@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { useParams, useRouter } from "next/navigation"
 import {
@@ -27,7 +28,7 @@ import {
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface IPBlocklistEntry {
   id: string
@@ -46,23 +47,25 @@ interface IPBlocklistEntry {
   updatedAt: string
 }
 
-const BLOCK_TYPES = [
-  { value: "MANUAL", label: "Manual Block" },
-  { value: "AUTOMATIC", label: "Automatic Detection" },
-  { value: "THREAT_INTEL", label: "Threat Intelligence" },
-  { value: "GEOGRAPHIC", label: "Geographic Block" },
-]
-
-const SOURCES = [
-  { value: "ADMIN", label: "Admin Action" },
-  { value: "SYSTEM", label: "System Detection" },
-  { value: "THREAT_FEED", label: "Threat Feed" },
-  { value: "USER_REPORT", label: "User Report" },
-]
-
 export default function IPBlocklistDetailPage() {
+  const t = useTranslations("admin.security.ipBlocklist")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const params = useParams()
+
+  const BLOCK_TYPES = [
+    { value: "MANUAL", label: t("types.manualBlock") },
+    { value: "AUTOMATIC", label: t("types.automaticDetection") },
+    { value: "THREAT_INTEL", label: t("types.threatIntel") },
+    { value: "GEOGRAPHIC", label: t("types.geographicBlock") },
+  ]
+
+  const SOURCES = [
+    { value: "ADMIN", label: t("sources.admin") },
+    { value: "SYSTEM", label: t("sources.system") },
+    { value: "THREAT_FEED", label: t("sources.threatFeed") },
+    { value: "USER_REPORT", label: t("sources.userReport") },
+  ]
   const [entry, setEntry] = useState<IPBlocklistEntry | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -104,7 +107,7 @@ export default function IPBlocklistDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch entry:", error)
-      toast.error("Failed to fetch IP blocklist entry")
+      showErrorToast(t("toast.fetchError"))
       router.push("/admin/security/ip-blocklist")
     } finally {
       setLoading(false)
@@ -130,10 +133,10 @@ export default function IPBlocklistDetailPage() {
         throw new Error("Failed to update entry")
       }
 
-      toast.success("IP blocklist entry updated successfully")
+      showSuccessToast(t("toast.updateSuccess"))
       fetchEntry()
     } catch (error) {
-      toast.error("Failed to update IP blocklist entry")
+      showErrorToast(t("toast.updateError"))
     } finally {
       setSaving(false)
     }
@@ -152,10 +155,10 @@ export default function IPBlocklistDetailPage() {
         throw new Error("Failed to delete entry")
       }
 
-      toast.success("IP removed from blocklist")
+      showSuccessToast(t("toast.removeSuccess"))
       router.push("/admin/security/ip-blocklist")
     } catch (error) {
-      toast.error("Failed to remove IP from blocklist")
+      showErrorToast(t("toast.removeError"))
     } finally {
       setDeleting(false)
       setShowDeleteDialog(false)
@@ -176,38 +179,40 @@ export default function IPBlocklistDetailPage() {
         throw new Error("Failed to update entry status")
       }
 
-      toast.success(`IP block ${entry.isActive ? "deactivated" : "activated"} successfully`)
+      showSuccessToast(entry.isActive ? t("toast.deactivateSuccess") : t("toast.activateSuccess"))
       fetchEntry()
     } catch (error) {
-      toast.error("Failed to update entry status")
+      showErrorToast(t("toast.statusUpdateError"))
     }
   }
 
   const getTypeBadge = (type: string) => {
     switch (type) {
       case "MANUAL":
-        return <Badge variant="outline">Manual</Badge>
+        return <Badge variant="outline">{t("types.manual")}</Badge>
       case "AUTOMATIC":
-        return <Badge variant="secondary">Automatic</Badge>
+        return <Badge variant="secondary">{t("types.automatic")}</Badge>
       case "THREAT_INTEL":
-        return <Badge variant="destructive">Threat Intel</Badge>
+        return <Badge variant="destructive">{t("types.threatIntelShort")}</Badge>
+      case "BRUTE_FORCE":
+        return <Badge variant="destructive">{t("types.bruteForce")}</Badge>
       case "GEOGRAPHIC":
-        return <Badge variant="default" className="bg-purple-500">Geographic</Badge>
+        return <Badge variant="default" className="bg-purple-500">{t("types.geographic")}</Badge>
       default:
-        return <Badge variant="outline">{type}</Badge>
+        return <Badge variant="outline">{t(`types.${type.toLowerCase()}`, { defaultValue: type })}</Badge>
     }
   }
 
   const getSourceBadge = (source: string) => {
     switch (source) {
       case "ADMIN":
-        return <Badge variant="outline">Admin</Badge>
+        return <Badge variant="outline">{t("sources.adminShort")}</Badge>
       case "SYSTEM":
-        return <Badge variant="secondary">System</Badge>
+        return <Badge variant="secondary">{t("sources.systemShort")}</Badge>
       case "THREAT_FEED":
-        return <Badge variant="destructive">Threat Feed</Badge>
+        return <Badge variant="destructive">{t("sources.threatFeedShort")}</Badge>
       case "USER_REPORT":
-        return <Badge variant="default" className="bg-blue-500">User Report</Badge>
+        return <Badge variant="default" className="bg-blue-500">{t("sources.userReportShort")}</Badge>
       default:
         return <Badge variant="outline">{source}</Badge>
     }
@@ -226,14 +231,14 @@ export default function IPBlocklistDetailPage() {
     return (
       <div className="text-center py-12">
         <Globe className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <p className="text-muted-foreground">IP blocklist entry not found</p>
+        <p className="text-muted-foreground">{t("entryNotFound")}</p>
         <Button
           variant="outline"
           className="mt-4"
           onClick={() => router.push("/admin/security/ip-blocklist")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to IP Blocklist
+          {t("backToBlocklist")}
         </Button>
       </div>
     )
@@ -248,7 +253,7 @@ export default function IPBlocklistDetailPage() {
         <div className="flex items-center gap-4">
           <Button variant="ghost" onClick={() => router.push("/admin/security/ip-blocklist")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+            {tCommon("back")}
           </Button>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-3">
@@ -256,19 +261,19 @@ export default function IPBlocklistDetailPage() {
               {entry.ipAddress}
               {entry.cidrRange && <span className="text-muted-foreground">/{entry.cidrRange}</span>}
             </h1>
-            <p className="text-sm text-muted-foreground">ID: {entry.id}</p>
+            <p className="text-sm text-muted-foreground">{t("id")}: {entry.id}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {getTypeBadge(entry.type)}
           {entry.isActive ? (
             isExpired ? (
-              <Badge variant="secondary">Expired</Badge>
+              <Badge variant="secondary">{t("status.expired")}</Badge>
             ) : (
-              <Badge variant="destructive">Blocked</Badge>
+              <Badge variant="destructive">{t("status.blocked")}</Badge>
             )
           ) : (
-            <Badge variant="outline">Inactive</Badge>
+            <Badge variant="outline">{t("status.inactive")}</Badge>
           )}
         </div>
       </div>
@@ -277,9 +282,9 @@ export default function IPBlocklistDetailPage() {
         <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 flex items-center gap-3">
           <AlertTriangle className="h-5 w-5 text-yellow-500" />
           <div>
-            <p className="font-medium text-yellow-500">This block has expired</p>
+            <p className="font-medium text-yellow-500">{t("expiredWarning")}</p>
             <p className="text-sm text-muted-foreground">
-              The block expired on {new Date(entry.expiresAt!).toLocaleString()}
+              {t("expiredOn", { date: new Date(entry.expiresAt!).toLocaleString() })}
             </p>
           </div>
         </div>
@@ -290,15 +295,15 @@ export default function IPBlocklistDetailPage() {
         <div className="md:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Block Details</CardTitle>
+              <CardTitle>{t("detail.blockDetails")}</CardTitle>
               <CardDescription>
-                Configure the IP block settings
+                {t("detail.configureSettings")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="ipAddress">IP Address</Label>
+                  <Label htmlFor="ipAddress">{t("form.ipAddress")}</Label>
                   <Input
                     id="ipAddress"
                     value={formData.ipAddress}
@@ -307,7 +312,7 @@ export default function IPBlocklistDetailPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="cidrRange">CIDR Range (optional)</Label>
+                  <Label htmlFor="cidrRange">{t("form.cidrRange")}</Label>
                   <Input
                     id="cidrRange"
                     value={formData.cidrRange}
@@ -318,13 +323,13 @@ export default function IPBlocklistDetailPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="reason">Reason for Block</Label>
+                <Label htmlFor="reason">{t("form.reasonForBlock")}</Label>
                 <Textarea
                   id="reason"
                   value={formData.reason}
                   onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                   rows={3}
-                  placeholder="Describe why this IP was blocked..."
+                  placeholder={t("form.reasonPlaceholder")}
                 />
               </div>
 
@@ -332,7 +337,7 @@ export default function IPBlocklistDetailPage() {
 
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label>Block Type</Label>
+                  <Label>{t("form.blockType")}</Label>
                   <Select
                     value={formData.type}
                     onValueChange={(value) => setFormData({ ...formData, type: value })}
@@ -350,7 +355,7 @@ export default function IPBlocklistDetailPage() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Source</Label>
+                  <Label>{t("form.source")}</Label>
                   <Select
                     value={formData.source}
                     onValueChange={(value) => setFormData({ ...formData, source: value })}
@@ -368,7 +373,7 @@ export default function IPBlocklistDetailPage() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="expiresAt">Expires At (optional)</Label>
+                  <Label htmlFor="expiresAt">{t("form.expiresAt")}</Label>
                   <Input
                     id="expiresAt"
                     type="datetime-local"
@@ -387,11 +392,11 @@ export default function IPBlocklistDetailPage() {
                     checked={formData.isActive}
                     onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
                   />
-                  <Label htmlFor="isActive">Block Active</Label>
+                  <Label htmlFor="isActive">{t("form.blockActive")}</Label>
                 </div>
                 <Button onClick={handleSave} disabled={saving}>
                   <Save className="h-4 w-4 mr-2" />
-                  {saving ? "Saving..." : "Save Changes"}
+                  {saving ? tCommon("saving") : tCommon("saveChanges")}
                 </Button>
               </div>
             </CardContent>
@@ -401,7 +406,7 @@ export default function IPBlocklistDetailPage() {
           {entry.metadata && Object.keys(entry.metadata).length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Additional Metadata</CardTitle>
+                <CardTitle>{t("detail.additionalMetadata")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <pre className="p-4 bg-muted rounded-lg text-sm overflow-auto">
@@ -416,7 +421,7 @@ export default function IPBlocklistDetailPage() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
+              <CardTitle>{t("detail.quickActions")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <Button
@@ -427,12 +432,12 @@ export default function IPBlocklistDetailPage() {
                 {entry.isActive ? (
                   <>
                     <CheckCircle className="h-4 w-4 mr-2" />
-                    Deactivate Block
+                    {t("actions.deactivateBlock")}
                   </>
                 ) : (
                   <>
                     <Ban className="h-4 w-4 mr-2" />
-                    Activate Block
+                    {t("actions.activateBlock")}
                   </>
                 )}
               </Button>
@@ -443,7 +448,7 @@ export default function IPBlocklistDetailPage() {
                 disabled={deleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                {deleting ? "Removing..." : "Remove from Blocklist"}
+                {deleting ? t("actions.removing") : t("actions.removeFromBlocklist")}
               </Button>
             </CardContent>
           </Card>
@@ -452,25 +457,25 @@ export default function IPBlocklistDetailPage() {
           <ConfirmationDialog
             open={showDeleteDialog}
             onOpenChange={setShowDeleteDialog}
-            title="Remove from Blocklist"
-            description={`Are you sure you want to remove ${entry?.ipAddress} from the blocklist? This IP will be allowed to access the platform again.`}
-            confirmText="Remove"
+            title={t("confirmations.removeTitle")}
+            description={t("confirmations.removeDetailDescription", { ipAddress: entry?.ipAddress })}
+            confirmText={tCommon("remove")}
             onConfirm={handleDelete}
             variant="destructive"
           />
 
           <Card>
             <CardHeader>
-              <CardTitle>Block Statistics</CardTitle>
+              <CardTitle>{t("detail.blockStatistics")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">Times Blocked</span>
+                <span className="text-muted-foreground">{t("detail.timesBlocked")}</span>
                 <Badge variant="destructive">{entry.blockedCount}</Badge>
               </div>
               {entry.lastBlockedAt && (
                 <div>
-                  <Label className="text-muted-foreground">Last Blocked</Label>
+                  <Label className="text-muted-foreground">{t("detail.lastBlocked")}</Label>
                   <p className="text-sm">{new Date(entry.lastBlockedAt).toLocaleString()}</p>
                 </div>
               )}
@@ -479,23 +484,23 @@ export default function IPBlocklistDetailPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Entry Info</CardTitle>
+              <CardTitle>{t("detail.entryInfo")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div>
-                <Label className="text-muted-foreground">Source</Label>
+                <Label className="text-muted-foreground">{t("form.source")}</Label>
                 <div className="mt-1">{getSourceBadge(entry.source)}</div>
               </div>
               <div>
-                <Label className="text-muted-foreground">Created</Label>
+                <Label className="text-muted-foreground">{t("detail.created")}</Label>
                 <p>{new Date(entry.createdAt).toLocaleString()}</p>
               </div>
               <div>
-                <Label className="text-muted-foreground">Last Updated</Label>
+                <Label className="text-muted-foreground">{t("detail.lastUpdated")}</Label>
                 <p>{new Date(entry.updatedAt).toLocaleString()}</p>
               </div>
               <div>
-                <Label className="text-muted-foreground">Created By</Label>
+                <Label className="text-muted-foreground">{t("detail.createdBy")}</Label>
                 <p className="font-mono text-xs">{entry.createdBy}</p>
               </div>
             </CardContent>

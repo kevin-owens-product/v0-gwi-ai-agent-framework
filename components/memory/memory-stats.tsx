@@ -1,14 +1,19 @@
+"use client"
+
+import { useTranslations } from "next-intl"
 import { Card, CardContent } from "@/components/ui/card"
 import { Brain, Database, Clock, Layers } from "lucide-react"
 
-const stats = [
-  { label: "Total Memories", value: "2,847", icon: Brain, change: "+124 this week" },
-  { label: "Storage Used", value: "847 MB", icon: Database, change: "of 5 GB" },
-  { label: "Avg Retention", value: "45 days", icon: Clock, change: "Extended tier" },
-  { label: "Active Projects", value: "8", icon: Layers, change: "3 with memories" },
-]
-
 export function MemoryStats() {
+  const t = useTranslations("memory")
+
+  const stats = [
+    { label: t("stats.totalMemories"), value: "2,847", icon: Brain, change: t("stats.thisWeek", { count: 124 }) },
+    { label: t("stats.storageUsed"), value: "847 MB", icon: Database, change: t("stats.ofTotal", { total: "5 GB" }) },
+    { label: t("stats.avgRetention"), value: t("stats.days", { count: 45 }), icon: Clock, change: t("stats.extendedTier") },
+    { label: t("stats.activeProjects"), value: "8", icon: Layers, change: t("stats.withMemories", { count: 3 }) },
+  ]
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {stats.map((stat) => (

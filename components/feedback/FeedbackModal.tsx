@@ -7,6 +7,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Dialog,
   DialogContent,
@@ -43,25 +44,27 @@ interface FeedbackModalProps {
   defaultType?: string
 }
 
-const feedbackTypes = [
-  { value: "BUG_REPORT", label: "Bug Report", icon: Bug, color: "text-red-500" },
-  { value: "FEATURE_REQUEST", label: "Feature Request", icon: Lightbulb, color: "text-amber-500" },
-  { value: "GENERAL", label: "General Feedback", icon: MessageSquare, color: "text-blue-500" },
-  { value: "COMPLAINT", label: "Complaint", icon: AlertTriangle, color: "text-orange-500" },
-  { value: "PRAISE", label: "Praise", icon: ThumbsUp, color: "text-green-500" },
+const feedbackTypeKeys = [
+  { value: "BUG_REPORT", key: "bugReport", icon: Bug, color: "text-red-500" },
+  { value: "FEATURE_REQUEST", key: "featureRequest", icon: Lightbulb, color: "text-amber-500" },
+  { value: "GENERAL", key: "general", icon: MessageSquare, color: "text-blue-500" },
+  { value: "COMPLAINT", key: "complaint", icon: AlertTriangle, color: "text-orange-500" },
+  { value: "PRAISE", key: "praise", icon: ThumbsUp, color: "text-green-500" },
 ]
 
-const categories = [
-  "Dashboard",
-  "Analytics",
-  "Agents",
-  "Reports",
-  "Settings",
-  "Performance",
-  "Other",
+const categoryKeys = [
+  "dashboard",
+  "analytics",
+  "agents",
+  "reports",
+  "settings",
+  "performance",
+  "other",
 ]
 
 export function FeedbackModal({ open, onOpenChange, defaultType }: FeedbackModalProps) {
+  const t = useTranslations("feedback.modal")
+  const tCommon = useTranslations("common")
   const [type, setType] = useState(defaultType || "")
   const [category, setCategory] = useState("")
   const [title, setTitle] = useState("")
@@ -113,7 +116,7 @@ export function FeedbackModal({ open, onOpenChange, defaultType }: FeedbackModal
   }
 
   // Find the selected feedback type for icon display
-  feedbackTypes.find((t) => t.value === type)
+  feedbackTypeKeys.find((ft) => ft.value === type)
 
   if (isSuccess) {
     return (
@@ -123,9 +126,9 @@ export function FeedbackModal({ open, onOpenChange, defaultType }: FeedbackModal
             <div className="h-16 w-16 rounded-full bg-green-500/10 flex items-center justify-center mb-4">
               <CheckCircle className="h-8 w-8 text-green-500" />
             </div>
-            <DialogTitle className="text-xl mb-2">Thank you!</DialogTitle>
+            <DialogTitle className="text-xl mb-2">{t("thankYou")}</DialogTitle>
             <DialogDescription>
-              Your feedback has been submitted successfully. We appreciate you taking the time to help us improve.
+              {t("successMessage")}
             </DialogDescription>
           </div>
         </DialogContent>
@@ -137,18 +140,18 @@ export function FeedbackModal({ open, onOpenChange, defaultType }: FeedbackModal
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Send Feedback</DialogTitle>
+          <DialogTitle>{t("sendFeedback")}</DialogTitle>
           <DialogDescription>
-            Help us improve by sharing your thoughts, reporting bugs, or suggesting features.
+            {t("description")}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
           {/* Feedback Type Selection */}
           <div className="space-y-2">
-            <Label>What type of feedback is this?</Label>
+            <Label>{t("typeLabel")}</Label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {feedbackTypes.map((feedbackType) => {
+              {feedbackTypeKeys.map((feedbackType) => {
                 const Icon = feedbackType.icon
                 const isSelected = type === feedbackType.value
                 return (
@@ -164,7 +167,7 @@ export function FeedbackModal({ open, onOpenChange, defaultType }: FeedbackModal
                     )}
                   >
                     <Icon className={cn("h-4 w-4", feedbackType.color)} />
-                    <span className="text-sm font-medium">{feedbackType.label}</span>
+                    <span className="text-sm font-medium">{t(`types.${feedbackType.key}`)}</span>
                   </button>
                 )
               })}
@@ -173,15 +176,15 @@ export function FeedbackModal({ open, onOpenChange, defaultType }: FeedbackModal
 
           {/* Category */}
           <div className="space-y-2">
-            <Label htmlFor="category">Category (optional)</Label>
+            <Label htmlFor="category">{t("categoryLabel")}</Label>
             <Select value={category} onValueChange={setCategory}>
               <SelectTrigger id="category">
-                <SelectValue placeholder="Select a category" />
+                <SelectValue placeholder={t("selectCategory")} />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((cat) => (
-                  <SelectItem key={cat} value={cat}>
-                    {cat}
+                {categoryKeys.map((catKey) => (
+                  <SelectItem key={catKey} value={catKey}>
+                    {t(`categories.${catKey}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -190,32 +193,32 @@ export function FeedbackModal({ open, onOpenChange, defaultType }: FeedbackModal
 
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title">Title (optional)</Label>
+            <Label htmlFor="title">{t("titleLabel")}</Label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Brief summary of your feedback"
+              placeholder={t("titlePlaceholder")}
             />
           </div>
 
           {/* Content */}
           <div className="space-y-2">
             <Label htmlFor="content">
-              Description <span className="text-red-500">*</span>
+              {t("descriptionLabel")} <span className="text-red-500">*</span>
             </Label>
             <Textarea
               id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Please provide details about your feedback..."
+              placeholder={t("descriptionPlaceholder")}
               rows={4}
             />
           </div>
 
           {/* Rating */}
           <div className="space-y-2">
-            <Label>Overall experience (optional)</Label>
+            <Label>{t("ratingLabel")}</Label>
             <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -242,7 +245,7 @@ export function FeedbackModal({ open, onOpenChange, defaultType }: FeedbackModal
                   onClick={() => setRating(null)}
                   className="ml-2 text-xs text-muted-foreground hover:text-foreground"
                 >
-                  Clear
+                  {tCommon("clear")}
                 </button>
               )}
             </div>
@@ -251,7 +254,7 @@ export function FeedbackModal({ open, onOpenChange, defaultType }: FeedbackModal
           {/* Submit Button */}
           <div className="flex justify-end gap-3 pt-4">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               onClick={handleSubmit}
@@ -260,10 +263,10 @@ export function FeedbackModal({ open, onOpenChange, defaultType }: FeedbackModal
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Submitting...
+                  {t("submitting")}
                 </>
               ) : (
-                "Submit Feedback"
+                t("submitFeedback")
               )}
             </Button>
           </div>

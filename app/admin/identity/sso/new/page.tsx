@@ -27,7 +27,8 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useAdmin } from "@/components/providers/admin-provider"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface Organization {
   id: string
@@ -35,27 +36,30 @@ interface Organization {
   slug: string
 }
 
-const ssoProviders = [
-  { value: "SAML", label: "SAML 2.0" },
-  { value: "OIDC", label: "OpenID Connect" },
-  { value: "AZURE_AD", label: "Azure AD" },
-  { value: "OKTA", label: "Okta" },
-  { value: "GOOGLE_WORKSPACE", label: "Google Workspace" },
-  { value: "ONELOGIN", label: "OneLogin" },
-  { value: "PING_IDENTITY", label: "Ping Identity" },
-  { value: "CUSTOM", label: "Custom" },
-]
-
-const defaultRoles = [
-  { value: "VIEWER", label: "Viewer" },
-  { value: "MEMBER", label: "Member" },
-  { value: "ADMIN", label: "Admin" },
-]
-
 export default function NewSSOPage() {
   const router = useRouter()
+  const t = useTranslations("admin.identity.sso.new")
+  const tMain = useTranslations("admin.identity.sso")
+  const tCommon = useTranslations("common")
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
+
+  const ssoProviders = [
+    { value: "SAML", label: tMain("providers.saml") },
+    { value: "OIDC", label: tMain("providers.oidc") },
+    { value: "AZURE_AD", label: tMain("providers.azure") },
+    { value: "OKTA", label: tMain("providers.okta") },
+    { value: "GOOGLE_WORKSPACE", label: tMain("providers.google") },
+    { value: "ONELOGIN", label: tMain("providers.onelogin") },
+    { value: "PING_IDENTITY", label: tMain("providers.pingidentity") },
+    { value: "CUSTOM", label: tMain("providers.custom") },
+  ]
+
+  const defaultRoles = [
+    { value: "VIEWER", label: t("roles.viewer") },
+    { value: "MEMBER", label: t("roles.member") },
+    { value: "ADMIN", label: t("roles.admin") },
+  ]
   const [activeTab, setActiveTab] = useState("basic")
   const [organizations, setOrganizations] = useState<Organization[]>([])
   const [orgSearch, setOrgSearch] = useState("")
@@ -107,7 +111,7 @@ export default function NewSSOPage() {
 
   const handleCreate = async () => {
     if (!formData.orgId || !formData.provider) {
-      toast.error("Organization and provider are required")
+      showErrorToast(t("validation.organizationAndProviderRequired"))
       return
     }
 
@@ -150,15 +154,15 @@ export default function NewSSOPage() {
 
       if (response.ok) {
         const data = await response.json()
-        toast.success("SSO configuration created successfully")
+        showSuccessToast(t("toast.createSuccess"))
         router.push(`/admin/identity/sso/${data.ssoConfig.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to create SSO configuration")
+        showErrorToast(data.error || t("toast.createFailed"))
       }
     } catch (error) {
       console.error("Failed to create SSO config:", error)
-      toast.error("Failed to create SSO configuration")
+      showErrorToast(t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -167,11 +171,11 @@ export default function NewSSOPage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to create SSO configurations</p>
+        <p className="text-muted-foreground">{t("noPermission")}</p>
         <Link href="/admin/identity/sso">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to SSO Configurations
+            {t("backToSSO")}
           </Button>
         </Link>
       </div>
@@ -189,16 +193,16 @@ export default function NewSSOPage() {
           <Link href="/admin/identity/sso">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Key className="h-6 w-6 text-primary" />
-              Create SSO Configuration
+              {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Configure Single Sign-On for an organization
+              {t("description")}
             </p>
           </div>
         </div>
@@ -206,12 +210,12 @@ export default function NewSSOPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Configuration
+              {t("createConfiguration")}
             </>
           )}
         </Button>
@@ -220,35 +224,35 @@ export default function NewSSOPage() {
       {/* Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="basic">Basic Settings</TabsTrigger>
-          <TabsTrigger value="provider">Provider Configuration</TabsTrigger>
-          <TabsTrigger value="provisioning">User Provisioning</TabsTrigger>
+          <TabsTrigger value="basic">{t("tabs.basic")}</TabsTrigger>
+          <TabsTrigger value="provider">{t("tabs.provider")}</TabsTrigger>
+          <TabsTrigger value="provisioning">{t("tabs.provisioning")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="basic" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Organization & Provider</CardTitle>
+              <CardTitle>{t("sections.organizationProvider")}</CardTitle>
               <CardDescription>
-                Select the organization and SSO provider type
+                {t("sections.organizationProviderDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label>Organization *</Label>
+                <Label>{t("fields.organization")} *</Label>
                 <Select
                   value={formData.orgId}
                   onValueChange={(v) => setFormData((prev) => ({ ...prev, orgId: v }))}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select an organization" />
+                    <SelectValue placeholder={t("placeholders.selectOrganization")} />
                   </SelectTrigger>
                   <SelectContent>
                     <div className="p-2">
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                          placeholder="Search organizations..."
+                          placeholder={t("placeholders.searchOrganizations")}
                           value={orgSearch}
                           onChange={(e) => {
                             setOrgSearch(e.target.value)
@@ -259,9 +263,9 @@ export default function NewSSOPage() {
                       </div>
                     </div>
                     {loadingOrgs ? (
-                      <div className="p-4 text-center text-muted-foreground">Loading...</div>
+                      <div className="p-4 text-center text-muted-foreground">{t("placeholders.loading")}</div>
                     ) : organizations.length === 0 ? (
-                      <div className="p-4 text-center text-muted-foreground">No organizations found</div>
+                      <div className="p-4 text-center text-muted-foreground">{t("placeholders.noOrganizationsFound")}</div>
                     ) : (
                       organizations.map((org) => (
                         <SelectItem key={org.id} value={org.id}>
@@ -278,7 +282,7 @@ export default function NewSSOPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>SSO Provider *</Label>
+                <Label>{t("fields.ssoProvider")} *</Label>
                 <Select
                   value={formData.provider}
                   onValueChange={(v) => setFormData((prev) => ({ ...prev, provider: v }))}
@@ -297,26 +301,26 @@ export default function NewSSOPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Display Name</Label>
+                <Label>{t("fields.displayName")}</Label>
                 <Input
                   value={formData.displayName}
                   onChange={(e) => setFormData((prev) => ({ ...prev, displayName: e.target.value }))}
-                  placeholder="e.g., Acme Corp SSO"
+                  placeholder={t("placeholders.displayName")}
                 />
                 <p className="text-xs text-muted-foreground">
-                  A friendly name for this SSO configuration
+                  {t("hints.displayName")}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label>Allowed Email Domains</Label>
+                <Label>{t("fields.allowedEmailDomains")}</Label>
                 <Input
                   value={formData.allowedDomains}
                   onChange={(e) => setFormData((prev) => ({ ...prev, allowedDomains: e.target.value }))}
-                  placeholder="acme.com, acme.org"
+                  placeholder={t("placeholders.allowedDomains")}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Comma-separated list of email domains allowed to use this SSO
+                  {t("hints.allowedDomains")}
                 </p>
               </div>
             </CardContent>
@@ -327,50 +331,50 @@ export default function NewSSOPage() {
           {isSAMLProvider && (
             <Card>
               <CardHeader>
-                <CardTitle>SAML Configuration</CardTitle>
+                <CardTitle>{t("sections.samlConfiguration")}</CardTitle>
                 <CardDescription>
-                  Configure SAML 2.0 settings from your Identity Provider
+                  {t("sections.samlConfigurationDescription")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
-                  <Label>Entity ID / Issuer</Label>
+                  <Label>{t("fields.entityId")}</Label>
                   <Input
                     value={formData.entityId}
                     onChange={(e) => setFormData((prev) => ({ ...prev, entityId: e.target.value }))}
-                    placeholder="https://idp.example.com/entity"
+                    placeholder={t("placeholders.entityId")}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label>SSO URL (Login URL)</Label>
+                  <Label>{t("fields.ssoUrl")}</Label>
                   <Input
                     value={formData.ssoUrl}
                     onChange={(e) => setFormData((prev) => ({ ...prev, ssoUrl: e.target.value }))}
-                    placeholder="https://idp.example.com/sso"
+                    placeholder={t("placeholders.ssoUrl")}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label>SLO URL (Logout URL)</Label>
+                  <Label>{t("fields.sloUrl")}</Label>
                   <Input
                     value={formData.sloUrl}
                     onChange={(e) => setFormData((prev) => ({ ...prev, sloUrl: e.target.value }))}
-                    placeholder="https://idp.example.com/slo"
+                    placeholder={t("placeholders.sloUrl")}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label>X.509 Certificate</Label>
+                  <Label>{t("fields.certificate")}</Label>
                   <Textarea
                     value={formData.certificate}
                     onChange={(e) => setFormData((prev) => ({ ...prev, certificate: e.target.value }))}
-                    placeholder="-----BEGIN CERTIFICATE-----&#10;...&#10;-----END CERTIFICATE-----"
+                    placeholder={t("placeholders.certificate")}
                     rows={6}
                     className="font-mono text-sm"
                   />
                   <p className="text-xs text-muted-foreground">
-                    Paste the public certificate from your Identity Provider
+                    {t("hints.certificate")}
                   </p>
                 </div>
               </CardContent>
@@ -380,74 +384,74 @@ export default function NewSSOPage() {
           {isOIDCProvider && formData.provider !== "SAML" && (
             <Card>
               <CardHeader>
-                <CardTitle>OIDC Configuration</CardTitle>
+                <CardTitle>{t("sections.oidcConfiguration")}</CardTitle>
                 <CardDescription>
-                  Configure OpenID Connect settings
+                  {t("sections.oidcConfigurationDescription")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Client ID</Label>
+                    <Label>{t("fields.clientId")}</Label>
                     <Input
                       value={formData.clientId}
                       onChange={(e) => setFormData((prev) => ({ ...prev, clientId: e.target.value }))}
-                      placeholder="your-client-id"
+                      placeholder={t("placeholders.clientId")}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Client Secret</Label>
+                    <Label>{t("fields.clientSecret")}</Label>
                     <Input
                       type="password"
                       value={formData.clientSecret}
                       onChange={(e) => setFormData((prev) => ({ ...prev, clientSecret: e.target.value }))}
-                      placeholder="your-client-secret"
+                      placeholder={t("placeholders.clientSecret")}
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Discovery URL</Label>
+                  <Label>{t("fields.discoveryUrl")}</Label>
                   <Input
                     value={formData.discoveryUrl}
                     onChange={(e) => setFormData((prev) => ({ ...prev, discoveryUrl: e.target.value }))}
-                    placeholder="https://idp.example.com/.well-known/openid-configuration"
+                    placeholder={t("placeholders.discoveryUrl")}
                   />
                   <p className="text-xs text-muted-foreground">
-                    If provided, other URLs will be auto-discovered
+                    {t("hints.discoveryUrl")}
                   </p>
                 </div>
 
                 <Separator />
 
                 <div className="space-y-4">
-                  <p className="text-sm font-medium">Manual URL Configuration (optional if discovery URL is provided)</p>
+                  <p className="text-sm font-medium">{t("hints.manualUrlConfig")}</p>
 
                   <div className="space-y-2">
-                    <Label>Authorization URL</Label>
+                    <Label>{t("fields.authorizationUrl")}</Label>
                     <Input
                       value={formData.authorizationUrl}
                       onChange={(e) => setFormData((prev) => ({ ...prev, authorizationUrl: e.target.value }))}
-                      placeholder="https://idp.example.com/authorize"
+                      placeholder={t("placeholders.authorizationUrl")}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Token URL</Label>
+                    <Label>{t("fields.tokenUrl")}</Label>
                     <Input
                       value={formData.tokenUrl}
                       onChange={(e) => setFormData((prev) => ({ ...prev, tokenUrl: e.target.value }))}
-                      placeholder="https://idp.example.com/token"
+                      placeholder={t("placeholders.tokenUrl")}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label>User Info URL</Label>
+                    <Label>{t("fields.userInfoUrl")}</Label>
                     <Input
                       value={formData.userInfoUrl}
                       onChange={(e) => setFormData((prev) => ({ ...prev, userInfoUrl: e.target.value }))}
-                      placeholder="https://idp.example.com/userinfo"
+                      placeholder={t("placeholders.userInfoUrl")}
                     />
                   </div>
                 </div>
@@ -459,14 +463,14 @@ export default function NewSSOPage() {
         <TabsContent value="provisioning" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>User Provisioning Settings</CardTitle>
+              <CardTitle>{t("sections.userProvisioning")}</CardTitle>
               <CardDescription>
-                Configure how users are provisioned through SSO
+                {t("sections.userProvisioningDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label>Default Role</Label>
+                <Label>{t("fields.defaultRole")}</Label>
                 <Select
                   value={formData.defaultRole}
                   onValueChange={(v) => setFormData((prev) => ({ ...prev, defaultRole: v }))}
@@ -483,7 +487,7 @@ export default function NewSSOPage() {
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
-                  Role assigned to users when they first sign in via SSO
+                  {t("hints.defaultRole")}
                 </p>
               </div>
 
@@ -491,9 +495,9 @@ export default function NewSSOPage() {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Just-in-Time Provisioning</Label>
+                  <Label>{t("fields.jitProvisioning")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Automatically create user accounts on first SSO login
+                    {t("hints.jitProvisioning")}
                   </p>
                 </div>
                 <Switch
@@ -506,9 +510,9 @@ export default function NewSSOPage() {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Auto-Deactivate</Label>
+                  <Label>{t("fields.autoDeactivate")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Automatically deactivate users removed from Identity Provider
+                    {t("hints.autoDeactivate")}
                   </p>
                 </div>
                 <Switch

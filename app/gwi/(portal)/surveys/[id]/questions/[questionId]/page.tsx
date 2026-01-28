@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -86,16 +87,6 @@ const questionTypeIcons = {
   MATRIX: Grid3X3,
 }
 
-const questionTypeLabels: Record<string, string> = {
-  SINGLE_SELECT: "Single Select",
-  MULTI_SELECT: "Multi Select",
-  SCALE: "Scale",
-  OPEN_TEXT: "Open Text",
-  NUMERIC: "Numeric",
-  DATE: "Date",
-  MATRIX: "Matrix",
-}
-
 export default function QuestionDetailPage({
   params,
 }: {
@@ -103,6 +94,9 @@ export default function QuestionDetailPage({
 }) {
   const { id: surveyId, questionId } = use(params)
   const router = useRouter()
+  const t = useTranslations('gwi.surveys.questions.detail')
+  const tTypes = useTranslations('gwi.surveys.questions.types')
+  const tCommon = useTranslations('common')
   const [question, setQuestion] = useState<Question | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -260,7 +254,7 @@ export default function QuestionDetailPage({
               <ArrowLeft className="h-4 w-4" />
             </Link>
           </Button>
-          <h1 className="text-3xl font-bold tracking-tight">Error</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{tCommon("error")}</h1>
         </div>
         <Card>
           <CardContent className="pt-6">
@@ -277,9 +271,7 @@ export default function QuestionDetailPage({
 
   const Icon =
     questionTypeIcons[question.type as keyof typeof questionTypeIcons] || Type
-  const typeLabel =
-    questionTypeLabels[question.type as keyof typeof questionTypeLabels] ||
-    question.type
+  const typeLabel = tTypes(question.type.toLowerCase()) || question.type
 
   // Calculate distribution chart data
   const distributionEntries = Object.entries(question.stats.distribution).sort(
@@ -309,7 +301,7 @@ export default function QuestionDetailPage({
                   </span>
                   <Badge variant="outline">{typeLabel}</Badge>
                   {question.required && (
-                    <Badge variant="secondary">Required</Badge>
+                    <Badge variant="secondary">{tCommon("required")}</Badge>
                   )}
                 </div>
                 <h1 className="text-2xl font-bold tracking-tight mt-1">
@@ -333,21 +325,18 @@ export default function QuestionDetailPage({
             <AlertDialogTrigger asChild>
               <Button variant="outline" className="text-red-600 border-red-200">
                 <Trash2 className="mr-2 h-4 w-4" />
-                Delete
+                {tCommon("delete")}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Delete Question</AlertDialogTitle>
+                <AlertDialogTitle>{t('deleteQuestion')}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to delete this question? This action
-                  cannot be undone. All response data for this question will be
-                  preserved in the survey responses but will no longer be
-                  associated with this question.
+                  {t('deleteQuestionConfirmation')}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleDelete}
                   className="bg-red-600 hover:bg-red-700"
@@ -356,10 +345,10 @@ export default function QuestionDetailPage({
                   {deleting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Deleting...
+                      {t('deleting')}
                     </>
                   ) : (
-                    "Delete Question"
+                    t('deleteQuestion')
                   )}
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -389,7 +378,7 @@ export default function QuestionDetailPage({
                 <p className="text-2xl font-bold">
                   {question.stats.totalResponses}
                 </p>
-                <p className="text-sm text-muted-foreground">Total Responses</p>
+                <p className="text-sm text-muted-foreground">{t('totalResponses')}</p>
               </div>
             </div>
           </CardContent>
@@ -404,7 +393,7 @@ export default function QuestionDetailPage({
                 <p className="text-2xl font-bold">
                   {question.stats.answeredCount}
                 </p>
-                <p className="text-sm text-muted-foreground">Answered</p>
+                <p className="text-sm text-muted-foreground">{t('answered')}</p>
               </div>
             </div>
           </CardContent>
@@ -419,7 +408,7 @@ export default function QuestionDetailPage({
                 <p className="text-2xl font-bold">
                   {question.stats.completedCount}
                 </p>
-                <p className="text-sm text-muted-foreground">Completed</p>
+                <p className="text-sm text-muted-foreground">{t('completed')}</p>
               </div>
             </div>
           </CardContent>
@@ -434,7 +423,7 @@ export default function QuestionDetailPage({
                 <p className="text-2xl font-bold">
                   {question.stats.responseRate}%
                 </p>
-                <p className="text-sm text-muted-foreground">Response Rate</p>
+                <p className="text-sm text-muted-foreground">{t('responseRate')}</p>
               </div>
             </div>
           </CardContent>
@@ -446,24 +435,24 @@ export default function QuestionDetailPage({
         <TabsList>
           <TabsTrigger value="statistics" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
-            Statistics
+            {t('statistics')}
           </TabsTrigger>
           <TabsTrigger value="details" className="flex items-center gap-2">
             <FileText className="h-4 w-4" />
-            Details
+            {t('details')}
           </TabsTrigger>
           <TabsTrigger value="edit" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
-            Edit
+            {t('edit')}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="statistics">
           <Card>
             <CardHeader>
-              <CardTitle>Response Distribution</CardTitle>
+              <CardTitle>{t('responseDistribution')}</CardTitle>
               <CardDescription>
-                Breakdown of responses for this question
+                {t('responseDistributionDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -501,9 +490,9 @@ export default function QuestionDetailPage({
               ) : (
                 <div className="text-center py-12">
                   <BarChart3 className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-                  <h3 className="text-lg font-medium">No response data yet</h3>
+                  <h3 className="text-lg font-medium">{t('noResponseDataYet')}</h3>
                   <p className="text-muted-foreground">
-                    Statistics will appear once responses are collected
+                    {t('statisticsWillAppear')}
                   </p>
                 </div>
               )}
@@ -515,22 +504,22 @@ export default function QuestionDetailPage({
           <div className="grid gap-6 md:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>Question Configuration</CardTitle>
+                <CardTitle>{t('questionConfiguration')}</CardTitle>
                 <CardDescription>
-                  Current settings for this question
+                  {t('currentSettings')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <dl className="space-y-4">
                   <div>
                     <dt className="text-sm font-medium text-muted-foreground">
-                      Question Code
+                      {t('questionCode')}
                     </dt>
                     <dd className="text-sm font-mono mt-1">{question.code}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-muted-foreground">
-                      Type
+                      {tCommon("type")}
                     </dt>
                     <dd className="flex items-center gap-2 mt-1">
                       <Icon className="h-4 w-4" />
@@ -539,16 +528,16 @@ export default function QuestionDetailPage({
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-muted-foreground">
-                      Order
+                      {t('order')}
                     </dt>
                     <dd className="text-sm mt-1">{question.order}</dd>
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-muted-foreground">
-                      Required
+                      {tCommon("required")}
                     </dt>
                     <dd className="text-sm mt-1">
-                      {question.required ? "Yes" : "No"}
+                      {question.required ? tCommon("yes") : tCommon("no")}
                     </dd>
                   </div>
                 </dl>
@@ -557,9 +546,9 @@ export default function QuestionDetailPage({
 
             <Card>
               <CardHeader>
-                <CardTitle>Options & Validation</CardTitle>
+                <CardTitle>{t('optionsAndValidation')}</CardTitle>
                 <CardDescription>
-                  Answer choices and validation rules
+                  {t('answerChoicesAndValidation')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -567,7 +556,7 @@ export default function QuestionDetailPage({
                   {question.options && (
                     <div>
                       <dt className="text-sm font-medium text-muted-foreground mb-2">
-                        Options
+                        {t('options')}
                       </dt>
                       <dd className="font-mono text-xs bg-slate-50 p-3 rounded-lg border overflow-auto max-h-48">
                         <pre>{JSON.stringify(question.options, null, 2)}</pre>
@@ -577,7 +566,7 @@ export default function QuestionDetailPage({
                   {question.validationRules && (
                     <div>
                       <dt className="text-sm font-medium text-muted-foreground mb-2">
-                        Validation Rules
+                        {t('validationRules')}
                       </dt>
                       <dd className="font-mono text-xs bg-slate-50 p-3 rounded-lg border overflow-auto max-h-48">
                         <pre>
@@ -589,7 +578,7 @@ export default function QuestionDetailPage({
                   {question.taxonomyLinks && (
                     <div>
                       <dt className="text-sm font-medium text-muted-foreground mb-2">
-                        Taxonomy Links
+                        {t('taxonomyLinks')}
                       </dt>
                       <dd className="font-mono text-xs bg-slate-50 p-3 rounded-lg border overflow-auto max-h-48">
                         <pre>
@@ -602,7 +591,7 @@ export default function QuestionDetailPage({
                     !question.validationRules &&
                     !question.taxonomyLinks && (
                       <p className="text-sm text-muted-foreground">
-                        No options or validation rules configured
+                        {t('noOptionsOrValidation')}
                       </p>
                     )}
                 </dl>
@@ -614,16 +603,16 @@ export default function QuestionDetailPage({
         <TabsContent value="edit">
           <Card>
             <CardHeader>
-              <CardTitle>Edit Question</CardTitle>
+              <CardTitle>{t('editQuestion')}</CardTitle>
               <CardDescription>
-                Modify the question settings and options
+                {t('modifySettings')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="code">Question Code</Label>
+                    <Label htmlFor="code">{t('questionCode')}</Label>
                     <Input
                       id="code"
                       value={formData.code}
@@ -633,11 +622,11 @@ export default function QuestionDetailPage({
                       placeholder="Q1"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Unique identifier for this question
+                      {t('uniqueIdentifier')}
                     </p>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="type">Question Type</Label>
+                    <Label htmlFor="type">{t('questionType')}</Label>
                     <Select
                       value={formData.type}
                       onValueChange={(value) =>
@@ -649,30 +638,30 @@ export default function QuestionDetailPage({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="SINGLE_SELECT">
-                          Single Select
+                          {tTypes("single_select")}
                         </SelectItem>
                         <SelectItem value="MULTI_SELECT">
-                          Multi Select
+                          {tTypes("multi_select")}
                         </SelectItem>
-                        <SelectItem value="SCALE">Scale</SelectItem>
-                        <SelectItem value="OPEN_TEXT">Open Text</SelectItem>
-                        <SelectItem value="NUMERIC">Numeric</SelectItem>
-                        <SelectItem value="DATE">Date</SelectItem>
-                        <SelectItem value="MATRIX">Matrix</SelectItem>
+                        <SelectItem value="SCALE">{tTypes("scale")}</SelectItem>
+                        <SelectItem value="OPEN_TEXT">{tTypes("open_text")}</SelectItem>
+                        <SelectItem value="NUMERIC">{tTypes("numeric")}</SelectItem>
+                        <SelectItem value="DATE">{tTypes("date")}</SelectItem>
+                        <SelectItem value="MATRIX">{tTypes("matrix")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="text">Question Text</Label>
+                  <Label htmlFor="text">{tCommon("questionText")}</Label>
                   <Textarea
                     id="text"
                     value={formData.text}
                     onChange={(e) =>
                       setFormData({ ...formData, text: e.target.value })
                     }
-                    placeholder="Enter the question text"
+                    placeholder={tCommon("enterQuestionText")}
                     rows={3}
                   />
                 </div>
@@ -680,7 +669,7 @@ export default function QuestionDetailPage({
                 {(formData.type === "SINGLE_SELECT" ||
                   formData.type === "MULTI_SELECT") && (
                   <div className="space-y-2">
-                    <Label htmlFor="options">Options (JSON)</Label>
+                    <Label htmlFor="options">{t('optionsJson')}</Label>
                     <Textarea
                       id="options"
                       value={formData.options}
@@ -692,14 +681,14 @@ export default function QuestionDetailPage({
                       className="font-mono text-sm"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Enter options as a JSON array
+                      {t('enterOptionsJson')}
                     </p>
                   </div>
                 )}
 
                 <div className="space-y-2">
                   <Label htmlFor="validationRules">
-                    Validation Rules (JSON, optional)
+                    {t('validationRulesJson')}
                   </Label>
                   <Textarea
                     id="validationRules"
@@ -715,7 +704,7 @@ export default function QuestionDetailPage({
                     className="font-mono text-sm"
                   />
                   <p className="text-xs text-muted-foreground">
-                    Optional validation rules in JSON format
+                    {t('optionalValidationRules')}
                   </p>
                 </div>
 
@@ -727,7 +716,7 @@ export default function QuestionDetailPage({
                       setFormData({ ...formData, required: checked })
                     }
                   />
-                  <Label htmlFor="required">Required question</Label>
+                  <Label htmlFor="required">{t('requiredQuestion')}</Label>
                 </div>
 
                 <div className="flex justify-end gap-2 pt-4 border-t">
@@ -750,18 +739,18 @@ export default function QuestionDetailPage({
                       }
                     }}
                   >
-                    Reset
+                    {t('reset')}
                   </Button>
                   <Button onClick={handleSave} disabled={saving}>
                     {saving ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Saving...
+                        {tCommon("saving")}
                       </>
                     ) : (
                       <>
                         <Save className="mr-2 h-4 w-4" />
-                        Save Changes
+                        {tCommon("saveChanges")}
                       </>
                     )}
                   </Button>
@@ -776,19 +765,19 @@ export default function QuestionDetailPage({
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Question Information
+            {t('questionInformation')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <dt className="text-muted-foreground">ID</dt>
+              <dt className="text-muted-foreground">{t('id')}</dt>
               <dd className="font-mono text-xs truncate" title={question.id}>
                 {question.id}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Survey Status</dt>
+              <dt className="text-muted-foreground">{t('surveyStatus')}</dt>
               <dd>
                 <Badge
                   variant="outline"
@@ -805,13 +794,13 @@ export default function QuestionDetailPage({
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Created At</dt>
+              <dt className="text-muted-foreground">{t('createdAt')}</dt>
               <dd className="font-medium">
                 {new Date(question.createdAt).toLocaleDateString()}
               </dd>
             </div>
             <div>
-              <dt className="text-muted-foreground">Last Updated</dt>
+              <dt className="text-muted-foreground">{t('lastUpdated')}</dt>
               <dd className="font-medium">
                 {new Date(question.updatedAt).toLocaleDateString()}
               </dd>

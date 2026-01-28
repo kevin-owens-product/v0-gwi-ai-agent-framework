@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useTranslations } from "next-intl"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -161,14 +161,15 @@ export default function UsersPage() {
           return
         }
         const data = await response.json()
-        throw new Error(data.error || "Failed to ban user")
+        throw new Error(data.error || t("toast.banFailed"))
       }
       setBanDialogOpen(false)
       setBanReason("")
+      showSuccessToast(t("toast.userBanned"))
       fetchUsers()
     } catch (error) {
       console.error("Failed to ban user:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to ban user")
+      showErrorToast(error instanceof Error ? error.message : t("toast.banFailed"))
     } finally {
       setIsSubmitting(false)
     }
@@ -186,12 +187,13 @@ export default function UsersPage() {
           return
         }
         const data = await response.json()
-        throw new Error(data.error || "Failed to lift ban")
+        throw new Error(data.error || t("toast.liftBanFailed"))
       }
+      showSuccessToast(t("toast.banLifted"))
       fetchUsers()
     } catch (error) {
       console.error("Failed to lift ban:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to lift ban")
+      showErrorToast(error instanceof Error ? error.message : t("toast.liftBanFailed"))
     }
   }
 
@@ -207,12 +209,13 @@ export default function UsersPage() {
           return
         }
         const data = await response.json()
-        throw new Error(data.error || "Failed to delete user")
+        throw new Error(data.error || t("toast.deleteFailed"))
       }
+      showSuccessToast(t("toast.userDeleted"))
       fetchUsers()
     } catch (error) {
       console.error("Failed to delete user:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to delete user")
+      showErrorToast(error instanceof Error ? error.message : t("toast.deleteFailed"))
     }
   }
 
@@ -225,17 +228,18 @@ export default function UsersPage() {
         body: JSON.stringify({
           action: "ban",
           userIds: ids,
-          data: { reason: "Bulk ban action", banType: "PERMANENT" },
+          data: { reason: t("bulkActions.banReason"), banType: "PERMANENT" },
         }),
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Bulk ban failed")
+        throw new Error(data.error || t("toast.bulkBanFailed"))
       }
+      showSuccessToast(t("toast.bulkBanSuccess", { count: ids.length }))
       fetchUsers()
     } catch (error) {
       console.error("Bulk ban failed:", error)
-      toast.error(error instanceof Error ? error.message : "Bulk ban failed")
+      showErrorToast(error instanceof Error ? error.message : t("toast.bulkBanFailed"))
     }
   }
 
@@ -252,12 +256,13 @@ export default function UsersPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Bulk unban failed")
+        throw new Error(data.error || t("toast.bulkUnbanFailed"))
       }
+      showSuccessToast(t("toast.bulkUnbanSuccess", { count: ids.length }))
       fetchUsers()
     } catch (error) {
       console.error("Bulk unban failed:", error)
-      toast.error(error instanceof Error ? error.message : "Bulk unban failed")
+      showErrorToast(error instanceof Error ? error.message : t("toast.bulkUnbanFailed"))
     }
   }
 
@@ -274,12 +279,13 @@ export default function UsersPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Bulk delete failed")
+        throw new Error(data.error || t("toast.bulkDeleteFailed"))
       }
+      showSuccessToast(t("toast.bulkDeleteSuccess", { count: ids.length }))
       fetchUsers()
     } catch (error) {
       console.error("Bulk delete failed:", error)
-      toast.error(error instanceof Error ? error.message : "Bulk delete failed")
+      showErrorToast(error instanceof Error ? error.message : t("toast.bulkDeleteFailed"))
     }
   }
 
@@ -296,12 +302,13 @@ export default function UsersPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Bulk verify failed")
+        throw new Error(data.error || t("toast.bulkVerifyFailed"))
       }
+      showSuccessToast(t("toast.bulkVerifySuccess", { count: ids.length }))
       fetchUsers()
     } catch (error) {
       console.error("Bulk verify failed:", error)
-      toast.error(error instanceof Error ? error.message : "Bulk verify failed")
+      showErrorToast(error instanceof Error ? error.message : t("toast.bulkVerifyFailed"))
     }
   }
 
@@ -319,12 +326,13 @@ export default function UsersPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Bulk reset password failed")
+        throw new Error(data.error || t("toast.bulkResetPasswordFailed"))
       }
+      showSuccessToast(t("toast.bulkResetPasswordSuccess", { count: ids.length }))
       fetchUsers()
     } catch (error) {
       console.error("Bulk reset password failed:", error)
-      toast.error(error instanceof Error ? error.message : "Bulk reset password failed")
+      showErrorToast(error instanceof Error ? error.message : t("toast.bulkResetPasswordFailed"))
     }
   }
 
@@ -341,12 +349,13 @@ export default function UsersPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Bulk revoke sessions failed")
+        throw new Error(data.error || t("toast.bulkRevokeSessionsFailed"))
       }
+      showSuccessToast(t("toast.bulkRevokeSessionsSuccess", { count: ids.length }))
       fetchUsers()
     } catch (error) {
       console.error("Bulk revoke sessions failed:", error)
-      toast.error(error instanceof Error ? error.message : "Bulk revoke sessions failed")
+      showErrorToast(error instanceof Error ? error.message : t("toast.bulkRevokeSessionsFailed"))
     }
   }
 
@@ -402,7 +411,7 @@ export default function UsersPage() {
           return
         }
         const data = await response.json()
-        throw new Error(data.error || "Failed to create user")
+        throw new Error(data.error || t("toast.createFailed"))
       }
 
       setCreateDialogOpen(false)
@@ -413,10 +422,11 @@ export default function UsersPage() {
         orgId: "",
         role: "MEMBER",
       })
+      showSuccessToast(t("toast.userCreated"))
       fetchUsers()
     } catch (error) {
       console.error("Failed to create user:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to create user")
+      showErrorToast(error instanceof Error ? error.message : t("toast.createFailed"))
     } finally {
       setIsSubmitting(false)
     }

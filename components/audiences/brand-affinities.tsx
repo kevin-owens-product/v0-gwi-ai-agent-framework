@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -431,6 +432,7 @@ export function BrandAffinities({
   audienceCriteria,
   className,
 }: BrandAffinitiesProps) {
+  const t = useTranslations("audiences")
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState<ReturnType<typeof generateBrandData> | null>(null)
 
@@ -461,19 +463,19 @@ export function BrandAffinities({
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-2">
           <Heart className="h-5 w-5 text-primary" />
-          Brand Affinities
+          {t("brandAffinities.title")}
         </CardTitle>
         <CardDescription>
-          Brand preferences, loyalty patterns, and category-level insights
+          {t("brandAffinities.description")}
         </CardDescription>
       </CardHeader>
 
       <CardContent>
         <Tabs defaultValue="overview" className="w-full">
           <TabsList className="w-full justify-start mb-4 flex-wrap h-auto gap-1">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="categories">By Category</TabsTrigger>
-            <TabsTrigger value="loyalty">Loyalty Profile</TabsTrigger>
+            <TabsTrigger value="overview">{t("brandAffinities.tabs.overview")}</TabsTrigger>
+            <TabsTrigger value="categories">{t("brandAffinities.tabs.byCategory")}</TabsTrigger>
+            <TabsTrigger value="loyalty">{t("brandAffinities.tabs.loyaltyProfile")}</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -482,7 +484,7 @@ export function BrandAffinities({
             <div>
               <h4 className="font-semibold mb-4 flex items-center gap-2">
                 <Crown className="h-4 w-4 text-amber-500" />
-                Top Brand Affinities
+                {t("brandAffinities.topBrandAffinities")}
               </h4>
               <div className="grid gap-3 sm:grid-cols-2">
                 {data.topBrandsOverall.slice(0, 8).map((brand, i) => (
@@ -499,7 +501,7 @@ export function BrandAffinities({
                         {brand.indexVsPopulation >= 120 && (
                           <Badge variant="secondary" className="text-xs">
                             <TrendingUp className="h-3 w-3 mr-1" />
-                            Over-index
+                            {t("brandAffinities.overIndex")}
                           </Badge>
                         )}
                       </div>
@@ -521,7 +523,7 @@ export function BrandAffinities({
             <div>
               <h4 className="font-semibold mb-4 flex items-center gap-2">
                 <Zap className="h-4 w-4 text-emerald-500" />
-                Rising Brands (Trend: Up)
+                {t("brandAffinities.risingBrands")}
               </h4>
               <div className="flex flex-wrap gap-2">
                 {data.risingBrands.map((brand) => (
@@ -543,19 +545,19 @@ export function BrandAffinities({
             <div className="grid gap-4 sm:grid-cols-4">
               <div className="p-4 rounded-lg bg-muted/50 text-center">
                 <div className="text-2xl font-bold text-primary">{data.loyaltyProfile.overallLoyalty}%</div>
-                <div className="text-xs text-muted-foreground">Overall Brand Loyalty</div>
+                <div className="text-xs text-muted-foreground">{t("brandAffinities.stats.overallLoyalty")}</div>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
                 <div className="text-2xl font-bold text-primary">{data.loyaltyProfile.advocacyLevel}%</div>
-                <div className="text-xs text-muted-foreground">Advocacy Score</div>
+                <div className="text-xs text-muted-foreground">{t("brandAffinities.stats.advocacyScore")}</div>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
                 <div className="text-2xl font-bold text-primary capitalize">{data.loyaltyProfile.priceVsLoyalty}</div>
-                <div className="text-xs text-muted-foreground">Price vs Loyalty</div>
+                <div className="text-xs text-muted-foreground">{t("brandAffinities.stats.priceVsLoyalty")}</div>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
                 <div className="text-2xl font-bold text-primary">{data.loyaltyProfile.switchingPropensity}%</div>
-                <div className="text-xs text-muted-foreground">Switching Propensity</div>
+                <div className="text-xs text-muted-foreground">{t("brandAffinities.stats.switchingPropensity")}</div>
               </div>
             </div>
           </TabsContent>
@@ -620,7 +622,7 @@ export function BrandAffinities({
                                 </div>
                               </TooltipTrigger>
                               <TooltipContent>
-                                Index vs. general population (100 = average)
+                                {t("brandAffinities.indexTooltip")}
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
@@ -633,7 +635,7 @@ export function BrandAffinities({
                   <div className="p-3 rounded-lg bg-muted/50">
                     <h5 className="text-sm font-medium mb-2 flex items-center gap-1">
                       <Sparkles className="h-3 w-3 text-primary" />
-                      Category Insights
+                      {t("brandAffinities.categoryInsights")}
                     </h5>
                     <ul className="text-sm text-muted-foreground space-y-1">
                       {category.insights.map((insight, i) => (

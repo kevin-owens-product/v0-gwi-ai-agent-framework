@@ -29,6 +29,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import {
   ChevronDown,
@@ -324,6 +325,7 @@ export function AppSidebar({
 }: AppSidebarProps) {
   const pathname = usePathname()
   const [isCompact, setIsCompact] = useState(defaultCollapsed)
+  const t = useTranslations("ui.sidebar")
   const [_openGroups, _setOpenGroups] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {}
     navSections.forEach((section) => {
@@ -406,7 +408,7 @@ export function AppSidebar({
                       : "text-base text-sidebar-foreground"
                   )}
                 >
-                  {branding?.title || (isAdminVariant ? "Admin Portal" : "GWI Insights")}
+                  {branding?.title || (isAdminVariant ? t("adminPortal") : t("gwiInsights"))}
                 </span>
                 {branding?.subtitle && isAdminVariant && (
                   <p className="text-xs text-slate-400">{branding.subtitle}</p>
@@ -466,7 +468,7 @@ export function AppSidebar({
                         <Search className="h-4 w-4" />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent side="right">Search</TooltipContent>
+                    <TooltipContent side="right">{t("search")}</TooltipContent>
                   </Tooltip>
                 )}
               </div>
@@ -522,7 +524,7 @@ export function AppSidebar({
                 className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-sidebar-foreground/40 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
               >
                 <Layers className="h-4 w-4" />
-                Collapse
+                {t("collapse")}
               </button>
             )}
           </div>
@@ -567,7 +569,7 @@ export function AppSidebar({
                     onClick={onLogout}
                   >
                     <LogOut className="h-4 w-4 mr-2" />
-                    Sign out
+                    {t("signOut")}
                   </Button>
                 )}
               </>

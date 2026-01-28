@@ -34,24 +34,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { toast } from "sonner"
-
-const webhookEvents = [
-  { value: "user.created", label: "User Created", category: "Users" },
-  { value: "user.updated", label: "User Updated", category: "Users" },
-  { value: "user.deleted", label: "User Deleted", category: "Users" },
-  { value: "organization.created", label: "Organization Created", category: "Organizations" },
-  { value: "organization.updated", label: "Organization Updated", category: "Organizations" },
-  { value: "agent.run.completed", label: "Agent Run Completed", category: "Agents" },
-  { value: "agent.run.failed", label: "Agent Run Failed", category: "Agents" },
-  { value: "workflow.completed", label: "Workflow Completed", category: "Workflows" },
-  { value: "workflow.failed", label: "Workflow Failed", category: "Workflows" },
-  { value: "report.generated", label: "Report Generated", category: "Reports" },
-  { value: "subscription.changed", label: "Subscription Changed", category: "Billing" },
-  { value: "subscription.cancelled", label: "Subscription Cancelled", category: "Billing" },
-]
-
-const eventCategories = [...new Set(webhookEvents.map(e => e.category))]
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface Organization {
   id: string
@@ -60,10 +44,29 @@ interface Organization {
 
 export default function NewWebhookPage() {
   const router = useRouter()
+  const t = useTranslations("admin.integrations.webhooks.new")
+  const tCommon = useTranslations("common")
   const [isSaving, setIsSaving] = useState(false)
   const [showSecret, setShowSecret] = useState<string | null>(null)
   const [organizations, setOrganizations] = useState<Organization[]>([])
   const [loadingOrgs, setLoadingOrgs] = useState(true)
+
+  const webhookEvents = [
+    { value: "user.created", label: t("eventLabels.userCreated"), category: t("events.users") },
+    { value: "user.updated", label: t("eventLabels.userUpdated"), category: t("events.users") },
+    { value: "user.deleted", label: t("eventLabels.userDeleted"), category: t("events.users") },
+    { value: "organization.created", label: t("eventLabels.organizationCreated"), category: t("events.organizations") },
+    { value: "organization.updated", label: t("eventLabels.organizationUpdated"), category: t("events.organizations") },
+    { value: "agent.run.completed", label: t("eventLabels.agentRunCompleted"), category: t("events.agents") },
+    { value: "agent.run.failed", label: t("eventLabels.agentRunFailed"), category: t("events.agents") },
+    { value: "workflow.completed", label: t("eventLabels.workflowCompleted"), category: t("events.workflows") },
+    { value: "workflow.failed", label: t("eventLabels.workflowFailed"), category: t("events.workflows") },
+    { value: "report.generated", label: t("eventLabels.reportGenerated"), category: t("events.reports") },
+    { value: "subscription.changed", label: t("eventLabels.subscriptionChanged"), category: t("events.billing") },
+    { value: "subscription.cancelled", label: t("eventLabels.subscriptionCancelled"), category: t("events.billing") },
+  ]
+
+  const eventCategories = [...new Set(webhookEvents.map(e => e.category))]
 
   const [formData, setFormData] = useState({
     name: "",
@@ -94,12 +97,12 @@ export default function NewWebhookPage() {
 
   const handleCreate = async () => {
     if (!formData.url || !formData.orgId) {
-      toast.error("URL and organization are required")
+      showErrorToast(t("validation.urlAndOrgRequired"))
       return
     }
 
     if (formData.events.length === 0) {
-      toast.error("Please select at least one event to subscribe to")
+      showErrorToast(t("validation.atLeastOneEvent"))
       return
     }
 
@@ -107,7 +110,7 @@ export default function NewWebhookPage() {
     try {
       new URL(formData.url)
     } catch {
-      toast.error("Please enter a valid URL")
+      showErrorToast(t("validation.invalidUrl"))
       return
     }
 
@@ -119,7 +122,7 @@ export default function NewWebhookPage() {
         try {
           headers = JSON.parse(formData.headers)
         } catch {
-          throw new Error("Invalid JSON format for custom headers")
+          throw new Error(t("validation.invalidJsonHeaders"))
         }
       }
 
@@ -136,7 +139,7 @@ export default function NewWebhookPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to create webhook")
+        throw new Error(data.error || t("toast.createFailed"))
       }
 
       const data = await response.json()
@@ -145,11 +148,11 @@ export default function NewWebhookPage() {
       if (data.secret) {
         setShowSecret(data.secret)
       } else {
-        toast.success("Webhook created successfully")
+        showSuccessToast(t("toast.createSuccess"))
         router.push("/admin/integrations/webhooks")
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create webhook")
+      showErrorToast(error instanceof Error ? error.message : t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -157,7 +160,7 @@ export default function NewWebhookPage() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
-    toast.success("Copied to clipboard")
+    showSuccessToast(t("toast.copied"))
   }
 
   const handleSecretClose = () => {
@@ -192,9 +195,9 @@ export default function NewWebhookPage() {
       <Dialog open={!!showSecret} onOpenChange={handleSecretClose}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Webhook Signing Secret</DialogTitle>
+            <DialogTitle>{t("dialog.secretTitle")}</DialogTitle>
             <DialogDescription>
-              Copy this secret now - it will not be shown again! Use this to verify webhook signatures.
+              {t("dialog.secretDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="p-4 bg-muted rounded-lg font-mono text-sm break-all">
@@ -203,10 +206,10 @@ export default function NewWebhookPage() {
           <DialogFooter>
             <Button onClick={() => copyToClipboard(showSecret!)}>
               <Copy className="h-4 w-4 mr-2" />
-              Copy Secret
+              {t("dialog.copySecret")}
             </Button>
             <Button variant="outline" onClick={handleSecretClose}>
-              Done
+              {t("dialog.done")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -218,16 +221,16 @@ export default function NewWebhookPage() {
           <Link href="/admin/integrations/webhooks">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Webhook className="h-6 w-6 text-primary" />
-              Create Webhook
+              {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Create a new webhook endpoint to receive event notifications
+              {t("description")}
             </p>
           </div>
         </div>
@@ -235,12 +238,12 @@ export default function NewWebhookPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Webhook
+              {t("createWebhook")}
             </>
           )}
         </Button>
@@ -250,17 +253,17 @@ export default function NewWebhookPage() {
         {/* Basic Info */}
         <Card>
           <CardHeader>
-            <CardTitle>Endpoint Details</CardTitle>
+            <CardTitle>{t("sections.endpointDetails")}</CardTitle>
             <CardDescription>
-              Configure the webhook endpoint
+              {t("sections.endpointDetailsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Webhook Name</Label>
+              <Label htmlFor="name">{t("fields.webhookName")}</Label>
               <Input
                 id="name"
-                placeholder="My Webhook"
+                placeholder={t("placeholders.webhookName")}
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
@@ -269,26 +272,26 @@ export default function NewWebhookPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="url">Endpoint URL *</Label>
+              <Label htmlFor="url">{t("fields.endpointUrl")} *</Label>
               <Input
                 id="url"
                 type="url"
-                placeholder="https://example.com/webhooks"
+                placeholder={t("placeholders.endpointUrl")}
                 value={formData.url}
                 onChange={(e) =>
                   setFormData({ ...formData, url: e.target.value })
                 }
               />
               <p className="text-xs text-muted-foreground">
-                Must be a valid HTTPS URL that can receive POST requests
+                {t("hints.endpointUrl")}
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("fields.description")}</Label>
               <Textarea
                 id="description"
-                placeholder="What is this webhook used for?"
+                placeholder={t("placeholders.description")}
                 rows={2}
                 value={formData.description}
                 onChange={(e) =>
@@ -300,7 +303,7 @@ export default function NewWebhookPage() {
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
                 <Building2 className="h-4 w-4" />
-                Organization *
+                {t("fields.organization")} *
               </Label>
               <Select
                 value={formData.orgId}
@@ -309,7 +312,7 @@ export default function NewWebhookPage() {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={loadingOrgs ? "Loading..." : "Select organization"} />
+                  <SelectValue placeholder={loadingOrgs ? t("placeholders.loading") : t("placeholders.selectOrganization")} />
                 </SelectTrigger>
                 <SelectContent>
                   {organizations.map((org) => (
@@ -328,10 +331,10 @@ export default function NewWebhookPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Shield className="h-5 w-5" />
-              Settings
+              {t("sections.settings")}
             </CardTitle>
             <CardDescription>
-              Configure timeout and retry behavior
+              {t("sections.settingsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -339,7 +342,7 @@ export default function NewWebhookPage() {
               <div className="space-y-2">
                 <Label htmlFor="timeout" className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
-                  Timeout (seconds)
+                  {t("fields.timeout")}
                 </Label>
                 <Input
                   id="timeout"
@@ -354,7 +357,7 @@ export default function NewWebhookPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="retryCount">Retry Count</Label>
+                <Label htmlFor="retryCount">{t("fields.retryCount")}</Label>
                 <Input
                   id="retryCount"
                   type="number"
@@ -369,10 +372,10 @@ export default function NewWebhookPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="headers">Custom Headers (JSON)</Label>
+              <Label htmlFor="headers">{t("fields.customHeaders")}</Label>
               <Textarea
                 id="headers"
-                placeholder={'{\n  "X-Custom-Header": "value"\n}'}
+                placeholder={t("placeholders.customHeaders")}
                 rows={4}
                 className="font-mono text-sm"
                 value={formData.headers}
@@ -381,7 +384,7 @@ export default function NewWebhookPage() {
                 }
               />
               <p className="text-xs text-muted-foreground">
-                Optional custom headers to include with webhook requests
+                {t("hints.customHeaders")}
               </p>
             </div>
           </CardContent>
@@ -390,9 +393,9 @@ export default function NewWebhookPage() {
         {/* Events */}
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle>Event Subscriptions</CardTitle>
+            <CardTitle>{t("sections.eventSubscriptions")}</CardTitle>
             <CardDescription>
-              Select the events this webhook should receive ({formData.events.length} selected)
+              {t("sections.eventSubscriptionsDescription", { count: formData.events.length })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -419,7 +422,7 @@ export default function NewWebhookPage() {
                         size="sm"
                         onClick={() => toggleCategory(category)}
                       >
-                        {allSelected ? "Deselect All" : "Select All"}
+                        {allSelected ? t("actions.deselectAll") : t("actions.selectAll")}
                       </Button>
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -441,7 +444,7 @@ export default function NewWebhookPage() {
 
             {formData.events.length === 0 && (
               <p className="text-sm text-muted-foreground mt-4">
-                Please select at least one event to subscribe to
+                {t("hints.selectEvents")}
               </p>
             )}
           </CardContent>

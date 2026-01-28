@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -210,6 +211,7 @@ export function AdvancedFilters({
   onFilterApply,
   className,
 }: AdvancedFiltersProps) {
+  const t = useTranslations("dashboard.crosstabs.components.filters")
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
   const [searchQuery, setSearchQuery] = useState("")
   const [showSaveDialog, setShowSaveDialog] = useState(false)
@@ -417,17 +419,17 @@ export function AdvancedFilters({
                 onChange={(e) => updateCondition(groupId, condition.id, {
                   value: parseFloat(e.target.value) || ""
                 })}
-                placeholder="Min"
+                placeholder={t("values.min")}
                 className="h-8 w-24"
               />
-              <span className="text-muted-foreground">to</span>
+              <span className="text-muted-foreground">{t("values.to")}</span>
               <Input
                 type="number"
                 value={condition.value2 ?? ""}
                 onChange={(e) => updateCondition(groupId, condition.id, {
                   value2: parseFloat(e.target.value) || ""
                 })}
-                placeholder="Max"
+                placeholder={t("values.max")}
                 className="h-8 w-24"
               />
             </div>
@@ -445,7 +447,7 @@ export function AdvancedFilters({
                 })}
                 className="h-8 w-20"
               />
-              <span className="text-xs text-muted-foreground">items</span>
+              <span className="text-xs text-muted-foreground">{t("values.items")}</span>
             </div>
           )
         }
@@ -539,8 +541,8 @@ export function AdvancedFilters({
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm" className="h-8 justify-start">
                 {Array.isArray(condition.value) && condition.value.length > 0
-                  ? `${condition.value.length} selected`
-                  : "Select..."}
+                  ? t("values.selected", { count: condition.value.length })
+                  : t("values.select")}
                 <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </PopoverTrigger>
@@ -591,16 +593,16 @@ export function AdvancedFilters({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Filter className="h-5 w-5" />
-          <h3 className="font-semibold">Advanced Filters</h3>
+          <h3 className="font-semibold">{t("title")}</h3>
           {activeConditionCount > 0 && (
-            <Badge variant="secondary">{activeConditionCount} active</Badge>
+            <Badge variant="secondary">{t("active", { count: activeConditionCount })}</Badge>
           )}
         </div>
         <div className="flex items-center gap-2">
           {activeConditionCount > 0 && (
             <Button variant="ghost" size="sm" onClick={clearAllFilters}>
               <X className="h-4 w-4 mr-2" />
-              Clear All
+              {t("clearAll")}
             </Button>
           )}
           {savedFilters.length > 0 && (
@@ -608,11 +610,11 @@ export function AdvancedFilters({
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
                   <Star className="h-4 w-4 mr-2" />
-                  Saved
+                  {t("saved")}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-64">
-                <DropdownMenuLabel>Saved Filters</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("savedFilters")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {savedFilters.map(saved => (
                   <DropdownMenuItem
@@ -627,7 +629,7 @@ export function AdvancedFilters({
                       )}
                     </div>
                     {saved.isDefault && (
-                      <Badge variant="secondary" className="text-xs">Default</Badge>
+                      <Badge variant="secondary" className="text-xs">{t("default")}</Badge>
                     )}
                   </DropdownMenuItem>
                 ))}
@@ -637,12 +639,12 @@ export function AdvancedFilters({
           {activeConditionCount > 0 && onFilterSave && (
             <Button variant="outline" size="sm" onClick={() => setShowSaveDialog(true)}>
               <Save className="h-4 w-4 mr-2" />
-              Save
+              {t("save")}
             </Button>
           )}
           <Button size="sm" onClick={addFilterGroup}>
             <Plus className="h-4 w-4 mr-2" />
-            Add Group
+            {t("addGroup")}
           </Button>
         </div>
       </div>
@@ -651,7 +653,7 @@ export function AdvancedFilters({
       <div className="flex items-center gap-2 p-2 border rounded-lg bg-muted/30">
         <Search className="h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search fields to filter..."
+          placeholder={t("searchPlaceholder")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="h-8 border-0 bg-transparent focus-visible:ring-0"
@@ -708,7 +710,7 @@ export function AdvancedFilters({
                           className="h-7 w-40 text-sm font-medium"
                         />
                         <Badge variant={group.enabled ? "default" : "secondary"} className="text-xs">
-                          {group.conditions.filter(c => c.enabled).length} conditions
+                          {t("conditions", { count: group.conditions.filter(c => c.enabled).length })}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-2">
@@ -720,8 +722,8 @@ export function AdvancedFilters({
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="and">AND</SelectItem>
-                            <SelectItem value="or">OR</SelectItem>
+                            <SelectItem value="and">{t("logic.and")}</SelectItem>
+                            <SelectItem value="or">{t("logic.or")}</SelectItem>
                           </SelectContent>
                         </Select>
                         <Checkbox
@@ -848,13 +850,13 @@ export function AdvancedFilters({
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline" size="sm" className="w-full border-dashed">
                             <Plus className="h-4 w-4 mr-2" />
-                            Add Condition
+                            {t("addCondition")}
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-64">
                           <div className="p-2">
                             <Input
-                              placeholder="Search fields..."
+                              placeholder={t("searchFieldsPlaceholder")}
                               value={searchQuery}
                               onChange={(e) => setSearchQuery(e.target.value)}
                               className="h-8"
@@ -901,13 +903,13 @@ export function AdvancedFilters({
       ) : (
         <Card className="p-8 text-center">
           <Filter className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <h4 className="font-medium mb-2">No filters applied</h4>
+          <h4 className="font-medium mb-2">{t("noFiltersApplied")}</h4>
           <p className="text-sm text-muted-foreground mb-4">
-            Add filter groups to narrow down your data
+            {t("noFiltersDescription")}
           </p>
           <Button onClick={addFilterGroup}>
             <Plus className="h-4 w-4 mr-2" />
-            Add Filter Group
+            {t("addFilterGroup")}
           </Button>
         </Card>
       )}
@@ -917,7 +919,7 @@ export function AdvancedFilters({
         <div className="flex justify-end">
           <Button onClick={() => onFilterApply?.(activeFilters)}>
             <Check className="h-4 w-4 mr-2" />
-            Apply Filters
+            {t("applyFilters")}
           </Button>
         </div>
       )}
@@ -926,31 +928,31 @@ export function AdvancedFilters({
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Save Filter</DialogTitle>
+            <DialogTitle>{t("saveFilter")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Filter Name</Label>
+              <Label>{t("filterName")}</Label>
               <Input
                 value={saveFilterName}
                 onChange={(e) => setSaveFilterName(e.target.value)}
-                placeholder="e.g., High-Value Customers"
+                placeholder={t("filterNamePlaceholder")}
               />
             </div>
             <div className="space-y-2">
-              <Label>Description (optional)</Label>
+              <Label>{t("filterDescriptionOptional")}</Label>
               <Input
                 value={saveFilterDescription}
                 onChange={(e) => setSaveFilterDescription(e.target.value)}
-                placeholder="Describe what this filter does..."
+                placeholder={t("filterDescriptionPlaceholder")}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowSaveDialog(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setShowSaveDialog(false)}>{t("cancel")}</Button>
             <Button onClick={saveCurrentFilters} disabled={!saveFilterName.trim()}>
               <Save className="h-4 w-4 mr-2" />
-              Save Filter
+              {t("saveFilter")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -960,13 +962,13 @@ export function AdvancedFilters({
       <Dialog open={showQuickFilter} onOpenChange={setShowQuickFilter}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>Quick Filter: {quickFilterField?.label}</DialogTitle>
+            <DialogTitle>{t("quickFilter")}: {quickFilterField?.label}</DialogTitle>
           </DialogHeader>
           {quickFilterField && (
             <div className="space-y-4 py-4">
               {quickFilterField.type === "number" && quickFilterField.min !== undefined && quickFilterField.max !== undefined ? (
                 <div className="space-y-4">
-                  <Label>Value Range</Label>
+                  <Label>{t("valueRange")}</Label>
                   <Slider
                     defaultValue={[quickFilterField.min, quickFilterField.max]}
                     min={quickFilterField.min}

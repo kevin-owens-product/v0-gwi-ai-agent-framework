@@ -415,23 +415,6 @@ const CHART_TYPE_ICONS: Record<string, React.ReactNode> = {
   METRIC: <Activity className="h-4 w-4" />,
 }
 
-function formatChartTypeName(type: ChartType): string {
-  const typeMap: Record<ChartType, string> = {
-    BAR: "Bar",
-    LINE: "Line",
-    PIE: "Pie",
-    DONUT: "Donut",
-    AREA: "Area",
-    SCATTER: "Scatter",
-    HEATMAP: "Heatmap",
-    TREEMAP: "Treemap",
-    FUNNEL: "Funnel",
-    RADAR: "Radar",
-    METRIC: "Metric",
-  }
-  return typeMap[type] || type
-}
-
 interface DashboardType {
   id: string
   name: string
@@ -452,6 +435,24 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
   const t = useTranslations('dashboard.dashboards.detail')
   const { id } = use(params)
   const router = useRouter()
+  
+  const formatChartTypeName = (type: ChartType): string => {
+    const typeMap: Record<ChartType, string> = {
+      BAR: t('chartTypes.bar'),
+      LINE: t('chartTypes.line'),
+      PIE: t('chartTypes.pie'),
+      DONUT: t('chartTypes.donut'),
+      AREA: t('chartTypes.area'),
+      SCATTER: t('chartTypes.scatter'),
+      HEATMAP: t('chartTypes.heatmap'),
+      TREEMAP: t('chartTypes.treemap'),
+      FUNNEL: t('chartTypes.funnel'),
+      RADAR: t('chartTypes.radar'),
+      METRIC: t('chartTypes.metric'),
+    }
+    return typeMap[type] || type
+  }
+  
   const [isExporting, setIsExporting] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -858,7 +859,7 @@ export default function DashboardDetailPage({ params }: { params: Promise<{ id: 
       switch (format) {
         case "csv": {
           // Export charts as CSV
-          const csvHeaders = ["ID", "Name", "Type", "Category", "Data Source"]
+          const csvHeaders = [t('export.csvHeaders.id'), t('export.csvHeaders.name'), t('export.csvHeaders.type'), t('export.csvHeaders.category'), t('export.csvHeaders.dataSource')]
           const csvRows = filteredCharts.map(chart =>
             [chart.id, chart.name, chart.type, chart.category || "", chart.dataSource || ""].join(",")
           )

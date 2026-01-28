@@ -1,149 +1,126 @@
+"use client"
+
 import { Header } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
+import { useTranslations } from "next-intl"
 
 export default function PrivacyPage() {
+  const t = useTranslations("legal.privacy")
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4 max-w-4xl">
-          <h1 className="text-4xl font-bold mb-4">Privacy Policy</h1>
-          <p className="text-muted-foreground mb-8">Last updated: January 15, 2024</p>
+          <h1 className="text-4xl font-bold mb-4">{t("title")}</h1>
+          <p className="text-muted-foreground mb-8">{t("lastUpdated")}</p>
 
           <div className="prose prose-neutral dark:prose-invert max-w-none">
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
-              <p className="text-muted-foreground mb-4">
-                GWI ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we
-                collect, use, disclose, and safeguard your information when you use our platform and services.
-              </p>
-              <p className="text-muted-foreground">
-                By using our services, you agree to the collection and use of information in accordance with this
-                policy.
-              </p>
+              <h2 className="text-2xl font-semibold mb-4">{t("introduction.title")}</h2>
+              <p className="text-muted-foreground mb-4">{t("introduction.p1")}</p>
+              <p className="text-muted-foreground">{t("introduction.p2")}</p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">2. Information We Collect</h2>
-              <h3 className="text-xl font-medium mb-3">2.1 Information You Provide</h3>
+              <h2 className="text-2xl font-semibold mb-4">{t("informationCollected.title")}</h2>
+              <h3 className="text-xl font-medium mb-3">{t("informationCollected.youProvide.title")}</h3>
               <ul className="list-disc pl-6 text-muted-foreground space-y-2 mb-4">
-                <li>Account information (name, email, company, job title)</li>
-                <li>Payment and billing information</li>
-                <li>Communications with our support team</li>
-                <li>Custom data you upload to the platform</li>
-                <li>Queries and prompts you submit to our agents</li>
+                <li>{t("informationCollected.youProvide.item1")}</li>
+                <li>{t("informationCollected.youProvide.item2")}</li>
+                <li>{t("informationCollected.youProvide.item3")}</li>
+                <li>{t("informationCollected.youProvide.item4")}</li>
+                <li>{t("informationCollected.youProvide.item5")}</li>
               </ul>
 
-              <h3 className="text-xl font-medium mb-3">2.2 Automatically Collected Information</h3>
+              <h3 className="text-xl font-medium mb-3">{t("informationCollected.automatic.title")}</h3>
               <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-                <li>Device information (browser type, operating system)</li>
-                <li>Usage data (features used, time spent, interactions)</li>
-                <li>Log data (IP address, access times, pages viewed)</li>
-                <li>Cookies and similar tracking technologies</li>
-              </ul>
-            </section>
-
-            <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">3. How We Use Your Information</h2>
-              <p className="text-muted-foreground mb-4">We use the information we collect to:</p>
-              <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-                <li>Provide, maintain, and improve our services</li>
-                <li>Process transactions and send related information</li>
-                <li>Send technical notices, updates, and support messages</li>
-                <li>Respond to your comments, questions, and requests</li>
-                <li>Monitor and analyze trends, usage, and activities</li>
-                <li>Detect, investigate, and prevent fraudulent transactions</li>
-                <li>Personalize and improve your experience</li>
+                <li>{t("informationCollected.automatic.item1")}</li>
+                <li>{t("informationCollected.automatic.item2")}</li>
+                <li>{t("informationCollected.automatic.item3")}</li>
+                <li>{t("informationCollected.automatic.item4")}</li>
               </ul>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">4. Data Sharing and Disclosure</h2>
-              <p className="text-muted-foreground mb-4">
-                We do not sell your personal information. We may share your information in the following circumstances:
-              </p>
+              <h2 className="text-2xl font-semibold mb-4">{t("howWeUse.title")}</h2>
+              <p className="text-muted-foreground mb-4">{t("howWeUse.intro")}</p>
+              <ul className="list-disc pl-6 text-muted-foreground space-y-2">
+                <li>{t("howWeUse.item1")}</li>
+                <li>{t("howWeUse.item2")}</li>
+                <li>{t("howWeUse.item3")}</li>
+                <li>{t("howWeUse.item4")}</li>
+                <li>{t("howWeUse.item5")}</li>
+                <li>{t("howWeUse.item6")}</li>
+                <li>{t("howWeUse.item7")}</li>
+              </ul>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold mb-4">{t("sharing.title")}</h2>
+              <p className="text-muted-foreground mb-4">{t("sharing.intro")}</p>
               <ul className="list-disc pl-6 text-muted-foreground space-y-2">
                 <li>
-                  <strong>Service Providers:</strong> Third parties that help us operate our platform
+                  <strong>{t("sharing.serviceProviders.label")}</strong> {t("sharing.serviceProviders.text")}
                 </li>
                 <li>
-                  <strong>Legal Requirements:</strong> When required by law or to protect our rights
+                  <strong>{t("sharing.legal.label")}</strong> {t("sharing.legal.text")}
                 </li>
                 <li>
-                  <strong>Business Transfers:</strong> In connection with a merger, acquisition, or sale of assets
+                  <strong>{t("sharing.businessTransfers.label")}</strong> {t("sharing.businessTransfers.text")}
                 </li>
                 <li>
-                  <strong>With Your Consent:</strong> When you give us permission to share
+                  <strong>{t("sharing.consent.label")}</strong> {t("sharing.consent.text")}
                 </li>
               </ul>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">5. Data Security</h2>
-              <p className="text-muted-foreground">
-                We implement appropriate technical and organizational measures to protect your information against
-                unauthorized access, alteration, disclosure, or destruction. This includes encryption at rest and in
-                transit, regular security assessments, and access controls. We are SOC 2 Type II certified.
-              </p>
+              <h2 className="text-2xl font-semibold mb-4">{t("dataSecurity.title")}</h2>
+              <p className="text-muted-foreground">{t("dataSecurity.content")}</p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">6. Data Retention</h2>
-              <p className="text-muted-foreground">
-                We retain your information for as long as your account is active or as needed to provide you services.
-                We will retain and use your information as necessary to comply with our legal obligations, resolve
-                disputes, and enforce our agreements.
-              </p>
+              <h2 className="text-2xl font-semibold mb-4">{t("dataRetention.title")}</h2>
+              <p className="text-muted-foreground">{t("dataRetention.content")}</p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">7. Your Rights</h2>
-              <p className="text-muted-foreground mb-4">Depending on your location, you may have the right to:</p>
+              <h2 className="text-2xl font-semibold mb-4">{t("yourRights.title")}</h2>
+              <p className="text-muted-foreground mb-4">{t("yourRights.intro")}</p>
               <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-                <li>Access the personal information we hold about you</li>
-                <li>Request correction of inaccurate information</li>
-                <li>Request deletion of your information</li>
-                <li>Object to or restrict certain processing</li>
-                <li>Data portability</li>
-                <li>Withdraw consent at any time</li>
+                <li>{t("yourRights.item1")}</li>
+                <li>{t("yourRights.item2")}</li>
+                <li>{t("yourRights.item3")}</li>
+                <li>{t("yourRights.item4")}</li>
+                <li>{t("yourRights.item5")}</li>
+                <li>{t("yourRights.item6")}</li>
               </ul>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">8. International Transfers</h2>
-              <p className="text-muted-foreground">
-                Your information may be transferred to and processed in countries other than your own. We ensure
-                appropriate safeguards are in place, including Standard Contractual Clauses approved by the European
-                Commission.
-              </p>
+              <h2 className="text-2xl font-semibold mb-4">{t("internationalTransfers.title")}</h2>
+              <p className="text-muted-foreground">{t("internationalTransfers.content")}</p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">9. Children's Privacy</h2>
-              <p className="text-muted-foreground">
-                Our services are not intended for children under 16. We do not knowingly collect information from
-                children under 16. If you believe we have collected information from a child, please contact us.
-              </p>
+              <h2 className="text-2xl font-semibold mb-4">{t("childrensPrivacy.title")}</h2>
+              <p className="text-muted-foreground">{t("childrensPrivacy.content")}</p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">10. Changes to This Policy</h2>
-              <p className="text-muted-foreground">
-                We may update this Privacy Policy from time to time. We will notify you of any changes by posting the
-                new policy on this page and updating the "Last updated" date.
-              </p>
+              <h2 className="text-2xl font-semibold mb-4">{t("changes.title")}</h2>
+              <p className="text-muted-foreground">{t("changes.content")}</p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold mb-4">11. Contact Us</h2>
-              <p className="text-muted-foreground">
-                If you have any questions about this Privacy Policy, please contact us at:
-              </p>
+              <h2 className="text-2xl font-semibold mb-4">{t("contact.title")}</h2>
+              <p className="text-muted-foreground">{t("contact.intro")}</p>
               <p className="text-muted-foreground mt-2">
-                Email: privacy@gwi.com
+                {t("contact.email")}
                 <br />
-                Address: 123 Tech Hub, Shoreditch, London EC2A 4BX
+                {t("contact.address")}
               </p>
             </section>
           </div>

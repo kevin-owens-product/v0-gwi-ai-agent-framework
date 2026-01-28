@@ -43,6 +43,7 @@ import {
   Trash2,
 } from "lucide-react"
 import { NPSScoreGauge } from "@/components/admin/feedback"
+import { useTranslations } from "next-intl"
 
 interface NPSSurvey {
   id: string
@@ -76,6 +77,8 @@ interface OverallStats {
 
 export default function NPSPage() {
   const router = useRouter()
+  const t = useTranslations("admin.nps")
+  const tCommon = useTranslations("common")
   const [surveys, setSurveys] = useState<NPSSurvey[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState<OverallStats | null>(null)
@@ -89,7 +92,7 @@ export default function NPSPage() {
   const [newSurvey, setNewSurvey] = useState({
     name: "",
     description: "",
-    question: "How likely are you to recommend us to a friend or colleague?",
+    question: t("defaultQuestion"),
     followUpQuestion: "",
     targetType: "ALL",
     isActive: true,
@@ -140,7 +143,7 @@ export default function NPSPage() {
         setNewSurvey({
           name: "",
           description: "",
-          question: "How likely are you to recommend us to a friend or colleague?",
+          question: t("defaultQuestion"),
           followUpQuestion: "",
           targetType: "ALL",
           isActive: true,
@@ -188,52 +191,52 @@ export default function NPSPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">NPS Surveys</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground">
-            Manage Net Promoter Score surveys and track customer satisfaction
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button onClick={fetchSurveys} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            {t("refresh")}
           </Button>
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
-                New Survey
+                {t("newSurvey")}
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-lg">
               <DialogHeader>
-                <DialogTitle>Create NPS Survey</DialogTitle>
+                <DialogTitle>{t("createNpsSurvey")}</DialogTitle>
                 <DialogDescription>
-                  Set up a new Net Promoter Score survey to gather customer feedback.
+                  {t("setUpNew")}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Survey Name</Label>
+                  <Label htmlFor="name">{t("surveyName")}</Label>
                   <Input
                     id="name"
                     value={newSurvey.name}
                     onChange={(e) => setNewSurvey({ ...newSurvey, name: e.target.value })}
-                    placeholder="Q1 2026 NPS Survey"
+                    placeholder={t("placeholders.surveyName")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Description (optional)</Label>
+                  <Label htmlFor="description">{t("description")}</Label>
                   <Textarea
                     id="description"
                     value={newSurvey.description}
                     onChange={(e) => setNewSurvey({ ...newSurvey, description: e.target.value })}
-                    placeholder="Quarterly customer satisfaction survey"
+                    placeholder={t("placeholders.description")}
                     rows={2}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="question">Main Question</Label>
+                  <Label htmlFor="question">{t("mainQuestion")}</Label>
                   <Textarea
                     id="question"
                     value={newSurvey.question}
@@ -242,17 +245,17 @@ export default function NPSPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="followUp">Follow-up Question (optional)</Label>
+                  <Label htmlFor="followUp">{t("followUpQuestion")}</Label>
                   <Textarea
                     id="followUp"
                     value={newSurvey.followUpQuestion}
                     onChange={(e) => setNewSurvey({ ...newSurvey, followUpQuestion: e.target.value })}
-                    placeholder="What's the main reason for your score?"
+                    placeholder={t("placeholders.followUp")}
                     rows={2}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="target">Target Audience</Label>
+                  <Label htmlFor="target">{t("targetAudience")}</Label>
                   <Select
                     value={newSurvey.targetType}
                     onValueChange={(v) => setNewSurvey({ ...newSurvey, targetType: v })}
@@ -261,14 +264,14 @@ export default function NPSPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="ALL">All Users</SelectItem>
-                      <SelectItem value="SPECIFIC_ORGS">Specific Organizations</SelectItem>
-                      <SelectItem value="SPECIFIC_PLANS">Specific Plans</SelectItem>
+                      <SelectItem value="ALL">{t("targetTypes.allUsers")}</SelectItem>
+                      <SelectItem value="SPECIFIC_ORGS">{t("targetTypes.specificOrgs")}</SelectItem>
+                      <SelectItem value="SPECIFIC_PLANS">{t("targetTypes.specificPlans")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="active">Active Immediately</Label>
+                  <Label htmlFor="active">{t("activeImmediately")}</Label>
                   <Switch
                     id="active"
                     checked={newSurvey.isActive}
@@ -277,16 +280,16 @@ export default function NPSPage() {
                 </div>
                 <div className="flex justify-end gap-3 pt-4">
                   <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                    Cancel
+                    {t("cancel")}
                   </Button>
                   <Button onClick={handleCreateSurvey} disabled={!newSurvey.name.trim() || isCreating}>
                     {isCreating ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Creating...
+                        {t("creating")}
                       </>
                     ) : (
-                      "Create Survey"
+                      t("createSurveyButton")
                     )}
                   </Button>
                 </div>
@@ -298,9 +301,9 @@ export default function NPSPage() {
           <ConfirmationDialog
             open={!!surveyToDelete}
             onOpenChange={(open) => !open && setSurveyToDelete(null)}
-            title="Delete Survey"
-            description={`Are you sure you want to delete "${surveyToDelete?.name}"? All responses will be permanently lost.`}
-            confirmText="Delete"
+            title={t("deleteSurvey")}
+            description={t("deleteConfirm", { name: surveyToDelete?.name || "" })}
+            confirmText={t("delete")}
             onConfirm={handleDeleteSurvey}
             variant="destructive"
           />
@@ -321,33 +324,33 @@ export default function NPSPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Total Surveys</CardDescription>
+            <CardDescription>{t("stats.totalSurveys")}</CardDescription>
             <CardTitle className="text-3xl">{stats?.totalSurveys || 0}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <BarChart3 className="h-4 w-4" />
-              Active campaigns
+              {t("activeCampaigns")}
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Total Responses</CardDescription>
+            <CardDescription>{t("stats.totalResponses")}</CardDescription>
             <CardTitle className="text-3xl">{stats?.totalResponses || 0}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <Users className="h-4 w-4" />
-              Across all surveys
+              {t("acrossAllSurveys")}
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Promoter Rate</CardDescription>
+            <CardDescription>{t("promoterRate")}</CardDescription>
             <CardTitle className="text-3xl text-green-500">
               {stats && stats.totalResponses > 0
                 ? `${Math.round((stats.totalPromoters / stats.totalResponses) * 100)}%`
@@ -357,31 +360,31 @@ export default function NPSPage() {
           <CardContent>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <TrendingUp className="h-4 w-4" />
-              {stats?.totalPromoters || 0} promoters
+              {stats?.totalPromoters || 0} {t("promoters")}
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Surveys List */}
-      <Card>
-        <CardHeader>
-          <CardTitle>All Surveys</CardTitle>
-          <CardDescription>
-            Manage your NPS surveys and view responses
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-            </div>
-          ) : surveys.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
-              <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No surveys created yet</p>
-              <p className="text-sm">Create your first NPS survey to start collecting feedback</p>
-            </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("allSurveys")}</CardTitle>
+            <CardDescription>
+              {t("manageNpsSurveys")}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              </div>
+            ) : surveys.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground">
+                <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>{t("noSurveysCreated")}</p>
+                <p className="text-sm">{t("createFirstSurvey")}</p>
+              </div>
           ) : (
             <div className="space-y-4">
               {surveys.map((survey) => (
@@ -394,7 +397,7 @@ export default function NPSPage() {
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold">{survey.name}</h3>
                         <Badge variant={survey.isActive ? "default" : "secondary"}>
-                          {survey.isActive ? "Active" : "Inactive"}
+                          {survey.isActive ? t("status.active") : t("status.inactive")}
                         </Badge>
                       </div>
                       {survey.description && (
@@ -405,11 +408,11 @@ export default function NPSPage() {
                       <div className="flex items-center gap-4 mt-3 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <Users className="h-4 w-4" />
-                          {survey.totalResponses} responses
+                          {survey.totalResponses} {t("responses")}
                         </div>
                         <div className="flex items-center gap-1">
                           <TrendingUp className="h-4 w-4" />
-                          NPS: {survey.npsScore !== null ? Math.round(Number(survey.npsScore)) : "-"}
+                          {t("nps")}: {survey.npsScore !== null ? Math.round(Number(survey.npsScore)) : "-"}
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
@@ -419,13 +422,13 @@ export default function NPSPage() {
                       {/* Mini breakdown */}
                       <div className="flex items-center gap-4 mt-2">
                         <span className="text-xs text-green-500">
-                          {survey.promoters} promoters
+                          {survey.promoters} {t("promoters")}
                         </span>
                         <span className="text-xs text-amber-500">
-                          {survey.passives} passives
+                          {survey.passives} {t("passives")}
                         </span>
                         <span className="text-xs text-red-500">
-                          {survey.detractors} detractors
+                          {survey.detractors} {t("detractors")}
                         </span>
                       </div>
                     </div>
@@ -458,7 +461,7 @@ export default function NPSPage() {
               {totalPages > 1 && (
                 <div className="flex items-center justify-between pt-4">
                   <p className="text-sm text-muted-foreground">
-                    Page {page} of {totalPages}
+                    {t("pagination.page")} {page} {t("pagination.of")} {totalPages}
                   </p>
                   <div className="flex gap-2">
                     <Button
@@ -467,7 +470,7 @@ export default function NPSPage() {
                       onClick={() => setPage((p) => Math.max(1, p - 1))}
                       disabled={page === 1}
                     >
-                      Previous
+                      {t("pagination.previous")}
                     </Button>
                     <Button
                       variant="outline"
@@ -475,7 +478,7 @@ export default function NPSPage() {
                       onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                       disabled={page === totalPages}
                     >
-                      Next
+                      {t("pagination.next")}
                     </Button>
                   </div>
                 </div>

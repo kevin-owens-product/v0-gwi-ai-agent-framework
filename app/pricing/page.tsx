@@ -1,3 +1,6 @@
+"use client"
+
+import { useTranslations } from "next-intl"
 import { Header } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 import { Button } from "@/components/ui/button"
@@ -5,127 +8,124 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Check, HelpCircle, Minus } from "lucide-react"
 import Link from "next/link"
 
-const plans = [
-  {
-    name: "Starter",
-    description: "For small teams getting started with AI insights",
-    price: 299,
-    period: "per month",
-    features: [
-      { name: "5 team members", included: true },
-      { name: "3 pre-built agents", included: true },
-      { name: "1,000 queries/month", included: true },
-      { name: "Basic memory (30 days)", included: true },
-      { name: "Email support", included: true },
-      { name: "Custom agents", included: false },
-      { name: "Workflow automation", included: false },
-      { name: "API access", included: false },
-      { name: "SSO/SAML", included: false },
-    ],
-    cta: "Start Free Trial",
-    popular: false,
-  },
-  {
-    name: "Professional",
-    description: "For growing teams that need more power",
-    price: 799,
-    period: "per month",
-    features: [
-      { name: "25 team members", included: true },
-      { name: "All pre-built agents", included: true },
-      { name: "10,000 queries/month", included: true },
-      { name: "Extended memory (90 days)", included: true },
-      { name: "Priority support", included: true },
-      { name: "5 custom agents", included: true },
-      { name: "Scheduled workflows", included: true },
-      { name: "Multi-format reports (PDF, PPT, Excel)", included: true },
-      { name: "50 integrations", included: true },
-      { name: "Advanced analytics dashboard", included: true },
-      { name: "API access", included: true },
-      { name: "SSO/SAML", included: false },
-    ],
-    cta: "Start Free Trial",
-    popular: true,
-  },
-  {
-    name: "Enterprise",
-    description: "For large organizations with advanced needs",
-    price: null,
-    period: "custom pricing",
-    features: [
-      { name: "Unlimited team members", included: true },
-      { name: "All pre-built agents", included: true },
-      { name: "Unlimited queries", included: true },
-      { name: "Unlimited memory", included: true },
-      { name: "Dedicated support & CSM", included: true },
-      { name: "Unlimited custom agents", included: true },
-      { name: "Advanced scheduled workflows", included: true },
-      { name: "All report formats + custom templates", included: true },
-      { name: "Unlimited integrations + custom connectors", included: true },
-      { name: "SSO/SAML (Azure AD, Google, custom)", included: true },
-      { name: "99.99% SLA with circuit breakers", included: true },
-      { name: "Full API access + webhooks", included: true },
-      { name: "Dedicated infrastructure", included: true },
-    ],
-    cta: "Contact Sales",
-    popular: false,
-  },
-]
-
-const faqs = [
-  {
-    question: "What counts as a query?",
-    answer:
-      "A query is any request made to an agent, including follow-up questions within the same conversation. Complex multi-step workflows count as a single query.",
-  },
-  {
-    question: "Can I change plans at any time?",
-    answer:
-      "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately and are prorated.",
-  },
-  {
-    question: "What happens if I exceed my query limit?",
-    answer:
-      "We'll notify you when you're approaching your limit. You can purchase additional queries or upgrade your plan.",
-  },
-  {
-    question: "Is there a free trial?",
-    answer: "Yes, all plans come with a 14-day free trial. No credit card required to start.",
-  },
-  {
-    question: "What integrations are included?",
-    answer:
-      "All plans include access to our core integrations (Google Workspace, Slack, Tableau). Enterprise plans include custom integrations.",
-  },
-  {
-    question: "How does data security work?",
-    answer:
-      "All data is encrypted at rest and in transit. We're SOC 2 Type II certified and GDPR compliant. Enterprise plans include additional security features.",
-  },
-]
-
-const comparisonFeatures = [
-  { name: "Team Members", starter: "5", professional: "25", enterprise: "Unlimited" },
-  { name: "Pre-built Agents", starter: "3", professional: "All", enterprise: "All" },
-  { name: "Custom Agents", starter: "-", professional: "5", enterprise: "Unlimited" },
-  { name: "Monthly Queries", starter: "1,000", professional: "10,000", enterprise: "Unlimited" },
-  { name: "Real LLM Execution", starter: "✓", professional: "✓", enterprise: "✓" },
-  { name: "Memory Retention", starter: "30 days", professional: "90 days", enterprise: "Unlimited" },
-  { name: "Scheduled Workflows", starter: "-", professional: "✓", enterprise: "✓" },
-  { name: "Report Formats", starter: "CSV, HTML", professional: "All Formats", enterprise: "All Formats" },
-  { name: "Workflow Automation", starter: "-", professional: "Basic", enterprise: "Advanced" },
-  { name: "API Access", starter: "-", professional: "Yes", enterprise: "Full" },
-  { name: "Integrations Hub", starter: "5", professional: "50", enterprise: "Unlimited" },
-  { name: "Email Notifications", starter: "✓", professional: "✓", enterprise: "✓" },
-  { name: "Circuit Breakers", starter: "✓", professional: "✓", enterprise: "✓" },
-  { name: "Advanced Analytics", starter: "-", professional: "✓", enterprise: "✓" },
-  { name: "Support", starter: "Email", professional: "Priority", enterprise: "Dedicated" },
-  { name: "SSO/SAML", starter: "-", professional: "-", enterprise: "✓" },
-  { name: "Audit Logs", starter: "-", professional: "90 days", enterprise: "Unlimited" },
-  { name: "SLA", starter: "99.9%", professional: "99.9%", enterprise: "99.99%" },
-]
-
 export default function PricingPage() {
+  const t = useTranslations("pricing")
+
+  const plans = [
+    {
+      name: t("plans.starter.name"),
+      description: t("plans.starter.description"),
+      price: 299,
+      period: t("plans.starter.period"),
+      features: [
+        { name: t("plans.starter.features.teamMembers"), included: true },
+        { name: t("plans.starter.features.prebuiltAgents"), included: true },
+        { name: t("plans.starter.features.queriesPerMonth"), included: true },
+        { name: t("plans.starter.features.basicMemory"), included: true },
+        { name: t("plans.starter.features.emailSupport"), included: true },
+        { name: t("plans.starter.features.customAgents"), included: false },
+        { name: t("plans.starter.features.workflowAutomation"), included: false },
+        { name: t("plans.starter.features.apiAccess"), included: false },
+        { name: t("plans.starter.features.ssoSaml"), included: false },
+      ],
+      cta: t("plans.starter.cta"),
+      popular: false,
+    },
+    {
+      name: t("plans.professional.name"),
+      description: t("plans.professional.description"),
+      price: 799,
+      period: t("plans.professional.period"),
+      features: [
+        { name: t("plans.professional.features.teamMembers"), included: true },
+        { name: t("plans.professional.features.prebuiltAgents"), included: true },
+        { name: t("plans.professional.features.queriesPerMonth"), included: true },
+        { name: t("plans.professional.features.extendedMemory"), included: true },
+        { name: t("plans.professional.features.prioritySupport"), included: true },
+        { name: t("plans.professional.features.customAgents"), included: true },
+        { name: t("plans.professional.features.scheduledWorkflows"), included: true },
+        { name: t("plans.professional.features.multiFormatReports"), included: true },
+        { name: t("plans.professional.features.integrations"), included: true },
+        { name: t("plans.professional.features.advancedAnalytics"), included: true },
+        { name: t("plans.professional.features.apiAccess"), included: true },
+        { name: t("plans.professional.features.ssoSaml"), included: false },
+      ],
+      cta: t("plans.professional.cta"),
+      popular: true,
+    },
+    {
+      name: t("plans.enterprise.name"),
+      description: t("plans.enterprise.description"),
+      price: null,
+      period: t("plans.enterprise.period"),
+      features: [
+        { name: t("plans.enterprise.features.teamMembers"), included: true },
+        { name: t("plans.enterprise.features.prebuiltAgents"), included: true },
+        { name: t("plans.enterprise.features.unlimitedQueries"), included: true },
+        { name: t("plans.enterprise.features.unlimitedMemory"), included: true },
+        { name: t("plans.enterprise.features.dedicatedSupport"), included: true },
+        { name: t("plans.enterprise.features.unlimitedCustomAgents"), included: true },
+        { name: t("plans.enterprise.features.advancedWorkflows"), included: true },
+        { name: t("plans.enterprise.features.allReportFormats"), included: true },
+        { name: t("plans.enterprise.features.unlimitedIntegrations"), included: true },
+        { name: t("plans.enterprise.features.ssoSaml"), included: true },
+        { name: t("plans.enterprise.features.sla"), included: true },
+        { name: t("plans.enterprise.features.fullApiAccess"), included: true },
+        { name: t("plans.enterprise.features.dedicatedInfrastructure"), included: true },
+      ],
+      cta: t("plans.enterprise.cta"),
+      popular: false,
+    },
+  ]
+
+  const faqs = [
+    {
+      question: t("faq.queryCount.question"),
+      answer: t("faq.queryCount.answer"),
+    },
+    {
+      question: t("faq.changePlans.question"),
+      answer: t("faq.changePlans.answer"),
+    },
+    {
+      question: t("faq.exceedLimit.question"),
+      answer: t("faq.exceedLimit.answer"),
+    },
+    {
+      question: t("faq.freeTrial.question"),
+      answer: t("faq.freeTrial.answer"),
+    },
+    {
+      question: t("faq.integrations.question"),
+      answer: t("faq.integrations.answer"),
+    },
+    {
+      question: t("faq.dataSecurity.question"),
+      answer: t("faq.dataSecurity.answer"),
+    },
+  ]
+
+  const comparisonFeatures = [
+    { name: t("comparison.teamMembers"), starter: "5", professional: "25", enterprise: t("comparison.unlimited") },
+    { name: t("comparison.prebuiltAgents"), starter: "3", professional: t("comparison.all"), enterprise: t("comparison.all") },
+    { name: t("comparison.customAgents"), starter: "-", professional: "5", enterprise: t("comparison.unlimited") },
+    { name: t("comparison.monthlyQueries"), starter: "1,000", professional: "10,000", enterprise: t("comparison.unlimited") },
+    { name: t("comparison.realLlmExecution"), starter: "✓", professional: "✓", enterprise: "✓" },
+    { name: t("comparison.memoryRetention"), starter: t("comparison.days30"), professional: t("comparison.days90"), enterprise: t("comparison.unlimited") },
+    { name: t("comparison.scheduledWorkflows"), starter: "-", professional: "✓", enterprise: "✓" },
+    { name: t("comparison.reportFormats"), starter: "CSV, HTML", professional: t("comparison.allFormats"), enterprise: t("comparison.allFormats") },
+    { name: t("comparison.workflowAutomation"), starter: "-", professional: t("comparison.basic"), enterprise: t("comparison.advanced") },
+    { name: t("comparison.apiAccess"), starter: "-", professional: t("comparison.yes"), enterprise: t("comparison.full") },
+    { name: t("comparison.integrationsHub"), starter: "5", professional: "50", enterprise: t("comparison.unlimited") },
+    { name: t("comparison.emailNotifications"), starter: "✓", professional: "✓", enterprise: "✓" },
+    { name: t("comparison.circuitBreakers"), starter: "✓", professional: "✓", enterprise: "✓" },
+    { name: t("comparison.advancedAnalytics"), starter: "-", professional: "✓", enterprise: "✓" },
+    { name: t("comparison.support"), starter: t("comparison.email"), professional: t("comparison.priority"), enterprise: t("comparison.dedicated") },
+    { name: t("comparison.ssoSaml"), starter: "-", professional: "-", enterprise: "✓" },
+    { name: t("comparison.auditLogs"), starter: "-", professional: t("comparison.days90"), enterprise: t("comparison.unlimited") },
+    { name: t("comparison.sla"), starter: "99.9%", professional: "99.9%", enterprise: "99.99%" },
+  ]
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -134,9 +134,9 @@ export default function PricingPage() {
         {/* Hero */}
         <section className="py-20">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Simple, transparent pricing</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{t("hero.title")}</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Choose the plan that fits your team. All plans include a 14-day free trial.
+              {t("hero.subtitle")}
             </p>
           </div>
         </section>
@@ -153,7 +153,7 @@ export default function PricingPage() {
                   {plan.popular && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                       <span className="bg-primary text-primary-foreground text-sm font-medium px-3 py-1 rounded-full">
-                        Most Popular
+                        {t("mostPopular")}
                       </span>
                     </div>
                   )}
@@ -169,7 +169,7 @@ export default function PricingPage() {
                           <span className="text-muted-foreground">{plan.period}</span>
                         </div>
                       ) : (
-                        <div className="text-4xl font-bold">Custom</div>
+                        <div className="text-4xl font-bold">{t("custom")}</div>
                       )}
                     </div>
                     <ul className="space-y-3">
@@ -199,15 +199,15 @@ export default function PricingPage() {
         {/* Comparison Table */}
         <section className="py-20 bg-muted/30">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Compare Plans</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t("comparePlans")}</h2>
             <div className="max-w-5xl mx-auto overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left py-4 px-4 font-medium">Feature</th>
-                    <th className="text-center py-4 px-4 font-medium">Starter</th>
-                    <th className="text-center py-4 px-4 font-medium">Professional</th>
-                    <th className="text-center py-4 px-4 font-medium">Enterprise</th>
+                    <th className="text-left py-4 px-4 font-medium">{t("tableHeaders.feature")}</th>
+                    <th className="text-center py-4 px-4 font-medium">{t("plans.starter.name")}</th>
+                    <th className="text-center py-4 px-4 font-medium">{t("plans.professional.name")}</th>
+                    <th className="text-center py-4 px-4 font-medium">{t("plans.enterprise.name")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -228,7 +228,7 @@ export default function PricingPage() {
         {/* FAQ */}
         <section className="py-20">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t("faqTitle")}</h2>
             <div className="max-w-3xl mx-auto grid gap-6">
               {faqs.map((faq) => (
                 <Card key={faq.question}>
@@ -250,13 +250,13 @@ export default function PricingPage() {
         {/* CTA */}
         <section className="py-20 bg-primary text-primary-foreground">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("cta.title")}</h2>
             <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-              Start your 14-day free trial today. No credit card required.
+              {t("cta.subtitle")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" asChild>
-                <Link href="/signup">Start Free Trial</Link>
+                <Link href="/signup">{t("cta.startFreeTrial")}</Link>
               </Button>
               <Button
                 size="lg"
@@ -264,7 +264,7 @@ export default function PricingPage() {
                 className="border-primary-foreground/20 hover:bg-primary-foreground/10 bg-transparent"
                 asChild
               >
-                <Link href="/contact">Talk to Sales</Link>
+                <Link href="/contact">{t("cta.talkToSales")}</Link>
               </Button>
             </div>
           </div>

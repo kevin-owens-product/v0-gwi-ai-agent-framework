@@ -25,40 +25,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { toast } from "sonner"
-
-const typeOptions = [
-  { value: "SCHEDULED", label: "Scheduled", description: "Planned maintenance window" },
-  { value: "EMERGENCY", label: "Emergency", description: "Urgent maintenance required" },
-  { value: "UPGRADE", label: "Upgrade", description: "System or component upgrade" },
-  { value: "MIGRATION", label: "Migration", description: "Data or service migration" },
-  { value: "SECURITY_PATCH", label: "Security Patch", description: "Security-related updates" },
-]
-
-const serviceOptions = [
-  "API Gateway",
-  "Authentication",
-  "Database",
-  "File Storage",
-  "Messaging",
-  "Search",
-  "Analytics",
-  "Payments",
-  "Notifications",
-]
-
-const regionOptions = [
-  "US East",
-  "US West",
-  "EU West",
-  "EU Central",
-  "Asia Pacific",
-  "Global",
-]
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 export default function NewMaintenancePage() {
   const router = useRouter()
+  const t = useTranslations("admin.operations.maintenance.new")
+  const tMain = useTranslations("admin.operations.maintenance")
+  const tOps = useTranslations("admin.operations")
+  const tCommon = useTranslations("common")
   const [isSaving, setIsSaving] = useState(false)
+
+  const typeOptions = [
+    { value: "SCHEDULED", label: tMain("type.scheduled"), description: t("typeDescriptions.scheduled") },
+    { value: "EMERGENCY", label: tMain("type.emergency"), description: t("typeDescriptions.emergency") },
+    { value: "UPGRADE", label: tMain("type.upgrade"), description: t("typeDescriptions.upgrade") },
+    { value: "MIGRATION", label: tMain("type.migration"), description: t("typeDescriptions.migration") },
+    { value: "SECURITY_PATCH", label: tMain("type.securityPatch"), description: t("typeDescriptions.securityPatch") },
+  ]
+
+  const serviceOptions = [
+    tOps("services.apiGateway"),
+    tOps("services.authentication"),
+    tOps("services.database"),
+    tOps("services.fileStorage"),
+    tOps("services.messaging"),
+    tOps("services.search"),
+    tOps("services.analytics"),
+    tOps("services.payments"),
+    tOps("services.notifications"),
+  ]
+
+  const regionOptions = [
+    t("regions.usEast"),
+    t("regions.usWest"),
+    t("regions.euWest"),
+    t("regions.euCentral"),
+    t("regions.asiaPacific"),
+    t("regions.global"),
+  ]
 
   const [formData, setFormData] = useState({
     title: "",
@@ -73,12 +78,12 @@ export default function NewMaintenancePage() {
 
   const handleCreate = async () => {
     if (!formData.title || !formData.scheduledStart || !formData.scheduledEnd) {
-      toast.error("Title, start time, and end time are required")
+      showErrorToast(t("validation.titleStartEndRequired"))
       return
     }
 
     if (new Date(formData.scheduledEnd) <= new Date(formData.scheduledStart)) {
-      toast.error("End time must be after start time")
+      showErrorToast(t("validation.endAfterStart"))
       return
     }
 
@@ -95,14 +100,14 @@ export default function NewMaintenancePage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to schedule maintenance")
+        throw new Error(data.error || t("toast.createFailed"))
       }
 
       const data = await response.json()
-      toast.success("Maintenance window scheduled")
+      showSuccessToast(t("toast.createSuccess"))
       router.push(`/admin/operations/maintenance/${data.window.id}`)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to schedule maintenance")
+      showErrorToast(error instanceof Error ? error.message : t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -137,6 +142,8 @@ export default function NewMaintenancePage() {
     return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`
   }
 
+  const tDuration = useTranslations("admin.operations.maintenance.new")
+
   const duration = calculateDuration()
 
   return (
@@ -147,16 +154,16 @@ export default function NewMaintenancePage() {
           <Link href="/admin/operations/maintenance">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Wrench className="h-6 w-6 text-primary" />
-              Schedule Maintenance
+              {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Create a new scheduled maintenance window
+              {t("description")}
             </p>
           </div>
         </div>
@@ -167,12 +174,12 @@ export default function NewMaintenancePage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Scheduling...
+              {t("scheduling")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Schedule Maintenance
+              {t("scheduleMaintenance")}
             </>
           )}
         </Button>
@@ -182,17 +189,17 @@ export default function NewMaintenancePage() {
         {/* Basic Info */}
         <Card>
           <CardHeader>
-            <CardTitle>Maintenance Details</CardTitle>
+            <CardTitle>{t("sections.maintenanceDetails")}</CardTitle>
             <CardDescription>
-              Basic information about the maintenance window
+              {t("sections.maintenanceDetailsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Title *</Label>
+              <Label htmlFor="title">{t("fields.title")} *</Label>
               <Input
                 id="title"
-                placeholder="e.g., Database upgrade"
+                placeholder={t("placeholders.title")}
                 value={formData.title}
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
@@ -201,10 +208,10 @@ export default function NewMaintenancePage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("fields.description")}</Label>
               <Textarea
                 id="description"
-                placeholder="Describe the maintenance work being performed..."
+                placeholder={t("placeholders.description")}
                 rows={3}
                 value={formData.description}
                 onChange={(e) =>
@@ -214,7 +221,7 @@ export default function NewMaintenancePage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Type</Label>
+              <Label>{t("fields.type")}</Label>
               <Select
                 value={formData.type}
                 onValueChange={(value) =>
@@ -246,16 +253,16 @@ export default function NewMaintenancePage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              Schedule
+              {t("sections.schedule")}
             </CardTitle>
             <CardDescription>
-              Set the maintenance window timing
+              {t("sections.scheduleDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="scheduledStart">Start Time *</Label>
+                <Label htmlFor="scheduledStart">{t("fields.startTime")} *</Label>
                 <div className="relative">
                   <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -270,7 +277,7 @@ export default function NewMaintenancePage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="scheduledEnd">End Time *</Label>
+                <Label htmlFor="scheduledEnd">{t("fields.endTime")} *</Label>
                 <div className="relative">
                   <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -289,7 +296,7 @@ export default function NewMaintenancePage() {
             {duration && (
               <div className="p-3 rounded-md bg-muted">
                 <p className="text-sm">
-                  <span className="font-medium">Duration:</span> {duration}
+                  <span className="font-medium">{tCommon("duration")}:</span> {duration}
                 </p>
               </div>
             )}
@@ -297,7 +304,7 @@ export default function NewMaintenancePage() {
             <div className="space-y-2">
               <Label htmlFor="notifyBefore" className="flex items-center gap-2">
                 <Bell className="h-4 w-4" />
-                Notify Before (hours)
+                {t("fields.notifyBefore")}
               </Label>
               <Input
                 id="notifyBefore"
@@ -313,7 +320,7 @@ export default function NewMaintenancePage() {
                 }
               />
               <p className="text-xs text-muted-foreground">
-                Users will be notified {formData.notifyBefore} hours before maintenance begins
+                {t("hints.notifyBefore", { hours: formData.notifyBefore })}
               </p>
             </div>
           </CardContent>
@@ -322,9 +329,9 @@ export default function NewMaintenancePage() {
         {/* Affected Services */}
         <Card>
           <CardHeader>
-            <CardTitle>Affected Services</CardTitle>
+            <CardTitle>{t("sections.affectedServices")}</CardTitle>
             <CardDescription>
-              Select all services that will be affected
+              {t("sections.affectedServicesDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -346,7 +353,7 @@ export default function NewMaintenancePage() {
             </div>
             {formData.affectedServices.length === 0 && (
               <p className="text-sm text-muted-foreground mt-2">
-                Click to select affected services
+                {t("hints.selectServices")}
               </p>
             )}
           </CardContent>
@@ -355,9 +362,9 @@ export default function NewMaintenancePage() {
         {/* Affected Regions */}
         <Card>
           <CardHeader>
-            <CardTitle>Affected Regions</CardTitle>
+            <CardTitle>{t("sections.affectedRegions")}</CardTitle>
             <CardDescription>
-              Select the geographic regions impacted
+              {t("sections.affectedRegionsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -379,7 +386,7 @@ export default function NewMaintenancePage() {
             </div>
             {formData.affectedRegions.length === 0 && (
               <p className="text-sm text-muted-foreground mt-2">
-                Click to select affected regions
+                {t("hints.selectRegions")}
               </p>
             )}
           </CardContent>

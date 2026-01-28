@@ -67,40 +67,40 @@ interface BrandTrackingData {
 }
 
 const industries = [
-  "Technology",
-  "Sportswear",
-  "Automotive",
-  "Beverages",
-  "Food & Dining",
-  "Retail",
-  "Financial Services",
-  "Healthcare",
-  "Entertainment",
-  "Travel & Hospitality",
-  "Consumer Electronics",
-  "Fashion & Apparel",
-  "Other",
+  { value: "Technology", labelKey: "industries.technology" },
+  { value: "Sportswear", labelKey: "industries.sportswear" },
+  { value: "Automotive", labelKey: "industries.automotive" },
+  { value: "Beverages", labelKey: "industries.beverages" },
+  { value: "Food & Dining", labelKey: "industries.foodDining" },
+  { value: "Retail", labelKey: "industries.retail" },
+  { value: "Financial Services", labelKey: "industries.financialServices" },
+  { value: "Healthcare", labelKey: "industries.healthcare" },
+  { value: "Entertainment", labelKey: "industries.entertainment" },
+  { value: "Travel & Hospitality", labelKey: "industries.travelHospitality" },
+  { value: "Consumer Electronics", labelKey: "industries.consumerElectronics" },
+  { value: "Fashion & Apparel", labelKey: "industries.fashionApparel" },
+  { value: "Other", labelKey: "industries.other" },
 ]
 
 const audienceOptions = [
-  "18-24",
-  "25-34",
-  "35-44",
-  "45-54",
-  "55-64",
-  "65+",
-  "Male",
-  "Female",
-  "Urban",
-  "Suburban",
-  "Rural",
-  "High Income",
-  "Middle Income",
-  "Tech Early Adopters",
-  "Eco-Conscious",
-  "Athletes",
-  "Parents",
-  "Students",
+  { value: "18-24", labelKey: "audienceOptions.age18to24" },
+  { value: "25-34", labelKey: "audienceOptions.age25to34" },
+  { value: "35-44", labelKey: "audienceOptions.age35to44" },
+  { value: "45-54", labelKey: "audienceOptions.age45to54" },
+  { value: "55-64", labelKey: "audienceOptions.age55to64" },
+  { value: "65+", labelKey: "audienceOptions.age65plus" },
+  { value: "Male", labelKey: "audienceOptions.male" },
+  { value: "Female", labelKey: "audienceOptions.female" },
+  { value: "Urban", labelKey: "audienceOptions.urban" },
+  { value: "Suburban", labelKey: "audienceOptions.suburban" },
+  { value: "Rural", labelKey: "audienceOptions.rural" },
+  { value: "High Income", labelKey: "audienceOptions.highIncome" },
+  { value: "Middle Income", labelKey: "audienceOptions.middleIncome" },
+  { value: "Tech Early Adopters", labelKey: "audienceOptions.techEarlyAdopters" },
+  { value: "Eco-Conscious", labelKey: "audienceOptions.ecoConscious" },
+  { value: "Athletes", labelKey: "audienceOptions.athletes" },
+  { value: "Parents", labelKey: "audienceOptions.parents" },
+  { value: "Students", labelKey: "audienceOptions.students" },
 ]
 
 export default function EditBrandTrackingPage({ params }: { params: Promise<{ id: string }> }) {
@@ -150,7 +150,7 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
       return
     }
     fetchBrandTracking()
-  }, [id, sessionStatus])
+  }, [id, sessionStatus, fetchBrandTracking, router])
 
   async function fetchBrandTracking() {
     setIsLoading(true)
@@ -213,7 +213,7 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
       }
     } catch (err) {
       console.error("Error fetching brand tracking:", err)
-      setError(err instanceof Error ? err.message : "Failed to load brand tracking study")
+      setError(err instanceof Error ? err.message : t("common.errors.brandTrackingLoadFailed"))
     } finally {
       setIsLoading(false)
     }
@@ -304,7 +304,7 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
       router.push(`/dashboard/brand-tracking/${id}`)
     } catch (err) {
       console.error("Error updating brand tracking:", err)
-      setError(err instanceof Error ? err.message : "Failed to save changes")
+      setError(err instanceof Error ? err.message : t("common.errors.saveFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -410,8 +410,8 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
                   </SelectTrigger>
                   <SelectContent>
                     {industries.map((ind) => (
-                      <SelectItem key={ind} value={ind}>
-                        {ind}
+                      <SelectItem key={ind.value} value={ind.value}>
+                        {t(ind.labelKey)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -502,17 +502,17 @@ export default function EditBrandTrackingPage({ params }: { params: Promise<{ id
           <CardContent>
             <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
               {audienceOptions.map((audience) => (
-                <div key={audience} className="flex items-center space-x-2">
+                <div key={audience.value} className="flex items-center space-x-2">
                   <Checkbox
-                    id={`audience-${audience}`}
-                    checked={audiences.includes(audience)}
-                    onCheckedChange={() => handleToggleAudience(audience)}
+                    id={`audience-${audience.value}`}
+                    checked={audiences.includes(audience.value)}
+                    onCheckedChange={() => handleToggleAudience(audience.value)}
                   />
                   <Label
-                    htmlFor={`audience-${audience}`}
+                    htmlFor={`audience-${audience.value}`}
                     className="text-sm font-normal cursor-pointer"
                   >
-                    {audience}
+                    {t(audience.labelKey)}
                   </Label>
                 </div>
               ))}

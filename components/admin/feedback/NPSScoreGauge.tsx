@@ -7,6 +7,7 @@
 "use client"
 
 import { useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
@@ -29,11 +30,13 @@ export function NPSScoreGauge({
   showBreakdown = true,
   className,
 }: NPSScoreGaugeProps) {
+  const t = useTranslations("admin.analytics.npsGauge")
+
   const { scoreColor, scoreLabel, gaugeRotation } = useMemo(() => {
     if (score === null) {
       return {
         scoreColor: "text-muted-foreground",
-        scoreLabel: "No data",
+        scoreLabel: t("labels.noData"),
         gaugeRotation: 0,
       }
     }
@@ -43,20 +46,20 @@ export function NPSScoreGauge({
     const rotation = ((score + 100) / 200) * 180
 
     let color = "text-red-500"
-    let label = "Needs Improvement"
+    let label = t("labels.needsImprovement")
 
     if (score >= 70) {
       color = "text-green-500"
-      label = "Excellent"
+      label = t("labels.excellent")
     } else if (score >= 50) {
       color = "text-emerald-500"
-      label = "Great"
+      label = t("labels.great")
     } else if (score >= 30) {
       color = "text-amber-500"
-      label = "Good"
+      label = t("labels.good")
     } else if (score >= 0) {
       color = "text-orange-500"
-      label = "Okay"
+      label = t("labels.okay")
     }
 
     return {
@@ -64,7 +67,7 @@ export function NPSScoreGauge({
       scoreLabel: label,
       gaugeRotation: rotation,
     }
-  }, [score])
+  }, [score, t])
 
   const percentages = useMemo(() => {
     if (totalResponses === 0) {
@@ -80,7 +83,7 @@ export function NPSScoreGauge({
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>NPS Score</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-center">
@@ -156,7 +159,7 @@ export function NPSScoreGauge({
               {scoreLabel}
             </div>
             <div className="text-xs text-muted-foreground mt-1">
-              Based on {totalResponses} responses
+              {t("basedOnResponses", { count: totalResponses })}
             </div>
           </div>
 
@@ -166,7 +169,7 @@ export function NPSScoreGauge({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-green-500" />
-                  <span className="text-sm">Promoters (9-10)</span>
+                  <span className="text-sm">{t("categories.promoters")}</span>
                 </div>
                 <span className="text-sm font-medium">
                   {promoters} ({percentages.promoters}%)
@@ -175,7 +178,7 @@ export function NPSScoreGauge({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-amber-500" />
-                  <span className="text-sm">Passives (7-8)</span>
+                  <span className="text-sm">{t("categories.passives")}</span>
                 </div>
                 <span className="text-sm font-medium">
                   {passives} ({percentages.passives}%)
@@ -184,7 +187,7 @@ export function NPSScoreGauge({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <span className="text-sm">Detractors (0-6)</span>
+                  <span className="text-sm">{t("categories.detractors")}</span>
                 </div>
                 <span className="text-sm font-medium">
                   {detractors} ({percentages.detractors}%)

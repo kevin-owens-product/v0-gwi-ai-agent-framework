@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -42,32 +43,20 @@ interface PipelineEditorProps {
   pipeline?: Pipeline
 }
 
-const PIPELINE_TYPES = [
-  { value: "ETL", label: "ETL (Extract, Transform, Load)" },
-  { value: "TRANSFORMATION", label: "Transformation" },
-  { value: "AGGREGATION", label: "Aggregation" },
-  { value: "EXPORT", label: "Export" },
-  { value: "SYNC", label: "Sync" },
-]
+const PIPELINE_TYPE_VALUES = ["ETL", "TRANSFORMATION", "AGGREGATION", "EXPORT", "SYNC"] as const
 
-const SCHEDULE_PRESETS = [
-  { value: "", label: "Manual (No Schedule)" },
-  { value: "0 * * * *", label: "Every Hour" },
-  { value: "0 */6 * * *", label: "Every 6 Hours" },
-  { value: "0 0 * * *", label: "Daily at Midnight" },
-  { value: "0 0 * * 0", label: "Weekly (Sunday)" },
-  { value: "0 0 1 * *", label: "Monthly (1st)" },
-  { value: "custom", label: "Custom Cron Expression" },
-]
+const SCHEDULE_PRESET_VALUES = ["", "0 * * * *", "0 */6 * * *", "0 0 * * *", "0 0 * * 0", "0 0 1 * *", "custom"] as const
 
 export function PipelineEditor({ pipeline }: PipelineEditorProps) {
   const router = useRouter()
+  const t = useTranslations("gwi.editors.pipeline")
+  const tCommon = useTranslations("gwi.editors.common")
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [scheduleMode, setScheduleMode] = useState<string>(
     pipeline?.schedule
-      ? SCHEDULE_PRESETS.some(p => p.value === pipeline.schedule)
+      ? SCHEDULE_PRESET_VALUES.some(p => p === pipeline.schedule)
         ? pipeline.schedule
         : "custom"
       : ""
@@ -85,21 +74,21 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
     const newErrors: Record<string, string> = {}
 
     if (!formData.name.trim()) {
-      newErrors.name = "Pipeline name is required"
+      newErrors.name = t("validation.nameRequired")
     }
 
     if (!formData.type) {
-      newErrors.type = "Pipeline type is required"
+      newErrors.type = t("validation.typeRequired")
     }
 
     try {
       JSON.parse(formData.configuration)
     } catch {
-      newErrors.configuration = "Invalid JSON configuration"
+      newErrors.configuration = t("validation.invalidJsonConfig")
     }
 
     if (formData.schedule && !isValidCron(formData.schedule)) {
-      newErrors.schedule = "Invalid cron expression"
+      newErrors.schedule = t("validation.invalidCron")
     }
 
     setErrors(newErrors)
@@ -151,11 +140,11 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
         }
       } else {
         const errorData = await response.json()
-        setErrors({ submit: errorData.error || "Failed to save pipeline" })
+        setErrors({ submit: errorData.error || t("errors.failedToSave") })
       }
     } catch (error) {
       console.error("Failed to save pipeline:", error)
-      setErrors({ submit: "An unexpected error occurred" })
+      setErrors({ submit: t("errors.unexpectedError") })
     } finally {
       setIsLoading(false)
     }
@@ -175,11 +164,11 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
         router.push("/gwi/pipelines")
       } else {
         const errorData = await response.json()
-        setErrors({ submit: errorData.error || "Failed to delete pipeline" })
+        setErrors({ submit: errorData.error || t("errors.failedToDelete") })
       }
     } catch (error) {
       console.error("Failed to delete pipeline:", error)
-      setErrors({ submit: "An unexpected error occurred" })
+      setErrors({ submit: t("errors.unexpectedError") })
     } finally {
       setIsDeleting(false)
     }
@@ -198,21 +187,21 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
         {/* Basic Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Pipeline Settings</CardTitle>
+            <CardTitle>{t("pipelineSettings")}</CardTitle>
             <CardDescription>
-              Configure the basic settings for this data pipeline
+              {t("pipelineSettingsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Pipeline Name *</Label>
+              <Label htmlFor="name">{t("pipelineName")} *</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                placeholder="Enter pipeline name"
+                placeholder={t("placeholders.pipelineName")}
                 className={errors.name ? "border-red-500" : ""}
               />
               {errors.name && (
@@ -221,20 +210,20 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{tCommon("description")}</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                placeholder="Enter pipeline description (optional)"
+                placeholder={t("placeholders.description")}
                 rows={3}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="type">Pipeline Type *</Label>
+              <Label htmlFor="type">{t("pipelineType")} *</Label>
               <Select
                 value={formData.type}
                 onValueChange={(value) =>
@@ -242,12 +231,12 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
                 }
               >
                 <SelectTrigger className={errors.type ? "border-red-500" : ""}>
-                  <SelectValue placeholder="Select pipeline type" />
+                  <SelectValue placeholder={t("placeholders.selectType")} />
                 </SelectTrigger>
                 <SelectContent>
-                  {PIPELINE_TYPES.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
+                  {PIPELINE_TYPE_VALUES.map((typeValue) => (
+                    <SelectItem key={typeValue} value={typeValue}>
+                      {t(`types.${typeValue}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -259,9 +248,9 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="isActive">Active</Label>
+                <Label htmlFor="isActive">{tCommon("active")}</Label>
                 <p className="text-sm text-muted-foreground">
-                  Enable or disable this pipeline
+                  {t("activeDescription")}
                 </p>
               </div>
               <Switch
@@ -278,25 +267,25 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
         {/* Schedule Configuration */}
         <Card>
           <CardHeader>
-            <CardTitle>Schedule</CardTitle>
+            <CardTitle>{t("schedule")}</CardTitle>
             <CardDescription>
-              Configure when this pipeline should run automatically
+              {t("scheduleDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="schedulePreset">Schedule Preset</Label>
+              <Label htmlFor="schedulePreset">{t("schedulePreset")}</Label>
               <Select
                 value={scheduleMode}
                 onValueChange={handleSchedulePresetChange}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select schedule" />
+                  <SelectValue placeholder={t("placeholders.selectSchedule")} />
                 </SelectTrigger>
                 <SelectContent>
-                  {SCHEDULE_PRESETS.map((preset) => (
-                    <SelectItem key={preset.value || "manual"} value={preset.value}>
-                      {preset.label}
+                  {SCHEDULE_PRESET_VALUES.map((presetValue) => (
+                    <SelectItem key={presetValue || "manual"} value={presetValue}>
+                      {t(`schedulePresets.${presetValue || "manual"}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -305,18 +294,18 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
 
             {scheduleMode === "custom" && (
               <div className="space-y-2">
-                <Label htmlFor="schedule">Custom Cron Expression</Label>
+                <Label htmlFor="schedule">{t("customCronExpression")}</Label>
                 <Input
                   id="schedule"
                   value={formData.schedule}
                   onChange={(e) =>
                     setFormData({ ...formData, schedule: e.target.value })
                   }
-                  placeholder="e.g., 0 */2 * * * (every 2 hours)"
+                  placeholder={t("placeholders.customCron")}
                   className={errors.schedule ? "border-red-500" : ""}
                 />
                 <p className="text-sm text-muted-foreground">
-                  Format: minute hour day-of-month month day-of-week
+                  {t("cronFormat")}
                 </p>
                 {errors.schedule && (
                   <p className="text-sm text-red-500">{errors.schedule}</p>
@@ -326,7 +315,7 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
 
             {formData.schedule && (
               <div className="p-3 bg-slate-50 rounded-lg">
-                <p className="text-sm font-medium">Current Schedule:</p>
+                <p className="text-sm font-medium">{t("currentSchedule")}</p>
                 <code className="text-sm text-slate-600">{formData.schedule}</code>
               </div>
             )}
@@ -336,14 +325,14 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
         {/* Configuration */}
         <Card>
           <CardHeader>
-            <CardTitle>Configuration</CardTitle>
+            <CardTitle>{t("configuration")}</CardTitle>
             <CardDescription>
-              Define the pipeline configuration as JSON
+              {t("configurationDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="configuration">Configuration JSON *</Label>
+              <Label htmlFor="configuration">{t("configurationJson")} *</Label>
               <Textarea
                 id="configuration"
                 value={formData.configuration}
@@ -358,7 +347,7 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
                 <p className="text-sm text-red-500">{errors.configuration}</p>
               )}
               <p className="text-sm text-muted-foreground">
-                Define source, destination, and transformation settings
+                {t("configurationHint")}
               </p>
             </div>
           </CardContent>
@@ -374,31 +363,30 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
                     {isDeleting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Deleting...
+                        {tCommon("deleting")}
                       </>
                     ) : (
                       <>
                         <Trash2 className="mr-2 h-4 w-4" />
-                        Delete Pipeline
+                        {t("deletePipeline")}
                       </>
                     )}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogTitle>{t("deleteDialogTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete the
-                      pipeline &quot;{pipeline.name}&quot; and all associated run history.
+                      {t("deleteDialogDescription", { name: pipeline.name })}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDelete}
                       className="bg-red-600 hover:bg-red-700"
                     >
-                      Delete Pipeline
+                      {t("deletePipeline")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -411,18 +399,18 @@ export function PipelineEditor({ pipeline }: PipelineEditorProps) {
               <p className="text-sm text-red-500 self-center">{errors.submit}</p>
             )}
             <Button type="button" variant="outline" onClick={() => router.back()}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button type="submit" disabled={isLoading} className="bg-emerald-600 hover:bg-emerald-700">
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {tCommon("saving")}
                 </>
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  {pipeline ? "Save Changes" : "Create Pipeline"}
+                  {pipeline ? tCommon("saveChanges") : t("createPipeline")}
                 </>
               )}
             </Button>

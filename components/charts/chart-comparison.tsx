@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -39,26 +40,33 @@ interface ChartComparisonProps {
   onPeriodChange?: (period: string) => void
 }
 
-const periods = [
-  { value: "week", label: "vs. Last Week" },
-  { value: "month", label: "vs. Last Month" },
-  { value: "quarter", label: "vs. Last Quarter" },
-  { value: "year", label: "vs. Last Year" },
-  { value: "custom", label: "Custom Period" },
-]
-
 export function ChartComparison({
   data,
-  title = "Performance Comparison",
-  description = "Compare metrics across time periods and benchmarks",
-  currentLabel = "Current Period",
-  previousLabel = "Previous Period",
-  benchmarkLabel = "Industry Benchmark",
+  title,
+  description,
+  currentLabel,
+  previousLabel,
+  benchmarkLabel,
   className,
   showPercentageChange = true,
   showBenchmark = true,
   onPeriodChange,
 }: ChartComparisonProps) {
+  const t = useTranslations('dashboard.charts.comparison')
+
+  const periods = [
+    { value: "week", labelKey: "vsLastWeek" },
+    { value: "month", labelKey: "vsLastMonth" },
+    { value: "quarter", labelKey: "vsLastQuarter" },
+    { value: "year", labelKey: "vsLastYear" },
+    { value: "custom", labelKey: "customPeriod" },
+  ]
+
+  const displayTitle = title ?? t('title')
+  const displayDescription = description ?? t('description')
+  const displayCurrentLabel = currentLabel ?? t('currentPeriod')
+  const displayPreviousLabel = previousLabel ?? t('previousPeriod')
+  const displayBenchmarkLabel = benchmarkLabel ?? t('industryBenchmark')
   const [selectedPeriod, setSelectedPeriod] = useState("month")
   const [viewMode, setViewMode] = useState<"chart" | "table">("chart")
 
@@ -98,9 +106,9 @@ export function ChartComparison({
           <div>
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5" />
-              {title}
+              {displayTitle}
             </CardTitle>
-            <CardDescription>{description}</CardDescription>
+            <CardDescription>{displayDescription}</CardDescription>
           </div>
           <div className="flex items-center gap-2">
             <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
@@ -110,7 +118,7 @@ export function ChartComparison({
               <SelectContent>
                 {periods.map((period) => (
                   <SelectItem key={period.value} value={period.value}>
-                    {period.label}
+                    {t(`periods.${period.labelKey}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -131,21 +139,21 @@ export function ChartComparison({
             <div className="text-2xl font-bold text-green-500">{summary.improvements}</div>
             <div className="text-xs text-muted-foreground flex items-center gap-1">
               <TrendingUp className="h-3 w-3" />
-              Improvements
+              {t('summary.improvements')}
             </div>
           </div>
           <div className="p-3 rounded-lg bg-muted/50">
             <div className="text-2xl font-bold text-red-500">{summary.declines}</div>
             <div className="text-xs text-muted-foreground flex items-center gap-1">
               <TrendingDown className="h-3 w-3" />
-              Declines
+              {t('summary.declines')}
             </div>
           </div>
           <div className="p-3 rounded-lg bg-muted/50">
             <div className="text-2xl font-bold text-muted-foreground">{summary.unchanged}</div>
             <div className="text-xs text-muted-foreground flex items-center gap-1">
               <Minus className="h-3 w-3" />
-              Unchanged
+              {t('summary.unchanged')}
             </div>
           </div>
           <div className="p-3 rounded-lg bg-muted/50">
@@ -158,12 +166,12 @@ export function ChartComparison({
               {summary.avgChange > 0 ? "+" : ""}
               {summary.avgChange.toFixed(1)}%
             </div>
-            <div className="text-xs text-muted-foreground">Avg. Change</div>
+            <div className="text-xs text-muted-foreground">{t('summary.avgChange')}</div>
           </div>
           {showBenchmark && (
             <div className="p-3 rounded-lg bg-muted/50">
               <div className="text-2xl font-bold text-primary">{summary.aboveBenchmark}/{data.length}</div>
-              <div className="text-xs text-muted-foreground">Above Benchmark</div>
+              <div className="text-xs text-muted-foreground">{t('summary.aboveBenchmark')}</div>
             </div>
           )}
         </div>
@@ -171,8 +179,8 @@ export function ChartComparison({
         {/* View Toggle */}
         <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as any)}>
           <TabsList>
-            <TabsTrigger value="chart">Chart View</TabsTrigger>
-            <TabsTrigger value="table">Table View</TabsTrigger>
+            <TabsTrigger value="chart">{t('views.chart')}</TabsTrigger>
+            <TabsTrigger value="table">{t('views.table')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="chart" className="mt-4">
@@ -195,16 +203,16 @@ export function ChartComparison({
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-3 font-medium text-muted-foreground">Metric</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">{currentLabel}</th>
-                    <th className="text-right p-3 font-medium text-muted-foreground">{previousLabel}</th>
+                    <th className="text-left p-3 font-medium text-muted-foreground">{t('table.metric')}</th>
+                    <th className="text-right p-3 font-medium text-muted-foreground">{displayCurrentLabel}</th>
+                    <th className="text-right p-3 font-medium text-muted-foreground">{displayPreviousLabel}</th>
                     {showBenchmark && (
-                      <th className="text-right p-3 font-medium text-muted-foreground">{benchmarkLabel}</th>
+                      <th className="text-right p-3 font-medium text-muted-foreground">{displayBenchmarkLabel}</th>
                     )}
                     {showPercentageChange && (
-                      <th className="text-right p-3 font-medium text-muted-foreground">Change</th>
+                      <th className="text-right p-3 font-medium text-muted-foreground">{t('table.change')}</th>
                     )}
-                    <th className="text-center p-3 font-medium text-muted-foreground">Status</th>
+                    <th className="text-center p-3 font-medium text-muted-foreground">{t('table.status')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -249,12 +257,12 @@ export function ChartComparison({
                         <td className="p-3 text-center">
                           {isAboveBenchmark ? (
                             <Badge variant="default" className="bg-green-500">
-                              Above Benchmark
+                              {t('status.aboveBenchmark')}
                             </Badge>
                           ) : item.benchmark ? (
-                            <Badge variant="secondary">Below Benchmark</Badge>
+                            <Badge variant="secondary">{t('status.belowBenchmark')}</Badge>
                           ) : (
-                            <Badge variant="outline">N/A</Badge>
+                            <Badge variant="outline">{t('status.notAvailable')}</Badge>
                           )}
                         </td>
                       </tr>
@@ -270,16 +278,16 @@ export function ChartComparison({
         <div className="flex flex-wrap items-center justify-center gap-6 pt-4 border-t">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-primary" />
-            <span className="text-sm text-muted-foreground">{currentLabel}</span>
+            <span className="text-sm text-muted-foreground">{displayCurrentLabel}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-muted" />
-            <span className="text-sm text-muted-foreground">{previousLabel}</span>
+            <span className="text-sm text-muted-foreground">{displayPreviousLabel}</span>
           </div>
           {showBenchmark && (
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-purple-500" />
-              <span className="text-sm text-muted-foreground">{benchmarkLabel}</span>
+              <span className="text-sm text-muted-foreground">{displayBenchmarkLabel}</span>
             </div>
           )}
         </div>

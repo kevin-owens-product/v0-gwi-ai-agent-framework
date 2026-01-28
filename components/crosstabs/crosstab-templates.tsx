@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -206,17 +207,18 @@ interface CrosstabTemplatesProps {
 }
 
 export function CrosstabTemplates({ onSelect, className }: CrosstabTemplatesProps) {
+  const t = useTranslations("dashboard.crosstabs.components.templates")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [previewTemplate, setPreviewTemplate] = useState<CrosstabTemplate | null>(null)
 
   const categories = [
-    { id: "all", label: "All", icon: <Star className="h-4 w-4" /> },
-    { id: "social", label: "Social", icon: <Users className="h-4 w-4" /> },
-    { id: "commerce", label: "Commerce", icon: <Zap className="h-4 w-4" /> },
-    { id: "brand", label: "Brand", icon: <Target className="h-4 w-4" /> },
-    { id: "media", label: "Media", icon: <BarChart3 className="h-4 w-4" /> },
-    { id: "custom", label: "Other", icon: <Globe className="h-4 w-4" /> },
+    { id: "all", label: t("categories.all"), icon: <Star className="h-4 w-4" /> },
+    { id: "social", label: t("categories.social"), icon: <Users className="h-4 w-4" /> },
+    { id: "commerce", label: t("categories.commerce"), icon: <Zap className="h-4 w-4" /> },
+    { id: "brand", label: t("categories.brand"), icon: <Target className="h-4 w-4" /> },
+    { id: "media", label: t("categories.media"), icon: <BarChart3 className="h-4 w-4" /> },
+    { id: "custom", label: t("categories.other"), icon: <Globe className="h-4 w-4" /> },
   ]
 
   const filteredTemplates = crosstabTemplates.filter((template) => {
@@ -244,7 +246,7 @@ export function CrosstabTemplates({ onSelect, className }: CrosstabTemplatesProp
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search templates..."
+          placeholder={t("searchPlaceholder")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10"
@@ -289,14 +291,14 @@ export function CrosstabTemplates({ onSelect, className }: CrosstabTemplatesProp
               </p>
 
               <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                <span>{template.audiences.length} audiences</span>
-                <span>{template.metrics.length} metrics</span>
+                <span>{t("template.audiences", { count: template.audiences.length })}</span>
+                <span>{t("template.metrics", { count: template.metrics.length })}</span>
               </div>
 
               <div className="flex items-center justify-between pt-2 border-t">
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <TrendingUp className="h-3 w-3" />
-                  {template.popularity}% popular
+                  {t("template.popular", { percent: template.popularity })}
                 </div>
                 <Button
                   size="sm"
@@ -306,7 +308,7 @@ export function CrosstabTemplates({ onSelect, className }: CrosstabTemplatesProp
                     onSelect(template)
                   }}
                 >
-                  Use Template
+                  {t("template.useTemplate")}
                 </Button>
               </div>
             </div>
@@ -318,8 +320,8 @@ export function CrosstabTemplates({ onSelect, className }: CrosstabTemplatesProp
       {sortedTemplates.length === 0 && (
         <div className="text-center py-12 text-muted-foreground">
           <Sparkles className="h-12 w-12 mx-auto mb-4 opacity-50" />
-          <h3 className="font-medium mb-1">No templates found</h3>
-          <p className="text-sm">Try adjusting your search</p>
+          <h3 className="font-medium mb-1">{t("empty.title")}</h3>
+          <p className="text-sm">{t("empty.description")}</p>
         </div>
       )}
 
@@ -338,7 +340,7 @@ export function CrosstabTemplates({ onSelect, className }: CrosstabTemplatesProp
 
               <div className="space-y-4">
                 <div className="p-3 bg-muted/50 rounded-lg">
-                  <p className="text-sm font-medium mb-1">Use Case</p>
+                  <p className="text-sm font-medium mb-1">{t("template.useCase")}</p>
                   <p className="text-sm text-muted-foreground">{previewTemplate.useCase}</p>
                 </div>
 
@@ -371,7 +373,7 @@ export function CrosstabTemplates({ onSelect, className }: CrosstabTemplatesProp
 
               <DialogFooter>
                 <Button variant="outline" onClick={() => setPreviewTemplate(null)}>
-                  Cancel
+                  {t("cancel")}
                 </Button>
                 <Button
                   onClick={() => {
@@ -380,7 +382,7 @@ export function CrosstabTemplates({ onSelect, className }: CrosstabTemplatesProp
                   }}
                 >
                   <Sparkles className="h-4 w-4 mr-2" />
-                  Use This Template
+                  {t("preview.useThisTemplate")}
                 </Button>
               </DialogFooter>
             </>

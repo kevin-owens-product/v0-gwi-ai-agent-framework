@@ -79,7 +79,7 @@ async function ToolsContent() {
                 <TableRow>
                   <TableHead>{t('toolName')}</TableHead>
                   <TableHead>{t('type')}</TableHead>
-                  <TableHead>Description</TableHead>
+                  <TableHead>{t('description')}</TableHead>
                   <TableHead>{t('active')}</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>

@@ -26,7 +26,7 @@ import {
   XCircle,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { showErrorToast } from "@/lib/toast-utils"
 
 interface Plan {
   id: string
@@ -98,7 +98,7 @@ export default function PlansPage() {
         fetchPlans()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to delete plan")
+        showErrorToast(data.error || t("toast.deleteFailed"))
       }
     } catch (error) {
       console.error("Failed to delete plan:", error)

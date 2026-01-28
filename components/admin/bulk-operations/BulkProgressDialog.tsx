@@ -7,6 +7,7 @@
  */
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Dialog,
   DialogContent,
@@ -108,13 +109,18 @@ export function BulkProgressDialog({
   open,
   onOpenChange,
   progress,
-  title = "Processing",
-  description = "Please wait while the operation completes.",
+  title,
+  description,
   itemLabel = "item",
   onCancel,
   canCancel = false,
 }: BulkProgressDialogProps) {
+  const t = useTranslations("admin.bulk.progress")
   const [showErrors, setShowErrors] = useState(false)
+
+  // Use translations for defaults
+  const dialogTitle = title || t("title")
+  const dialogDescription = description || t("description")
 
   // Auto-expand errors when there are any
   useEffect(() => {
@@ -151,14 +157,14 @@ export function BulkProgressDialog({
     switch (progress.status) {
       case "processing":
         return progress.currentItem
-          ? `Processing: ${progress.currentItem}`
-          : "Processing..."
+          ? t("status.processingItem", { item: progress.currentItem })
+          : t("status.processing")
       case "completed":
-        return "Operation completed successfully"
+        return t("status.completed")
       case "completed_with_errors":
-        return "Operation completed with some errors"
+        return t("status.completedWithErrors")
       case "cancelled":
-        return "Operation was cancelled"
+        return t("status.cancelled")
       default:
         return ""
     }
@@ -172,21 +178,21 @@ export function BulkProgressDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             {getStatusIcon()}
-            {title}
+            {dialogTitle}
           </DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+          <DialogDescription>{dialogDescription}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           {/* Progress bar */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Progress</span>
+              <span className="text-muted-foreground">{t("progress")}</span>
               <span className="font-medium">{percentComplete}%</span>
             </div>
             <Progress value={percentComplete} className="h-2" />
             <p className="text-xs text-muted-foreground">
-              {progress.processed} of {progress.total} {itemsLabel} processed
+              {t("processed", { processed: progress.processed, total: progress.total, itemLabel: itemsLabel })}
             </p>
           </div>
 
@@ -194,12 +200,12 @@ export function BulkProgressDialog({
           <div className="flex gap-2 flex-wrap">
             <Badge variant="default" className="bg-green-500/10 text-green-600 hover:bg-green-500/20">
               <CheckCircle2 className="h-3 w-3 mr-1" />
-              {progress.succeeded} succeeded
+              {t("succeeded", { count: progress.succeeded })}
             </Badge>
             {progress.failed > 0 && (
               <Badge variant="destructive" className="bg-red-500/10 text-red-600 hover:bg-red-500/20">
                 <XCircle className="h-3 w-3 mr-1" />
-                {progress.failed} failed
+                {t("failed", { count: progress.failed })}
               </Badge>
             )}
           </div>
@@ -219,7 +225,7 @@ export function BulkProgressDialog({
                 ) : (
                   <ChevronDown className="h-4 w-4" />
                 )}
-                {showErrors ? "Hide" : "Show"} error details ({progress.errors.length})
+                {showErrors ? t("hideErrors", { count: progress.errors.length }) : t("showErrors", { count: progress.errors.length })}
               </button>
 
               {showErrors && (
@@ -240,7 +246,7 @@ export function BulkProgressDialog({
         <DialogFooter className="gap-2 sm:gap-0">
           {isProcessing && canCancel && onCancel && (
             <Button variant="outline" onClick={onCancel}>
-              Cancel
+              {t("cancel")}
             </Button>
           )}
           <Button
@@ -248,7 +254,7 @@ export function BulkProgressDialog({
             disabled={isProcessing}
             className={cn(isProcessing && "opacity-50 cursor-not-allowed")}
           >
-            {isProcessing ? "Please wait..." : "Done"}
+            {isProcessing ? t("pleaseWait") : t("done")}
           </Button>
         </DialogFooter>
       </DialogContent>

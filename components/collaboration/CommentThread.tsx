@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { formatDistanceToNow } from 'date-fns'
+import { useTranslations } from "next-intl"
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -67,6 +68,7 @@ function CommentCard({
   onResolve,
   depth = 0,
 }: CommentCardProps) {
+  const t = useTranslations("collaboration")
   const [showReplies, setShowReplies] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState(comment.content)
@@ -112,7 +114,7 @@ function CommentCard({
               {comment.isResolved && (
                 <Badge variant="secondary" className="text-xs">
                   <CheckCircle2 className="h-3 w-3 mr-1" />
-                  Resolved
+                  {t("resolved")}
                 </Badge>
               )}
             </div>
@@ -126,8 +128,8 @@ function CommentCard({
                   autoFocus
                 />
                 <div className="flex gap-2">
-                  <Button size="sm" onClick={handleEditSave}>Save</Button>
-                  <Button size="sm" variant="outline" onClick={handleEditCancel}>Cancel</Button>
+                  <Button size="sm" onClick={handleEditSave}>{t("save")}</Button>
+                  <Button size="sm" variant="outline" onClick={handleEditCancel}>{t("cancel")}</Button>
                 </div>
               </div>
             ) : (
@@ -145,7 +147,7 @@ function CommentCard({
                   onClick={() => onReply(comment.id)}
                 >
                   <Reply className="h-3 w-3 mr-1" />
-                  Reply
+                  {t("reply")}
                 </Button>
 
                 {hasReplies && (
@@ -160,7 +162,7 @@ function CommentCard({
                     ) : (
                       <ChevronRight className="h-3 w-3 mr-1" />
                     )}
-                    {replyCount} {replyCount === 1 ? 'reply' : 'replies'}
+                    {t("replyCount", { count: replyCount })}
                   </Button>
                 )}
               </div>
@@ -182,19 +184,19 @@ function CommentCard({
                 {isAuthor && (
                   <DropdownMenuItem onClick={() => setIsEditing(true)}>
                     <Pencil className="h-4 w-4 mr-2" />
-                    Edit
+                    {t("edit")}
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem onClick={() => onResolve(comment.id, !comment.isResolved)}>
                   {comment.isResolved ? (
                     <>
                       <XCircle className="h-4 w-4 mr-2" />
-                      Unresolve
+                      {t("unresolve")}
                     </>
                   ) : (
                     <>
                       <CheckCircle2 className="h-4 w-4 mr-2" />
-                      Resolve
+                      {t("resolve")}
                     </>
                   )}
                 </DropdownMenuItem>
@@ -206,7 +208,7 @@ function CommentCard({
                       onClick={() => onDelete(comment.id)}
                     >
                       <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
+                      {t("delete")}
                     </DropdownMenuItem>
                   </>
                 )}
@@ -259,6 +261,7 @@ export function CommentThread({
   currentUserId,
   onCommentCountChange,
 }: CommentThreadProps) {
+  const t = useTranslations("collaboration")
   const {
     comments,
     total,
@@ -330,14 +333,14 @@ export function CommentThread({
   if (error) {
     return (
       <div className={cn('rounded-lg border border-destructive/50 bg-destructive/10 p-4', className)}>
-        <p className="text-sm text-destructive">Failed to load comments: {error}</p>
+        <p className="text-sm text-destructive">{t("failedToLoadComments", { error })}</p>
         <Button
           variant="outline"
           size="sm"
           className="mt-2"
           onClick={() => fetchComments({ entityType, entityId, parentId: null })}
         >
-          Retry
+          {t("retry")}
         </Button>
       </div>
     )
@@ -347,7 +350,7 @@ export function CommentThread({
     <div className={cn('space-y-4', className)}>
       <div className="flex items-center gap-2">
         <MessageSquare className="h-5 w-5 text-muted-foreground" />
-        <h3 className="font-medium">Comments</h3>
+        <h3 className="font-medium">{t("comments")}</h3>
         {total > 0 && (
           <Badge variant="secondary" className="text-xs">
             {total}
@@ -359,7 +362,7 @@ export function CommentThread({
       <CommentInput
         onSubmit={handleCreateComment}
         isSubmitting={isSubmitting}
-        placeholder="Add a comment..."
+        placeholder={t("addCommentPlaceholder")}
       />
 
       {/* Comments list */}
@@ -371,7 +374,7 @@ export function CommentThread({
           </>
         ) : comments.length === 0 ? (
           <p className="text-sm text-muted-foreground text-center py-8">
-            No comments yet. Be the first to comment!
+            {t("noCommentsYet")}
           </p>
         ) : (
           comments.map((comment) => (
@@ -392,7 +395,7 @@ export function CommentThread({
                     onSubmit={handleReply}
                     onCancel={() => setReplyingTo(null)}
                     isSubmitting={isSubmitting}
-                    placeholder={`Reply to ${comment.user.name || comment.user.email}...`}
+                    placeholder={t("replyToPlaceholder", { name: comment.user.name || comment.user.email })}
                     autoFocus
                   />
                 </div>

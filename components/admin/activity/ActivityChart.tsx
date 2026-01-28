@@ -6,6 +6,7 @@
 
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -170,6 +171,8 @@ function StatusBreakdown({
 }
 
 export function ActivityChart({ stats, isLoading = false }: ActivityChartProps) {
+  const t = useTranslations("admin.analytics.activityChart")
+
   if (isLoading) {
     return (
       <Card>
@@ -215,10 +218,10 @@ export function ActivityChart({ stats, isLoading = false }: ActivityChartProps) 
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <BarChart3 className="h-5 w-5" />
-          Activity Analytics
+          {t("title")}
         </CardTitle>
         <CardDescription>
-          Visual breakdown of admin activity patterns
+          {t("description")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -226,30 +229,30 @@ export function ActivityChart({ stats, isLoading = false }: ActivityChartProps) 
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="daily" className="gap-2">
               <TrendingUp className="h-4 w-4" />
-              <span className="hidden sm:inline">Daily Trend</span>
-              <span className="sm:hidden">Daily</span>
+              <span className="hidden sm:inline">{t("tabs.dailyTrend")}</span>
+              <span className="sm:hidden">{t("tabs.daily")}</span>
             </TabsTrigger>
             <TabsTrigger value="hourly" className="gap-2">
               <BarChart3 className="h-4 w-4" />
-              <span className="hidden sm:inline">Hourly</span>
-              <span className="sm:hidden">Hours</span>
+              <span className="hidden sm:inline">{t("tabs.hourly")}</span>
+              <span className="sm:hidden">{t("tabs.hours")}</span>
             </TabsTrigger>
             <TabsTrigger value="actions" className="gap-2">
               <PieChart className="h-4 w-4" />
-              <span className="hidden sm:inline">Top Actions</span>
-              <span className="sm:hidden">Actions</span>
+              <span className="hidden sm:inline">{t("tabs.topActions")}</span>
+              <span className="sm:hidden">{t("tabs.actions")}</span>
             </TabsTrigger>
             <TabsTrigger value="status" className="gap-2">
               <PieChart className="h-4 w-4" />
-              <span className="hidden sm:inline">Status</span>
-              <span className="sm:hidden">Status</span>
+              <span className="hidden sm:inline">{t("tabs.status")}</span>
+              <span className="sm:hidden">{t("tabs.status")}</span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="daily" className="space-y-4">
             <div className="pt-4">
               <h4 className="text-sm font-medium mb-4">
-                Daily Activity (Last 14 Days)
+                {t("sections.dailyActivity")}
               </h4>
               <SimpleBarChart data={dailyChartData} />
             </div>
@@ -258,7 +261,7 @@ export function ActivityChart({ stats, isLoading = false }: ActivityChartProps) 
           <TabsContent value="hourly" className="space-y-4">
             <div className="pt-4">
               <h4 className="text-sm font-medium mb-4">
-                Activity by Hour of Day
+                {t("sections.activityByHour")}
               </h4>
               <div className="overflow-x-auto">
                 <div className="min-w-[600px]">
@@ -268,7 +271,7 @@ export function ActivityChart({ stats, isLoading = false }: ActivityChartProps) 
               <div className="mt-4 flex flex-wrap gap-2">
                 {stats.busiestHours.slice(0, 3).map((hourData, index) => (
                   <Badge key={hourData.hour} variant="secondary">
-                    #{index + 1} Busiest: {formatHour(hourData.hour)} ({hourData.count} activities)
+                    {t("busiestHour", { rank: index + 1, hour: formatHour(hourData.hour), count: hourData.count })}
                   </Badge>
                 ))}
               </div>
@@ -278,11 +281,11 @@ export function ActivityChart({ stats, isLoading = false }: ActivityChartProps) 
           <TabsContent value="actions" className="space-y-4">
             <div className="grid gap-6 md:grid-cols-2 pt-4">
               <div>
-                <h4 className="text-sm font-medium mb-4">Top Actions</h4>
+                <h4 className="text-sm font-medium mb-4">{t("sections.topActions")}</h4>
                 <HorizontalBarChart data={topActionsData} />
               </div>
               <div>
-                <h4 className="text-sm font-medium mb-4">By Resource Type</h4>
+                <h4 className="text-sm font-medium mb-4">{t("sections.byResourceType")}</h4>
                 <HorizontalBarChart data={resourceData} />
               </div>
             </div>
@@ -290,7 +293,7 @@ export function ActivityChart({ stats, isLoading = false }: ActivityChartProps) 
 
           <TabsContent value="status" className="space-y-4">
             <div className="pt-4">
-              <h4 className="text-sm font-medium mb-4">Status Breakdown</h4>
+              <h4 className="text-sm font-medium mb-4">{t("sections.statusBreakdown")}</h4>
               <StatusBreakdown data={stats.activitiesByStatus} />
 
               <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -301,7 +304,7 @@ export function ActivityChart({ stats, isLoading = false }: ActivityChartProps) 
                         {stats.activitiesByStatus.find((s) => s.status === "success")?.count || 0}
                       </div>
                       <p className="text-sm text-muted-foreground mt-1">
-                        Successful Operations
+                        {t("status.successful")}
                       </p>
                     </div>
                   </CardContent>
@@ -313,7 +316,7 @@ export function ActivityChart({ stats, isLoading = false }: ActivityChartProps) 
                         {stats.activitiesByStatus.find((s) => s.status === "failure")?.count || 0}
                       </div>
                       <p className="text-sm text-muted-foreground mt-1">
-                        Failed Operations
+                        {t("status.failed")}
                       </p>
                     </div>
                   </CardContent>
@@ -325,7 +328,7 @@ export function ActivityChart({ stats, isLoading = false }: ActivityChartProps) 
                         {stats.activitiesByStatus.find((s) => s.status === "pending")?.count || 0}
                       </div>
                       <p className="text-sm text-muted-foreground mt-1">
-                        Pending Operations
+                        {t("status.pending")}
                       </p>
                     </div>
                   </CardContent>

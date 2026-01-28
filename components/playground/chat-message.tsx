@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -178,7 +179,7 @@ function PersonaBlock({ block }: { block: OutputBlock }) {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <p className="text-xs font-medium text-muted-foreground mb-2">VALUES</p>
+          <p className="text-xs font-medium text-muted-foreground mb-2">{t("values")}</p>
           <div className="flex flex-wrap gap-1">
             {content.values?.map((value: string) => (
               <Badge key={value} variant="secondary" className="text-xs">
@@ -188,7 +189,7 @@ function PersonaBlock({ block }: { block: OutputBlock }) {
           </div>
         </div>
         <div>
-          <p className="text-xs font-medium text-muted-foreground mb-2">MEDIA HABITS</p>
+          <p className="text-xs font-medium text-muted-foreground mb-2">{t("mediaHabits")}</p>
           <ul className="space-y-1">
             {content.mediaHabits?.slice(0, 3).map((habit: string) => (
               <li key={habit} className="text-xs text-muted-foreground flex items-center gap-2">
@@ -201,7 +202,7 @@ function PersonaBlock({ block }: { block: OutputBlock }) {
       </div>
       {content.behaviors && (
         <div className="mt-4 pt-4 border-t border-border">
-          <p className="text-xs font-medium text-muted-foreground mb-2">KEY BEHAVIORS</p>
+          <p className="text-xs font-medium text-muted-foreground mb-2">{t("keyBehaviors")}</p>
           <ul className="space-y-1">
             {content.behaviors.map((behavior: string) => (
               <li key={behavior} className="text-xs text-foreground flex items-center gap-2">
@@ -301,7 +302,7 @@ function SlidesBlock({ block }: { block: OutputBlock }) {
           <path d="M8 21h8M12 17v4" />
         </svg>
         <h4 className="text-sm font-medium">{block.title}</h4>
-        <Badge variant="secondary" className="text-[10px]">{content.slides.length} slides</Badge>
+        <Badge variant="secondary" className="text-[10px]">{t("slides", { count: content.slides.length })}</Badge>
         <BlockExportButton block={block} />
       </div>
       <div className="space-y-2">
@@ -374,6 +375,7 @@ function CodeBlock({ block }: { block: OutputBlock }) {
 }
 
 export function ChatMessage({ message }: { message: Message }) {
+  const t = useTranslations("playground.chatMessage")
   const isUser = message.role === "user"
   const [copied, setCopied] = useState(false)
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null)
@@ -463,7 +465,7 @@ export function ChatMessage({ message }: { message: Message }) {
               className="w-full flex items-center justify-between p-3 text-left"
               onClick={() => setShowReasoning(!showReasoning)}
             >
-              <span className="text-xs font-medium text-muted-foreground">Reasoning Process</span>
+              <span className="text-xs font-medium text-muted-foreground">{t("reasoningProcess")}</span>
               {showReasoning ? (
                 <ChevronUp className="h-4 w-4 text-muted-foreground" />
               ) : (
@@ -540,7 +542,7 @@ export function ChatMessage({ message }: { message: Message }) {
 
         {!isUser && message.citations && message.status === "complete" && (
           <div className="space-y-2">
-            <p className="text-xs text-muted-foreground">Sources (click to view details):</p>
+            <p className="text-xs text-muted-foreground">{t("sourcesLabel")}</p>
             <div className="flex flex-wrap gap-2">
               {message.citations.map((citation, i) => (
                 <button
@@ -566,11 +568,11 @@ export function ChatMessage({ message }: { message: Message }) {
               onClick={handleCopy}
             >
               {copied ? <Check className="h-3 w-3 mr-1" /> : <Copy className="h-3 w-3 mr-1" />}
-              {copied ? "Copied" : "Copy"}
+              {copied ? t("copied") : t("copy")}
             </Button>
             <Button variant="ghost" size="sm" className="h-7 px-2 text-muted-foreground hover:text-foreground">
               <RefreshCw className="h-3 w-3 mr-1" />
-              Regenerate
+              {t("regenerate")}
             </Button>
             <div className="flex items-center ml-2">
               <Button

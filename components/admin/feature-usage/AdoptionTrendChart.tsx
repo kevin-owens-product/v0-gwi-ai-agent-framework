@@ -10,6 +10,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { useTranslations } from "next-intl"
 import {
   AreaChart,
   Area,
@@ -80,10 +81,14 @@ const FEATURE_COLORS = [
 export function AdoptionTrendChart({
   data,
   features,
-  title = "Adoption Trends Over Time",
-  description = "Track how feature adoption changes over time",
+  title,
+  description,
   height = 400,
 }: AdoptionTrendChartProps) {
+  const t = useTranslations("admin.analytics.adoptionTrend")
+  const displayTitle = title || t("title")
+  const displayDescription = description || t("description")
+
   const [categoryFilter, setCategoryFilter] = useState<string>("all")
   const [selectedFeatures, setSelectedFeatures] = useState<Set<string>>(
     new Set(features.slice(0, 5).map(f => f.featureKey))
@@ -152,15 +157,15 @@ export function AdoptionTrendChart({
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>{title}</CardTitle>
-            <CardDescription>{description}</CardDescription>
+            <CardTitle>{displayTitle}</CardTitle>
+            <CardDescription>{displayDescription}</CardDescription>
           </div>
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by category" />
+              <SelectValue placeholder={t("filterByCategory")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all">{t("allCategories")}</SelectItem>
               {categories.map(cat => (
                 <SelectItem key={cat} value={cat}>
                   {cat.charAt(0).toUpperCase() + cat.slice(1)}
@@ -175,12 +180,12 @@ export function AdoptionTrendChart({
           {/* Feature selection panel */}
           <div className="w-48 flex-shrink-0">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Features</span>
+              <span className="text-sm font-medium">{t("features")}</span>
               <button
                 onClick={handleSelectAll}
                 className="text-xs text-primary hover:underline"
               >
-                {selectedFeatures.size === filteredFeatures.length ? "Clear" : "Select all"}
+                {selectedFeatures.size === filteredFeatures.length ? t("clear") : t("selectAll")}
               </button>
             </div>
             <ScrollArea className="h-[300px] border rounded-md p-2">
@@ -208,7 +213,7 @@ export function AdoptionTrendChart({
               </div>
             </ScrollArea>
             <p className="text-xs text-muted-foreground mt-2">
-              {selectedFeatures.size}/10 features selected
+              {t("featuresSelected", { count: selectedFeatures.size, max: 10 })}
             </p>
           </div>
 
@@ -217,8 +222,8 @@ export function AdoptionTrendChart({
             {chartData.length === 0 || selectedFeatures.size === 0 ? (
               <div className="flex items-center justify-center h-full text-muted-foreground">
                 {selectedFeatures.size === 0
-                  ? "Select features to view trend data"
-                  : "No trend data available"
+                  ? t("selectFeaturesPrompt")
+                  : t("noData")
                 }
               </div>
             ) : (
@@ -268,7 +273,7 @@ export function AdoptionTrendChart({
                       border: "1px solid hsl(var(--border))",
                       borderRadius: "8px",
                     }}
-                    formatter={(value: number) => [`${value.toFixed(1)}%`, "Adoption"]}
+                    formatter={(value: number) => [`${value.toFixed(1)}%`, t("adoption")]}
                   />
                   <Legend />
                   {Array.from(selectedFeatures).map((featureKey, index) => {

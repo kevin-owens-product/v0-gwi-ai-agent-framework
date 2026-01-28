@@ -6,6 +6,7 @@
 
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle, AlertCircle, AlertOctagon, CheckCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -25,27 +26,29 @@ export function ChurnRiskBadge({
   size = "default",
   className,
 }: ChurnRiskBadgeProps) {
+  const t = useTranslations("admin.analytics.churnRisk")
+
   const config = {
     LOW: {
-      label: "Low Risk",
+      label: t("low"),
       icon: CheckCircle,
       variant: "default" as const,
       className: "bg-green-500 hover:bg-green-500/80",
     },
     MEDIUM: {
-      label: "Medium Risk",
+      label: t("medium"),
       icon: AlertCircle,
       variant: "default" as const,
       className: "bg-amber-500 hover:bg-amber-500/80",
     },
     HIGH: {
-      label: "High Risk",
+      label: t("high"),
       icon: AlertTriangle,
       variant: "default" as const,
       className: "bg-orange-500 hover:bg-orange-500/80",
     },
     CRITICAL: {
-      label: "Critical",
+      label: t("critical"),
       icon: AlertOctagon,
       variant: "destructive" as const,
       className: "",

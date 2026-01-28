@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { StatusBadge, SystemStatus } from "./StatusBadge"
 import { CheckCircle, AlertCircle, AlertTriangle, XCircle, Server } from "lucide-react"
@@ -18,47 +19,49 @@ interface StatusOverviewProps {
   className?: string
 }
 
-const statusConfig: Record<
-  SystemStatus,
-  {
-    label: string
-    icon: React.ComponentType<{ className?: string }>
-    bgColor: string
-    borderColor: string
-    textColor: string
-  }
-> = {
-  operational: {
-    label: "Operational",
-    icon: CheckCircle,
-    bgColor: "bg-green-500/10",
-    borderColor: "border-green-500/30",
-    textColor: "text-green-500",
-  },
-  degraded: {
-    label: "Degraded",
-    icon: AlertTriangle,
-    bgColor: "bg-yellow-500/10",
-    borderColor: "border-yellow-500/30",
-    textColor: "text-yellow-500",
-  },
-  partial_outage: {
-    label: "Partial Outage",
-    icon: AlertCircle,
-    bgColor: "bg-orange-500/10",
-    borderColor: "border-orange-500/30",
-    textColor: "text-orange-500",
-  },
-  major_outage: {
-    label: "Major Outage",
-    icon: XCircle,
-    bgColor: "bg-red-500/10",
-    borderColor: "border-red-500/30",
-    textColor: "text-red-500",
-  },
-}
-
 function ComponentStatus({ component }: { component: SystemComponent }) {
+  const t = useTranslations("status.overview")
+
+  const statusConfig: Record<
+    SystemStatus,
+    {
+      labelKey: string
+      icon: React.ComponentType<{ className?: string }>
+      bgColor: string
+      borderColor: string
+      textColor: string
+    }
+  > = {
+    operational: {
+      labelKey: "operational",
+      icon: CheckCircle,
+      bgColor: "bg-green-500/10",
+      borderColor: "border-green-500/30",
+      textColor: "text-green-500",
+    },
+    degraded: {
+      labelKey: "degraded",
+      icon: AlertTriangle,
+      bgColor: "bg-yellow-500/10",
+      borderColor: "border-yellow-500/30",
+      textColor: "text-yellow-500",
+    },
+    partial_outage: {
+      labelKey: "partialOutage",
+      icon: AlertCircle,
+      bgColor: "bg-orange-500/10",
+      borderColor: "border-orange-500/30",
+      textColor: "text-orange-500",
+    },
+    major_outage: {
+      labelKey: "majorOutage",
+      icon: XCircle,
+      bgColor: "bg-red-500/10",
+      borderColor: "border-red-500/30",
+      textColor: "text-red-500",
+    },
+  }
+
   const config = statusConfig[component.status]
   const Icon = config.icon
 
@@ -81,7 +84,7 @@ function ComponentStatus({ component }: { component: SystemComponent }) {
       </div>
       <div className={cn("flex items-center gap-2", config.textColor)}>
         <Icon className="h-5 w-5" />
-        <span className="text-sm font-medium">{config.label}</span>
+        <span className="text-sm font-medium">{t(config.labelKey)}</span>
       </div>
     </div>
   )
@@ -93,6 +96,33 @@ export function StatusOverview({
   lastUpdated,
   className,
 }: StatusOverviewProps) {
+  const t = useTranslations("status.overview")
+
+  const statusConfig: Record<
+    SystemStatus,
+    {
+      icon: React.ComponentType<{ className?: string }>
+      textColor: string
+    }
+  > = {
+    operational: {
+      icon: CheckCircle,
+      textColor: "text-green-500",
+    },
+    degraded: {
+      icon: AlertTriangle,
+      textColor: "text-yellow-500",
+    },
+    partial_outage: {
+      icon: AlertCircle,
+      textColor: "text-orange-500",
+    },
+    major_outage: {
+      icon: XCircle,
+      textColor: "text-red-500",
+    },
+  }
+
   const config = statusConfig[overallStatus]
   const Icon = config.icon
 
@@ -106,7 +136,7 @@ export function StatusOverview({
               <StatusBadge status={overallStatus} size="lg" />
               {lastUpdated && (
                 <p className="text-sm text-muted-foreground mt-1">
-                  Last updated: {lastUpdated.toLocaleString()}
+                  {t("lastUpdated", { time: lastUpdated.toLocaleString() })}
                 </p>
               )}
             </div>

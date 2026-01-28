@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import {
   Search,
   FileText,
@@ -25,97 +26,99 @@ interface CommandPaletteProps {
   onSelectTemplate: (prompt: string) => void
 }
 
-const recentTemplates = [
-  {
-    id: 1,
-    name: "Creative Brief Generator",
-    icon: Megaphone,
-    prompt: "Create a creative brief for [CAMPAIGN] targeting [AUDIENCE]...",
-  },
-  {
-    id: 2,
-    name: "Audience Profile Summary",
-    icon: Users,
-    prompt: "Generate a comprehensive audience profile for [SEGMENT]...",
-  },
-  {
-    id: 3,
-    name: "Trend Analysis Report",
-    icon: TrendingUp,
-    prompt: "Analyze the trend of [TREND] and its implications...",
-  },
-]
-
-const allTemplates = [
-  {
-    id: 1,
-    name: "Creative Brief Generator",
-    icon: Megaphone,
-    category: "Briefs",
-    prompt: "Create a creative brief for [CAMPAIGN] targeting [AUDIENCE] with the objective of [GOAL].",
-  },
-  {
-    id: 2,
-    name: "Audience Profile Summary",
-    icon: Users,
-    category: "Research",
-    prompt:
-      "Generate a comprehensive audience profile for [SEGMENT] including demographics, interests, values, and behaviors.",
-  },
-  {
-    id: 3,
-    name: "Trend Analysis Report",
-    icon: TrendingUp,
-    category: "Analysis",
-    prompt:
-      "Analyze the trend of [TREND] and its implications for [BRAND/CATEGORY]. Include data points and recommendations.",
-  },
-  {
-    id: 4,
-    name: "Competitive Landscape",
-    icon: Target,
-    category: "Analysis",
-    prompt: "Create a competitive analysis for [BRAND] in the [CATEGORY] space.",
-  },
-  {
-    id: 5,
-    name: "Market Entry Assessment",
-    icon: Globe,
-    category: "Research",
-    prompt: "Assess the opportunity for [BRAND] to enter the [MARKET] market.",
-  },
-  {
-    id: 6,
-    name: "Consumer Insight Extraction",
-    icon: Lightbulb,
-    category: "Research",
-    prompt: "Extract key consumer insights from [DATA SOURCE] about [TOPIC].",
-  },
-  {
-    id: 7,
-    name: "Campaign Performance Debrief",
-    icon: BarChart3,
-    category: "Analysis",
-    prompt: "Create a campaign debrief for [CAMPAIGN] including performance metrics and recommendations.",
-  },
-  {
-    id: 8,
-    name: "Presentation Narrative",
-    icon: FileText,
-    category: "Briefs",
-    prompt: "Create a presentation narrative for [TOPIC] that tells a compelling story.",
-  },
-]
+// Templates are now defined inside the component to use translations
 
 export function CommandPalette({ open, onOpenChange, onSelectTemplate }: CommandPaletteProps) {
+  const t = useTranslations("playground.commandPalette")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedIndex, setSelectedIndex] = useState(0)
 
+  // Build templates with translated content
+  const recentTemplates = [
+    {
+      id: 1,
+      name: t("templates.creativeBrief.name"),
+      icon: Megaphone,
+      prompt: t("templates.creativeBrief.prompt"),
+    },
+    {
+      id: 2,
+      name: t("templates.audienceProfile.name"),
+      icon: Users,
+      prompt: t("templates.audienceProfile.prompt"),
+    },
+    {
+      id: 3,
+      name: t("templates.trendAnalysis.name"),
+      icon: TrendingUp,
+      prompt: t("templates.trendAnalysis.prompt"),
+    },
+  ]
+
+  const allTemplates = [
+    {
+      id: 1,
+      name: t("templates.creativeBrief.name"),
+      icon: Megaphone,
+      category: t("categories.briefs"),
+      prompt: t("templates.creativeBrief.prompt"),
+    },
+    {
+      id: 2,
+      name: t("templates.audienceProfile.name"),
+      icon: Users,
+      category: t("categories.research"),
+      prompt: t("templates.audienceProfile.prompt"),
+    },
+    {
+      id: 3,
+      name: t("templates.trendAnalysis.name"),
+      icon: TrendingUp,
+      category: t("categories.analysis"),
+      prompt: t("templates.trendAnalysis.prompt"),
+    },
+    {
+      id: 4,
+      name: t("templates.competitiveLandscape.name"),
+      icon: Target,
+      category: t("categories.analysis"),
+      prompt: t("templates.competitiveLandscape.prompt"),
+    },
+    {
+      id: 5,
+      name: t("templates.marketEntry.name"),
+      icon: Globe,
+      category: t("categories.research"),
+      prompt: t("templates.marketEntry.prompt"),
+    },
+    {
+      id: 6,
+      name: t("templates.consumerInsight.name"),
+      icon: Lightbulb,
+      category: t("categories.research"),
+      prompt: t("templates.consumerInsight.prompt"),
+    },
+    {
+      id: 7,
+      name: t("templates.campaignDebrief.name"),
+      icon: BarChart3,
+      category: t("categories.analysis"),
+      prompt: t("templates.campaignDebrief.prompt"),
+    },
+    {
+      id: 8,
+      name: t("templates.presentationNarrative.name"),
+      icon: FileText,
+      category: t("categories.briefs"),
+      prompt: t("templates.presentationNarrative.prompt"),
+    },
+  ]
+
   const filteredTemplates = searchQuery
     ? allTemplates.filter(
-        (t) =>
-          t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          t.category.toLowerCase().includes(searchQuery.toLowerCase()),
+        (template) =>
+          template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          template.category.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : allTemplates
 
@@ -153,7 +156,7 @@ export function CommandPalette({ open, onOpenChange, onSelectTemplate }: Command
         <div className="flex items-center border-b border-border px-3">
           <Search className="w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search templates..."
+            placeholder={t("searchPlaceholder")}
             className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -169,7 +172,7 @@ export function CommandPalette({ open, onOpenChange, onSelectTemplate }: Command
             <div className="px-2 py-2">
               <p className="px-2 py-1.5 text-xs font-medium text-muted-foreground flex items-center gap-2">
                 <Clock className="w-3 h-3" />
-                Recent
+                {t("recent")}
               </p>
               {recentTemplates.map((template, index) => (
                 <button
@@ -196,7 +199,7 @@ export function CommandPalette({ open, onOpenChange, onSelectTemplate }: Command
           <div className="px-2 py-2">
             <p className="px-2 py-1.5 text-xs font-medium text-muted-foreground flex items-center gap-2">
               <Sparkles className="w-3 h-3" />
-              {searchQuery ? "Results" : "All Templates"}
+              {searchQuery ? t("results") : t("allTemplates")}
             </p>
             {filteredTemplates.map((template, index) => {
               const adjustedIndex = searchQuery ? index : index + recentTemplates.length
@@ -230,15 +233,15 @@ export function CommandPalette({ open, onOpenChange, onSelectTemplate }: Command
         <div className="border-t border-border px-3 py-2 flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <kbd className="px-1.5 py-0.5 rounded border bg-muted font-mono text-[10px]">↑↓</kbd>
-            <span>Navigate</span>
+            <span>{t("navigate")}</span>
           </div>
           <div className="flex items-center gap-2">
             <kbd className="px-1.5 py-0.5 rounded border bg-muted font-mono text-[10px]">↵</kbd>
-            <span>Select</span>
+            <span>{t("select")}</span>
           </div>
           <div className="flex items-center gap-2">
             <kbd className="px-1.5 py-0.5 rounded border bg-muted font-mono text-[10px]">ESC</kbd>
-            <span>Close</span>
+            <span>{t("close")}</span>
           </div>
         </div>
       </DialogContent>

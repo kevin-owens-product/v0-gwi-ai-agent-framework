@@ -126,7 +126,7 @@ export function StatusTimeline({
                       ))}
                       {day.incidents.length > 3 && (
                         <p className="text-muted-foreground">
-                          +{day.incidents.length - 3} more
+                          {t("more", { count: day.incidents.length - 3 })}
                         </p>
                       )}
                     </div>

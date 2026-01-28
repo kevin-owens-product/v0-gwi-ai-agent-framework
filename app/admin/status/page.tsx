@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   AlertCircle,
   Plus,
@@ -42,7 +43,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Incident {
@@ -61,34 +62,9 @@ interface Incident {
 
 // Subscription interface removed - unused
 
-const statusOptions = [
-  { value: "INVESTIGATING", label: "Investigating" },
-  { value: "IDENTIFIED", label: "Identified" },
-  { value: "MONITORING", label: "Monitoring" },
-  { value: "RESOLVED", label: "Resolved" },
-  { value: "POSTMORTEM", label: "Postmortem" },
-]
-
-const impactOptions = [
-  { value: "NONE", label: "None", color: "bg-gray-500" },
-  { value: "MINOR", label: "Minor", color: "bg-yellow-500" },
-  { value: "MAJOR", label: "Major", color: "bg-orange-500" },
-  { value: "CRITICAL", label: "Critical", color: "bg-red-500" },
-]
-
-const systemOptions = [
-  "API Gateway",
-  "Authentication",
-  "Database",
-  "File Storage",
-  "Analytics",
-  "Search",
-  "Notifications",
-  "Messaging",
-  "Payments",
-]
-
 export default function AdminStatusPage() {
+  const t = useTranslations("admin.status")
+  const tCommon = useTranslations("common")
   const [incidents, setIncidents] = useState<Incident[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -99,6 +75,33 @@ export default function AdminStatusPage() {
   const [newUpdate, setNewUpdate] = useState("")
   const [newUpdateStatus, setNewUpdateStatus] = useState("")
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+
+  const statusOptions = [
+    { value: "INVESTIGATING", label: t("status.investigating") },
+    { value: "IDENTIFIED", label: t("status.identified") },
+    { value: "MONITORING", label: t("status.monitoring") },
+    { value: "RESOLVED", label: t("status.resolved") },
+    { value: "POSTMORTEM", label: t("status.postmortem") },
+  ]
+
+  const impactOptions = [
+    { value: "NONE", label: t("impact.none"), color: "bg-gray-500" },
+    { value: "MINOR", label: t("impact.minor"), color: "bg-yellow-500" },
+    { value: "MAJOR", label: t("impact.major"), color: "bg-orange-500" },
+    { value: "CRITICAL", label: t("impact.critical"), color: "bg-red-500" },
+  ]
+
+  const systemOptions = [
+    t("systems.apiGateway"),
+    t("systems.authentication"),
+    t("systems.database"),
+    t("systems.fileStorage"),
+    t("systems.analytics"),
+    t("systems.search"),
+    t("systems.notifications"),
+    t("systems.messaging"),
+    t("systems.payments"),
+  ]
 
   const [newIncident, setNewIncident] = useState({
     title: "",
@@ -142,7 +145,7 @@ export default function AdminStatusPage() {
         throw new Error("Failed to create incident")
       }
 
-      toast.success("Incident created successfully")
+      showSuccessToast(t("toast.incidentCreated"))
 
       setIsCreateOpen(false)
       setNewIncident({
@@ -155,7 +158,7 @@ export default function AdminStatusPage() {
       })
       fetchIncidents()
     } catch (error) {
-      toast.error("Failed to create incident")
+      showErrorToast(t("toast.createFailed"))
     }
   }
 
@@ -171,13 +174,13 @@ export default function AdminStatusPage() {
         throw new Error("Failed to update incident")
       }
 
-      toast.success("Incident status updated")
+      showSuccessToast(t("toast.incidentUpdated"))
       fetchIncidents()
       if (selectedIncident?.id === incidentId) {
         setSelectedIncident((prev) => (prev ? { ...prev, status: newStatus } : null))
       }
     } catch (error) {
-      toast.error("Failed to update incident")
+      showErrorToast(t("toast.updateFailed"))
     }
   }
 
@@ -201,12 +204,12 @@ export default function AdminStatusPage() {
         throw new Error("Failed to add update")
       }
 
-      toast.success("Update posted successfully")
+      showSuccessToast(t("toast.updatePosted"))
       setNewUpdate("")
       setNewUpdateStatus("")
       fetchIncidents()
     } catch (error) {
-      toast.error("Failed to add update")
+      showErrorToast(t("toast.addUpdateFailed"))
     }
   }
 
@@ -220,13 +223,13 @@ export default function AdminStatusPage() {
         throw new Error("Failed to delete incident")
       }
 
-      toast.success("Incident deleted")
+      showSuccessToast(t("toast.incidentDeleted"))
       fetchIncidents()
       if (selectedIncident?.id === incidentId) {
         setSelectedIncident(null)
       }
     } catch (error) {
-      toast.error("Failed to delete incident")
+      showErrorToast(t("toast.deleteFailed"))
     }
   }
 
@@ -238,15 +241,15 @@ export default function AdminStatusPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "RESOLVED":
-        return <Badge className="bg-green-500">Resolved</Badge>
+        return <Badge className="bg-green-500">{t("status.resolved")}</Badge>
       case "MONITORING":
-        return <Badge className="bg-blue-500">Monitoring</Badge>
+        return <Badge className="bg-blue-500">{t("status.monitoring")}</Badge>
       case "IDENTIFIED":
-        return <Badge className="bg-yellow-500">Identified</Badge>
+        return <Badge className="bg-yellow-500">{t("status.identified")}</Badge>
       case "INVESTIGATING":
-        return <Badge className="bg-orange-500">Investigating</Badge>
+        return <Badge className="bg-orange-500">{t("status.investigating")}</Badge>
       case "POSTMORTEM":
-        return <Badge variant="secondary">Postmortem</Badge>
+        return <Badge variant="secondary">{t("status.postmortem")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -266,7 +269,7 @@ export default function AdminStatusPage() {
   const columns: Column<Incident>[] = [
     {
       id: "incident",
-      header: "Incident",
+      header: t("columns.incident"),
       cell: (incident) => (
         <div className="flex items-start gap-2">
           {incident.isPublic ? (
@@ -277,7 +280,7 @@ export default function AdminStatusPage() {
           <div>
             <p className="font-medium">{incident.title}</p>
             <p className="text-xs text-muted-foreground">
-              Started {new Date(incident.startedAt).toLocaleString()}
+              {t("detail.started")} {new Date(incident.startedAt).toLocaleString()}
             </p>
           </div>
         </div>
@@ -285,17 +288,17 @@ export default function AdminStatusPage() {
     },
     {
       id: "impact",
-      header: "Impact",
+      header: t("columns.impact"),
       cell: (incident) => getImpactBadge(incident.impact),
     },
     {
       id: "status",
-      header: "Status",
+      header: t("columns.status"),
       cell: (incident) => getStatusBadge(incident.status),
     },
     {
       id: "affectedSystems",
-      header: "Affected Systems",
+      header: t("columns.affectedSystems"),
       cell: (incident) => (
         <div className="flex flex-wrap gap-1 max-w-[200px]">
           {incident.affectedSystems.slice(0, 2).map((system) => (
@@ -313,7 +316,7 @@ export default function AdminStatusPage() {
     },
     {
       id: "updates",
-      header: "Updates",
+      header: t("columns.updates"),
       cell: (incident) => (
         <span className="text-muted-foreground">{incident.updates.length}</span>
       ),
@@ -323,12 +326,12 @@ export default function AdminStatusPage() {
   // Define row actions
   const rowActions: RowAction<Incident>[] = [
     {
-      label: "View Details",
+      label: t("actions.viewDetails"),
       icon: <ExternalLink className="h-4 w-4" />,
       onClick: (incident) => setSelectedIncident(incident),
     },
     {
-      label: "Add Update",
+      label: t("actions.addUpdate"),
       icon: <MessageSquare className="h-4 w-4" />,
       onClick: (incident) => {
         setSelectedIncident(incident)
@@ -337,7 +340,7 @@ export default function AdminStatusPage() {
       },
     },
     {
-      label: "Delete",
+      label: t("actions.delete"),
       icon: <AlertCircle className="h-4 w-4" />,
       onClick: (incident) => handleDeleteIncident(incident.id),
       variant: "destructive",
@@ -348,7 +351,7 @@ export default function AdminStatusPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Mark as Resolved",
+      label: t("actions.markAsResolved"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: async (selectedIds) => {
         try {
@@ -361,14 +364,14 @@ export default function AdminStatusPage() {
               })
             )
           )
-          toast.success(`${selectedIds.length} incident(s) marked as resolved`)
+          showSuccessToast(t("toast.markedResolved", { count: selectedIds.length }))
           fetchIncidents()
         } catch (error) {
-          toast.error("Failed to update incidents")
+          showErrorToast(t("toast.updateIncidentsFailed"))
         }
       },
-      confirmTitle: "Mark Incidents as Resolved",
-      confirmDescription: "Are you sure you want to mark the selected incidents as resolved?",
+      confirmTitle: t("actions.markIncidentsResolved"),
+      confirmDescription: t("actions.markResolvedConfirm"),
     },
   ]
 
@@ -386,26 +389,26 @@ export default function AdminStatusPage() {
                   {selectedIncident.isPublic && (
                     <Badge variant="outline">
                       <Eye className="h-3 w-3 mr-1" />
-                      Public
+                      {t("detail.public")}
                     </Badge>
                   )}
                 </div>
                 <SheetTitle>{selectedIncident.title}</SheetTitle>
                 <SheetDescription>
-                  Started {new Date(selectedIncident.startedAt).toLocaleString()}
+                  {t("detail.started")} {new Date(selectedIncident.startedAt).toLocaleString()}
                 </SheetDescription>
               </SheetHeader>
 
               <div className="space-y-6 mt-6">
                 <div>
-                  <h4 className="font-medium mb-2">Description</h4>
+                  <h4 className="font-medium mb-2">{t("detail.description")}</h4>
                   <p className="text-sm text-muted-foreground">
                     {selectedIncident.description}
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">Affected Systems</h4>
+                  <h4 className="font-medium mb-2">{t("detail.affectedSystems")}</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedIncident.affectedSystems.map((system) => (
                       <Badge key={system} variant="outline">
@@ -416,7 +419,7 @@ export default function AdminStatusPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">Update Status</h4>
+                  <h4 className="font-medium mb-2">{t("detail.updateStatus")}</h4>
                   <Select
                     value={selectedIncident.status}
                     onValueChange={(value) =>
@@ -437,7 +440,7 @@ export default function AdminStatusPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">Timeline</h4>
+                  <h4 className="font-medium mb-2">{t("detail.timeline")}</h4>
                   <div className="space-y-4">
                     {selectedIncident.updates.map((update) => (
                       <div key={update.id} className="flex gap-3">
@@ -446,7 +449,7 @@ export default function AdminStatusPage() {
                           <div className="flex items-center gap-2">
                             {getStatusBadge(update.status)}
                             {!update.isPublic && (
-                              <Badge variant="outline" className="text-xs">Internal</Badge>
+                              <Badge variant="outline" className="text-xs">{t("detail.internal")}</Badge>
                             )}
                           </div>
                           <p className="text-sm mt-1">{update.message}</p>
@@ -460,14 +463,14 @@ export default function AdminStatusPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">Post Update</h4>
+                  <h4 className="font-medium mb-2">{t("detail.postUpdate")}</h4>
                   <div className="space-y-3">
                     <Select
                       value={newUpdateStatus}
                       onValueChange={setNewUpdateStatus}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Change status (optional)" />
+                        <SelectValue placeholder={t("detail.changeStatusOptional")} />
                       </SelectTrigger>
                       <SelectContent>
                         {statusOptions.map((opt) => (
@@ -478,7 +481,7 @@ export default function AdminStatusPage() {
                       </SelectContent>
                     </Select>
                     <Textarea
-                      placeholder="Enter status update message..."
+                      placeholder={t("detail.enterStatusUpdate")}
                       value={newUpdate}
                       onChange={(e) => setNewUpdate(e.target.value)}
                     />
@@ -487,7 +490,7 @@ export default function AdminStatusPage() {
                       disabled={!newUpdate}
                     >
                       <MessageSquare className="h-4 w-4 mr-2" />
-                      Post Update
+                      {t("detail.postUpdateButton")}
                     </Button>
                   </div>
                 </div>
@@ -502,39 +505,39 @@ export default function AdminStatusPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <AlertCircle className="h-8 w-8 text-primary" />
-            Status Page Management
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Manage public status page incidents and updates
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" asChild>
             <a href="/status" target="_blank" rel="noopener noreferrer">
               <ExternalLink className="h-4 w-4 mr-2" />
-              View Public Page
+              {t("viewPublicPage")}
             </a>
           </Button>
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
-                Create Incident
+                {t("createIncident")}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
-                <DialogTitle>Create Status Page Incident</DialogTitle>
+                <DialogTitle>{t("createStatusPageIncident")}</DialogTitle>
                 <DialogDescription>
-                  Create a new incident to display on the public status page
+                  {t("createNewIncident")}
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="title">Incident Title</Label>
+                  <Label htmlFor="title">{t("incidentTitle")}</Label>
                   <Input
                     id="title"
-                    placeholder="Brief description of the incident"
+                    placeholder={t("placeholders.incidentTitle")}
                     value={newIncident.title}
                     onChange={(e) =>
                       setNewIncident({ ...newIncident, title: e.target.value })
@@ -542,10 +545,10 @@ export default function AdminStatusPage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">{t("description")}</Label>
                   <Textarea
                     id="description"
-                    placeholder="Detailed description of the incident..."
+                    placeholder={t("placeholders.description")}
                     rows={4}
                     value={newIncident.description}
                     onChange={(e) =>
@@ -555,7 +558,7 @@ export default function AdminStatusPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label>Impact</Label>
+                    <Label>{t("impact")}</Label>
                     <Select
                       value={newIncident.impact}
                       onValueChange={(value) =>
@@ -575,7 +578,7 @@ export default function AdminStatusPage() {
                     </Select>
                   </div>
                   <div className="grid gap-2">
-                    <Label>Status</Label>
+                    <Label>{t("status")}</Label>
                     <Select
                       value={newIncident.status}
                       onValueChange={(value) =>
@@ -596,7 +599,7 @@ export default function AdminStatusPage() {
                   </div>
                 </div>
                 <div className="grid gap-2">
-                  <Label>Affected Systems</Label>
+                  <Label>{t("affectedSystems")}</Label>
                   <div className="flex flex-wrap gap-2">
                     {systemOptions.map((system) => (
                       <Badge
@@ -627,18 +630,18 @@ export default function AdminStatusPage() {
                       setNewIncident({ ...newIncident, isPublic: checked })
                     }
                   />
-                  <Label htmlFor="isPublic">Display on public status page</Label>
+                  <Label htmlFor="isPublic">{t("displayOnPublic")}</Label>
                 </div>
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                  Cancel
+                  {t("cancel")}
                 </Button>
                 <Button
                   onClick={handleCreateIncident}
                   disabled={!newIncident.title || !newIncident.description}
                 >
-                  Create Incident
+                  {t("createIncident")}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -654,12 +657,12 @@ export default function AdminStatusPage() {
               <AlertTriangle className="h-8 w-8 text-orange-500" />
               <div>
                 <h3 className="font-semibold">
-                  {activeIncidents.length} Active Incident{activeIncidents.length !== 1 ? "s" : ""}
+                  {activeIncidents.length} {t("active")} {activeIncidents.length !== 1 ? tCommon("incidents") : tCommon("incident")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  {activeIncidents.filter((i) => i.impact === "CRITICAL").length} critical,{" "}
-                  {activeIncidents.filter((i) => i.impact === "MAJOR").length} major,{" "}
-                  {activeIncidents.filter((i) => i.impact === "MINOR").length} minor
+                  {activeIncidents.filter((i) => i.impact === "CRITICAL").length} {t("critical")},{" "}
+                  {activeIncidents.filter((i) => i.impact === "MAJOR").length} {t("major")},{" "}
+                  {activeIncidents.filter((i) => i.impact === "MINOR").length} {t("minor")}
                 </p>
               </div>
             </div>
@@ -672,7 +675,7 @@ export default function AdminStatusPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{incidents.length}</div>
-            <p className="text-xs text-muted-foreground">Total Incidents</p>
+            <p className="text-xs text-muted-foreground">{t("totalIncidents")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -680,7 +683,7 @@ export default function AdminStatusPage() {
             <div className="text-2xl font-bold text-orange-500">
               {activeIncidents.length}
             </div>
-            <p className="text-xs text-muted-foreground">Active</p>
+            <p className="text-xs text-muted-foreground">{t("active")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -688,7 +691,7 @@ export default function AdminStatusPage() {
             <div className="text-2xl font-bold text-green-500">
               {incidents.filter((i) => i.status === "RESOLVED").length}
             </div>
-            <p className="text-xs text-muted-foreground">Resolved</p>
+            <p className="text-xs text-muted-foreground">{t("resolved")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -696,7 +699,7 @@ export default function AdminStatusPage() {
             <div className="text-2xl font-bold text-blue-500">
               {incidents.filter((i) => i.isPublic).length}
             </div>
-            <p className="text-xs text-muted-foreground">Public</p>
+            <p className="text-xs text-muted-foreground">{t("public")}</p>
           </CardContent>
         </Card>
       </div>
@@ -709,7 +712,7 @@ export default function AdminStatusPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search incidents..."
+                  placeholder={t("searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -718,10 +721,10 @@ export default function AdminStatusPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="all">{t("allStatus")}</SelectItem>
                 {statusOptions.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -731,10 +734,10 @@ export default function AdminStatusPage() {
             </Select>
             <Select value={impactFilter} onValueChange={setImpactFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Impact" />
+                <SelectValue placeholder={t("impact")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Impact</SelectItem>
+                <SelectItem value="all">{t("allImpact")}</SelectItem>
                 {impactOptions.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -752,7 +755,7 @@ export default function AdminStatusPage() {
         columns={columns}
         getRowId={(incident) => incident.id}
         isLoading={loading}
-        emptyMessage="No incidents found"
+        emptyMessage={t("noIncidentsFound")}
         rowActions={rowActions}
         bulkActions={bulkActions}
         selectedIds={selectedIds}

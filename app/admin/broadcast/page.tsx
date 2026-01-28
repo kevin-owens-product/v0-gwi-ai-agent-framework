@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Megaphone,
   Plus,
@@ -72,31 +73,10 @@ interface BroadcastMessage {
   createdAt: string
 }
 
-const messageTypes = [
-  { value: "ANNOUNCEMENT", label: "Announcement" },
-  { value: "PRODUCT_UPDATE", label: "Product Update" },
-  { value: "MAINTENANCE", label: "Maintenance Notice" },
-  { value: "SECURITY_ALERT", label: "Security Alert" },
-  { value: "MARKETING", label: "Marketing" },
-  { value: "SURVEY", label: "Survey" },
-]
-
-const priorityOptions = [
-  { value: "LOW", label: "Low" },
-  { value: "NORMAL", label: "Normal" },
-  { value: "HIGH", label: "High" },
-  { value: "URGENT", label: "Urgent" },
-]
-
-const targetOptions = [
-  { value: "ALL", label: "All Users" },
-  { value: "SPECIFIC_ORGS", label: "Specific Organizations" },
-  { value: "SPECIFIC_PLANS", label: "Specific Plan Tiers" },
-]
-
-// channelOptions removed - unused
-
 export default function BroadcastCenterPage() {
+  const t = useTranslations("admin.broadcast")
+  const tCommon = useTranslations("common")
+
   const [messages, setMessages] = useState<BroadcastMessage[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -112,9 +92,31 @@ export default function BroadcastCenterPage() {
     channels: ["IN_APP"],
   })
 
+  const messageTypes = [
+    { value: "ANNOUNCEMENT", label: t("types.announcement") },
+    { value: "PRODUCT_UPDATE", label: t("types.productUpdate") },
+    { value: "MAINTENANCE", label: t("types.maintenance") },
+    { value: "SECURITY_ALERT", label: t("types.securityAlert") },
+    { value: "MARKETING", label: t("types.marketing") },
+    { value: "SURVEY", label: t("types.survey") },
+  ]
+
+  const priorityOptions = [
+    { value: "LOW", label: t("priority.low") },
+    { value: "NORMAL", label: t("priority.normal") },
+    { value: "HIGH", label: t("priority.high") },
+    { value: "URGENT", label: t("priority.urgent") },
+  ]
+
+  const targetOptions = [
+    { value: "ALL", label: t("target.allUsers") },
+    { value: "SPECIFIC_ORGS", label: t("target.specificOrgs") },
+    { value: "SPECIFIC_PLANS", label: t("target.specificPlans") },
+  ]
+
   useEffect(() => {
     fetchMessages()
-  }, [statusFilter])
+  }, [statusFilter, fetchMessages])
 
   const fetchMessages = async () => {
     try {
@@ -144,7 +146,7 @@ export default function BroadcastCenterPage() {
         throw new Error("Failed to create message")
       }
 
-      toast.success("Broadcast message created")
+      toast.success(t("toast.messageCreated"))
       setIsCreateOpen(false)
       setNewMessage({
         title: "",
@@ -155,8 +157,8 @@ export default function BroadcastCenterPage() {
         channels: ["IN_APP"],
       })
       fetchMessages()
-    } catch (error) {
-      toast.error("Failed to create message")
+    } catch {
+      toast.error(t("toast.createFailed"))
     }
   }
 
@@ -170,25 +172,25 @@ export default function BroadcastCenterPage() {
         throw new Error("Failed to send message")
       }
 
-      toast.success("Broadcast message sent")
+      toast.success(t("toast.messageSent"))
       fetchMessages()
-    } catch (error) {
-      toast.error("Failed to send message")
+    } catch {
+      toast.error(t("toast.sendFailed"))
     }
   }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "SENT":
-        return <Badge className="bg-green-500">Sent</Badge>
+        return <Badge className="bg-green-500">{t("status.sent")}</Badge>
       case "SCHEDULED":
-        return <Badge className="bg-blue-500">Scheduled</Badge>
+        return <Badge className="bg-blue-500">{t("status.scheduled")}</Badge>
       case "SENDING":
-        return <Badge className="bg-yellow-500">Sending</Badge>
+        return <Badge className="bg-yellow-500">{t("status.sending")}</Badge>
       case "DRAFT":
-        return <Badge variant="secondary">Draft</Badge>
+        return <Badge variant="secondary">{t("status.draft")}</Badge>
       case "CANCELLED":
-        return <Badge variant="outline">Cancelled</Badge>
+        return <Badge variant="outline">{t("status.cancelled")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -197,13 +199,13 @@ export default function BroadcastCenterPage() {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case "URGENT":
-        return <Badge variant="destructive">Urgent</Badge>
+        return <Badge variant="destructive">{t("priority.urgent")}</Badge>
       case "HIGH":
-        return <Badge className="bg-orange-500">High</Badge>
+        return <Badge className="bg-orange-500">{t("priority.high")}</Badge>
       case "NORMAL":
-        return <Badge variant="secondary">Normal</Badge>
+        return <Badge variant="secondary">{t("priority.normal")}</Badge>
       default:
-        return <Badge variant="outline">Low</Badge>
+        return <Badge variant="outline">{t("priority.low")}</Badge>
     }
   }
 
@@ -220,32 +222,32 @@ export default function BroadcastCenterPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Megaphone className="h-8 w-8 text-primary" />
-            Broadcast Center
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Send platform-wide announcements and targeted communications
+            {t("description")}
           </p>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              New Broadcast
+              {t("newBroadcast")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Create Broadcast Message</DialogTitle>
+              <DialogTitle>{t("createDialog.title")}</DialogTitle>
               <DialogDescription>
-                Compose a message to send to your platform users
+                {t("createDialog.description")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="title">Title</Label>
+                <Label htmlFor="title">{t("form.title")}</Label>
                 <Input
                   id="title"
-                  placeholder="Message title..."
+                  placeholder={t("form.titlePlaceholder")}
                   value={newMessage.title}
                   onChange={(e) =>
                     setNewMessage({ ...newMessage, title: e.target.value })
@@ -253,10 +255,10 @@ export default function BroadcastCenterPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="content">Content</Label>
+                <Label htmlFor="content">{t("form.content")}</Label>
                 <Textarea
                   id="content"
-                  placeholder="Write your message..."
+                  placeholder={t("form.contentPlaceholder")}
                   rows={5}
                   value={newMessage.content}
                   onChange={(e) =>
@@ -266,7 +268,7 @@ export default function BroadcastCenterPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label>Message Type</Label>
+                  <Label>{t("form.messageType")}</Label>
                   <Select
                     value={newMessage.type}
                     onValueChange={(value) =>
@@ -286,7 +288,7 @@ export default function BroadcastCenterPage() {
                   </Select>
                 </div>
                 <div className="grid gap-2">
-                  <Label>Priority</Label>
+                  <Label>{t("form.priority")}</Label>
                   <Select
                     value={newMessage.priority}
                     onValueChange={(value) =>
@@ -307,7 +309,7 @@ export default function BroadcastCenterPage() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label>Target Audience</Label>
+                <Label>{t("form.targetAudience")}</Label>
                 <Select
                   value={newMessage.targetType}
                   onValueChange={(value) =>
@@ -329,14 +331,14 @@ export default function BroadcastCenterPage() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button
                 variant="outline"
                 onClick={handleCreateMessage}
                 disabled={!newMessage.title || !newMessage.content}
               >
-                Save as Draft
+                {t("actions.saveDraft")}
               </Button>
               <Button
                 onClick={() => {
@@ -346,7 +348,7 @@ export default function BroadcastCenterPage() {
                 disabled={!newMessage.title || !newMessage.content}
               >
                 <Send className="h-4 w-4 mr-2" />
-                Send Now
+                {t("actions.sendNow")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -358,7 +360,7 @@ export default function BroadcastCenterPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{messages.length}</div>
-            <p className="text-xs text-muted-foreground">Total Messages</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalMessages")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -366,7 +368,7 @@ export default function BroadcastCenterPage() {
             <div className="text-2xl font-bold text-green-500">
               {messages.filter((m) => m.status === "SENT").length}
             </div>
-            <p className="text-xs text-muted-foreground">Sent</p>
+            <p className="text-xs text-muted-foreground">{t("status.sent")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -374,7 +376,7 @@ export default function BroadcastCenterPage() {
             <div className="text-2xl font-bold text-blue-500">
               {messages.filter((m) => m.status === "SCHEDULED").length}
             </div>
-            <p className="text-xs text-muted-foreground">Scheduled</p>
+            <p className="text-xs text-muted-foreground">{t("status.scheduled")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -382,7 +384,7 @@ export default function BroadcastCenterPage() {
             <div className="text-2xl font-bold text-yellow-500">
               {messages.filter((m) => m.status === "DRAFT").length}
             </div>
-            <p className="text-xs text-muted-foreground">Drafts</p>
+            <p className="text-xs text-muted-foreground">{t("stats.drafts")}</p>
           </CardContent>
         </Card>
       </div>
@@ -395,7 +397,7 @@ export default function BroadcastCenterPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search messages..."
+                  placeholder={t("searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -404,14 +406,14 @@ export default function BroadcastCenterPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="DRAFT">Draft</SelectItem>
-                <SelectItem value="SCHEDULED">Scheduled</SelectItem>
-                <SelectItem value="SENT">Sent</SelectItem>
-                <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                <SelectItem value="all">{t("filter.allStatus")}</SelectItem>
+                <SelectItem value="DRAFT">{t("status.draft")}</SelectItem>
+                <SelectItem value="SCHEDULED">{t("status.scheduled")}</SelectItem>
+                <SelectItem value="SENT">{t("status.sent")}</SelectItem>
+                <SelectItem value="CANCELLED">{t("status.cancelled")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -424,13 +426,13 @@ export default function BroadcastCenterPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Priority</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Target</TableHead>
-                <TableHead>Delivery Stats</TableHead>
-                <TableHead>Date</TableHead>
+                <TableHead>{t("table.title")}</TableHead>
+                <TableHead>{t("table.type")}</TableHead>
+                <TableHead>{t("table.priority")}</TableHead>
+                <TableHead>{t("table.status")}</TableHead>
+                <TableHead>{t("table.target")}</TableHead>
+                <TableHead>{t("table.deliveryStats")}</TableHead>
+                <TableHead>{t("table.date")}</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -447,14 +449,14 @@ export default function BroadcastCenterPage() {
                 <TableRow>
                   <TableCell colSpan={8} className="text-center py-12">
                     <Megaphone className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No broadcast messages found</p>
+                    <p className="text-muted-foreground">{t("empty.noMessages")}</p>
                     <Button
                       variant="outline"
                       className="mt-4"
                       onClick={() => setIsCreateOpen(true)}
                     >
                       <Plus className="h-4 w-4 mr-2" />
-                      Create First Broadcast
+                      {t("empty.createFirst")}
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -491,9 +493,12 @@ export default function BroadcastCenterPage() {
                     <TableCell>
                       {message.status === "SENT" ? (
                         <div className="text-xs">
-                          <p>{message.delivered.toLocaleString()} delivered</p>
+                          <p>{t("delivery.delivered", { count: message.delivered.toLocaleString() })}</p>
                           <p className="text-muted-foreground">
-                            {message.opened} opened ({message.totalRecipients > 0 ? Math.round((message.opened / message.totalRecipients) * 100) : 0}%)
+                            {t("delivery.opened", {
+                              count: message.opened,
+                              percent: message.totalRecipients > 0 ? Math.round((message.opened / message.totalRecipients) * 100) : 0
+                            })}
                           </p>
                         </div>
                       ) : (
@@ -505,7 +510,7 @@ export default function BroadcastCenterPage() {
                         {message.sentAt
                           ? new Date(message.sentAt).toLocaleDateString()
                           : message.scheduledFor
-                          ? `Scheduled: ${new Date(message.scheduledFor).toLocaleDateString()}`
+                          ? `${t("delivery.scheduledFor")}: ${new Date(message.scheduledFor).toLocaleDateString()}`
                           : new Date(message.createdAt).toLocaleDateString()}
                       </div>
                     </TableCell>
@@ -519,30 +524,30 @@ export default function BroadcastCenterPage() {
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem>
                             <Eye className="h-4 w-4 mr-2" />
-                            View Details
+                            {t("actions.viewDetails")}
                           </DropdownMenuItem>
                           {message.status === "DRAFT" && (
                             <>
                               <DropdownMenuItem>
                                 <Edit className="h-4 w-4 mr-2" />
-                                Edit
+                                {tCommon("edit")}
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => handleSendMessage(message.id)}
                               >
                                 <Send className="h-4 w-4 mr-2" />
-                                Send Now
+                                {t("actions.sendNow")}
                               </DropdownMenuItem>
                               <DropdownMenuItem>
                                 <Calendar className="h-4 w-4 mr-2" />
-                                Schedule
+                                {t("actions.schedule")}
                               </DropdownMenuItem>
                             </>
                           )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className="text-destructive">
                             <Trash className="h-4 w-4 mr-2" />
-                            Delete
+                            {tCommon("delete")}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

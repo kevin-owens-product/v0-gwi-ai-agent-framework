@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import {
   Zap,
   ArrowLeft,
@@ -31,7 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface ThreatEvent {
   id: string
@@ -61,15 +62,11 @@ interface RelatedThreat {
   createdAt: string
 }
 
-const statuses = [
-  { value: "ACTIVE", label: "Active" },
-  { value: "CONTAINED", label: "Contained" },
-  { value: "MITIGATED", label: "Mitigated" },
-  { value: "RESOLVED", label: "Resolved" },
-  { value: "FALSE_POSITIVE", label: "False Positive" },
-]
+const statusValues = ["ACTIVE", "CONTAINED", "MITIGATED", "RESOLVED", "FALSE_POSITIVE"] as const
 
 export default function ThreatDetailPage() {
+  const t = useTranslations("admin.security.threats")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const params = useParams()
   const [threat, setThreat] = useState<ThreatEvent | null>(null)
@@ -98,7 +95,7 @@ export default function ThreatDetailPage() {
       setMitigation(data.threat.mitigation || "")
     } catch (error) {
       console.error("Failed to fetch threat:", error)
-      toast.error("Failed to fetch threat details")
+      showErrorToast(t("detail.errors.fetchFailed"))
       router.push("/admin/security/threats")
     } finally {
       setLoading(false)
@@ -123,10 +120,10 @@ export default function ThreatDetailPage() {
         throw new Error("Failed to update threat")
       }
 
-      toast.success("Threat updated successfully")
+      showSuccessToast(t("detail.messages.updateSuccess"))
       fetchThreat()
     } catch (error) {
-      toast.error("Failed to update threat")
+      showErrorToast(t("detail.errors.updateFailed"))
     } finally {
       setSaving(false)
     }
@@ -175,14 +172,14 @@ export default function ThreatDetailPage() {
     return (
       <div className="text-center py-12">
         <Zap className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <p className="text-muted-foreground">Threat not found</p>
+        <p className="text-muted-foreground">{t("detail.notFound")}</p>
         <Button
           variant="outline"
           className="mt-4"
           onClick={() => router.push("/admin/security/threats")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Threats
+          {t("detail.backToThreats")}
         </Button>
       </div>
     )
@@ -197,14 +194,14 @@ export default function ThreatDetailPage() {
         <div className="flex items-center gap-4">
           <Button variant="ghost" onClick={() => router.push("/admin/security/threats")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+            {tCommon("back")}
           </Button>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-3">
               <Zap className="h-6 w-6 text-orange-500" />
-              Threat Event
+              {t("detail.title")}
             </h1>
-            <p className="text-sm text-muted-foreground">ID: {threat.id}</p>
+            <p className="text-sm text-muted-foreground">{t("detail.id")}: {threat.id}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -218,14 +215,14 @@ export default function ThreatDetailPage() {
         <div className="md:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Threat Details</CardTitle>
+              <CardTitle>{t("detail.threatDetails")}</CardTitle>
               <CardDescription>
                 {threat.type.replace(/_/g, " ")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-muted-foreground">Description</Label>
+                <Label className="text-muted-foreground">{t("detail.description")}</Label>
                 <p className="mt-1">{threat.description}</p>
               </div>
 
@@ -235,28 +232,28 @@ export default function ThreatDetailPage() {
                 <div>
                   <Label className="text-muted-foreground flex items-center gap-2">
                     <Globe className="h-4 w-4" />
-                    Source
+                    {t("detail.source")}
                   </Label>
                   <p className="mt-1 font-mono">{threat.source}</p>
                 </div>
                 <div>
                   <Label className="text-muted-foreground flex items-center gap-2">
                     <User className="h-4 w-4" />
-                    User ID
+                    {t("detail.userId")}
                   </Label>
-                  <p className="mt-1 font-mono text-sm">{threat.userId || "N/A"}</p>
+                  <p className="mt-1 font-mono text-sm">{threat.userId || t("detail.notAvailable")}</p>
                 </div>
                 <div>
                   <Label className="text-muted-foreground flex items-center gap-2">
                     <Building className="h-4 w-4" />
-                    Organization ID
+                    {t("detail.organizationId")}
                   </Label>
-                  <p className="mt-1 font-mono text-sm">{threat.orgId || "Platform-wide"}</p>
+                  <p className="mt-1 font-mono text-sm">{threat.orgId || t("detail.platformWide")}</p>
                 </div>
                 <div>
                   <Label className="text-muted-foreground flex items-center gap-2">
                     <Clock className="h-4 w-4" />
-                    Last Updated
+                    {t("detail.lastUpdated")}
                   </Label>
                   <p className="mt-1 text-sm">
                     {new Date(threat.updatedAt).toLocaleString()}
@@ -268,7 +265,7 @@ export default function ThreatDetailPage() {
                 <>
                   <Separator />
                   <div>
-                    <Label className="text-muted-foreground">Additional Details</Label>
+                    <Label className="text-muted-foreground">{t("detail.additionalDetails")}</Label>
                     <pre className="mt-2 p-4 bg-muted rounded-lg text-sm overflow-auto">
                       {JSON.stringify(threat.details, null, 2)}
                     </pre>
@@ -280,7 +277,7 @@ export default function ThreatDetailPage() {
 
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
-                Detected at: {new Date(threat.createdAt).toLocaleString()}
+                {t("detail.detectedAt")}: {new Date(threat.createdAt).toLocaleString()}
               </div>
             </CardContent>
           </Card>
@@ -290,16 +287,16 @@ export default function ThreatDetailPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Target className="h-5 w-5" />
-                Indicators of Compromise (IOCs)
+                {t("detail.iocs.title")}
               </CardTitle>
               <CardDescription>
-                {indicators.length} indicator{indicators.length !== 1 ? "s" : ""} identified
+                {t("detail.iocs.count", { count: indicators.length })}
               </CardDescription>
             </CardHeader>
             <CardContent>
               {indicators.length === 0 ? (
                 <p className="text-muted-foreground text-center py-4">
-                  No indicators of compromise recorded
+                  {t("detail.iocs.noIndicators")}
                 </p>
               ) : (
                 <div className="space-y-2">
@@ -329,10 +326,10 @@ export default function ThreatDetailPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Link className="h-5 w-5" />
-                  Related Threats
+                  {t("detail.relatedThreats.title")}
                 </CardTitle>
                 <CardDescription>
-                  {relatedThreats.length} related threat event{relatedThreats.length !== 1 ? "s" : ""}
+                  {t("detail.relatedThreats.count", { count: relatedThreats.length })}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -364,20 +361,20 @@ export default function ThreatDetailPage() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Mitigation</CardTitle>
-              <CardDescription>Update the threat status and add mitigation notes</CardDescription>
+              <CardTitle>{t("detail.mitigation.title")}</CardTitle>
+              <CardDescription>{t("detail.mitigation.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>Status</Label>
+                <Label>{t("detail.mitigation.status")}</Label>
                 <Select value={status} onValueChange={setStatus}>
                   <SelectTrigger className="mt-2">
-                    <SelectValue placeholder="Select status" />
+                    <SelectValue placeholder={t("detail.mitigation.selectStatus")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {statuses.map((s) => (
-                      <SelectItem key={s.value} value={s.value}>
-                        {s.label}
+                    {statusValues.map((s) => (
+                      <SelectItem key={s} value={s}>
+                        {t(`statuses.${s === "FALSE_POSITIVE" ? "falsePositive" : s.toLowerCase()}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -385,10 +382,10 @@ export default function ThreatDetailPage() {
               </div>
 
               <div>
-                <Label>Mitigation Notes</Label>
+                <Label>{t("detail.mitigation.notes")}</Label>
                 <Textarea
                   className="mt-2"
-                  placeholder="Describe the mitigation steps taken..."
+                  placeholder={t("detail.mitigation.notesPlaceholder")}
                   value={mitigation}
                   onChange={(e) => setMitigation(e.target.value)}
                   rows={4}
@@ -401,7 +398,7 @@ export default function ThreatDetailPage() {
                 disabled={saving}
               >
                 <Save className="h-4 w-4 mr-2" />
-                {saving ? "Saving..." : "Save Changes"}
+                {saving ? tCommon("saving") : tCommon("saveChanges")}
               </Button>
             </CardContent>
           </Card>
@@ -411,23 +408,23 @@ export default function ThreatDetailPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-green-500">
                   <CheckCircle className="h-5 w-5" />
-                  Mitigation Info
+                  {t("detail.mitigationInfo.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 <div>
-                  <Label className="text-muted-foreground">Mitigated By</Label>
-                  <p className="text-sm">{threat.mitigatedBy || "System"}</p>
+                  <Label className="text-muted-foreground">{t("detail.mitigationInfo.mitigatedBy")}</Label>
+                  <p className="text-sm">{threat.mitigatedBy || t("detail.mitigationInfo.system")}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Mitigated At</Label>
+                  <Label className="text-muted-foreground">{t("detail.mitigationInfo.mitigatedAt")}</Label>
                   <p className="text-sm">
                     {new Date(threat.mitigatedAt).toLocaleString()}
                   </p>
                 </div>
                 {threat.mitigation && (
                   <div>
-                    <Label className="text-muted-foreground">Notes</Label>
+                    <Label className="text-muted-foreground">{t("detail.mitigationInfo.notes")}</Label>
                     <p className="text-sm mt-1">{threat.mitigation}</p>
                   </div>
                 )}
@@ -438,7 +435,7 @@ export default function ThreatDetailPage() {
           {/* Quick Actions */}
           <Card>
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
+              <CardTitle>{t("detail.quickActions.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {status === "ACTIVE" && (
@@ -451,7 +448,7 @@ export default function ThreatDetailPage() {
                   }}
                 >
                   <Shield className="h-4 w-4 mr-2" />
-                  Contain Threat
+                  {t("detail.quickActions.containThreat")}
                 </Button>
               )}
               {(status === "ACTIVE" || status === "CONTAINED") && (
@@ -464,7 +461,7 @@ export default function ThreatDetailPage() {
                   }}
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  Mark as Mitigated
+                  {t("detail.quickActions.markMitigated")}
                 </Button>
               )}
               {status !== "RESOLVED" && (
@@ -477,7 +474,7 @@ export default function ThreatDetailPage() {
                   }}
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  Mark as Resolved
+                  {t("detail.quickActions.markResolved")}
                 </Button>
               )}
               {status !== "FALSE_POSITIVE" && (
@@ -490,7 +487,7 @@ export default function ThreatDetailPage() {
                   }}
                 >
                   <XCircle className="h-4 w-4 mr-2" />
-                  Mark as False Positive
+                  {t("detail.quickActions.markFalsePositive")}
                 </Button>
               )}
             </CardContent>
@@ -501,24 +498,24 @@ export default function ThreatDetailPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <FileText className="h-5 w-5" />
-                Threat Intelligence
+                {t("detail.intelligence.title")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Type</span>
+                <span className="text-muted-foreground">{t("detail.intelligence.type")}</span>
                 <Badge variant="outline">{threat.type.replace(/_/g, " ")}</Badge>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Severity</span>
+                <span className="text-muted-foreground">{t("detail.intelligence.severity")}</span>
                 <span>{threat.severity}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">IOC Count</span>
+                <span className="text-muted-foreground">{t("detail.intelligence.iocCount")}</span>
                 <span>{indicators.length}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Related Events</span>
+                <span className="text-muted-foreground">{t("detail.intelligence.relatedEvents")}</span>
                 <span>{threat.relatedEvents?.length || 0}</span>
               </div>
             </CardContent>

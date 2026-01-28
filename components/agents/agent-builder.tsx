@@ -30,6 +30,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -50,6 +51,7 @@ import { useAgentTracking, useFormTracking, usePageViewTracking } from "@/hooks/
 type AgentType = 'RESEARCH' | 'ANALYSIS' | 'REPORTING' | 'MONITORING' | 'CUSTOM'
 
 export function AgentBuilder() {
+  const t = useTranslations("agents.builder")
   const router = useRouter()
 
   // Form state
@@ -126,9 +128,9 @@ export function AgentBuilder() {
     const newErrors: Record<string, string> = {}
 
     if (!name.trim()) {
-      newErrors.name = "Agent name is required"
+      newErrors.name = t("basicInfo.agentNameRequired")
     } else if (name.length > 100) {
-      newErrors.name = "Agent name must be 100 characters or less"
+      newErrors.name = t("basicInfo.agentNameTooLong")
     }
 
     setErrors(newErrors)
@@ -197,7 +199,7 @@ export function AgentBuilder() {
         requireCitations,
       })
 
-      toast.success(asDraft ? 'Agent draft saved' : 'Agent created successfully')
+      toast.success(asDraft ? t("toast.draftSaved") : t("toast.created"))
       router.push(`/dashboard/agents/${data.id}`)
     } catch (err) {
       console.error('Failed to create agent:', err)
@@ -226,8 +228,8 @@ export function AgentBuilder() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Create Custom Agent</h1>
-            <p className="text-muted-foreground">Build a specialized agent for your unique research needs</p>
+            <h1 className="text-2xl font-bold text-foreground">{t("title")}</h1>
+            <p className="text-muted-foreground">{t("subtitle")}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">

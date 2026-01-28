@@ -539,19 +539,19 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
             // Extract demographics from criteria structure
             const demographics: { label: string; value: string }[] = []
             if (criteria.ageRange) {
-              demographics.push({ label: "Age Range", value: `${criteria.ageRange.min}-${criteria.ageRange.max}` })
+              demographics.push({ label: t("demographics.ageRange"), value: `${criteria.ageRange.min}-${criteria.ageRange.max}` })
             }
             if (criteria.income) {
-              demographics.push({ label: "Income", value: `$${(criteria.income.min / 1000).toFixed(0)}K+` })
+              demographics.push({ label: t("demographics.income"), value: `$${(criteria.income.min / 1000).toFixed(0)}K+` })
             }
             if (criteria.lifestyle && Array.isArray(criteria.lifestyle)) {
               criteria.lifestyle.forEach((l: string) => {
-                demographics.push({ label: "Lifestyle", value: formatCriteriaValue(l) })
+                demographics.push({ label: t("demographics.lifestyle"), value: formatCriteriaValue(l) })
               })
             }
             if (criteria.values && Array.isArray(criteria.values)) {
               criteria.values.forEach((v: string) => {
-                demographics.push({ label: "Values", value: formatCriteriaValue(v) })
+                demographics.push({ label: t("demographics.values"), value: formatCriteriaValue(v) })
               })
             }
 
@@ -596,15 +596,15 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
   }
 
   function formatTimeAgo(dateString: string): string {
-    if (!dateString) return "Unknown"
+    if (!dateString) return t("common.unknown")
     const date = new Date(dateString)
     const now = new Date()
     const diffMs = now.getTime() - date.getTime()
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
     const diffDays = Math.floor(diffHours / 24)
-    if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`
-    if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`
-    return "Just now"
+    if (diffDays > 0) return t("common.relativeTime.daysAgo", { count: diffDays })
+    if (diffHours > 0) return t("common.relativeTime.hoursAgo", { count: diffHours })
+    return t("common.relativeTime.justNow")
   }
 
   function formatSize(size: number): string {
@@ -687,23 +687,23 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
 
       if (format === "csv") {
         // Create CSV content
-        const demoHeaders = ["Attribute", "Value"]
+        const demoHeaders = [t("export.csvHeaders.attribute"), t("export.csvHeaders.value")]
         const demoRows = audience.demographics.map(d => `"${d.label}","${d.value}"`)
-        const behaviorRows = audience.behaviors.map((b, i) => `"Behavior ${i + 1}","${b}"`)
-        const interestRows = audience.interests.map((int, i) => `"Interest ${i + 1}","${int}"`)
+        const behaviorRows = audience.behaviors.map((b, i) => `"${t("export.csvHeaders.behavior")} ${i + 1}","${b}"`)
+        const interestRows = audience.interests.map((int, i) => `"${t("export.csvHeaders.interest")} ${i + 1}","${int}"`)
         const csvContent = [
-          `"Audience: ${audience.name}"`,
-          `"Description: ${audience.description}"`,
-          `"Size: ${audience.size}"`,
-          `"Markets: ${audience.markets.join(", ")}"`,
+          `"${t("export.csvHeaders.audience")}: ${audience.name}"`,
+          `"${t("export.csvHeaders.description")}: ${audience.description}"`,
+          `"${t("export.csvHeaders.size")}: ${audience.size}"`,
+          `"${t("export.csvHeaders.markets")}: ${audience.markets.join(", ")}"`,
           "",
           demoHeaders.join(","),
           ...demoRows,
           "",
-          "Behaviors",
+          t("export.csvHeaders.behaviors"),
           ...behaviorRows,
           "",
-          "Interests",
+          t("export.csvHeaders.interests"),
           ...interestRows,
         ].join("\n")
         const blob = new Blob([csvContent], { type: "text/csv" })

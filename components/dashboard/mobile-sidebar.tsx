@@ -20,9 +20,12 @@ import {
   Inbox,
   LayoutTemplate,
   Sparkles,
+  LogOut,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTranslations } from "next-intl"
+import { LanguageSwitcher } from "@/components/ui/language-switcher"
+import { signOut } from "next-auth/react"
 
 const mobileNavGroups = [
   {
@@ -139,17 +142,36 @@ export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
           ))}
         </nav>
 
-        {/* User Section */}
+        {/* Language Switcher */}
         <div className="border-t border-sidebar-border p-3">
+          <LanguageSwitcher showLabel variant="outline" size="sm" className="w-full justify-start" />
+        </div>
+
+        {/* User Section */}
+        <div className="border-t border-sidebar-border p-3 space-y-2">
           <div className="flex items-center gap-3">
             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-accent to-accent/60 flex items-center justify-center">
               <span className="text-xs font-medium text-accent-foreground">JD</span>
             </div>
             <div className="flex-1 min-w-0">
+              {/* eslint-disable-next-line local/no-hardcoded-strings */}
               <p className="text-sm font-medium text-sidebar-foreground truncate">John Doe</p>
+              {/* eslint-disable-next-line local/no-hardcoded-strings */}
               <p className="text-xs text-sidebar-foreground/50 truncate">john@company.com</p>
             </div>
           </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full border-sidebar-border text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+            onClick={() => {
+              onClose()
+              signOut({ callbackUrl: "/login" })
+            }}
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            {t('logout')}
+          </Button>
         </div>
       </div>
     </div>

@@ -1,3 +1,6 @@
+"use client"
+
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { ArrowLeft, BookOpen, Clock, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,48 +9,50 @@ import { Header } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 
 export default function TutorialsPage() {
+  const t = useTranslations("landing.tutorials")
+
   const tutorials = [
     {
-      title: "Getting Started with GWI Insights",
-      description: "Learn the basics of the platform and create your first insight.",
+      titleKey: "items.gettingStarted.title",
+      descriptionKey: "items.gettingStarted.description",
       duration: "15 min",
-      level: "Beginner",
-      category: "Fundamentals",
+      levelKey: "levels.beginner",
+      categoryKey: "categories.fundamentals",
     },
     {
-      title: "Building Custom Agents",
-      description: "Create powerful agents tailored to your specific needs.",
+      titleKey: "items.buildingAgents.title",
+      descriptionKey: "items.buildingAgents.description",
       duration: "30 min",
-      level: "Intermediate",
-      category: "Agents",
+      levelKey: "levels.intermediate",
+      categoryKey: "categories.agents",
     },
     {
-      title: "Automating Workflows",
-      description: "Set up automated workflows to save time and scale insights.",
+      titleKey: "items.automatingWorkflows.title",
+      descriptionKey: "items.automatingWorkflows.description",
       duration: "25 min",
-      level: "Intermediate",
-      category: "Workflows",
+      levelKey: "levels.intermediate",
+      categoryKey: "categories.workflows",
     },
     {
-      title: "Advanced Report Builder",
-      description: "Master the report builder and create stunning presentations.",
+      titleKey: "items.advancedReportBuilder.title",
+      descriptionKey: "items.advancedReportBuilder.description",
       duration: "40 min",
-      level: "Advanced",
-      category: "Reports",
+      levelKey: "levels.advanced",
+      categoryKey: "categories.reports",
     },
     {
-      title: "Using Inbox Agents",
-      description: "Configure inbox agents to automatically handle incoming requests.",
+      titleKey: "items.usingInboxAgents.title",
+      descriptionKey: "items.usingInboxAgents.description",
       duration: "20 min",
-      level: "Intermediate",
-      category: "Automation",
+      levelKey: "levels.intermediate",
+      categoryKey: "categories.automation",
     },
     {
-      title: "API Integration Guide",
-      description: "Integrate GWI Insights with your existing tools and workflows.",
+      titleKey: "items.apiIntegration.title",
+      descriptionKey: "items.apiIntegration.description",
       duration: "35 min",
-      level: "Advanced",
-      category: "API",
+      levelKey: "levels.advanced",
+      categoryKey: "categories.api",
     },
   ]
 
@@ -60,16 +65,16 @@ export default function TutorialsPage() {
           <Link href="/">
             <Button variant="ghost" size="sm" className="mb-8">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
+              {t("backToHome")}
             </Button>
           </Link>
 
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-4">
               <BookOpen className="h-8 w-8 text-accent" />
-              <h1 className="text-4xl font-bold text-foreground">Tutorials</h1>
+              <h1 className="text-4xl font-bold text-foreground">{t("title")}</h1>
             </div>
-            <p className="text-lg text-muted-foreground">Step-by-step guides to help you master GWI Insights.</p>
+            <p className="text-lg text-muted-foreground">{t("subtitle")}</p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
@@ -79,17 +84,17 @@ export default function TutorialsPage() {
                 className="rounded-lg border border-border bg-card p-6 hover:border-accent transition-colors cursor-pointer"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <Badge variant="secondary">{tutorial.category}</Badge>
+                  <Badge variant="secondary">{t(tutorial.categoryKey)}</Badge>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Clock className="h-4 w-4" />
                     {tutorial.duration}
                   </div>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">{tutorial.title}</h3>
-                <p className="text-muted-foreground mb-4">{tutorial.description}</p>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{t(tutorial.titleKey)}</h3>
+                <p className="text-muted-foreground mb-4">{t(tutorial.descriptionKey)}</p>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">{tutorial.level}</span>
+                  <span className="text-sm text-muted-foreground">{t(tutorial.levelKey)}</span>
                 </div>
               </div>
             ))}

@@ -6,6 +6,7 @@
 
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   DollarSign,
@@ -34,6 +35,8 @@ interface RevenueOverviewCardsProps {
 }
 
 export function RevenueOverviewCards({ summary, isLoading }: RevenueOverviewCardsProps) {
+  const t = useTranslations("admin.analytics.revenueCards")
+
   const formatCurrency = (value: number) => {
     if (value >= 1000000) {
       return `$${(value / 1000000).toFixed(2)}M`
@@ -69,58 +72,58 @@ export function RevenueOverviewCards({ summary, isLoading }: RevenueOverviewCard
 
   const cards = [
     {
-      title: "Monthly Recurring Revenue",
+      title: t("mrr.title"),
       value: formatCurrency(summary.currentMrr),
       change: summary.mrrGrowthRate,
       icon: DollarSign,
-      description: "Current MRR",
+      description: t("mrr.description"),
     },
     {
-      title: "Annual Recurring Revenue",
+      title: t("arr.title"),
       value: formatCurrency(summary.currentArr),
       change: summary.mrrGrowthRate,
       icon: BarChart3,
-      description: "Annualized revenue",
+      description: t("arr.description"),
     },
     {
-      title: "Total Customers",
+      title: t("totalCustomers.title"),
       value: summary.totalCustomers.toLocaleString(),
       change: summary.customerGrowthRate,
       icon: Users,
-      description: "Active subscriptions",
+      description: t("totalCustomers.description"),
     },
     {
-      title: "ARPU",
+      title: t("arpu.title"),
       value: formatCurrency(summary.arpu),
       icon: Target,
-      description: "Avg revenue per user",
+      description: t("arpu.description"),
     },
     {
-      title: "Customer LTV",
+      title: t("ltv.title"),
       value: formatCurrency(summary.ltv),
       icon: Activity,
-      description: "Lifetime value",
+      description: t("ltv.description"),
     },
     {
-      title: "Churn Rate",
+      title: t("churnRate.title"),
       value: `${summary.churnRate.toFixed(2)}%`,
       icon: TrendingDown,
-      description: "Monthly churn",
+      description: t("churnRate.description"),
       inverse: true,
     },
     {
-      title: "Net Revenue Retention",
+      title: t("nrr.title"),
       value: `${summary.netRevenueRetention.toFixed(1)}%`,
       icon: Percent,
-      description: "NRR (including expansion)",
+      description: t("nrr.description"),
       threshold: 100,
     },
     {
-      title: "MRR Growth",
+      title: t("mrrGrowth.title"),
       value: formatPercent(summary.mrrGrowthRate),
       change: summary.mrrGrowthRate,
       icon: TrendingUp,
-      description: "Month over month",
+      description: t("mrrGrowth.description"),
     },
   ]
 
@@ -165,7 +168,7 @@ export function RevenueOverviewCards({ summary, isLoading }: RevenueOverviewCard
                     <span className={isPositive ? "text-green-500" : "text-red-500"}>
                       {formatPercent(card.change!)}
                     </span>
-                    <span className="ml-1">vs last period</span>
+                    <span className="ml-1">{t("vsLastPeriod")}</span>
                   </>
                 )}
                 {!showTrend && <span>{card.description}</span>}

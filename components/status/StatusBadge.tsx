@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { CheckCircle, AlertCircle, AlertTriangle, XCircle } from "lucide-react"
 
@@ -12,40 +13,40 @@ interface StatusBadgeProps {
   className?: string
 }
 
-const statusConfig: Record<
+const statusIconMap: Record<
+  SystemStatus,
+  React.ComponentType<{ className?: string }>
+> = {
+  operational: CheckCircle,
+  degraded: AlertTriangle,
+  partial_outage: AlertCircle,
+  major_outage: XCircle,
+}
+
+const statusColorMap: Record<
   SystemStatus,
   {
-    label: string
-    icon: React.ComponentType<{ className?: string }>
     bgColor: string
     textColor: string
     dotColor: string
   }
 > = {
   operational: {
-    label: "All Systems Operational",
-    icon: CheckCircle,
     bgColor: "bg-green-500/10",
     textColor: "text-green-500",
     dotColor: "bg-green-500",
   },
   degraded: {
-    label: "Degraded Performance",
-    icon: AlertTriangle,
     bgColor: "bg-yellow-500/10",
     textColor: "text-yellow-500",
     dotColor: "bg-yellow-500",
   },
   partial_outage: {
-    label: "Partial Outage",
-    icon: AlertCircle,
     bgColor: "bg-orange-500/10",
     textColor: "text-orange-500",
     dotColor: "bg-orange-500",
   },
   major_outage: {
-    label: "Major Outage",
-    icon: XCircle,
     bgColor: "bg-red-500/10",
     textColor: "text-red-500",
     dotColor: "bg-red-500",
@@ -76,15 +77,22 @@ export function StatusBadge({
   size = "md",
   className,
 }: StatusBadgeProps) {
-  const config = statusConfig[status]
+  const t = useTranslations("status.badge")
+  const colors = statusColorMap[status]
   const sizes = sizeConfig[size]
+
+  const labelKey = status === "partial_outage"
+    ? "partialOutage"
+    : status === "major_outage"
+      ? "majorOutage"
+      : status
 
   return (
     <div
       className={cn(
         "inline-flex items-center rounded-full font-medium",
-        config.bgColor,
-        config.textColor,
+        colors.bgColor,
+        colors.textColor,
         sizes.container,
         className
       )}
@@ -92,11 +100,11 @@ export function StatusBadge({
       <span
         className={cn(
           "rounded-full animate-pulse",
-          config.dotColor,
+          colors.dotColor,
           sizes.dot
         )}
       />
-      {showLabel && <span>{config.label}</span>}
+      {showLabel && <span>{t(labelKey)}</span>}
     </div>
   )
 }
@@ -108,20 +116,29 @@ export function StatusBadgeCompact({
   status: SystemStatus
   className?: string
 }) {
-  const config = statusConfig[status]
-  const Icon = config.icon
+  const t = useTranslations("status.badge")
+  const colors = statusColorMap[status]
+  const Icon = statusIconMap[status]
+
+  const labelKey = status === "partial_outage"
+    ? "partialOutage"
+    : status === "major_outage"
+      ? "majorOutage"
+      : status
+
+  const label = t(labelKey)
 
   return (
     <div
       className={cn(
         "inline-flex items-center gap-1.5 text-xs font-medium",
-        config.textColor,
+        colors.textColor,
         className
       )}
-      title={config.label}
+      title={label}
     >
       <Icon className="h-3.5 w-3.5" />
-      <span className="sr-only">{config.label}</span>
+      <span className="sr-only">{label}</span>
     </div>
   )
 }

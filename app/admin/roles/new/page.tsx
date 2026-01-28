@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -24,7 +25,7 @@ import {
   Building2,
 } from "lucide-react"
 import Link from "next/link"
-import { toast } from "sonner"
+import { showErrorToast } from "@/lib/toast-utils"
 import { useAdmin } from "@/components/providers/admin-provider"
 import { PermissionMatrix } from "@/components/admin/roles/permission-matrix"
 
@@ -35,24 +36,28 @@ interface ExistingRole {
   scope: string
 }
 
-const colorOptions = [
-  { value: "#8B5CF6", label: "Purple" },
-  { value: "#3B82F6", label: "Blue" },
-  { value: "#10B981", label: "Green" },
-  { value: "#F59E0B", label: "Amber" },
-  { value: "#EF4444", label: "Red" },
-  { value: "#6B7280", label: "Gray" },
-  { value: "#EC4899", label: "Pink" },
-  { value: "#14B8A6", label: "Teal" },
-]
+// colorOptions moved inside component to use translations
 
 export default function NewRolePage() {
+  const t = useTranslations("admin.roles")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
   const [activeTab, setActiveTab] = useState("details")
   const [allRoles, setAllRoles] = useState<ExistingRole[]>([])
   const [parentPermissions, setParentPermissions] = useState<string[]>([])
+
+  const colorOptions = [
+    { value: "#8B5CF6", label: t("colors.purple") },
+    { value: "#3B82F6", label: t("colors.blue") },
+    { value: "#10B981", label: t("colors.green") },
+    { value: "#F59E0B", label: t("colors.amber") },
+    { value: "#EF4444", label: t("colors.red") },
+    { value: "#6B7280", label: t("colors.gray") },
+    { value: "#EC4899", label: t("colors.pink") },
+    { value: "#14B8A6", label: t("colors.teal") },
+  ]
 
   const [formData, setFormData] = useState({
     name: "",
@@ -118,7 +123,7 @@ export default function NewRolePage() {
 
   const handleCreate = async () => {
     if (!formData.name || !formData.displayName) {
-      toast.error("Name and display name are required")
+      showErrorToast(t("validation.required"))
       return
     }
 
@@ -144,11 +149,11 @@ export default function NewRolePage() {
         router.push(`/admin/roles/${data.role.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to create role")
+        showErrorToast(data.error || t("createError"))
       }
     } catch (error) {
       console.error("Failed to create role:", error)
-      toast.error("Failed to create role")
+      showErrorToast(t("createError"))
     } finally {
       setIsSaving(false)
     }
@@ -157,11 +162,11 @@ export default function NewRolePage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to create roles</p>
+        <p className="text-muted-foreground">{t("noPermissionCreate")}</p>
         <Link href="/admin/roles">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Roles
+            {t("backToRoles")}
           </Button>
         </Link>
       </div>
@@ -176,13 +181,13 @@ export default function NewRolePage() {
           <Link href="/admin/roles">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold">Create New Role</h1>
+            <h1 className="text-2xl font-bold">{t("createNewRole")}</h1>
             <p className="text-sm text-muted-foreground">
-              Define a new role with custom permissions
+              {t("createNewRoleDescription")}
             </p>
           </div>
         </div>
@@ -190,12 +195,12 @@ export default function NewRolePage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Role
+              {t("createRole")}
             </>
           )}
         </Button>
@@ -204,43 +209,43 @@ export default function NewRolePage() {
       {/* Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="details">Details</TabsTrigger>
-          <TabsTrigger value="permissions">Permissions</TabsTrigger>
+          <TabsTrigger value="details">{t("tabs.details")}</TabsTrigger>
+          <TabsTrigger value="permissions">{t("tabs.permissions")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="details" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Role Details</CardTitle>
+              <CardTitle>{t("details.title")}</CardTitle>
               <CardDescription>
-                Basic information about this role
+                {t("details.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label>Display Name *</Label>
+                  <Label>{t("form.displayNameRequired")}</Label>
                   <Input
                     value={formData.displayName}
                     onChange={(e) => handleDisplayNameChange(e.target.value)}
-                    placeholder="Custom Admin Role"
+                    placeholder={t("form.displayNamePlaceholder")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Slug (Name) *</Label>
+                  <Label>{t("form.slugRequired")}</Label>
                   <Input
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder="custom-admin-role"
+                    placeholder={t("form.slugPlaceholder")}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Lowercase letters, numbers, and hyphens only
+                    {t("form.nameHint")}
                   </p>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label>Scope *</Label>
+                <Label>{t("form.scopeRequired")}</Label>
                 <Select
                   value={formData.scope}
                   onValueChange={(v) => setFormData(prev => ({ ...prev, scope: v as "PLATFORM" | "TENANT", parentRoleId: null }))}
@@ -252,31 +257,31 @@ export default function NewRolePage() {
                     <SelectItem value="PLATFORM">
                       <div className="flex items-center gap-2">
                         <Shield className="h-4 w-4" />
-                        Platform (Super Admin)
+                        {t("scopes.platform")}
                       </div>
                     </SelectItem>
                     <SelectItem value="TENANT">
                       <div className="flex items-center gap-2">
                         <Building2 className="h-4 w-4" />
-                        Organization (Tenant)
+                        {t("scopes.organization")}
                       </div>
                     </SelectItem>
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
                   {formData.scope === "PLATFORM"
-                    ? "Platform roles are for super admins managing the entire platform"
-                    : "Organization roles are for users within individual organizations"
+                    ? t("platformRolesDescription")
+                    : t("organizationRolesDescription")
                   }
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label>Description</Label>
+                <Label>{t("form.description")}</Label>
                 <Textarea
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  placeholder="Describe what this role is for..."
+                  placeholder={t("form.descriptionPlaceholder")}
                 />
               </div>
 
@@ -284,16 +289,16 @@ export default function NewRolePage() {
 
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label>Parent Role (Inherits Permissions)</Label>
+                  <Label>{t("form.parentRole")}</Label>
                   <Select
                     value={formData.parentRoleId || "none"}
                     onValueChange={(v) => setFormData(prev => ({ ...prev, parentRoleId: v === "none" ? null : v }))}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="No parent role" />
+                      <SelectValue placeholder={t("form.noParentRole")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">No parent role</SelectItem>
+                      <SelectItem value="none">{t("form.noParentRole")}</SelectItem>
                       {allRoles
                         .filter(r => r.scope === formData.scope)
                         .map(r => (
@@ -304,33 +309,33 @@ export default function NewRolePage() {
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-muted-foreground">
-                    The new role will inherit all permissions from the parent role
+                    {t("form.parentRoleHint")}
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <Label>Priority</Label>
+                  <Label>{t("form.priority")}</Label>
                   <Input
                     type="number"
                     value={formData.priority}
                     onChange={(e) => setFormData(prev => ({ ...prev, priority: parseInt(e.target.value) || 0 }))}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Higher priority roles have more privileges in the hierarchy (0-100)
+                    {t("form.priorityHint")}
                   </p>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label>Color</Label>
+                <Label>{t("form.color")}</Label>
                 <Select
                   value={formData.color || "none"}
                   onValueChange={(v) => setFormData(prev => ({ ...prev, color: v === "none" ? "" : v }))}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a color" />
+                    <SelectValue placeholder={t("form.selectColor")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">Default</SelectItem>
+                    <SelectItem value="none">{t("form.default")}</SelectItem>
                     {colorOptions.map(color => (
                       <SelectItem key={color.value} value={color.value}>
                         <div className="flex items-center gap-2">
@@ -352,12 +357,12 @@ export default function NewRolePage() {
         <TabsContent value="permissions" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Permissions</CardTitle>
+              <CardTitle>{t("permissions.title")}</CardTitle>
               <CardDescription>
-                Select which permissions this role should have.
+                {t("permissions.description")}
                 {parentPermissions.length > 0 && (
                   <span className="block mt-1">
-                    This role will inherit {parentPermissions.length} permission(s) from its parent role.
+                    {t("permissions.inheritedCount", { count: parentPermissions.length })}
                   </span>
                 )}
               </CardDescription>

@@ -1,7 +1,7 @@
 /**
  * @prompt-id forge-v4.1:feature:feature-usage-analytics:010
  * @generated-at 2026-01-25T00:00:00Z
- * @model claude-opus-4.5
+ * @model claude-opus-4-5
  *
  * Feature Usage Analytics Admin Page
  * Comprehensive dashboard for tracking feature adoption and usage
@@ -10,6 +10,7 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -90,6 +91,8 @@ interface ApiResponse {
 }
 
 export default function FeatureUsageAnalyticsPage() {
+  const t = useTranslations("admin.analytics.features")
+  const tCommon = useTranslations("admin.analytics")
   const [data, setData] = useState<ApiResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isCalculating, setIsCalculating] = useState(false)
@@ -102,12 +105,12 @@ export default function FeatureUsageAnalyticsPage() {
     try {
       const response = await fetch(`/api/admin/feature-usage?period=${period}`)
       if (!response.ok) {
-        throw new Error("Failed to fetch feature usage data")
+        throw new Error(t("errors.fetchFailed"))
       }
       const result = await response.json()
       setData(result)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
+      setError(err instanceof Error ? err.message : t("errors.unknown"))
       console.error("Failed to fetch feature usage:", err)
     } finally {
       setIsLoading(false)
@@ -116,7 +119,7 @@ export default function FeatureUsageAnalyticsPage() {
 
   useEffect(() => {
     fetchData()
-  }, [period])
+  }, [period, fetchData])
 
   const calculateMetrics = async () => {
     setIsCalculating(true)
@@ -197,7 +200,7 @@ export default function FeatureUsageAnalyticsPage() {
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <AlertTriangle className="h-12 w-12 text-destructive" />
         <p className="text-destructive">{error}</p>
-        <Button onClick={fetchData}>Retry</Button>
+        <Button onClick={fetchData}>{t("actions.retry")}</Button>
       </div>
     )
   }
@@ -217,10 +220,10 @@ export default function FeatureUsageAnalyticsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <BarChart3 className="h-8 w-8 text-primary" />
-            Feature Usage Analytics
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Track feature adoption, usage patterns, and identify optimization opportunities
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
@@ -230,10 +233,10 @@ export default function FeatureUsageAnalyticsPage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="DAILY">Daily</SelectItem>
-              <SelectItem value="WEEKLY">Weekly</SelectItem>
-              <SelectItem value="MONTHLY">Monthly</SelectItem>
-              <SelectItem value="QUARTERLY">Quarterly</SelectItem>
+              <SelectItem value="DAILY">{tCommon("periodOptions.daily")}</SelectItem>
+              <SelectItem value="WEEKLY">{tCommon("periodOptions.weekly")}</SelectItem>
+              <SelectItem value="MONTHLY">{tCommon("periodOptions.monthly")}</SelectItem>
+              <SelectItem value="QUARTERLY">{tCommon("periodOptions.quarterly")}</SelectItem>
             </SelectContent>
           </Select>
           <Button
@@ -242,7 +245,7 @@ export default function FeatureUsageAnalyticsPage() {
             disabled={isLoading}
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
-            Refresh
+            {tCommon("actions.refresh")}
           </Button>
           <Button
             onClick={calculateMetrics}
@@ -253,7 +256,7 @@ export default function FeatureUsageAnalyticsPage() {
             ) : (
               <Calculator className="h-4 w-4 mr-2" />
             )}
-            Recalculate
+            {t("actions.recalculate")}
           </Button>
         </div>
       </div>
@@ -262,60 +265,60 @@ export default function FeatureUsageAnalyticsPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Features</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("summary.totalFeatures")}</CardTitle>
             <Zap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{summary.totalFeatures}</div>
-            <p className="text-xs text-muted-foreground">Tracked features</p>
+            <p className="text-xs text-muted-foreground">{t("summary.trackedFeatures")}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Events</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("summary.totalEvents")}</CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{summary.totalEvents.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">This period</p>
+            <p className="text-xs text-muted-foreground">{t("summary.thisPeriod")}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("summary.activeUsers")}</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{summary.totalActiveUsers.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Using features</p>
+            <p className="text-xs text-muted-foreground">{t("summary.usingFeatures")}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Avg Adoption</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("summary.avgAdoption")}</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className={`text-2xl font-bold ${summary.avgAdoptionRate >= 50 ? "text-green-500" : "text-amber-500"}`}>
               {summary.avgAdoptionRate.toFixed(1)}%
             </div>
-            <p className="text-xs text-muted-foreground">Across all features</p>
+            <p className="text-xs text-muted-foreground">{t("summary.acrossAllFeatures")}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Avg Retention</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("summary.avgRetention")}</CardTitle>
             <TrendingDown className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className={`text-2xl font-bold ${summary.avgRetentionRate >= 50 ? "text-green-500" : "text-amber-500"}`}>
               {summary.avgRetentionRate.toFixed(1)}%
             </div>
-            <p className="text-xs text-muted-foreground">Period-over-period</p>
+            <p className="text-xs text-muted-foreground">{t("summary.periodOverPeriod")}</p>
           </CardContent>
         </Card>
       </div>
@@ -326,9 +329,9 @@ export default function FeatureUsageAnalyticsPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-green-500" />
-              Top Features by Adoption
+              {t("topFeatures.title")}
             </CardTitle>
-            <CardDescription>Highest adoption rates</CardDescription>
+            <CardDescription>{t("topFeatures.description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -339,7 +342,7 @@ export default function FeatureUsageAnalyticsPage() {
                       <span className="text-sm text-muted-foreground font-mono">#{index + 1}</span>
                       <div>
                         <p className="font-medium">{feature.featureName}</p>
-                        <p className="text-xs text-muted-foreground">{feature.activeUsers} active users</p>
+                        <p className="text-xs text-muted-foreground">{t("topFeatures.activeUsers", { count: feature.activeUsers })}</p>
                       </div>
                     </div>
                     <Badge variant="default" className="bg-green-500">
@@ -348,7 +351,7 @@ export default function FeatureUsageAnalyticsPage() {
                   </div>
                 ))
               ) : (
-                <p className="text-muted-foreground text-center py-4">No data available</p>
+                <p className="text-muted-foreground text-center py-4">{t("noData")}</p>
               )}
             </div>
           </CardContent>
@@ -358,9 +361,9 @@ export default function FeatureUsageAnalyticsPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-amber-500" />
-              Underutilized Features
+              {t("underutilized.title")}
             </CardTitle>
-            <CardDescription>Features with low adoption (&lt;20%)</CardDescription>
+            <CardDescription>{t("underutilized.description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -369,7 +372,7 @@ export default function FeatureUsageAnalyticsPage() {
                   <div key={feature.featureKey} className="flex items-center justify-between">
                     <div>
                       <p className="font-medium">{feature.featureName}</p>
-                      <p className="text-xs text-muted-foreground">{feature.totalEvents} total events</p>
+                      <p className="text-xs text-muted-foreground">{t("underutilized.totalEvents", { count: feature.totalEvents })}</p>
                     </div>
                     <Badge variant="secondary" className="bg-amber-100 text-amber-800">
                       {feature.adoptionRate.toFixed(1)}%
@@ -378,7 +381,7 @@ export default function FeatureUsageAnalyticsPage() {
                 ))
               ) : (
                 <p className="text-muted-foreground text-center py-4">
-                  Great! All features have good adoption
+                  {t("underutilized.allGood")}
                 </p>
               )}
             </div>
@@ -389,10 +392,10 @@ export default function FeatureUsageAnalyticsPage() {
       {/* Main Content Tabs */}
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="heatmap">Plan Breakdown</TabsTrigger>
-          <TabsTrigger value="trends">Trends</TabsTrigger>
-          <TabsTrigger value="details">All Features</TabsTrigger>
+          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="heatmap">{t("tabs.planBreakdown")}</TabsTrigger>
+          <TabsTrigger value="trends">{t("tabs.trends")}</TabsTrigger>
+          <TabsTrigger value="details">{t("tabs.allFeatures")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">

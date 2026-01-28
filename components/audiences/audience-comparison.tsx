@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -95,6 +96,7 @@ export function AudienceComparison({
   availableAudiences,
   className,
 }: AudienceComparisonProps) {
+  const t = useTranslations("audiences")
   const [comparisonAudienceId, setComparisonAudienceId] = useState<string>("")
   const [comparisonData, setComparisonData] = useState<Record<string, { audience1: number; audience2: number }>>({})
 
@@ -143,13 +145,13 @@ export function AudienceComparison({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <ArrowLeftRight className="h-5 w-5" />
-          <h2 className="text-lg font-semibold">Compare Audiences</h2>
+          <h2 className="text-lg font-semibold">{t("comparison.title")}</h2>
         </div>
         {comparisonAudience && (
           <Link href={`/dashboard/crosstabs/new?audiences=${primaryAudience.id},${comparisonAudienceId}`}>
             <Button size="sm">
               <Table2 className="h-4 w-4 mr-2" />
-              Create Cross-tab
+              {t("comparison.createCrosstab")}
             </Button>
           </Link>
         )}
@@ -161,26 +163,26 @@ export function AudienceComparison({
         <Card className="p-4 bg-primary/5 border-primary/20">
           <div className="flex items-center gap-2 mb-2">
             <Users className="h-4 w-4 text-primary" />
-            <span className="text-xs text-muted-foreground">Primary</span>
+            <span className="text-xs text-muted-foreground">{t("comparison.primary")}</span>
           </div>
           <h3 className="font-medium">{primaryAudience.name}</h3>
-          <p className="text-sm text-muted-foreground">{primaryAudience.size} consumers</p>
+          <p className="text-sm text-muted-foreground">{t("comparison.consumers", { count: primaryAudience.size })}</p>
         </Card>
 
         {/* VS Divider */}
         <div className="flex justify-center">
-          <Badge variant="outline" className="text-lg px-4 py-2">VS</Badge>
+          <Badge variant="outline" className="text-lg px-4 py-2">{t("comparison.vs")}</Badge>
         </div>
 
         {/* Comparison Selector */}
         <Card className="p-4">
           <div className="flex items-center gap-2 mb-2">
             <Users className="h-4 w-4" />
-            <span className="text-xs text-muted-foreground">Compare with</span>
+            <span className="text-xs text-muted-foreground">{t("comparison.compareWith")}</span>
           </div>
           <Select value={comparisonAudienceId} onValueChange={setComparisonAudienceId}>
             <SelectTrigger>
-              <SelectValue placeholder="Select audience..." />
+              <SelectValue placeholder={t("comparison.selectAudience")} />
             </SelectTrigger>
             <SelectContent>
               {availableAudiences
@@ -193,7 +195,7 @@ export function AudienceComparison({
             </SelectContent>
           </Select>
           {comparisonAudience && (
-            <p className="text-sm text-muted-foreground mt-2">{comparisonAudience.size} consumers</p>
+            <p className="text-sm text-muted-foreground mt-2">{t("comparison.consumers", { count: comparisonAudience.size })}</p>
           )}
         </Card>
       </div>
@@ -205,7 +207,7 @@ export function AudienceComparison({
           <Card className="p-4">
             <h3 className="font-medium mb-3 flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
-              Key Differences
+              {t("comparison.keyDifferences")}
             </h3>
             <div className="space-y-2">
               {getKeyDifferences().map((diff) => (
@@ -292,12 +294,12 @@ export function AudienceComparison({
           <div className="flex items-center justify-center gap-4">
             <Button variant="outline">
               <Download className="h-4 w-4 mr-2" />
-              Export Comparison
+              {t("comparison.exportComparison")}
             </Button>
             <Link href={`/dashboard/crosstabs/new?audiences=${primaryAudience.id},${comparisonAudienceId}`}>
               <Button>
                 <BarChart3 className="h-4 w-4 mr-2" />
-                Full Cross-tab Analysis
+                {t("comparison.fullCrosstabAnalysis")}
               </Button>
             </Link>
           </div>
@@ -308,9 +310,9 @@ export function AudienceComparison({
       {!comparisonAudience && (
         <Card className="p-12 text-center">
           <ArrowLeftRight className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-          <h3 className="font-medium mb-2">Select an audience to compare</h3>
+          <h3 className="font-medium mb-2">{t("comparison.selectToCompare")}</h3>
           <p className="text-sm text-muted-foreground">
-            Choose another audience from the dropdown to see how they differ
+            {t("comparison.selectToCompareDescription")}
           </p>
         </Card>
       )}

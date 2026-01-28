@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -33,7 +34,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useAdmin } from "@/components/providers/admin-provider"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface UserOption {
   id: string
@@ -41,32 +42,38 @@ interface UserOption {
   name: string | null
 }
 
-const deviceTypes = [
-  { value: "DESKTOP", label: "Desktop", icon: Monitor },
-  { value: "LAPTOP", label: "Laptop", icon: Laptop },
-  { value: "MOBILE", label: "Mobile", icon: Smartphone },
-  { value: "TABLET", label: "Tablet", icon: Tablet },
-  { value: "OTHER", label: "Other", icon: Smartphone },
-]
-
-const platforms = [
-  { value: "iOS", label: "iOS" },
-  { value: "Android", label: "Android" },
-  { value: "Windows", label: "Windows" },
-  { value: "macOS", label: "macOS" },
-  { value: "Linux", label: "Linux" },
-  { value: "ChromeOS", label: "ChromeOS" },
-  { value: "Other", label: "Other" },
-]
-
-const trustStatuses = [
-  { value: "PENDING", label: "Pending - Requires approval" },
-  { value: "TRUSTED", label: "Trusted - Immediately trusted" },
-]
+// deviceTypes, platforms, and trustStatuses moved inside component to use translations
 
 export default function NewDevicePage() {
   const router = useRouter()
+  const t = useTranslations("admin.devices.new")
+  const tMain = useTranslations("admin.devices")
+  const tCommon = useTranslations("common")
   const { admin: currentAdmin } = useAdmin()
+  
+  const deviceTypes = [
+    { value: "DESKTOP", label: tMain("deviceTypes.desktop"), icon: Monitor },
+    { value: "LAPTOP", label: tMain("deviceTypes.laptop"), icon: Laptop },
+    { value: "MOBILE", label: tMain("deviceTypes.mobile"), icon: Smartphone },
+    { value: "TABLET", label: tMain("deviceTypes.tablet"), icon: Tablet },
+    { value: "OTHER", label: tMain("deviceTypes.other"), icon: Smartphone },
+  ]
+
+  const platforms = [
+    { value: "iOS", label: tMain("platforms.ios") },
+    { value: "Android", label: tMain("platforms.android") },
+    { value: "Windows", label: tMain("platforms.windows") },
+    { value: "macOS", label: tMain("platforms.macos") },
+    { value: "Linux", label: tMain("platforms.linux") },
+    { value: "ChromeOS", label: tMain("platforms.chromeos") },
+    { value: "Other", label: tMain("platforms.other") },
+  ]
+
+  const trustStatuses = [
+    { value: "PENDING", label: t("trustStatuses.pending") },
+    { value: "TRUSTED", label: t("trustStatuses.trusted") },
+  ]
+  
   const [isSaving, setIsSaving] = useState(false)
   const [users, setUsers] = useState<UserOption[]>([])
   const [userSearch, setUserSearch] = useState("")
@@ -118,12 +125,12 @@ export default function NewDevicePage() {
 
   const handleCreate = async () => {
     if (!formData.userId) {
-      toast.error("User is required")
+      showErrorToast(t("validation.userRequired"))
       return
     }
 
     if (!formData.deviceId) {
-      toast.error("Device ID is required")
+      showErrorToast(t("validation.deviceIdRequired"))
       return
     }
 
@@ -149,15 +156,15 @@ export default function NewDevicePage() {
 
       if (response.ok) {
         const data = await response.json()
-        toast.success("Device registered successfully")
+        showSuccessToast(t("messages.deviceRegistered"))
         router.push(`/admin/devices/${data.device.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to register device")
+        showErrorToast(data.error || t("errors.registerFailed"))
       }
     } catch (error) {
       console.error("Failed to register device:", error)
-      toast.error("Failed to register device")
+      showErrorToast(t("errors.registerFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -166,11 +173,11 @@ export default function NewDevicePage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to register devices</p>
+        <p className="text-muted-foreground">{t("noPermission")}</p>
         <Link href="/admin/devices">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Device Trust
+            {t("backToDevices")}
           </Button>
         </Link>
       </div>
@@ -187,16 +194,16 @@ export default function NewDevicePage() {
           <Link href="/admin/devices">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <DeviceIcon className="h-6 w-6 text-primary" />
-              Register New Device
+              {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Manually register a device for a user
+              {t("description")}
             </p>
           </div>
         </div>
@@ -204,12 +211,12 @@ export default function NewDevicePage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Registering...
+              {t("registering")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Register Device
+              {t("registerDevice")}
             </>
           )}
         </Button>
@@ -219,27 +226,27 @@ export default function NewDevicePage() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>User & Device</CardTitle>
+            <CardTitle>{t("sections.userDevice.title")}</CardTitle>
             <CardDescription>
-              Select the user and provide device identification
+              {t("sections.userDevice.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label>User *</Label>
+              <Label>{t("form.user")} *</Label>
               <Select
                 value={formData.userId}
                 onValueChange={(v) => setFormData((prev) => ({ ...prev, userId: v }))}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a user" />
+                  <SelectValue placeholder={t("form.selectUser")} />
                 </SelectTrigger>
                 <SelectContent>
                   <div className="p-2">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Search users..."
+                        placeholder={t("form.searchUsers")}
                         value={userSearch}
                         onChange={(e) => {
                           setUserSearch(e.target.value)
@@ -250,15 +257,15 @@ export default function NewDevicePage() {
                     </div>
                   </div>
                   {loadingUsers ? (
-                    <div className="p-4 text-center text-muted-foreground">Loading...</div>
+                    <div className="p-4 text-center text-muted-foreground">{tCommon("loading")}</div>
                   ) : users.length === 0 ? (
-                    <div className="p-4 text-center text-muted-foreground">No users found</div>
+                    <div className="p-4 text-center text-muted-foreground">{t("noUsersFound")}</div>
                   ) : (
                     users.map((user) => (
                       <SelectItem key={user.id} value={user.id}>
                         <div className="flex items-center gap-2">
                           <User className="h-4 w-4" />
-                          {user.name || "No name"}
+                          {user.name || tMain("noName")}
                           <span className="text-muted-foreground">({user.email})</span>
                         </div>
                       </SelectItem>
@@ -269,12 +276,12 @@ export default function NewDevicePage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Device ID *</Label>
+              <Label>{t("form.deviceId")} *</Label>
               <div className="flex gap-2">
                 <Input
                   value={formData.deviceId}
                   onChange={(e) => setFormData((prev) => ({ ...prev, deviceId: e.target.value }))}
-                  placeholder="unique-device-identifier"
+                  placeholder={t("form.deviceIdPlaceholder")}
                   className="font-mono"
                 />
                 <Button
@@ -282,23 +289,23 @@ export default function NewDevicePage() {
                   variant="outline"
                   onClick={() => setFormData((prev) => ({ ...prev, deviceId: generateDeviceId() }))}
                 >
-                  Generate
+                  {t("form.generate")}
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Unique identifier for the device (e.g., hardware ID, UUID)
+                {t("form.deviceIdHelp")}
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label>Device Name</Label>
+              <Label>{t("form.deviceName")}</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                placeholder="John's MacBook Pro"
+                placeholder={t("form.deviceNamePlaceholder")}
               />
               <p className="text-xs text-muted-foreground">
-                A friendly name to identify this device
+                {t("form.deviceNameHelp")}
               </p>
             </div>
           </CardContent>
@@ -306,15 +313,15 @@ export default function NewDevicePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Device Details</CardTitle>
+            <CardTitle>{t("sections.deviceDetails.title")}</CardTitle>
             <CardDescription>
-              Provide information about the device hardware and software
+              {t("sections.deviceDetails.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Device Type *</Label>
+                <Label>{t("form.deviceType")} *</Label>
                 <Select
                   value={formData.type}
                   onValueChange={(v) => setFormData((prev) => ({ ...prev, type: v }))}
@@ -339,7 +346,7 @@ export default function NewDevicePage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Platform</Label>
+                <Label>{t("form.platform")}</Label>
                 <Select
                   value={formData.platform}
                   onValueChange={(v) => setFormData((prev) => ({ ...prev, platform: v }))}
@@ -360,30 +367,30 @@ export default function NewDevicePage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Manufacturer</Label>
+                <Label>{t("form.manufacturer")}</Label>
                 <Input
                   value={formData.manufacturer}
                   onChange={(e) => setFormData((prev) => ({ ...prev, manufacturer: e.target.value }))}
-                  placeholder="Apple"
+                  placeholder={t("form.manufacturerPlaceholder")}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label>Model</Label>
+                <Label>{t("form.model")}</Label>
                 <Input
                   value={formData.model}
                   onChange={(e) => setFormData((prev) => ({ ...prev, model: e.target.value }))}
-                  placeholder="MacBook Pro 16"
+                  placeholder={t("form.modelPlaceholder")}
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label>OS Version</Label>
+              <Label>{t("form.osVersion")}</Label>
               <Input
                 value={formData.osVersion}
                 onChange={(e) => setFormData((prev) => ({ ...prev, osVersion: e.target.value }))}
-                placeholder="14.0"
+                placeholder={t("form.osVersionPlaceholder")}
               />
             </div>
           </CardContent>
@@ -391,15 +398,15 @@ export default function NewDevicePage() {
 
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle>Trust & Compliance Settings</CardTitle>
+            <CardTitle>{t("sections.trustCompliance.title")}</CardTitle>
             <CardDescription>
-              Configure the initial trust status and compliance state of this device
+              {t("sections.trustCompliance.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Initial Trust Status</Label>
+                <Label>{t("form.initialTrustStatus")}</Label>
                 <Select
                   value={formData.trustStatus}
                   onValueChange={(v) => setFormData((prev) => ({ ...prev, trustStatus: v }))}
@@ -410,7 +417,7 @@ export default function NewDevicePage() {
                   <SelectContent>
                     {trustStatuses.map((status) => (
                       <SelectItem key={status.value} value={status.value}>
-                        {status.label}
+                        {t(`trustStatuses.${status.value.toLowerCase()}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -420,9 +427,9 @@ export default function NewDevicePage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label>Compliant</Label>
+                    <Label>{t("form.compliant")}</Label>
                     <p className="text-xs text-muted-foreground">
-                      Mark device as meeting compliance requirements
+                      {t("form.compliantHelp")}
                     </p>
                   </div>
                   <Switch
@@ -435,9 +442,9 @@ export default function NewDevicePage() {
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label>MDM Managed</Label>
+                    <Label>{t("form.mdmManaged")}</Label>
                     <p className="text-xs text-muted-foreground">
-                      Device is enrolled in MDM
+                      {t("form.mdmManagedHelp")}
                     </p>
                   </div>
                   <Switch
@@ -452,11 +459,9 @@ export default function NewDevicePage() {
 
             <Alert>
               <Info className="h-4 w-4" />
-              <AlertTitle>Manual Device Registration</AlertTitle>
+              <AlertTitle>{t("alerts.manualRegistration.title")}</AlertTitle>
               <AlertDescription>
-                Devices are typically registered automatically when users sign in from new devices.
-                Manual registration is useful for pre-approving devices or adding devices that
-                cannot self-register.
+                {t("alerts.manualRegistration.description")}
               </AlertDescription>
             </Alert>
           </CardContent>

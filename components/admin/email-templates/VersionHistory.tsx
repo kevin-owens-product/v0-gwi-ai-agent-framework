@@ -7,6 +7,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -47,6 +48,7 @@ interface VersionHistoryProps {
 }
 
 export function VersionHistory({ versions, currentVersion, onRestore }: VersionHistoryProps) {
+  const t = useTranslations("admin.emailTemplates")
   const [selectedVersion, setSelectedVersion] = useState<TemplateVersion | null>(null)
   const [previewOpen, setPreviewOpen] = useState(false)
   const [compareOpen, setCompareOpen] = useState(false)
@@ -81,9 +83,9 @@ export function VersionHistory({ versions, currentVersion, onRestore }: VersionH
         <div className="flex items-center gap-2">
           <History className="h-5 w-5" />
           <div>
-            <CardTitle>Version History</CardTitle>
+            <CardTitle>{t("versionHistory.title")}</CardTitle>
             <CardDescription>
-              Track changes and restore previous versions of the template
+              {t("versionHistory.description")}
             </CardDescription>
           </div>
         </div>
@@ -92,18 +94,18 @@ export function VersionHistory({ versions, currentVersion, onRestore }: VersionH
         {versions.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <History className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>No version history available</p>
+            <p>{t("versionHistory.noHistory")}</p>
           </div>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-20">Version</TableHead>
-                <TableHead>Subject</TableHead>
-                <TableHead>Change Note</TableHead>
-                <TableHead>Changed By</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="w-32 text-right">Actions</TableHead>
+                <TableHead className="w-20">{t("versionHistory.version")}</TableHead>
+                <TableHead>{t("versionHistory.subject")}</TableHead>
+                <TableHead>{t("versionHistory.changeNote")}</TableHead>
+                <TableHead>{t("versionHistory.changedBy")}</TableHead>
+                <TableHead>{t("versionHistory.date")}</TableHead>
+                <TableHead className="w-32 text-right">{t("versionHistory.actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -117,7 +119,7 @@ export function VersionHistory({ versions, currentVersion, onRestore }: VersionH
                       <span className="font-mono text-sm">v{version.version}</span>
                       {version.version === currentVersion && (
                         <Badge variant="default" className="text-xs">
-                          Current
+                          {t("versionHistory.current")}
                         </Badge>
                       )}
                     </div>
@@ -184,23 +186,23 @@ export function VersionHistory({ versions, currentVersion, onRestore }: VersionH
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                Version {selectedVersion?.version} Preview
+                {t("versionHistory.versionPreview", { version: selectedVersion?.version || 0 })}
               </DialogTitle>
               <DialogDescription>
-                {selectedVersion?.changeNote || "No change note provided"}
+                {selectedVersion?.changeNote || t("versionHistory.noChangeNote")}
               </DialogDescription>
             </DialogHeader>
             <Tabs defaultValue="preview">
               <TabsList>
-                <TabsTrigger value="preview">Preview</TabsTrigger>
-                <TabsTrigger value="html">HTML</TabsTrigger>
-                <TabsTrigger value="text">Plain Text</TabsTrigger>
+                <TabsTrigger value="preview">{t("versionHistory.tabs.preview")}</TabsTrigger>
+                <TabsTrigger value="html">{t("versionHistory.tabs.html")}</TabsTrigger>
+                <TabsTrigger value="text">{t("versionHistory.tabs.plainText")}</TabsTrigger>
               </TabsList>
               <TabsContent value="preview">
                 <div className="border rounded-lg bg-white p-4">
                   <div className="border-b pb-2 mb-4">
                     <p className="text-sm font-medium">
-                      Subject: {selectedVersion?.subject}
+                      {t("versionHistory.subject")}: {selectedVersion?.subject}
                     </p>
                   </div>
                   {selectedVersion?.htmlContent && (
@@ -221,13 +223,13 @@ export function VersionHistory({ versions, currentVersion, onRestore }: VersionH
               </TabsContent>
               <TabsContent value="text">
                 <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm font-mono max-h-[400px] overflow-y-auto whitespace-pre-wrap">
-                  {selectedVersion?.textContent || "No plain text version"}
+                  {selectedVersion?.textContent || t("versionHistory.noPlainText")}
                 </pre>
               </TabsContent>
             </Tabs>
             <div className="flex justify-end gap-2 pt-4">
               <Button variant="outline" onClick={() => setPreviewOpen(false)}>
-                Close
+                {t("versionHistory.close")}
               </Button>
               {selectedVersion && selectedVersion.version !== currentVersion && (
                 <Button
@@ -237,7 +239,7 @@ export function VersionHistory({ versions, currentVersion, onRestore }: VersionH
                   }}
                 >
                   <RotateCcw className="h-4 w-4 mr-2" />
-                  Restore This Version
+                  {t("versionHistory.restoreThisVersion")}
                 </Button>
               )}
             </div>
@@ -249,17 +251,17 @@ export function VersionHistory({ versions, currentVersion, onRestore }: VersionH
           <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                Compare Versions: v{compareVersions.old?.version} vs v{compareVersions.new?.version}
+                {t("versionHistory.compareVersions", { oldVersion: compareVersions.old?.version || 0, newVersion: compareVersions.new?.version || 0 })}
               </DialogTitle>
             </DialogHeader>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <h4 className="font-medium mb-2">
-                  Version {compareVersions.old?.version} (Older)
+                  {t("versionHistory.versionOlder", { version: compareVersions.old?.version || 0 })}
                 </h4>
                 <div className="border rounded-lg p-4 bg-red-50/50">
                   <p className="text-sm mb-2">
-                    <span className="font-medium">Subject:</span>{" "}
+                    <span className="font-medium">{t("versionHistory.subject")}:</span>{" "}
                     {compareVersions.old?.subject}
                   </p>
                   <pre className="text-xs font-mono bg-background p-2 rounded max-h-[300px] overflow-auto">
@@ -270,11 +272,11 @@ export function VersionHistory({ versions, currentVersion, onRestore }: VersionH
               </div>
               <div>
                 <h4 className="font-medium mb-2">
-                  Version {compareVersions.new?.version} (Newer)
+                  {t("versionHistory.versionNewer", { version: compareVersions.new?.version || 0 })}
                 </h4>
                 <div className="border rounded-lg p-4 bg-green-50/50">
                   <p className="text-sm mb-2">
-                    <span className="font-medium">Subject:</span>{" "}
+                    <span className="font-medium">{t("versionHistory.subject")}:</span>{" "}
                     {compareVersions.new?.subject}
                   </p>
                   <pre className="text-xs font-mono bg-background p-2 rounded max-h-[300px] overflow-auto">
@@ -286,7 +288,7 @@ export function VersionHistory({ versions, currentVersion, onRestore }: VersionH
             </div>
             <div className="flex justify-end">
               <Button variant="outline" onClick={() => setCompareOpen(false)}>
-                Close
+                {t("versionHistory.close")}
               </Button>
             </div>
           </DialogContent>

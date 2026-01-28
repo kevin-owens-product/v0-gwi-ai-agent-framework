@@ -7,6 +7,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -42,33 +43,19 @@ interface AlertFormProps<T extends CreateAlertInput | UpdateAlertInput = CreateA
   className?: string
 }
 
-const ENTITY_TYPES: Array<{ value: AlertEntityType; label: string; description: string }> = [
-  { value: 'metric', label: 'Metric', description: 'Monitor key performance metrics' },
-  { value: 'audience', label: 'Audience', description: 'Track audience changes' },
-  { value: 'brand', label: 'Brand', description: 'Brand tracking alerts' },
-  { value: 'report', label: 'Report', description: 'Report-related alerts' },
-  { value: 'agent', label: 'Agent', description: 'AI agent performance' },
-  { value: 'workflow', label: 'Workflow', description: 'Workflow execution alerts' },
-]
+const ENTITY_TYPE_VALUES: AlertEntityType[] = ['metric', 'audience', 'brand', 'report', 'agent', 'workflow']
 
-const CHANNELS: Array<{ value: AlertChannel; label: string; icon: React.ReactNode }> = [
-  { value: 'EMAIL', label: 'Email', icon: <Mail className="h-4 w-4" /> },
-  { value: 'SLACK', label: 'Slack', icon: <MessageSquare className="h-4 w-4" /> },
-  { value: 'WEBHOOK', label: 'Webhook', icon: <Globe className="h-4 w-4" /> },
-  { value: 'IN_APP', label: 'In-App', icon: <Bell className="h-4 w-4" /> },
-  { value: 'SMS', label: 'SMS', icon: <Smartphone className="h-4 w-4" /> },
-]
+const CHANNEL_VALUES: AlertChannel[] = ['EMAIL', 'SLACK', 'WEBHOOK', 'IN_APP', 'SMS']
 
-const COOLDOWN_OPTIONS = [
-  { value: 5, label: '5 minutes' },
-  { value: 15, label: '15 minutes' },
-  { value: 30, label: '30 minutes' },
-  { value: 60, label: '1 hour' },
-  { value: 120, label: '2 hours' },
-  { value: 360, label: '6 hours' },
-  { value: 720, label: '12 hours' },
-  { value: 1440, label: '24 hours' },
-]
+const COOLDOWN_VALUES = [5, 15, 30, 60, 120, 360, 720, 1440]
+
+const CHANNEL_ICONS: Record<AlertChannel, React.ReactNode> = {
+  EMAIL: <Mail className="h-4 w-4" />,
+  SLACK: <MessageSquare className="h-4 w-4" />,
+  WEBHOOK: <Globe className="h-4 w-4" />,
+  IN_APP: <Bell className="h-4 w-4" />,
+  SMS: <Smartphone className="h-4 w-4" />,
+}
 
 const DEFAULT_CONDITION: AlertCondition = {
   metric: 'sentiment',
@@ -84,6 +71,7 @@ export function AlertForm({
   isLoading = false,
   className,
 }: AlertFormProps) {
+  const t = useTranslations("alerts")
   const isEditing = !!alert
 
   // Form state
@@ -112,29 +100,29 @@ export function AlertForm({
     const newErrors: Record<string, string> = {}
 
     if (!name.trim()) {
-      newErrors.name = 'Name is required'
+      newErrors.name = t("form.validation.nameRequired")
     } else if (name.length > 100) {
-      newErrors.name = 'Name must be 100 characters or less'
+      newErrors.name = t("form.validation.nameTooLong")
     }
 
     if (description && description.length > 500) {
-      newErrors.description = 'Description must be 500 characters or less'
+      newErrors.description = t("form.validation.descriptionTooLong")
     }
 
     if (channels.length === 0) {
-      newErrors.channels = 'At least one notification channel is required'
+      newErrors.channels = t("form.validation.channelRequired")
     }
 
     if (channels.includes('EMAIL') && recipients.length === 0) {
-      newErrors.recipients = 'At least one email recipient is required when Email channel is selected'
+      newErrors.recipients = t("form.validation.recipientRequired")
     }
 
     if (channels.includes('WEBHOOK') && !webhookUrl) {
-      newErrors.webhookUrl = 'Webhook URL is required when Webhook channel is selected'
+      newErrors.webhookUrl = t("form.validation.webhookRequired")
     }
 
     if (webhookUrl && !isValidUrl(webhookUrl)) {
-      newErrors.webhookUrl = 'Please enter a valid URL'
+      newErrors.webhookUrl = t("form.validation.invalidUrl")
     }
 
     setErrors(newErrors)
@@ -200,16 +188,16 @@ export function AlertForm({
       {/* Basic Information */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Basic Information</CardTitle>
+          <CardTitle className="text-lg">{t("form.basicInformation")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Alert Name *</Label>
+            <Label htmlFor="name">{t("form.alertName")} *</Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g., Low Sentiment Alert"
+              placeholder={t("form.alertNamePlaceholder")}
               className={cn(errors.name && "border-red-500")}
             />
             {errors.name && (
@@ -218,12 +206,12 @@ export function AlertForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{t("form.description")}</Label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe what this alert monitors..."
+              placeholder={t("form.descriptionPlaceholder")}
               rows={2}
               className={cn(errors.description && "border-red-500")}
             />
@@ -235,9 +223,9 @@ export function AlertForm({
           {isEditing && (
             <div className="flex items-center justify-between pt-2">
               <div className="space-y-0.5">
-                <Label>Alert Status</Label>
+                <Label>{t("form.alertStatus")}</Label>
                 <p className="text-sm text-muted-foreground">
-                  Enable or disable this alert
+                  {t("form.alertStatusDescription")}
                 </p>
               </div>
               <Switch
@@ -252,25 +240,25 @@ export function AlertForm({
       {/* Alert Condition */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Alert Condition</CardTitle>
+          <CardTitle className="text-lg">{t("form.alertCondition")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Entity Type</Label>
+            <Label>{t("form.entityType")}</Label>
             <Select
               value={entityType}
               onValueChange={(v) => setEntityType(v as AlertEntityType)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select entity type" />
+                <SelectValue placeholder={t("form.selectEntityType")} />
               </SelectTrigger>
               <SelectContent>
-                {ENTITY_TYPES.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
+                {ENTITY_TYPE_VALUES.map((type) => (
+                  <SelectItem key={type} value={type}>
                     <div className="flex flex-col">
-                      <span>{type.label}</span>
+                      <span>{t(`form.entityTypes.${type}.label`)}</span>
                       <span className="text-xs text-muted-foreground">
-                        {type.description}
+                        {t(`form.entityTypes.${type}.description`)}
                       </span>
                     </div>
                   </SelectItem>
@@ -280,22 +268,22 @@ export function AlertForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="entityId">Entity ID (optional)</Label>
+            <Label htmlFor="entityId">{t("form.entityId")}</Label>
             <Input
               id="entityId"
               value={entityId}
               onChange={(e) => setEntityId(e.target.value)}
-              placeholder="Leave empty to monitor all entities of this type"
+              placeholder={t("form.entityIdPlaceholder")}
             />
             <p className="text-xs text-muted-foreground">
-              Specify an ID to monitor a specific entity, or leave empty to monitor all.
+              {t("form.entityIdHelp")}
             </p>
           </div>
 
           <Separator />
 
           <div className="space-y-2">
-            <Label>Condition</Label>
+            <Label>{t("form.condition")}</Label>
             <AlertConditionBuilder
               value={condition}
               onChange={setCondition}
@@ -308,30 +296,30 @@ export function AlertForm({
       {/* Notification Settings */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Notification Settings</CardTitle>
+          <CardTitle className="text-lg">{t("form.notificationSettings")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Notification Channels *</Label>
+            <Label>{t("form.notificationChannels")} *</Label>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-              {CHANNELS.map((channel) => (
+              {CHANNEL_VALUES.map((channel) => (
                 <div
-                  key={channel.value}
+                  key={channel}
                   className={cn(
                     "flex items-center space-x-2 p-3 rounded-lg border cursor-pointer transition-colors",
-                    channels.includes(channel.value)
+                    channels.includes(channel)
                       ? "border-primary bg-primary/5"
                       : "border-muted hover:border-muted-foreground/50"
                   )}
-                  onClick={() => handleChannelToggle(channel.value)}
+                  onClick={() => handleChannelToggle(channel)}
                 >
                   <Checkbox
-                    checked={channels.includes(channel.value)}
-                    onCheckedChange={() => handleChannelToggle(channel.value)}
+                    checked={channels.includes(channel)}
+                    onCheckedChange={() => handleChannelToggle(channel)}
                   />
                   <div className="flex items-center gap-2">
-                    {channel.icon}
-                    <span className="text-sm">{channel.label}</span>
+                    {CHANNEL_ICONS[channel]}
+                    <span className="text-sm">{t(`form.channels.${channel}`)}</span>
                   </div>
                 </div>
               ))}
@@ -344,12 +332,12 @@ export function AlertForm({
           {/* Email Recipients */}
           {channels.includes('EMAIL') && (
             <div className="space-y-2">
-              <Label>Email Recipients</Label>
+              <Label>{t("form.emailRecipients")}</Label>
               <div className="flex gap-2">
                 <Input
                   value={recipientInput}
                   onChange={(e) => setRecipientInput(e.target.value)}
-                  placeholder="Enter email address"
+                  placeholder={t("form.emailPlaceholder")}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault()
@@ -358,7 +346,7 @@ export function AlertForm({
                   }}
                 />
                 <Button type="button" onClick={addRecipient} variant="outline">
-                  Add
+                  {t("form.add")}
                 </Button>
               </div>
               {recipients.length > 0 && (
@@ -389,7 +377,7 @@ export function AlertForm({
           {/* Webhook URL */}
           {channels.includes('WEBHOOK') && (
             <div className="space-y-2">
-              <Label htmlFor="webhookUrl">Webhook URL</Label>
+              <Label htmlFor="webhookUrl">{t("form.webhookUrl")}</Label>
               <Input
                 id="webhookUrl"
                 value={webhookUrl}
@@ -406,24 +394,24 @@ export function AlertForm({
           <Separator />
 
           <div className="space-y-2">
-            <Label>Alert Cooldown</Label>
+            <Label>{t("form.alertCooldown")}</Label>
             <Select
               value={cooldownMinutes.toString()}
               onValueChange={(v) => setCooldownMinutes(parseInt(v))}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select cooldown period" />
+                <SelectValue placeholder={t("form.selectCooldown")} />
               </SelectTrigger>
               <SelectContent>
-                {COOLDOWN_OPTIONS.map((option) => (
-                  <SelectItem key={option.value} value={option.value.toString()}>
-                    {option.label}
+                {COOLDOWN_VALUES.map((value) => (
+                  <SelectItem key={value} value={value.toString()}>
+                    {t(`form.cooldownOptions.${value}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              Minimum time between alert notifications to prevent spam.
+              {t("form.cooldownHelp")}
             </p>
           </div>
         </CardContent>
@@ -433,17 +421,17 @@ export function AlertForm({
       <div className="flex justify-end gap-3">
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            {t("form.cancel")}
           </Button>
         )}
         <Button type="submit" disabled={isLoading}>
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {isEditing ? 'Saving...' : 'Creating...'}
+              {isEditing ? t("form.saving") : t("form.creating")}
             </>
           ) : (
-            isEditing ? 'Save Changes' : 'Create Alert'
+            isEditing ? t("form.saveChanges") : t("form.createAlert")
           )}
         </Button>
       </div>

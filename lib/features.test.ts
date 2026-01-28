@@ -34,7 +34,7 @@ describe('Features Library', () => {
     // Default to no entitlement found (tests override when needed)
     vi.mocked(prisma.tenantEntitlement.findFirst).mockResolvedValue(null)
     vi.mocked(prisma.tenantEntitlement.findMany).mockResolvedValue([])
-    vi.mocked(prisma.usageRecord.aggregate).mockResolvedValue({ _sum: { quantity: 0 } })
+    vi.mocked(prisma.usageRecord.aggregate).mockResolvedValue({ _sum: { quantity: 0 } } as any)
   })
 
   describe('checkFeatureAccess', () => {
@@ -127,7 +127,7 @@ describe('Features Library', () => {
         ],
       } as any)
       // Mock usage at 50%
-      vi.mocked(prisma.usageRecord.aggregate).mockResolvedValue({ _sum: { quantity: 50 } })
+      vi.mocked(prisma.usageRecord.aggregate).mockResolvedValue({ _sum: { quantity: 50 } } as any)
 
       const result = await checkFeatureAccess('org-1', 'API_REQUESTS')
 
@@ -167,7 +167,7 @@ describe('Features Library', () => {
         ],
       } as any)
       // Mock usage at 85%
-      vi.mocked(prisma.usageRecord.aggregate).mockResolvedValue({ _sum: { quantity: 85 } })
+      vi.mocked(prisma.usageRecord.aggregate).mockResolvedValue({ _sum: { quantity: 85 } } as any)
 
       const result = await checkFeatureAccess('org-1', 'API_REQUESTS')
 
@@ -203,7 +203,7 @@ describe('Features Library', () => {
         ],
       } as any)
       // Mock usage at 100%
-      vi.mocked(prisma.usageRecord.aggregate).mockResolvedValue({ _sum: { quantity: 100 } })
+      vi.mocked(prisma.usageRecord.aggregate).mockResolvedValue({ _sum: { quantity: 100 } } as any)
 
       const result = await checkFeatureAccess('org-1', 'API_REQUESTS')
 
@@ -232,7 +232,7 @@ describe('Features Library', () => {
           valueType: 'NUMBER',
         },
       } as any)
-      vi.mocked(prisma.usageRecord.aggregate).mockResolvedValue({ _sum: { quantity: 0 } })
+      vi.mocked(prisma.usageRecord.aggregate).mockResolvedValue({ _sum: { quantity: 0 } } as any)
 
       const result = await checkFeatureAccess('org-1', 'TEAM_MEMBERS')
 

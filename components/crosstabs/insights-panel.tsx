@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -39,6 +40,7 @@ interface InsightsPanelProps {
 }
 
 export function InsightsPanel({ crosstabId, className }: InsightsPanelProps) {
+  const t = useTranslations("dashboard.crosstabs.components.insights")
   const [insights, setInsights] = useState<Insight[]>([])
   const [summary, setSummary] = useState("")
   const [isLoading, setIsLoading] = useState(true)
@@ -122,7 +124,7 @@ export function InsightsPanel({ crosstabId, className }: InsightsPanelProps) {
       <Card className={cn("p-6 space-y-4", className)}>
         <div className="flex items-center gap-2">
           <Lightbulb className="h-5 w-5" />
-          <h3 className="font-semibold">Key Insights</h3>
+          <h3 className="font-semibold">{t("title")}</h3>
         </div>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
@@ -146,7 +148,7 @@ export function InsightsPanel({ crosstabId, className }: InsightsPanelProps) {
           </div>
           <Button variant="outline" size="sm" onClick={fetchInsights}>
             <RefreshCw className="h-4 w-4 mr-2" />
-            Retry
+            {t("retry")}
           </Button>
         </div>
       </Card>
@@ -159,9 +161,9 @@ export function InsightsPanel({ crosstabId, className }: InsightsPanelProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Lightbulb className="h-5 w-5 text-amber-500" />
-          <h3 className="font-semibold">Key Insights</h3>
+          <h3 className="font-semibold">{t("title")}</h3>
           <Badge variant="secondary" className="text-xs">
-            {insights.length} findings
+            {t("findings", { count: insights.length })}
           </Badge>
         </div>
         <Button variant="ghost" size="sm" onClick={fetchInsights}>
@@ -198,7 +200,7 @@ export function InsightsPanel({ crosstabId, className }: InsightsPanelProps) {
                     </Badge>
                     {insight.confidence && (
                       <span className="text-xs text-muted-foreground">
-                        {Math.round(insight.confidence * 100)}% confidence
+                        {t("confidence", { percent: Math.round(insight.confidence * 100) })}
                       </span>
                     )}
                   </div>
@@ -239,22 +241,22 @@ export function InsightsPanel({ crosstabId, className }: InsightsPanelProps) {
                 <div className="flex flex-wrap gap-2">
                   {insight.metric && (
                     <Badge variant="outline" className="text-xs">
-                      Metric: {insight.metric}
+                      {t("labels.metric")}: {insight.metric}
                     </Badge>
                   )}
                   {insight.audience && (
                     <Badge variant="outline" className="text-xs">
-                      Audience: {insight.audience}
+                      {t("labels.audience")}: {insight.audience}
                     </Badge>
                   )}
                   {insight.value !== undefined && (
                     <Badge variant="outline" className="text-xs">
-                      Value: {insight.value}%
+                      {t("labels.value")}: {insight.value}%
                     </Badge>
                   )}
                   {insight.comparison && (
                     <Badge variant="outline" className="text-xs">
-                      Gap: {insight.comparison.difference} pts
+                      {t("labels.gap")}: {insight.comparison.difference} pts
                     </Badge>
                   )}
                 </div>
@@ -268,8 +270,8 @@ export function InsightsPanel({ crosstabId, className }: InsightsPanelProps) {
       {insights.length === 0 && !isLoading && (
         <div className="text-center py-8 text-muted-foreground">
           <Lightbulb className="h-8 w-8 mx-auto mb-2 opacity-50" />
-          <p>No significant insights detected</p>
-          <p className="text-sm">Try adding more data points or audiences</p>
+          <p>{t("empty.title")}</p>
+          <p className="text-sm">{t("empty.description")}</p>
         </div>
       )}
     </Card>

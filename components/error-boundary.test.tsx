@@ -138,6 +138,7 @@ describe('withErrorBoundary HOC', () => {
       return <div>My component</div>
     }
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const WrappedComponent = withErrorBoundary(MyComponent)
     render(<WrappedComponent />)
 

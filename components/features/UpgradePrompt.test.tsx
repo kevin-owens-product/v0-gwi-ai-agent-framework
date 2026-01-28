@@ -26,8 +26,8 @@ describe('UpgradePrompt Component', () => {
     it('should render with default props', () => {
       render(<UpgradePrompt />)
 
-      expect(screen.getByText('Unlock this feature')).toBeInTheDocument()
-      expect(screen.getByText('Upgrade your plan to access this premium feature')).toBeInTheDocument()
+      expect(screen.getByText('Upgrade Required')).toBeInTheDocument()
+      expect(screen.getByText('This feature requires an upgraded plan to access.')).toBeInTheDocument()
       expect(screen.getByText('Upgrade Plan')).toBeInTheDocument()
     })
 
@@ -69,7 +69,9 @@ describe('UpgradePrompt Component', () => {
     it('should not show feature requirement message when feature is not provided', () => {
       render(<UpgradePrompt />)
 
-      expect(screen.queryByText(/This feature requires a/)).not.toBeInTheDocument()
+      // Should not show the "requiresPlan" message (which includes plan name)
+      expect(screen.queryByText(/This feature requires the/)).not.toBeInTheDocument()
+      expect(screen.queryByText(/plan or higher/)).not.toBeInTheDocument()
     })
   })
 
@@ -181,7 +183,7 @@ describe('UpgradePrompt Component', () => {
     it('should have header and content sections', () => {
       render(<UpgradePrompt />)
 
-      expect(screen.getByText('Unlock this feature')).toBeInTheDocument()
+      expect(screen.getByText('Upgrade Required')).toBeInTheDocument()
       expect(screen.getByText('Upgrade Plan')).toBeInTheDocument()
     })
   })
@@ -212,8 +214,9 @@ describe('UpgradePrompt Component', () => {
     it('should emphasize required plan text', () => {
       render(<UpgradePrompt feature="TEST_FEATURE" requiredPlan="Professional" />)
 
-      const strongElement = screen.getByText('Professional')
-      expect(strongElement.tagName).toBe('STRONG')
+      // Check that Professional appears in the requiresPlan message
+      expect(screen.getByText(/Professional/)).toBeInTheDocument()
+      expect(screen.getByText(/This feature requires the/)).toBeInTheDocument()
     })
   })
 

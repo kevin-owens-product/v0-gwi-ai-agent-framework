@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -53,16 +54,9 @@ interface Pagination {
   totalPages: number
 }
 
-const REPORT_TYPES = [
-  { value: "USAGE", label: "Usage" },
-  { value: "REVENUE", label: "Revenue" },
-  { value: "SECURITY", label: "Security" },
-  { value: "COMPLIANCE", label: "Compliance" },
-  { value: "USER_ACTIVITY", label: "User Activity" },
-  { value: "CUSTOM_SQL", label: "Custom SQL" },
-]
-
 export default function CustomReportsPage() {
+  const t = useTranslations("admin.analytics.reports")
+  const tCommon = useTranslations("admin.analytics")
   const [reports, setReports] = useState<CustomReport[]>([])
   const [pagination, setPagination] = useState<Pagination | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -74,6 +68,15 @@ export default function CustomReportsPage() {
   const [filterActive, setFilterActive] = useState<string>("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
+
+  const REPORT_TYPES = [
+    { value: "USAGE", label: t("types.usage") },
+    { value: "REVENUE", label: t("types.revenue") },
+    { value: "SECURITY", label: t("types.security") },
+    { value: "COMPLIANCE", label: t("types.compliance") },
+    { value: "USER_ACTIVITY", label: t("types.userActivity") },
+    { value: "CUSTOM_SQL", label: t("types.customSql") },
+  ]
 
   const fetchReports = async () => {
     setIsLoading(true)
@@ -105,7 +108,7 @@ export default function CustomReportsPage() {
 
   useEffect(() => {
     fetchReports()
-  }, [currentPage, filterType, filterActive])
+  }, [currentPage, filterType, filterActive, fetchReports])
 
   const handleSearch = () => {
     setCurrentPage(1)
@@ -181,11 +184,11 @@ export default function CustomReportsPage() {
   }
 
   const formatSchedule = (schedule: string | null) => {
-    if (!schedule) return "On-demand"
+    if (!schedule) return t("schedules.onDemand")
     const schedules: Record<string, string> = {
-      daily: "Daily",
-      weekly: "Weekly",
-      monthly: "Monthly",
+      daily: t("schedules.daily"),
+      weekly: t("schedules.weekly"),
+      monthly: t("schedules.monthly"),
     }
     return schedules[schedule] || schedule
   }
@@ -194,7 +197,7 @@ export default function CustomReportsPage() {
   const columns: Column<CustomReport>[] = [
     {
       id: "report",
-      header: "Report",
+      header: t("table.report"),
       cell: (report) => (
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -213,7 +216,7 @@ export default function CustomReportsPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("table.type"),
       cell: (report) => (
         <Badge className={getTypeColor(report.type)}>
           {report.type}
@@ -222,7 +225,7 @@ export default function CustomReportsPage() {
     },
     {
       id: "schedule",
-      header: "Schedule",
+      header: t("table.schedule"),
       cell: (report) => (
         <div className="flex items-center gap-1 text-sm">
           <Clock className="h-3 w-3 text-muted-foreground" />
@@ -232,7 +235,7 @@ export default function CustomReportsPage() {
     },
     {
       id: "lastRun",
-      header: "Last Run",
+      header: t("table.lastRun"),
       cell: (report) =>
         report.lastRunAt ? (
           <div className="flex items-center gap-1 text-sm">
@@ -240,12 +243,12 @@ export default function CustomReportsPage() {
             {new Date(report.lastRunAt).toLocaleDateString()}
           </div>
         ) : (
-          <span className="text-muted-foreground text-sm">Never</span>
+          <span className="text-muted-foreground text-sm">{t("table.never")}</span>
         ),
     },
     {
       id: "nextRun",
-      header: "Next Run",
+      header: t("table.nextRun"),
       cell: (report) =>
         report.nextRunAt ? (
           <div className="flex items-center gap-1 text-sm">
@@ -258,7 +261,7 @@ export default function CustomReportsPage() {
     },
     {
       id: "active",
-      header: "Active",
+      header: t("table.active"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (report) => (
@@ -273,7 +276,7 @@ export default function CustomReportsPage() {
   // Define row actions (created dynamically to access current runningReportId)
   const rowActions: RowAction<CustomReport>[] = [
     {
-      label: "Run Now",
+      label: t("actions.runNow"),
       icon: <Play className="h-4 w-4" />,
       onClick: (report) => handleRunReport(report.id),
       hidden: (report) => !report.isActive,
@@ -283,12 +286,12 @@ export default function CustomReportsPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Delete Selected",
+      label: t("actions.deleteSelected"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
-      confirmTitle: "Delete Reports",
-      confirmDescription: "Are you sure you want to delete the selected reports? This action cannot be undone.",
+      confirmTitle: t("confirmDelete.title"),
+      confirmDescription: t("confirmDelete.description"),
     },
   ]
 
@@ -299,21 +302,21 @@ export default function CustomReportsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <FileText className="h-8 w-8 text-primary" />
-            Custom Reports
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Create and manage custom analytics reports
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button onClick={fetchReports} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            {tCommon("actions.refresh")}
           </Button>
           <Button size="sm" asChild>
             <Link href="/admin/analytics/reports/new">
               <Plus className="h-4 w-4 mr-2" />
-              New Report
+              {t("actions.newReport")}
             </Link>
           </Button>
         </div>
@@ -323,7 +326,7 @@ export default function CustomReportsPage() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Reports</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("summary.totalReports")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{pagination?.total || 0}</div>
@@ -332,7 +335,7 @@ export default function CustomReportsPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Active Reports</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("summary.activeReports")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-500">
@@ -343,7 +346,7 @@ export default function CustomReportsPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Scheduled Reports</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("summary.scheduledReports")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-500">
@@ -354,7 +357,7 @@ export default function CustomReportsPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Run Today</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("summary.runToday")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -374,7 +377,7 @@ export default function CustomReportsPage() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4" />
-            <CardTitle className="text-lg">Filters</CardTitle>
+            <CardTitle className="text-lg">{t("filters.title")}</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
@@ -383,7 +386,7 @@ export default function CustomReportsPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search reports..."
+                  placeholder={t("filters.searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -393,10 +396,10 @@ export default function CustomReportsPage() {
             </div>
             <Select value={filterType} onValueChange={setFilterType}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="All Types" />
+                <SelectValue placeholder={t("filters.allTypes")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="all">{t("filters.allTypes")}</SelectItem>
                 {REPORT_TYPES.map((type) => (
                   <SelectItem key={type.value} value={type.value}>
                     {type.label}
@@ -406,15 +409,15 @@ export default function CustomReportsPage() {
             </Select>
             <Select value={filterActive} onValueChange={setFilterActive}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="All Status" />
+                <SelectValue placeholder={t("filters.allStatus")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="true">Active</SelectItem>
-                <SelectItem value="false">Inactive</SelectItem>
+                <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
+                <SelectItem value="true">{t("filters.active")}</SelectItem>
+                <SelectItem value="false">{t("filters.inactive")}</SelectItem>
               </SelectContent>
             </Select>
-            <Button onClick={handleSearch}>Search</Button>
+            <Button onClick={handleSearch}>{t("actions.search")}</Button>
             <Button
               variant="outline"
               onClick={() => {
@@ -424,7 +427,7 @@ export default function CustomReportsPage() {
                 setCurrentPage(1)
               }}
             >
-              Clear
+              {t("actions.clear")}
             </Button>
           </div>
         </CardContent>
@@ -433,9 +436,9 @@ export default function CustomReportsPage() {
       {/* Reports Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Reports</CardTitle>
+          <CardTitle>{t("table.title")}</CardTitle>
           <CardDescription>
-            {pagination?.total || 0} custom reports configured
+            {t("table.description", { count: pagination?.total || 0 })}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -444,12 +447,12 @@ export default function CustomReportsPage() {
             columns={columns}
             getRowId={(report) => report.id}
             isLoading={isLoading}
-            emptyMessage="No reports found"
+            emptyMessage={t("table.noReports")}
             viewHref={(report) => `/admin/analytics/reports/${report.id}`}
             onDelete={handleDeleteReport}
-            deleteConfirmTitle="Delete Report"
+            deleteConfirmTitle={t("confirmDelete.title")}
             deleteConfirmDescription={(report) =>
-              `Are you sure you want to delete "${report.name}"? This action cannot be undone.`
+              t("confirmDelete.singleDescription", { name: report.name })
             }
             rowActions={rowActions}
             bulkActions={bulkActions}

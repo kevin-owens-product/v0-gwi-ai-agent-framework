@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -39,21 +40,9 @@ interface LegalHold {
   caseNumber: string | null
 }
 
-const TYPE_OPTIONS = [
-  { value: "USER_DATA", label: "User Data Export" },
-  { value: "ORG_DATA", label: "Organization Data Export" },
-  { value: "GDPR_EXPORT", label: "GDPR Data Export" },
-  { value: "LEGAL_HOLD", label: "Legal Hold Export" },
-  { value: "BACKUP", label: "Backup Export" },
-]
-
-const FORMAT_OPTIONS = [
-  { value: "json", label: "JSON" },
-  { value: "csv", label: "CSV" },
-  { value: "zip", label: "ZIP Archive" },
-]
-
 export default function NewDataExportPage() {
+  const t = useTranslations("admin.compliance")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const [isSaving, setIsSaving] = useState(false)
   const [organizations, setOrganizations] = useState<Organization[]>([])
@@ -66,6 +55,20 @@ export default function NewDataExportPage() {
     userId: "",
     legalHoldId: "",
   })
+
+  const TYPE_OPTIONS = [
+    { value: "USER_DATA", label: t("dataExports.new.types.userData") },
+    { value: "ORG_DATA", label: t("dataExports.new.types.orgData") },
+    { value: "GDPR_EXPORT", label: t("dataExports.new.types.gdprExport") },
+    { value: "LEGAL_HOLD", label: t("dataExports.new.types.legalHold") },
+    { value: "BACKUP", label: t("dataExports.new.types.backup") },
+  ]
+
+  const FORMAT_OPTIONS = [
+    { value: "json", label: t("dataExports.formats.json") },
+    { value: "csv", label: t("dataExports.formats.csv") },
+    { value: "zip", label: t("dataExports.formats.zip") },
+  ]
 
   useEffect(() => {
     async function fetchData() {
@@ -97,21 +100,21 @@ export default function NewDataExportPage() {
 
   const handleCreate = async () => {
     if (!formData.type) {
-      toast.error("Export type is required")
+      toast.error(t("dataExports.errors.typeRequired"))
       return
     }
 
     // Validate subject based on type
     if (formData.type === "USER_DATA" && !formData.userId) {
-      toast.error("Please select a user for user data export")
+      toast.error(t("dataExports.errors.userRequired"))
       return
     }
     if (formData.type === "ORG_DATA" && !formData.orgId) {
-      toast.error("Please select an organization for org data export")
+      toast.error(t("dataExports.errors.orgRequired"))
       return
     }
     if (formData.type === "LEGAL_HOLD" && !formData.legalHoldId) {
-      toast.error("Please select a legal hold")
+      toast.error(t("dataExports.errors.legalHoldRequired"))
       return
     }
 
@@ -136,14 +139,14 @@ export default function NewDataExportPage() {
           return
         }
         const data = await response.json()
-        throw new Error(data.error || "Failed to create data export")
+        throw new Error(data.error || t("dataExports.errors.createFailed"))
       }
 
       const data = await response.json()
       router.push(`/admin/compliance/data-exports/${data.export?.id || ""}`)
     } catch (error) {
       console.error("Failed to create data export:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to create data export")
+      toast.error(error instanceof Error ? error.message : t("dataExports.errors.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -161,16 +164,16 @@ export default function NewDataExportPage() {
           <Link href="/admin/compliance/data-exports">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Download className="h-6 w-6 text-green-500" />
-              Create Data Export
+              {t("dataExports.new.title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Request a new data export for compliance purposes
+              {t("dataExports.new.description")}
             </p>
           </div>
         </div>
@@ -178,12 +181,12 @@ export default function NewDataExportPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {tCommon("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Export
+              {t("dataExports.createExport")}
             </>
           )}
         </Button>
@@ -192,15 +195,15 @@ export default function NewDataExportPage() {
       {/* Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Export Configuration</CardTitle>
+          <CardTitle>{t("dataExports.new.exportConfiguration")}</CardTitle>
           <CardDescription>
-            Configure the data export request. The export will be processed asynchronously.
+            {t("dataExports.new.configureDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Export Type *</Label>
+              <Label>{t("dataExports.fields.exportType")} *</Label>
               <Select
                 value={formData.type}
                 onValueChange={(value) => setFormData({
@@ -224,7 +227,7 @@ export default function NewDataExportPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Format *</Label>
+              <Label>{t("dataExports.fields.format")} *</Label>
               <Select
                 value={formData.format}
                 onValueChange={(value) => setFormData({ ...formData, format: value })}
@@ -245,16 +248,16 @@ export default function NewDataExportPage() {
 
           {showUserSelect && (
             <div className="space-y-2">
-              <Label>User {formData.type === "USER_DATA" ? "*" : "(Optional)"}</Label>
+              <Label>{t("dataExports.fields.user")} {formData.type === "USER_DATA" ? "*" : t("dataExports.new.optional")}</Label>
               <Select
                 value={formData.userId || "none"}
                 onValueChange={(value) => setFormData({ ...formData, userId: value === "none" ? "" : value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a user" />
+                  <SelectValue placeholder={t("dataExports.new.selectUser")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">No specific user</SelectItem>
+                  <SelectItem value="none">{t("dataExports.new.noSpecificUser")}</SelectItem>
                   {users.map((user) => (
                     <SelectItem key={user.id} value={user.id}>
                       {user.name || user.email} ({user.email})
@@ -267,13 +270,13 @@ export default function NewDataExportPage() {
 
           {showOrgSelect && (
             <div className="space-y-2">
-              <Label>Organization *</Label>
+              <Label>{t("dataExports.fields.organization")} *</Label>
               <Select
                 value={formData.orgId}
                 onValueChange={(value) => setFormData({ ...formData, orgId: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select an organization" />
+                  <SelectValue placeholder={t("dataExports.new.selectOrganization")} />
                 </SelectTrigger>
                 <SelectContent>
                   {organizations.map((org) => (
@@ -288,13 +291,13 @@ export default function NewDataExportPage() {
 
           {showLegalHoldSelect && (
             <div className="space-y-2">
-              <Label>Legal Hold *</Label>
+              <Label>{t("dataExports.fields.legalHold")} *</Label>
               <Select
                 value={formData.legalHoldId}
                 onValueChange={(value) => setFormData({ ...formData, legalHoldId: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a legal hold" />
+                  <SelectValue placeholder={t("dataExports.new.selectLegalHold")} />
                 </SelectTrigger>
                 <SelectContent>
                   {legalHolds.map((hold) => (
@@ -309,8 +312,7 @@ export default function NewDataExportPage() {
 
           <div className="rounded-lg border p-4 bg-muted/50">
             <p className="text-sm text-muted-foreground">
-              <strong>Note:</strong> Data exports are processed asynchronously. You will be notified
-              when the export is ready for download. Exports typically expire after 7 days.
+              <strong>{t("dataExports.new.note")}:</strong> {t("dataExports.new.noteDescription")}
             </p>
           </div>
         </CardContent>

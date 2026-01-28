@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { FileText, ArrowRight, CheckCircle2, Map, ClipboardList, Activity, Eye, PieChart, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,29 +8,41 @@ import { Badge } from "@/components/ui/badge"
 import { LandingHeader } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 import { marketResearchAgents } from "@/lib/solution-agents"
+import { useTranslations } from "next-intl"
 
 export default function MarketResearchPage() {
+  const t = useTranslations("solutions.marketResearch")
+
   const workflows = [
     {
-      name: "Market Sizing Study",
-      time: "3 hours",
-      description: "Define market, analyze segments, calculate TAM/SAM/SOM",
+      nameKey: "workflows.marketSizing.name",
+      timeKey: "workflows.marketSizing.time",
+      descriptionKey: "workflows.marketSizing.description",
     },
     {
-      name: "Competitive Landscape Analysis",
-      time: "4 hours",
-      description: "Map competitors, analyze positioning, identify opportunities",
+      nameKey: "workflows.competitiveLandscape.name",
+      timeKey: "workflows.competitiveLandscape.time",
+      descriptionKey: "workflows.competitiveLandscape.description",
     },
     {
-      name: "Consumer Segmentation Study",
-      time: "5 hours",
-      description: "Cluster analysis, profile segments, recommend targeting",
+      nameKey: "workflows.consumerSegmentation.name",
+      timeKey: "workflows.consumerSegmentation.time",
+      descriptionKey: "workflows.consumerSegmentation.description",
     },
     {
-      name: "Quarterly Trend Report",
-      time: "2 hours",
-      description: "Identify trends, assess momentum, predict impact",
+      nameKey: "workflows.trendReport.name",
+      timeKey: "workflows.trendReport.time",
+      descriptionKey: "workflows.trendReport.description",
     },
+  ]
+
+  const challenges = [
+    "challenges.slowExpensive",
+    "challenges.synthesizing",
+    "challenges.trackingTrends",
+    "challenges.compellingNarratives",
+    "challenges.consistency",
+    "challenges.scaling",
   ]
 
   return (
@@ -39,37 +53,36 @@ export default function MarketResearchPage() {
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
             <Badge variant="secondary" className="mb-4">
-              Market Research
+              {t("badge")}
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
-              Transform Data Into <span className="text-primary">Strategic Intelligence</span>
+              {t("hero.titleStart")} <span className="text-primary">{t("hero.titleHighlight")}</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-3xl text-pretty">
-              Conduct comprehensive market research in hours, not weeks. Analyze consumer behavior, track trends, and
-              deliver insights that drive strategic decisions.
+              {t("hero.description")}
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-12">
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">75% Faster</h3>
-                <p className="text-sm text-muted-foreground">Research project completion with AI automation</p>
+                <h3 className="font-semibold mb-2">{t("stats.faster.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.faster.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">5x More</h3>
-                <p className="text-sm text-muted-foreground">Studies delivered per researcher per quarter</p>
+                <h3 className="font-semibold mb-2">{t("stats.more.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.more.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">90% Lower</h3>
-                <p className="text-sm text-muted-foreground">Cost per research project vs traditional methods</p>
+                <h3 className="font-semibold mb-2">{t("stats.lower.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.lower.description")}</p>
               </Card>
             </div>
 
             <div className="flex flex-wrap gap-4">
               <Button size="lg" asChild>
-                <Link href="/dashboard">Start Researching</Link>
+                <Link href="/dashboard">{t("cta.startResearching")}</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Request Demo</Link>
+                <Link href="/contact">{t("cta.requestDemo")}</Link>
               </Button>
             </div>
           </div>
@@ -77,19 +90,12 @@ export default function MarketResearchPage() {
 
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-8">Key Challenges We Solve</h2>
+            <h2 className="text-3xl font-bold mb-8">{t("challengesTitle")}</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {[
-                "Traditional research methods are too slow and expensive",
-                "Difficulty synthesizing large volumes of data into insights",
-                "Limited capacity to track trends and competitors continuously",
-                "Creating compelling narratives from raw research data",
-                "Maintaining consistency across multiple research projects",
-                "Scaling research capabilities without scaling headcount",
-              ].map((challenge, i) => (
+              {challenges.map((challengeKey, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-muted-foreground">{challenge}</p>
+                  <p className="text-muted-foreground">{t(challengeKey)}</p>
                 </div>
               ))}
             </div>
@@ -98,9 +104,9 @@ export default function MarketResearchPage() {
 
         <section className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Market Research AI Agents</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("agentsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Specialized agents designed to accelerate every phase of the research process.
+              {t("agentsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -132,7 +138,7 @@ export default function MarketResearchPage() {
                           </div>
                           <div className="mt-4">
                             <span className="text-sm text-primary flex items-center gap-1">
-                              Open Agent <ArrowRight className="h-3 w-3" />
+                              {t("openAgent")} <ArrowRight className="h-3 w-3" />
                             </span>
                           </div>
                         </div>
@@ -147,19 +153,19 @@ export default function MarketResearchPage() {
 
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Pre-built Workflows</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("workflowsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Complete research projects faster with automated workflows for common study types.
+              {t("workflowsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
               {workflows.map((workflow, i) => (
                 <Card key={i} className="p-6 border-border/40">
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-semibold">{workflow.name}</h3>
-                    <Badge variant="outline">{workflow.time}</Badge>
+                    <h3 className="font-semibold">{t(workflow.nameKey)}</h3>
+                    <Badge variant="outline">{t(workflow.timeKey)}</Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">{workflow.description}</p>
+                  <p className="text-sm text-muted-foreground">{t(workflow.descriptionKey)}</p>
                 </Card>
               ))}
             </div>
@@ -168,18 +174,18 @@ export default function MarketResearchPage() {
 
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Accelerate Your Research?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("finalCta.title")}</h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Join leading research teams using AI to deliver faster, deeper insights.
+              {t("finalCta.description")}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Button size="lg" asChild>
                 <Link href="/dashboard">
-                  Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("finalCta.getStarted")} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Talk to Sales</Link>
+                <Link href="/contact">{t("finalCta.talkToSales")}</Link>
               </Button>
             </div>
           </div>

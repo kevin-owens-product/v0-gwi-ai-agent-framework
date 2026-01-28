@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast } from "@/lib/toast-utils"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -33,6 +34,8 @@ interface Organization {
 }
 
 export default function NewUserPage() {
+  const t = useTranslations("admin.users")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
@@ -77,7 +80,7 @@ export default function NewUserPage() {
 
   const handleCreate = async () => {
     if (!formData.email) {
-      toast.error("Email is required")
+      showErrorToast(t("emailRequired"))
       return
     }
 
@@ -102,11 +105,11 @@ export default function NewUserPage() {
         router.push(`/admin/users/${data.user.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to create user")
+        showErrorToast(data.error || t("failedToCreateUser"))
       }
     } catch (error) {
       console.error("Failed to create user:", error)
-      toast.error("Failed to create user")
+      showErrorToast(t("failedToCreateUser"))
     } finally {
       setIsSaving(false)
     }
@@ -115,11 +118,11 @@ export default function NewUserPage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to create users</p>
+        <p className="text-muted-foreground">{t("noPermissionToCreate")}</p>
         <Link href="/admin/users">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Users
+            {t("backToUsers")}
           </Button>
         </Link>
       </div>
@@ -134,13 +137,13 @@ export default function NewUserPage() {
           <Link href="/admin/users">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold">Create New User</h1>
+            <h1 className="text-2xl font-bold">{t("createNewUser")}</h1>
             <p className="text-sm text-muted-foreground">
-              Add a new user to the platform
+              {t("addNewUserDescription")}
             </p>
           </div>
         </div>
@@ -148,12 +151,12 @@ export default function NewUserPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create User
+              {t("createUser")}
             </>
           )}
         </Button>
@@ -165,10 +168,10 @@ export default function NewUserPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5" />
-              User Details
+              {t("userDetails")}
             </CardTitle>
             <CardDescription>
-              Basic information about the new user
+              {t("basicUserInfo")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -177,7 +180,7 @@ export default function NewUserPage() {
                 <Label htmlFor="email">
                   <div className="flex items-center gap-2">
                     <Mail className="h-4 w-4" />
-                    Email Address *
+                    {t("emailAddress")} *
                   </div>
                 </Label>
                 <Input
@@ -185,39 +188,39 @@ export default function NewUserPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  placeholder="user@example.com"
+                  placeholder={t("emailPlaceholder")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="name">{t("fullName")}</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="John Doe"
+                  placeholder={t("fullNamePlaceholder")}
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password (optional)</Label>
+              <Label htmlFor="password">{t("passwordOptional")}</Label>
               <Input
                 id="password"
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
-                placeholder="Leave empty to require password reset"
+                placeholder={t("passwordResetPlaceholder")}
               />
               <p className="text-xs text-muted-foreground">
-                If left empty, the user will need to set a password via email link
+                {t("passwordHint")}
               </p>
             </div>
 
             <div className="flex items-center justify-between pt-2">
               <div className="space-y-0.5">
-                <Label>Send Invite Email</Label>
+                <Label>{t("sendInviteEmail")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Send a welcome email with login instructions
+                  {t("sendInviteEmailDescription")}
                 </p>
               </div>
               <Switch
@@ -232,26 +235,26 @@ export default function NewUserPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Building2 className="h-5 w-5" />
-              Organization Assignment
+              {t("organizationAssignment")}
             </CardTitle>
             <CardDescription>
-              Optionally assign the user to an organization
+              {t("organizationAssignmentDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Organization</Label>
+                <Label>{t("organization")}</Label>
                 <Select
                   value={formData.orgId}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, orgId: value }))}
                   disabled={isLoadingOrgs}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder={isLoadingOrgs ? "Loading..." : "Select organization (optional)"} />
+                    <SelectValue placeholder={isLoadingOrgs ? tCommon("loading") : t("selectOrganizationOptional")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">No organization</SelectItem>
+                    <SelectItem value="none">{t("noOrganization")}</SelectItem>
                     {organizations.map((org) => (
                       <SelectItem key={org.id} value={org.id}>
                         {org.name} ({org.slug})
@@ -260,13 +263,13 @@ export default function NewUserPage() {
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
-                  User can be added to organizations later
+                  {t("organizationLaterHint")}
                 </p>
               </div>
 
               {formData.orgId && formData.orgId !== "none" && (
                 <div className="space-y-2">
-                  <Label>Role in Organization</Label>
+                  <Label>{t("roleInOrganization")}</Label>
                   <Select
                     value={formData.role}
                     onValueChange={(value) => setFormData(prev => ({ ...prev, role: value }))}
@@ -275,14 +278,14 @@ export default function NewUserPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="OWNER">Owner</SelectItem>
-                      <SelectItem value="ADMIN">Admin</SelectItem>
-                      <SelectItem value="MEMBER">Member</SelectItem>
-                      <SelectItem value="VIEWER">Viewer</SelectItem>
+                      <SelectItem value="OWNER">{t("owner")}</SelectItem>
+                      <SelectItem value="ADMIN">{t("admin")}</SelectItem>
+                      <SelectItem value="MEMBER">{t("member")}</SelectItem>
+                      <SelectItem value="VIEWER">{t("viewer")}</SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-muted-foreground">
-                    The role determines what actions the user can perform
+                    {t("roleHint")}
                   </p>
                 </div>
               )}

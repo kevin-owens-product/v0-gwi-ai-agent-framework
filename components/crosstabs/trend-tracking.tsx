@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -110,6 +111,7 @@ const colors = [
 ]
 
 export function TrendTracking({ audiences, metrics, className }: TrendTrackingProps) {
+  const t = useTranslations("dashboard.crosstabs.components.trendTracking")
   const [selectedMetric, setSelectedMetric] = useState(metrics[0] || "")
   const [selectedAudiences, setSelectedAudiences] = useState<string[]>(audiences.slice(0, 4))
   const [timeRange, setTimeRange] = useState<"1y" | "2y" | "all">("1y")
@@ -168,7 +170,7 @@ export function TrendTracking({ audiences, metrics, className }: TrendTrackingPr
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">Trend Analysis</h3>
+          <h3 className="font-semibold">{t("title")}</h3>
         </div>
         <div className="flex items-center gap-2">
           <Select value={timeRange} onValueChange={(v) => setTimeRange(v as "1y" | "2y" | "all")}>
@@ -176,9 +178,9 @@ export function TrendTracking({ audiences, metrics, className }: TrendTrackingPr
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1y">Last Year</SelectItem>
-              <SelectItem value="2y">2 Years</SelectItem>
-              <SelectItem value="all">All Time</SelectItem>
+              <SelectItem value="1y">{t("timeRange.lastYear")}</SelectItem>
+              <SelectItem value="2y">{t("timeRange.twoYears")}</SelectItem>
+              <SelectItem value="all">{t("timeRange.allTime")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -187,7 +189,7 @@ export function TrendTracking({ audiences, metrics, className }: TrendTrackingPr
       {/* Metric Selector */}
       <Card className="p-4">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-medium">Tracking:</span>
+          <span className="text-sm font-medium">{t("tracking")}:</span>
           <Select value={selectedMetric} onValueChange={setSelectedMetric}>
             <SelectTrigger className="w-48">
               <SelectValue />
@@ -209,7 +211,7 @@ export function TrendTracking({ audiences, metrics, className }: TrendTrackingPr
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle className="h-4 w-4 text-amber-600" />
             <span className="text-sm font-medium text-amber-700 dark:text-amber-400">
-              Significant Changes Detected
+              {t("alerts.title")}
             </span>
           </div>
           <div className="space-y-2">
@@ -227,7 +229,7 @@ export function TrendTracking({ audiences, metrics, className }: TrendTrackingPr
                       : "bg-red-100 text-red-700"
                   )}
                 >
-                  {alert.change > 0 ? "+" : ""}{alert.change} pts
+                  {alert.change > 0 ? "+" : ""}{alert.change} {t("points")}
                 </Badge>
               </div>
             ))}

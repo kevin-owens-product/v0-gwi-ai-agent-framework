@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -17,18 +18,20 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ArrowLeft, Save, Loader2, Ban } from "lucide-react"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { useAdmin } from "@/components/providers/admin-provider"
 
-const blockTypes = [
-  { value: "MANUAL", label: "Manual", description: "Manually blocked by administrator" },
-  { value: "AUTOMATIC", label: "Automatic", description: "Blocked by automated security rules" },
-  { value: "THREAT_INTEL", label: "Threat Intelligence", description: "Known malicious IP from threat feeds" },
-  { value: "BRUTE_FORCE", label: "Brute Force", description: "Detected brute force attack" },
-  { value: "GEOGRAPHIC", label: "Geographic", description: "Blocked based on geographic location" },
-]
-
 export default function NewIPBlocklistPage() {
+  const t = useTranslations("admin.security.ipBlocklist")
+  const tCommon = useTranslations("common")
+
+  const blockTypes = [
+    { value: "MANUAL", label: t("types.manual"), description: t("types.manualDesc") },
+    { value: "AUTOMATIC", label: t("types.automatic"), description: t("types.automaticDesc") },
+    { value: "THREAT_INTEL", label: t("types.threatIntel"), description: t("types.threatIntelDesc") },
+    { value: "BRUTE_FORCE", label: t("types.bruteForce"), description: t("types.bruteForceDesc") },
+    { value: "GEOGRAPHIC", label: t("types.geographic"), description: t("types.geographicDesc") },
+  ]
   const router = useRouter()
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
@@ -61,12 +64,12 @@ export default function NewIPBlocklistPage() {
 
   const handleCreate = async () => {
     if (!formData.ipAddress || !formData.reason) {
-      toast.error("IP address and reason are required")
+      showErrorToast(t("validation.ipAndReasonRequired"))
       return
     }
 
     if (!validateIPAddress(formData.ipAddress)) {
-      toast.error("Invalid IP address format")
+      showErrorToast(t("validation.invalidIpFormat"))
       return
     }
 
@@ -89,15 +92,15 @@ export default function NewIPBlocklistPage() {
 
       if (response.ok) {
         const data = await response.json()
-        toast.success("IP address added to blocklist")
+        showSuccessToast(t("toast.addSuccess"))
         router.push(`/admin/security/ip-blocklist/${data.entry.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to add IP to blocklist")
+        showErrorToast(data.error || t("toast.addError"))
       }
     } catch (error) {
       console.error("Failed to block IP:", error)
-      toast.error("Failed to add IP to blocklist")
+      showErrorToast(t("toast.addError"))
     } finally {
       setIsSaving(false)
     }
@@ -106,11 +109,11 @@ export default function NewIPBlocklistPage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to manage IP blocklist</p>
+        <p className="text-muted-foreground">{t("noPermission")}</p>
         <Link href="/admin/security/ip-blocklist">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Blocklist
+            {t("backToBlocklist")}
           </Button>
         </Link>
       </div>
@@ -125,16 +128,16 @@ export default function NewIPBlocklistPage() {
           <Link href="/admin/security/ip-blocklist">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Ban className="h-6 w-6 text-destructive" />
-              Block IP Address
+              {t("new.title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Add a new IP address to the platform blocklist
+              {t("new.description")}
             </p>
           </div>
         </div>
@@ -145,12 +148,12 @@ export default function NewIPBlocklistPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Blocking...
+              {t("new.blocking")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Block IP
+              {t("blockIp")}
             </>
           )}
         </Button>
@@ -159,41 +162,41 @@ export default function NewIPBlocklistPage() {
       {/* Form */}
       <Card>
         <CardHeader>
-          <CardTitle>IP Address Details</CardTitle>
+          <CardTitle>{t("new.ipDetailsTitle")}</CardTitle>
           <CardDescription>
-            Specify the IP address to block and the reason for blocking
+            {t("new.ipDetailsDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="ipAddress">IP Address *</Label>
+              <Label htmlFor="ipAddress">{t("form.ipAddress")} *</Label>
               <Input
                 id="ipAddress"
-                placeholder="e.g., 192.168.1.100 or 2001:0db8:85a3::8a2e:0370:7334"
+                placeholder={t("form.ipAddressPlaceholderFull")}
                 value={formData.ipAddress}
                 onChange={(e) => setFormData({ ...formData, ipAddress: e.target.value })}
               />
               <p className="text-xs text-muted-foreground">
-                Enter a valid IPv4 or IPv6 address
+                {t("form.ipAddressHint")}
               </p>
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="ipRange">CIDR Range (Optional)</Label>
+              <Label htmlFor="ipRange">{t("form.cidrRangeOptional")}</Label>
               <Input
                 id="ipRange"
-                placeholder="e.g., 192.168.1.0/24"
+                placeholder={t("form.cidrRangePlaceholder")}
                 value={formData.ipRange}
                 onChange={(e) => setFormData({ ...formData, ipRange: e.target.value })}
               />
               <p className="text-xs text-muted-foreground">
-                Optionally block an entire IP range using CIDR notation
+                {t("form.cidrRangeHint")}
               </p>
             </div>
 
             <div className="grid gap-2">
-              <Label>Block Type *</Label>
+              <Label>{t("form.blockType")} *</Label>
               <Select
                 value={formData.type}
                 onValueChange={(value) => setFormData({ ...formData, type: value })}
@@ -212,15 +215,15 @@ export default function NewIPBlocklistPage() {
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
-                {blockTypes.find((t) => t.value === formData.type)?.description}
+                {blockTypes.find((bt) => bt.value === formData.type)?.description}
               </p>
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="reason">Reason *</Label>
+              <Label htmlFor="reason">{t("form.reason")} *</Label>
               <Textarea
                 id="reason"
-                placeholder="Why is this IP being blocked?"
+                placeholder={t("form.reasonPlaceholder")}
                 value={formData.reason}
                 onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                 rows={3}
@@ -233,14 +236,14 @@ export default function NewIPBlocklistPage() {
       {/* Block Options */}
       <Card>
         <CardHeader>
-          <CardTitle>Block Options</CardTitle>
+          <CardTitle>{t("new.blockOptionsTitle")}</CardTitle>
           <CardDescription>
-            Configure when and how the block should be applied
+            {t("new.blockOptionsDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-2">
-            <Label htmlFor="expiresAt">Expiration Date (Optional)</Label>
+            <Label htmlFor="expiresAt">{t("form.expirationDate")}</Label>
             <Input
               id="expiresAt"
               type="datetime-local"
@@ -248,7 +251,7 @@ export default function NewIPBlocklistPage() {
               onChange={(e) => setFormData({ ...formData, expiresAt: e.target.value })}
             />
             <p className="text-xs text-muted-foreground">
-              Leave empty for a permanent block. Set a date for temporary blocks.
+              {t("form.expirationHint")}
             </p>
           </div>
 
@@ -259,9 +262,9 @@ export default function NewIPBlocklistPage() {
               onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
             />
             <div className="grid gap-0.5">
-              <Label htmlFor="isActive">Block immediately</Label>
+              <Label htmlFor="isActive">{t("form.blockImmediately")}</Label>
               <p className="text-xs text-muted-foreground">
-                When enabled, this IP will be blocked as soon as you save
+                {t("form.blockImmediatelyHint")}
               </p>
             </div>
           </div>
@@ -271,23 +274,22 @@ export default function NewIPBlocklistPage() {
       {/* Scope */}
       <Card>
         <CardHeader>
-          <CardTitle>Scope (Optional)</CardTitle>
+          <CardTitle>{t("new.scopeTitle")}</CardTitle>
           <CardDescription>
-            Restrict this block to a specific organization
+            {t("new.scopeDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-2">
-            <Label htmlFor="orgId">Organization ID</Label>
+            <Label htmlFor="orgId">{t("form.organizationId")}</Label>
             <Input
               id="orgId"
-              placeholder="e.g., org_xxxxx (leave empty for platform-wide block)"
+              placeholder={t("form.organizationIdPlaceholder")}
               value={formData.orgId}
               onChange={(e) => setFormData({ ...formData, orgId: e.target.value })}
             />
             <p className="text-xs text-muted-foreground">
-              If specified, this IP will only be blocked for the specified organization.
-              Leave empty to block platform-wide.
+              {t("form.organizationIdHint")}
             </p>
           </div>
         </CardContent>

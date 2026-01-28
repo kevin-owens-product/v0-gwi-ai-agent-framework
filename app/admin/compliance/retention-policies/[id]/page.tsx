@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { useParams, useRouter } from "next/navigation"
 import {
@@ -53,30 +54,33 @@ interface RetentionPolicy {
   updatedAt: string
 }
 
-const DATA_TYPES = [
-  { value: "AGENT_RUNS", label: "Agent Runs" },
-  { value: "AUDIT_LOGS", label: "Audit Logs" },
-  { value: "USER_SESSIONS", label: "User Sessions" },
-  { value: "TEMP_FILES", label: "Temp Files" },
-  { value: "NOTIFICATIONS", label: "Notifications" },
-  { value: "ANALYTICS", label: "Analytics" },
-]
-
-const SCOPES = [
-  { value: "PLATFORM", label: "Platform-wide" },
-  { value: "ORGANIZATION", label: "Organization" },
-  { value: "PLAN", label: "By Plan" },
-]
-
-const DELETE_ACTIONS = [
-  { value: "SOFT_DELETE", label: "Soft Delete" },
-  { value: "HARD_DELETE", label: "Hard Delete" },
-  { value: "ARCHIVE", label: "Archive" },
-]
-
 export default function RetentionPolicyDetailPage() {
   const router = useRouter()
   const params = useParams()
+  const t = useTranslations("admin.compliance.retentionPolicies.detail")
+  const tMain = useTranslations("admin.compliance.retentionPolicies")
+  const tCommon = useTranslations("common")
+  
+  const DATA_TYPES = [
+    { value: "AGENT_RUNS", label: tMain("dataTypes.agentRuns") },
+    { value: "AUDIT_LOGS", label: tMain("dataTypes.auditLogs") },
+    { value: "USER_SESSIONS", label: tMain("dataTypes.userSessions") },
+    { value: "TEMP_FILES", label: tMain("dataTypes.tempFiles") },
+    { value: "NOTIFICATIONS", label: tMain("dataTypes.notifications") },
+    { value: "ANALYTICS", label: tMain("dataTypes.analytics") },
+  ]
+
+  const SCOPES = [
+    { value: "PLATFORM", label: tMain("filters.platformWide") },
+    { value: "ORGANIZATION", label: tMain("filters.organization") },
+    { value: "PLAN", label: tMain("filters.byPlan") },
+  ]
+
+  const DELETE_ACTIONS = [
+    { value: "SOFT_DELETE", label: tMain("deleteAction.softDelete") },
+    { value: "HARD_DELETE", label: tMain("deleteAction.hardDelete") },
+    { value: "ARCHIVE", label: tMain("deleteAction.archive") },
+  ]
   const [policy, setPolicy] = useState<RetentionPolicy | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -97,7 +101,7 @@ export default function RetentionPolicyDetailPage() {
     if (params.id) {
       fetchPolicy()
     }
-  }, [params.id])
+  }, [params.id, fetchPolicy])
 
   const fetchPolicy = async () => {
     try {
@@ -109,7 +113,7 @@ export default function RetentionPolicyDetailPage() {
           window.location.href = "/login?type=admin"
           return
         }
-        throw new Error("Policy not found")
+        throw new Error(t("messages.fetchFailed"))
       }
       const data = await response.json()
       setPolicy(data.policy)
@@ -124,7 +128,7 @@ export default function RetentionPolicyDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch policy:", error)
-      toast.error("Failed to fetch retention policy")
+      toast.error(t("messages.fetchFailed"))
       router.push("/admin/compliance/retention-policies")
     } finally {
       setLoading(false)
@@ -144,13 +148,13 @@ export default function RetentionPolicyDetailPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to update policy")
+        throw new Error(t("messages.updateFailed"))
       }
 
-      toast.success("Retention policy updated successfully")
+      toast.success(t("messages.updateSuccess"))
       fetchPolicy()
-    } catch (error) {
-      toast.error("Failed to update retention policy")
+    } catch {
+      toast.error(t("messages.updateFailed"))
     } finally {
       setSaving(false)
     }
@@ -167,13 +171,13 @@ export default function RetentionPolicyDetailPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to delete policy")
+        throw new Error(t("messages.deleteFailed"))
       }
 
-      toast.success("Retention policy deleted")
+      toast.success(t("messages.deleteSuccess"))
       router.push("/admin/compliance/retention-policies")
-    } catch (error) {
-      toast.error("Failed to delete retention policy")
+    } catch {
+      toast.error(t("messages.deleteFailed"))
     } finally {
       setDeleting(false)
       setShowDeleteDialog(false)
@@ -192,24 +196,24 @@ export default function RetentionPolicyDetailPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to update policy status")
+        throw new Error(t("messages.updateStatusFailed"))
       }
 
-      toast.success(`Policy ${policy.isActive ? "deactivated" : "activated"} successfully`)
+      toast.success(policy.isActive ? t("messages.deactivateSuccess") : t("messages.activateSuccess"))
       fetchPolicy()
-    } catch (error) {
-      toast.error("Failed to update policy status")
+    } catch {
+      toast.error(t("messages.updateStatusFailed"))
     }
   }
 
   const getScopeBadge = (scope: string) => {
     switch (scope) {
       case "PLATFORM":
-        return <Badge variant="outline" className="border-purple-500 text-purple-500">Platform</Badge>
+        return <Badge variant="outline" className="border-purple-500 text-purple-500">{tMain("scope.platform")}</Badge>
       case "ORGANIZATION":
-        return <Badge variant="outline" className="border-blue-500 text-blue-500">Organization</Badge>
+        return <Badge variant="outline" className="border-blue-500 text-blue-500">{tMain("scope.organization")}</Badge>
       case "PLAN":
-        return <Badge variant="outline" className="border-green-500 text-green-500">Plan</Badge>
+        return <Badge variant="outline" className="border-green-500 text-green-500">{tMain("scope.plan")}</Badge>
       default:
         return <Badge variant="outline">{scope}</Badge>
     }
@@ -218,11 +222,11 @@ export default function RetentionPolicyDetailPage() {
   const getDeleteActionBadge = (action: string) => {
     switch (action) {
       case "SOFT_DELETE":
-        return <Badge variant="secondary">Soft Delete</Badge>
+        return <Badge variant="secondary">{tMain("deleteAction.softDelete")}</Badge>
       case "HARD_DELETE":
-        return <Badge variant="destructive">Hard Delete</Badge>
+        return <Badge variant="destructive">{tMain("deleteAction.hardDelete")}</Badge>
       case "ARCHIVE":
-        return <Badge variant="outline">Archive</Badge>
+        return <Badge variant="outline">{tMain("deleteAction.archive")}</Badge>
       default:
         return <Badge variant="outline">{action}</Badge>
     }
@@ -241,14 +245,14 @@ export default function RetentionPolicyDetailPage() {
     return (
       <div className="text-center py-12">
         <Calendar className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <p className="text-muted-foreground">Retention policy not found</p>
+        <p className="text-muted-foreground">{t("notFound")}</p>
         <Button
           variant="outline"
           className="mt-4"
           onClick={() => router.push("/admin/compliance/retention-policies")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Policies
+          {t("backToPolicies")}
         </Button>
       </div>
     )
@@ -261,22 +265,22 @@ export default function RetentionPolicyDetailPage() {
         <div className="flex items-center gap-4">
           <Button variant="ghost" onClick={() => router.push("/admin/compliance/retention-policies")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+            {t("back")}
           </Button>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-3">
               <Database className="h-6 w-6 text-purple-500" />
               {policy.name}
             </h1>
-            <p className="text-sm text-muted-foreground">ID: {policy.id}</p>
+            <p className="text-sm text-muted-foreground">{t("policyId", { id: policy.id })}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {getScopeBadge(policy.scope)}
           {policy.isActive ? (
-            <Badge className="bg-green-500">Active</Badge>
+            <Badge className="bg-green-500">{tMain("status.active")}</Badge>
           ) : (
-            <Badge variant="secondary">Inactive</Badge>
+            <Badge variant="secondary">{tMain("status.inactive")}</Badge>
           )}
         </div>
       </div>
@@ -286,15 +290,15 @@ export default function RetentionPolicyDetailPage() {
         <div className="md:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Policy Details</CardTitle>
+              <CardTitle>{t("sections.policyDetails")}</CardTitle>
               <CardDescription>
-                Configure the retention policy settings
+                {t("sections.detailsDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Policy Name</Label>
+                  <Label htmlFor="name">{t("fields.name")}</Label>
                   <Input
                     id="name"
                     value={formData.name}
@@ -302,7 +306,7 @@ export default function RetentionPolicyDetailPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Data Type</Label>
+                  <Label>{t("fields.dataType")}</Label>
                   <Select
                     value={formData.dataType}
                     onValueChange={(value) => setFormData({ ...formData, dataType: value })}
@@ -322,7 +326,7 @@ export default function RetentionPolicyDetailPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{t("fields.description")}</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
@@ -335,7 +339,7 @@ export default function RetentionPolicyDetailPage() {
 
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="retentionDays">Retention Days</Label>
+                  <Label htmlFor="retentionDays">{t("fields.retentionDays")}</Label>
                   <Input
                     id="retentionDays"
                     type="number"
@@ -343,10 +347,10 @@ export default function RetentionPolicyDetailPage() {
                     value={formData.retentionDays}
                     onChange={(e) => setFormData({ ...formData, retentionDays: parseInt(e.target.value) || 0 })}
                   />
-                  <p className="text-xs text-muted-foreground">Use -1 for forever</p>
+                  <p className="text-xs text-muted-foreground">{tMain("hints.retentionDaysForever")}</p>
                 </div>
                 <div className="space-y-2">
-                  <Label>Scope</Label>
+                  <Label>{t("fields.scope")}</Label>
                   <Select
                     value={formData.scope}
                     onValueChange={(value) => setFormData({ ...formData, scope: value })}
@@ -364,7 +368,7 @@ export default function RetentionPolicyDetailPage() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Delete Action</Label>
+                  <Label>{t("fields.deleteAction")}</Label>
                   <Select
                     value={formData.deleteAction}
                     onValueChange={(value) => setFormData({ ...formData, deleteAction: value })}
@@ -392,11 +396,11 @@ export default function RetentionPolicyDetailPage() {
                     checked={formData.isActive}
                     onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
                   />
-                  <Label htmlFor="isActive">Policy Active</Label>
+                  <Label htmlFor="isActive">{t("fields.isActive")}</Label>
                 </div>
                 <Button onClick={handleSave} disabled={saving}>
                   <Save className="h-4 w-4 mr-2" />
-                  {saving ? "Saving..." : "Save Changes"}
+                  {saving ? t("save.saving") : t("save.saveChanges")}
                 </Button>
               </div>
             </CardContent>
@@ -407,45 +411,45 @@ export default function RetentionPolicyDetailPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Clock className="h-5 w-5" />
-                Execution Schedule
+                {t("sections.executionSchedule")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-muted-foreground">Last Run</Label>
+                  <Label className="text-muted-foreground">{t("fields.lastRun")}</Label>
                   <p className="mt-1">
                     {policy.lastRun
                       ? new Date(policy.lastRun).toLocaleString()
-                      : "Never executed"}
+                      : t("fields.neverExecuted")}
                   </p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Next Run</Label>
+                  <Label className="text-muted-foreground">{t("fields.nextRun")}</Label>
                   <p className="mt-1">
                     {policy.nextRun ? (
                       <span className="flex items-center gap-2">
                         {new Date(policy.nextRun).toLocaleString()}
                         {policy.daysUntilNextRun !== null && (
                           <Badge variant="outline">
-                            {policy.daysUntilNextRun <= 0 ? "Today" : `${policy.daysUntilNextRun} days`}
+                            {policy.daysUntilNextRun <= 0 ? tMain("nextRun.today") : tMain("nextRun.days", { days: policy.daysUntilNextRun })}
                           </Badge>
                         )}
                       </span>
                     ) : (
-                      "Not scheduled"
+                      t("fields.notScheduled")
                     )}
                   </p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Retention Period</Label>
+                  <Label className="text-muted-foreground">{t("fields.retentionPeriod")}</Label>
                   <p className="mt-1 flex items-center gap-2">
                     <Timer className="h-4 w-4" />
                     {policy.retentionPeriod}
                   </p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Delete Action</Label>
+                  <Label className="text-muted-foreground">{t("fields.deleteAction")}</Label>
                   <div className="mt-1">{getDeleteActionBadge(policy.deleteAction)}</div>
                 </div>
               </div>
@@ -458,7 +462,7 @@ export default function RetentionPolicyDetailPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Building className="h-5 w-5" />
-                  Target Organizations
+                  {t("sections.targetOrganizations")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -478,7 +482,7 @@ export default function RetentionPolicyDetailPage() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
+              <CardTitle>{t("quickActions.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <Button
@@ -489,12 +493,12 @@ export default function RetentionPolicyDetailPage() {
                 {policy.isActive ? (
                   <>
                     <XCircle className="h-4 w-4 mr-2" />
-                    Deactivate Policy
+                    {t("quickActions.deactivatePolicy")}
                   </>
                 ) : (
                   <>
                     <CheckCircle className="h-4 w-4 mr-2" />
-                    Activate Policy
+                    {t("quickActions.activatePolicy")}
                   </>
                 )}
               </Button>
@@ -505,7 +509,7 @@ export default function RetentionPolicyDetailPage() {
                 disabled={deleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                {deleting ? "Deleting..." : "Delete Policy"}
+                {deleting ? t("quickActions.deleting") : t("quickActions.deletePolicy")}
               </Button>
             </CardContent>
           </Card>
@@ -514,28 +518,28 @@ export default function RetentionPolicyDetailPage() {
           <ConfirmationDialog
             open={showDeleteDialog}
             onOpenChange={setShowDeleteDialog}
-            title="Delete Retention Policy"
-            description="Are you sure you want to delete this retention policy? This action cannot be undone."
-            confirmText="Delete"
+            title={t("deleteDialog.title")}
+            description={t("deleteDialog.description")}
+            confirmText={tCommon("delete")}
             onConfirm={handleDelete}
             variant="destructive"
           />
 
           <Card>
             <CardHeader>
-              <CardTitle>Policy Info</CardTitle>
+              <CardTitle>{t("policyInfo.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div>
-                <Label className="text-muted-foreground">Created</Label>
+                <Label className="text-muted-foreground">{t("fields.created")}</Label>
                 <p>{new Date(policy.createdAt).toLocaleString()}</p>
               </div>
               <div>
-                <Label className="text-muted-foreground">Last Updated</Label>
+                <Label className="text-muted-foreground">{t("fields.lastUpdated")}</Label>
                 <p>{new Date(policy.updatedAt).toLocaleString()}</p>
               </div>
               <div>
-                <Label className="text-muted-foreground">Created By</Label>
+                <Label className="text-muted-foreground">{t("fields.createdBy")}</Label>
                 <p className="font-mono text-xs">{policy.createdBy}</p>
               </div>
             </CardContent>

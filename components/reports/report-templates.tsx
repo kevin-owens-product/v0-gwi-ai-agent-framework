@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -85,6 +86,7 @@ const templates = [
 
 export function ReportTemplates() {
   const router = useRouter()
+  const t = useTranslations("reports")
   const [search, setSearch] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
@@ -113,7 +115,7 @@ export function ReportTemplates() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search templates..."
+            placeholder={t("templates.searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
@@ -125,7 +127,7 @@ export function ReportTemplates() {
             size="sm"
             onClick={() => setSelectedCategory(null)}
           >
-            All
+            {t("templates.all")}
           </Button>
           {categories.map((category) => (
             <Button
@@ -150,7 +152,7 @@ export function ReportTemplates() {
                 </div>
                 {template.popular && (
                   <Badge variant="secondary" className="text-xs">
-                    Popular
+                    {t("templates.popular")}
                   </Badge>
                 )}
               </div>
@@ -171,7 +173,7 @@ export function ReportTemplates() {
                 className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
                 onClick={() => handleUseTemplate(template)}
               >
-                Use Template
+                {t("templates.useTemplate")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </CardFooter>

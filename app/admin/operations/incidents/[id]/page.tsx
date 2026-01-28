@@ -34,7 +34,8 @@ import {
   Save,
   X,
 } from "lucide-react"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface IncidentUpdate {
   id: string
@@ -109,6 +110,7 @@ export default function IncidentDetailPage() {
   const params = useParams()
   const router = useRouter()
   const incidentId = params.id as string
+  const t = useTranslations("admin.operations.incidents")
 
   const [incident, setIncident] = useState<Incident | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -138,7 +140,7 @@ export default function IncidentDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch incident:", error)
-      toast.error("Failed to load incident")
+      showErrorToast(t("toast.loadFailed"))
     } finally {
       setIsLoading(false)
     }
@@ -155,12 +157,12 @@ export default function IncidentDetailPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       })
-      if (!response.ok) throw new Error("Failed to update status")
-      toast.success("Status updated")
+      if (!response.ok) throw new Error(t("toast.updateStatusFailed"))
+      showSuccessToast(t("toast.statusUpdated"))
       fetchIncident()
     } catch (error) {
       console.error(error)
-      toast.error("Failed to update status")
+      showErrorToast(t("toast.updateStatusFailed"))
     }
   }
 
@@ -171,13 +173,13 @@ export default function IncidentDetailPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editForm),
       })
-      if (!response.ok) throw new Error("Failed to update incident")
-      toast.success("Incident updated")
+      if (!response.ok) throw new Error(t("toast.updateFailed"))
+      showSuccessToast(t("toast.updated"))
       setIsEditing(false)
       fetchIncident()
     } catch (error) {
       console.error(error)
-      toast.error("Failed to update incident")
+      showErrorToast(t("toast.updateFailed"))
     }
   }
 
@@ -193,14 +195,14 @@ export default function IncidentDetailPage() {
           status: updateStatus || undefined,
         }),
       })
-      if (!response.ok) throw new Error("Failed to add update")
-      toast.success("Update posted")
+      if (!response.ok) throw new Error(t("toast.addUpdateFailed"))
+      showSuccessToast(t("toast.updatePosted"))
       setNewUpdate("")
       setUpdateStatus("")
       fetchIncident()
     } catch (error) {
       console.error(error)
-      toast.error("Failed to add update")
+      showErrorToast(t("toast.addUpdateFailed"))
     } finally {
       setIsSubmitting(false)
     }

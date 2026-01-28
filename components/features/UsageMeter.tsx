@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useFeatureAccess } from '@/hooks/useFeatureAccess'
 import { Progress } from '@/components/ui/progress'
 import { AlertCircle, CheckCircle } from 'lucide-react'
@@ -17,6 +18,7 @@ export function UsageMeter({
   label,
   showPercentage = true,
 }: UsageMeterProps) {
+  const t = useTranslations('features.usage')
   const { usage, limit, percentage, isNearLimit, isAtLimit, isLoading } =
     useFeatureAccess(feature)
 
@@ -70,13 +72,13 @@ export function UsageMeter({
 
       {isAtLimit && (
         <p className="text-xs text-destructive">
-          You've reached your limit. Upgrade your plan to continue.
+          {t('limitReached')}
         </p>
       )}
 
       {isNearLimit && !isAtLimit && (
         <p className="text-xs text-yellow-600">
-          You're approaching your limit.
+          {t('approachingLimit')}
         </p>
       )}
     </div>

@@ -6,6 +6,7 @@
 
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
@@ -44,21 +45,25 @@ interface HealthTrendChartProps {
 
 export function HealthTrendChart({
   data,
-  title = "Health Score Trend",
-  description = "Historical health score over time",
+  title,
+  description,
   showBreakdown = false,
   className,
 }: HealthTrendChartProps) {
+  const t = useTranslations("admin.analytics.healthTrend")
+  const displayTitle = title || t("title")
+  const displayDescription = description || t("description")
+
   if (!data || data.length === 0) {
     return (
       <Card className={cn(className)}>
         <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
+          <CardTitle>{displayTitle}</CardTitle>
+          <CardDescription>{displayDescription}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-            No historical data available
+            {t("noData")}
           </div>
         </CardContent>
       </Card>
@@ -101,14 +106,14 @@ export function HealthTrendChart({
     return (
       <Card className={cn(className)}>
         <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
+          <CardTitle>{displayTitle}</CardTitle>
+          <CardDescription>{displayDescription}</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="overall">
             <TabsList className="mb-4">
-              <TabsTrigger value="overall">Overall</TabsTrigger>
-              <TabsTrigger value="breakdown">Breakdown</TabsTrigger>
+              <TabsTrigger value="overall">{t("tabs.overall")}</TabsTrigger>
+              <TabsTrigger value="breakdown">{t("tabs.breakdown")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="overall">
@@ -136,7 +141,7 @@ export function HealthTrendChart({
                     <Area
                       type="monotone"
                       dataKey="score"
-                      name="Overall Score"
+                      name={t("legend.overallScore")}
                       stroke="hsl(var(--primary))"
                       strokeWidth={2}
                       fillOpacity={1}
@@ -167,7 +172,7 @@ export function HealthTrendChart({
                     <Line
                       type="monotone"
                       dataKey="usageScore"
-                      name="Usage"
+                      name={t("legend.usage")}
                       stroke="#3b82f6"
                       strokeWidth={2}
                       dot={false}
@@ -175,7 +180,7 @@ export function HealthTrendChart({
                     <Line
                       type="monotone"
                       dataKey="engagementScore"
-                      name="Engagement"
+                      name={t("legend.engagement")}
                       stroke="#22c55e"
                       strokeWidth={2}
                       dot={false}
@@ -183,7 +188,7 @@ export function HealthTrendChart({
                     <Line
                       type="monotone"
                       dataKey="supportScore"
-                      name="Support"
+                      name={t("legend.support")}
                       stroke="#f59e0b"
                       strokeWidth={2}
                       dot={false}
@@ -191,7 +196,7 @@ export function HealthTrendChart({
                     <Line
                       type="monotone"
                       dataKey="paymentScore"
-                      name="Payment"
+                      name={t("legend.payment")}
                       stroke="#8b5cf6"
                       strokeWidth={2}
                       dot={false}
@@ -199,7 +204,7 @@ export function HealthTrendChart({
                     <Line
                       type="monotone"
                       dataKey="growthScore"
-                      name="Growth"
+                      name={t("legend.growth")}
                       stroke="#ec4899"
                       strokeWidth={2}
                       dot={false}
@@ -217,8 +222,8 @@ export function HealthTrendChart({
   return (
     <Card className={cn(className)}>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardTitle>{displayTitle}</CardTitle>
+        <CardDescription>{displayDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
@@ -245,7 +250,7 @@ export function HealthTrendChart({
               <Area
                 type="monotone"
                 dataKey="score"
-                name="Score"
+                name={t("legend.score")}
                 stroke="hsl(var(--primary))"
                 strokeWidth={2}
                 fillOpacity={1}

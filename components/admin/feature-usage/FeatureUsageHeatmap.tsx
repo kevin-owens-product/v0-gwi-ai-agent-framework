@@ -10,6 +10,7 @@
 "use client"
 
 import { useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Tooltip,
@@ -63,9 +64,12 @@ function getHeatmapColor(value: number, max: number): string {
 
 export function FeatureUsageHeatmap({
   data,
-  title = "Usage by Plan Tier",
-  description = "Feature usage distribution across plan tiers",
+  title,
+  description,
 }: FeatureUsageHeatmapProps) {
+  const t = useTranslations("admin.analytics.featureHeatmap")
+  const displayTitle = title || t("title")
+  const displayDescription = description || t("description")
   // Organize data by category
   const organizedData = useMemo(() => {
     const byCategory: Record<string, FeatureData[]> = {}
@@ -106,12 +110,12 @@ export function FeatureUsageHeatmap({
     return (
       <Card>
         <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
+          <CardTitle>{displayTitle}</CardTitle>
+          <CardDescription>{displayDescription}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center h-64 text-muted-foreground">
-            No usage data available
+            {t("noData")}
           </div>
         </CardContent>
       </Card>
@@ -122,15 +126,15 @@ export function FeatureUsageHeatmap({
     <TooltipProvider>
       <Card>
         <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
+          <CardTitle>{displayTitle}</CardTitle>
+          <CardDescription>{displayDescription}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
                 <tr>
-                  <th className="text-left p-2 border-b font-medium">Feature</th>
+                  <th className="text-left p-2 border-b font-medium">{t("table.feature")}</th>
                   {PLAN_TIERS.map(tier => (
                     <th key={tier} className="text-center p-2 border-b font-medium min-w-[100px]">
                       {tier.charAt(0) + tier.slice(1).toLowerCase()}
@@ -190,22 +194,22 @@ export function FeatureUsageHeatmap({
 
           {/* Legend */}
           <div className="mt-4 flex items-center gap-4 text-sm">
-            <span className="text-muted-foreground">Usage intensity:</span>
+            <span className="text-muted-foreground">{t("legend.usageIntensity")}:</span>
             <div className="flex items-center gap-1">
               <div className="w-6 h-4 rounded bg-muted" />
-              <span className="text-xs text-muted-foreground">None</span>
+              <span className="text-xs text-muted-foreground">{t("legend.none")}</span>
             </div>
             <div className="flex items-center gap-1">
               <div className="w-6 h-4 rounded bg-emerald-100" />
-              <span className="text-xs text-muted-foreground">Low</span>
+              <span className="text-xs text-muted-foreground">{t("legend.low")}</span>
             </div>
             <div className="flex items-center gap-1">
               <div className="w-6 h-4 rounded bg-emerald-300" />
-              <span className="text-xs text-muted-foreground">Medium</span>
+              <span className="text-xs text-muted-foreground">{t("legend.medium")}</span>
             </div>
             <div className="flex items-center gap-1">
               <div className="w-6 h-4 rounded bg-emerald-500" />
-              <span className="text-xs text-muted-foreground">High</span>
+              <span className="text-xs text-muted-foreground">{t("legend.high")}</span>
             </div>
           </div>
         </CardContent>

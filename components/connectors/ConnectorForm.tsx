@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -56,6 +57,8 @@ interface ConnectorFormProps {
 
 export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormProps) {
   const router = useRouter()
+  const t = useTranslations('connectors')
+  const tCommon = useTranslations('common')
   const { createConnector, updateConnector, testConnection } = useConnectors()
 
   const [step, setStep] = useState<'select' | 'configure'>(mode === 'edit' ? 'configure' : 'select')
@@ -112,7 +115,7 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
         await new Promise((resolve) => setTimeout(resolve, 1000))
         setTestResult({
           success: true,
-          message: 'Configuration looks valid. Save the connector to test the actual connection.',
+          message: t('form.testConfigValid'),
         })
       }
     } catch (err) {
@@ -162,7 +165,7 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
         router.push('/dashboard/integrations/connectors')
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save connector')
+      setError(err instanceof Error ? err.message : t('form.failedToSave'))
     } finally {
       setIsSubmitting(false)
     }
@@ -184,7 +187,7 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
         {/* Configuration fields */}
         {configFields.length > 0 && (
           <div className="space-y-4">
-            <h4 className="font-medium">Configuration</h4>
+            <h4 className="font-medium">{t('form.configuration')}</h4>
             {configFields.map(([key, schema]: [string, any]) => (
               <div key={key} className="space-y-2">
                 <Label htmlFor={`config-${key}`}>
@@ -206,12 +209,12 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
         {/* Credentials fields */}
         {credentialFields.length > 0 && (
           <div className="space-y-4">
-            <h4 className="font-medium">Authentication</h4>
+            <h4 className="font-medium">{t('form.authentication')}</h4>
             {selectedProvider.authType === 'oauth' ? (
               <Alert>
                 <Plug className="h-4 w-4" />
                 <AlertDescription>
-                  This connector uses OAuth authentication. Click "Connect" to authorize access.
+                  {t('form.oauthMessage')}
                 </AlertDescription>
               </Alert>
             ) : (
@@ -226,7 +229,7 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
                     type={isSecretField(key) ? 'password' : 'text'}
                     value={(credentials[key] as string) || ''}
                     onChange={(e) => setCredentials({ ...credentials, [key]: e.target.value })}
-                    placeholder={mode === 'edit' && isSecretField(key) ? '(unchanged)' : getFieldPlaceholder(key)}
+                    placeholder={mode === 'edit' && isSecretField(key) ? t('form.unchanged') : getFieldPlaceholder(key)}
                   />
                 </div>
               ))
@@ -242,9 +245,9 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold">Select Connector Type</h2>
+            <h2 className="text-lg font-semibold">{t('form.selectConnectorType')}</h2>
             <p className="text-sm text-muted-foreground">
-              Choose a data source to connect
+              {t('form.chooseDataSource')}
             </p>
           </div>
         </div>
@@ -289,7 +292,7 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
                 onClick={() => setStep('select')}
                 className="p-0 h-auto"
               >
-                Change connector type
+                {t('form.changeConnectorType')}
               </Button>
             </CardContent>
           )}
@@ -299,29 +302,29 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
       {/* Basic info */}
       <Card>
         <CardHeader>
-          <CardTitle>Basic Information</CardTitle>
+          <CardTitle>{t('form.basicInformation')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">
-              Name <span className="text-destructive">*</span>
+              {tCommon('name')} <span className="text-destructive">*</span>
             </Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="My Data Connector"
+              placeholder={t('form.namePlaceholder')}
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{tCommon('description')}</Label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe what this connector is used for..."
+              placeholder={t('form.descriptionPlaceholder')}
               rows={3}
             />
           </div>
@@ -331,7 +334,7 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
       {/* Configuration */}
       <Card>
         <CardHeader>
-          <CardTitle>Connection Settings</CardTitle>
+          <CardTitle>{t('form.connectionSettings')}</CardTitle>
         </CardHeader>
         <CardContent>{renderConfigFields()}</CardContent>
       </Card>
@@ -339,17 +342,17 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
       {/* Sync settings */}
       <Card>
         <CardHeader>
-          <CardTitle>Sync Settings</CardTitle>
+          <CardTitle>{t('form.syncSettings')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="syncSchedule">Sync Schedule</Label>
+            <Label htmlFor="syncSchedule">{t('form.syncSchedule')}</Label>
             <Select
               value={syncSchedule || 'manual'}
               onValueChange={(value) => setSyncSchedule(value === 'manual' ? null : value)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select schedule" />
+                <SelectValue placeholder={t('form.selectSchedule')} />
               </SelectTrigger>
               <SelectContent>
                 {SYNC_SCHEDULES.map((schedule) => (
@@ -367,9 +370,9 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
           {mode === 'edit' && (
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="isActive">Connector Status</Label>
+                <Label htmlFor="isActive">{t('form.connectorStatus')}</Label>
                 <p className="text-sm text-muted-foreground">
-                  {isActive ? 'Connector is active and will sync' : 'Connector is paused'}
+                  {isActive ? t('form.connectorActiveDesc') : t('form.connectorPausedDesc')}
                 </p>
               </div>
               <Switch
@@ -387,9 +390,9 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="font-medium">Test Connection</h4>
+              <h4 className="font-medium">{t('form.testConnection')}</h4>
               <p className="text-sm text-muted-foreground">
-                Verify your configuration before saving
+                {t('form.verifyConfiguration')}
               </p>
             </div>
             <Button
@@ -401,12 +404,12 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
               {isTesting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Testing...
+                  {t('form.testing')}
                 </>
               ) : (
                 <>
                   <Plug className="mr-2 h-4 w-4" />
-                  Test Connection
+                  {t('form.testConnection')}
                 </>
               )}
             </Button>
@@ -444,18 +447,18 @@ export function ConnectorForm({ mode, initialData, onSuccess }: ConnectorFormPro
           variant="outline"
           onClick={() => router.push('/dashboard/integrations/connectors')}
         >
-          Cancel
+          {tCommon('cancel')}
         </Button>
         <Button type="submit" disabled={isSubmitting || !name}>
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {mode === 'create' ? 'Creating...' : 'Saving...'}
+              {mode === 'create' ? tCommon('creating') : tCommon('saving')}
             </>
           ) : mode === 'create' ? (
-            'Create Connector'
+            t('form.createConnector')
           ) : (
-            'Save Changes'
+            tCommon('saveChanges')
           )}
         </Button>
       </div>

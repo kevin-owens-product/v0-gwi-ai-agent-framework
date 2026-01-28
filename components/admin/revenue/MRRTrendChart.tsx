@@ -7,6 +7,7 @@
 "use client"
 
 import { useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { TrendingUp, TrendingDown } from "lucide-react"
@@ -28,6 +29,8 @@ interface MRRTrendChartProps {
 }
 
 export function MRRTrendChart({ data, isLoading }: MRRTrendChartProps) {
+  const t = useTranslations("admin.analytics.mrrTrend")
+
   const chartData = useMemo(() => {
     if (!data || data.length === 0) return []
 
@@ -74,8 +77,8 @@ export function MRRTrendChart({ data, isLoading }: MRRTrendChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>MRR Trend</CardTitle>
-          <CardDescription>Loading revenue trends...</CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{t("loading")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-64 flex items-center justify-center">
@@ -101,12 +104,12 @@ export function MRRTrendChart({ data, isLoading }: MRRTrendChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>MRR Trend</CardTitle>
-          <CardDescription>Monthly recurring revenue over time</CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-64 flex items-center justify-center text-muted-foreground">
-            No revenue data available. Calculate metrics to see trends.
+            {t("noData")}
           </div>
         </CardContent>
       </Card>
@@ -118,8 +121,8 @@ export function MRRTrendChart({ data, isLoading }: MRRTrendChartProps) {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>MRR Trend</CardTitle>
-            <CardDescription>Monthly recurring revenue over time</CardDescription>
+            <CardTitle>{t("title")}</CardTitle>
+            <CardDescription>{t("description")}</CardDescription>
           </div>
           <div className="flex items-center gap-2">
             {stats.trend === "up" && (
@@ -135,7 +138,7 @@ export function MRRTrendChart({ data, isLoading }: MRRTrendChartProps) {
               </Badge>
             )}
             {stats.trend === "stable" && (
-              <Badge variant="secondary">Stable</Badge>
+              <Badge variant="secondary">{t("stable")}</Badge>
             )}
           </div>
         </div>
@@ -178,27 +181,27 @@ export function MRRTrendChart({ data, isLoading }: MRRTrendChartProps) {
                         <div className="font-medium mb-2">{formatDate(point.date)}</div>
                         <div className="space-y-1">
                           <div className="flex justify-between gap-4">
-                            <span>MRR:</span>
+                            <span>{t("tooltip.mrr")}:</span>
                             <span className="font-medium">{formatCurrency(point.mrr)}</span>
                           </div>
                           <div className="flex justify-between gap-4 text-green-500">
-                            <span>New:</span>
+                            <span>{t("tooltip.new")}:</span>
                             <span>+{formatCurrency(point.newMrr)}</span>
                           </div>
                           <div className="flex justify-between gap-4 text-blue-500">
-                            <span>Expansion:</span>
+                            <span>{t("tooltip.expansion")}:</span>
                             <span>+{formatCurrency(point.expansionMrr)}</span>
                           </div>
                           <div className="flex justify-between gap-4 text-orange-500">
-                            <span>Contraction:</span>
+                            <span>{t("tooltip.contraction")}:</span>
                             <span>-{formatCurrency(point.contractionMrr)}</span>
                           </div>
                           <div className="flex justify-between gap-4 text-red-500">
-                            <span>Churn:</span>
+                            <span>{t("tooltip.churn")}:</span>
                             <span>-{formatCurrency(point.churnMrr)}</span>
                           </div>
                           <div className="border-t pt-1 mt-1 flex justify-between gap-4">
-                            <span>Net New:</span>
+                            <span>{t("tooltip.netNew")}:</span>
                             <span className={point.netNewMrr >= 0 ? "text-green-500" : "text-red-500"}>
                               {point.netNewMrr >= 0 ? "+" : ""}{formatCurrency(point.netNewMrr)}
                             </span>
@@ -260,15 +263,15 @@ export function MRRTrendChart({ data, isLoading }: MRRTrendChartProps) {
         <div className="flex items-center justify-center gap-6 mt-4 text-xs">
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded bg-primary/80" />
-            <span>Existing MRR</span>
+            <span>{t("legend.existingMrr")}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded bg-blue-500" />
-            <span>Expansion</span>
+            <span>{t("legend.expansion")}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded bg-green-500" />
-            <span>New</span>
+            <span>{t("legend.new")}</span>
           </div>
         </div>
       </CardContent>

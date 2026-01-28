@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -83,13 +84,16 @@ interface APIClient {
   usageStats: UsageStats
 }
 
-const clientTypes = [
-  { value: "CONFIDENTIAL", label: "Confidential (Server-side)" },
-  { value: "PUBLIC", label: "Public (SPA/Mobile)" },
-  { value: "SERVICE", label: "Service (Machine-to-Machine)" },
-]
-
 export default function APIClientDetailPage() {
+  const t = useTranslations("admin.integrations.apiClients")
+  const tCommon = useTranslations("common")
+
+  const clientTypes = [
+    { value: "CONFIDENTIAL", label: t("clientTypes.confidential") },
+    { value: "PUBLIC", label: t("clientTypes.public") },
+    { value: "SERVICE", label: t("clientTypes.service") },
+  ]
+
   const params = useParams()
   const router = useRouter()
   const clientId = params.id as string
@@ -136,11 +140,11 @@ export default function APIClientDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch client:", error)
-      toast.error("Failed to load API client")
+      toast.error(t("toast.loadFailed"))
     } finally {
       setIsLoading(false)
     }
-  }, [clientId])
+  }, [clientId, t])
 
   useEffect(() => {
     fetchClient()
@@ -166,13 +170,13 @@ export default function APIClientDetailPage() {
       if (response.ok) {
         setIsEditing(false)
         fetchClient()
-        toast.success("API client updated")
+        toast.success(t("toast.updated"))
       } else {
-        toast.error("Failed to update client")
+        toast.error(t("toast.updateFailed"))
       }
     } catch (error) {
       console.error("Failed to update client:", error)
-      toast.error("Failed to update client")
+      toast.error(t("toast.updateFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -189,10 +193,10 @@ export default function APIClientDetailPage() {
       })
       if (response.ok) {
         fetchClient()
-        toast.success(`Client ${newStatus === "ACTIVE" ? "activated" : "suspended"}`)
+        toast.success(newStatus === "ACTIVE" ? t("toast.activated") : t("toast.suspended"))
       }
     } catch (error) {
-      toast.error("Failed to update status")
+      toast.error(t("toast.updateStatusFailed"))
     }
   }
 
@@ -206,12 +210,12 @@ export default function APIClientDetailPage() {
         const data = await response.json()
         setNewSecret(data.clientSecret)
         setRotateDialogOpen(false)
-        toast.success("Client secret rotated")
+        toast.success(t("toast.secretRotated"))
       } else {
-        toast.error("Failed to rotate secret")
+        toast.error(t("toast.rotateSecretFailed"))
       }
     } catch (error) {
-      toast.error("Failed to rotate secret")
+      toast.error(t("toast.rotateSecretFailed"))
     } finally {
       setIsRotating(false)
     }
@@ -224,13 +228,13 @@ export default function APIClientDetailPage() {
         method: "DELETE",
       })
       if (response.ok) {
-        toast.success("Client revoked")
+        toast.success(t("toast.revoked"))
         router.push("/admin/integrations/api-clients")
       } else {
-        toast.error("Failed to revoke client")
+        toast.error(t("toast.revokeFailed"))
       }
     } catch (error) {
-      toast.error("Failed to revoke client")
+      toast.error(t("toast.revokeFailed"))
     } finally {
       setIsDeleting(false)
       setDeleteDialogOpen(false)
@@ -239,17 +243,17 @@ export default function APIClientDetailPage() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
-    toast.success("Copied to clipboard")
+    toast.success(t("toast.copied"))
   }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "ACTIVE":
-        return <Badge className="bg-green-500">Active</Badge>
+        return <Badge className="bg-green-500">{t("status.active")}</Badge>
       case "SUSPENDED":
-        return <Badge className="bg-yellow-500">Suspended</Badge>
+        return <Badge className="bg-yellow-500">{t("status.suspended")}</Badge>
       case "REVOKED":
-        return <Badge variant="destructive">Revoked</Badge>
+        return <Badge variant="destructive">{t("status.revoked")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -274,11 +278,11 @@ export default function APIClientDetailPage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {tCommon("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">API client not found</p>
+            <p className="text-muted-foreground">{t("detail.notFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -291,9 +295,9 @@ export default function APIClientDetailPage() {
       <Dialog open={!!newSecret} onOpenChange={() => setNewSecret(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>New Client Secret</DialogTitle>
+            <DialogTitle>{t("secretDialog.newTitle")}</DialogTitle>
             <DialogDescription>
-              Copy this secret now - it will not be shown again!
+              {t("secretDialog.description")}
             </DialogDescription>
           </DialogHeader>
           <div className="p-4 bg-muted rounded-lg font-mono text-sm break-all">
@@ -302,7 +306,7 @@ export default function APIClientDetailPage() {
           <DialogFooter>
             <Button onClick={() => copyToClipboard(newSecret!)}>
               <Copy className="h-4 w-4 mr-2" />
-              Copy Secret
+              {t("secretDialog.copySecret")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -312,15 +316,14 @@ export default function APIClientDetailPage() {
       <Dialog open={rotateDialogOpen} onOpenChange={setRotateDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Rotate Client Secret</DialogTitle>
+            <DialogTitle>{t("rotateDialog.title")}</DialogTitle>
             <DialogDescription>
-              This will generate a new secret and invalidate the current one.
-              Any applications using the current secret will stop working.
+              {t("rotateDialog.description")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setRotateDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button onClick={handleRotateSecret} disabled={isRotating}>
               {isRotating ? (
@@ -328,7 +331,7 @@ export default function APIClientDetailPage() {
               ) : (
                 <RefreshCw className="h-4 w-4 mr-2" />
               )}
-              Rotate Secret
+              {t("actions.rotateSecret")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -338,14 +341,14 @@ export default function APIClientDetailPage() {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Revoke API Client</DialogTitle>
+            <DialogTitle>{t("revokeDialog.title")}</DialogTitle>
             <DialogDescription>
-              This will permanently revoke this client. All applications using this client will stop working.
+              {t("revokeDialog.description")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
               {isDeleting ? (
@@ -353,7 +356,7 @@ export default function APIClientDetailPage() {
               ) : (
                 <Trash className="h-4 w-4 mr-2" />
               )}
-              Revoke Client
+              {t("actions.revokeClient")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -365,7 +368,7 @@ export default function APIClientDetailPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/integrations/api-clients">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Link>
           </Button>
           <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -391,7 +394,7 @@ export default function APIClientDetailPage() {
             <>
               <Button variant="outline" onClick={() => setRotateDialogOpen(true)}>
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Rotate Secret
+                {t("actions.rotateSecret")}
               </Button>
               <Button
                 variant={client.status === "ACTIVE" ? "outline" : "default"}
@@ -400,18 +403,18 @@ export default function APIClientDetailPage() {
                 {client.status === "ACTIVE" ? (
                   <>
                     <PowerOff className="h-4 w-4 mr-2" />
-                    Suspend
+                    {t("actions.suspend")}
                   </>
                 ) : (
                   <>
                     <Power className="h-4 w-4 mr-2" />
-                    Activate
+                    {t("actions.activate")}
                   </>
                 )}
               </Button>
               <Button variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
                 <Trash className="h-4 w-4 mr-2" />
-                Revoke
+                {t("actions.revoke")}
               </Button>
             </>
           )}
@@ -425,9 +428,9 @@ export default function APIClientDetailPage() {
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-destructive" />
               <div>
-                <p className="font-medium text-destructive">Client Revoked</p>
+                <p className="font-medium text-destructive">{t("detail.revokedBanner.title")}</p>
                 <p className="text-sm text-muted-foreground">
-                  This client has been revoked and can no longer be used.
+                  {t("detail.revokedBanner.description")}
                 </p>
               </div>
             </div>
@@ -437,9 +440,9 @@ export default function APIClientDetailPage() {
 
       <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
-          <TabsTrigger value="usage">Usage Stats</TabsTrigger>
+          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="settings">{t("tabs.settings")}</TabsTrigger>
+          <TabsTrigger value="usage">{t("tabs.usageStats")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -447,7 +450,7 @@ export default function APIClientDetailPage() {
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Status</CardTitle>
+                <CardTitle className="text-sm font-medium">{tCommon("status")}</CardTitle>
                 <Shield className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -456,7 +459,7 @@ export default function APIClientDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("detail.totalRequests")}</CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -465,7 +468,7 @@ export default function APIClientDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Rate Limit</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("detail.rateLimit")}</CardTitle>
                 <Gauge className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -474,7 +477,7 @@ export default function APIClientDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Type</CardTitle>
+                <CardTitle className="text-sm font-medium">{tCommon("type")}</CardTitle>
                 <Key className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -488,7 +491,7 @@ export default function APIClientDetailPage() {
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>Client Details</CardTitle>
+                  <CardTitle>{t("detail.clientDetails")}</CardTitle>
                   {!isEditing && client.status !== "REVOKED" && (
                     <Button size="sm" variant="outline" onClick={() => setIsEditing(true)}>
                       <Edit className="h-4 w-4" />
@@ -498,39 +501,39 @@ export default function APIClientDetailPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Name</span>
+                  <span className="text-muted-foreground">{tCommon("name")}</span>
                   <span className="font-medium">{client.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Description</span>
+                  <span className="text-muted-foreground">{tCommon("description")}</span>
                   <span className="font-medium text-right max-w-[200px] truncate">
-                    {client.description || "No description"}
+                    {client.description || t("detail.noDescription")}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Client ID</span>
+                  <span className="text-muted-foreground">{t("table.clientId")}</span>
                   <code className="text-xs bg-muted px-2 py-1 rounded">
                     {client.clientId.substring(0, 16)}...
                   </code>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Type</span>
+                  <span className="text-muted-foreground">{tCommon("type")}</span>
                   <Badge variant="outline">{client.type}</Badge>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Created</span>
+                  <span className="text-muted-foreground">{t("detail.created")}</span>
                   <span className="font-medium flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
                     {new Date(client.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Last Used</span>
+                  <span className="text-muted-foreground">{t("detail.lastUsed")}</span>
                   <span className="font-medium flex items-center gap-1">
                     <Clock className="h-3 w-3" />
                     {client.lastUsedAt
                       ? new Date(client.lastUsedAt).toLocaleDateString()
-                      : "Never"}
+                      : t("table.never")}
                   </span>
                 </div>
               </CardContent>
@@ -539,8 +542,8 @@ export default function APIClientDetailPage() {
             {/* Organization */}
             <Card>
               <CardHeader>
-                <CardTitle>Organization</CardTitle>
-                <CardDescription>The organization this client belongs to</CardDescription>
+                <CardTitle>{t("detail.organization")}</CardTitle>
+                <CardDescription>{t("detail.organizationDescription")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {client.organization ? (
@@ -556,12 +559,12 @@ export default function APIClientDetailPage() {
                     </div>
                     <Button variant="outline" asChild className="w-full">
                       <Link href={`/admin/tenants/${client.organization.id}`}>
-                        View Organization
+                        {t("detail.viewOrganization")}
                       </Link>
                     </Button>
                   </>
                 ) : (
-                  <p className="text-muted-foreground">Organization not found</p>
+                  <p className="text-muted-foreground">{t("detail.organizationNotFound")}</p>
                 )}
               </CardContent>
             </Card>
@@ -570,24 +573,24 @@ export default function APIClientDetailPage() {
           {/* Scopes & Permissions */}
           <Card>
             <CardHeader>
-              <CardTitle>Scopes & Permissions</CardTitle>
-              <CardDescription>Allowed scopes and redirect URIs</CardDescription>
+              <CardTitle>{t("detail.scopesPermissions")}</CardTitle>
+              <CardDescription>{t("detail.scopesPermissionsDescription")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-sm text-muted-foreground">Allowed Scopes</Label>
+                <Label className="text-sm text-muted-foreground">{t("detail.allowedScopes")}</Label>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {client.allowedScopes.length > 0 ? (
                     client.allowedScopes.map((scope, i) => (
                       <Badge key={i} variant="secondary">{scope}</Badge>
                     ))
                   ) : (
-                    <span className="text-muted-foreground text-sm">No scopes configured</span>
+                    <span className="text-muted-foreground text-sm">{t("detail.noScopes")}</span>
                   )}
                 </div>
               </div>
               <div>
-                <Label className="text-sm text-muted-foreground">Allowed Grants</Label>
+                <Label className="text-sm text-muted-foreground">{t("detail.allowedGrants")}</Label>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {client.allowedGrants.map((grant, i) => (
                     <Badge key={i} variant="outline">{grant}</Badge>
@@ -595,7 +598,7 @@ export default function APIClientDetailPage() {
                 </div>
               </div>
               <div>
-                <Label className="text-sm text-muted-foreground">Redirect URIs</Label>
+                <Label className="text-sm text-muted-foreground">{t("detail.redirectUris")}</Label>
                 <div className="mt-2 space-y-1">
                   {client.redirectUris.length > 0 ? (
                     client.redirectUris.map((uri, i) => (
@@ -604,7 +607,7 @@ export default function APIClientDetailPage() {
                       </code>
                     ))
                   ) : (
-                    <span className="text-muted-foreground text-sm">No redirect URIs configured</span>
+                    <span className="text-muted-foreground text-sm">{t("detail.noRedirectUris")}</span>
                   )}
                 </div>
               </div>
@@ -617,14 +620,14 @@ export default function APIClientDetailPage() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Edit Client Settings</CardTitle>
-                  <CardDescription>Update client configuration</CardDescription>
+                  <CardTitle>{t("settings.editTitle")}</CardTitle>
+                  <CardDescription>{t("settings.editDescription")}</CardDescription>
                 </div>
                 {isEditing && (
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" onClick={() => setIsEditing(false)}>
                       <X className="h-4 w-4 mr-1" />
-                      Cancel
+                      {tCommon("cancel")}
                     </Button>
                     <Button size="sm" onClick={handleSave} disabled={isSaving}>
                       {isSaving ? (
@@ -632,7 +635,7 @@ export default function APIClientDetailPage() {
                       ) : (
                         <Save className="h-4 w-4 mr-1" />
                       )}
-                      Save
+                      {tCommon("save")}
                     </Button>
                   </div>
                 )}
@@ -641,7 +644,7 @@ export default function APIClientDetailPage() {
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Client Name</Label>
+                  <Label htmlFor="name">{t("form.clientName")}</Label>
                   <Input
                     id="name"
                     value={editForm.name}
@@ -650,7 +653,7 @@ export default function APIClientDetailPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Client Type</Label>
+                  <Label>{t("form.clientType")}</Label>
                   <Select
                     value={editForm.type}
                     onValueChange={(value) => setEditForm({ ...editForm, type: value })}
@@ -670,7 +673,7 @@ export default function APIClientDetailPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{tCommon("description")}</Label>
                 <Textarea
                   id="description"
                   value={editForm.description}
@@ -681,7 +684,7 @@ export default function APIClientDetailPage() {
               </div>
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="space-y-2">
-                  <Label htmlFor="rateLimit">Rate Limit (req/min)</Label>
+                  <Label htmlFor="rateLimit">{t("settings.rateLimitPerMin")}</Label>
                   <Input
                     id="rateLimit"
                     type="number"
@@ -691,53 +694,53 @@ export default function APIClientDetailPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="dailyLimit">Daily Limit (optional)</Label>
+                  <Label htmlFor="dailyLimit">{t("settings.dailyLimit")}</Label>
                   <Input
                     id="dailyLimit"
                     type="number"
                     value={editForm.dailyLimit}
                     onChange={(e) => setEditForm({ ...editForm, dailyLimit: e.target.value })}
                     disabled={!isEditing || client.status === "REVOKED"}
-                    placeholder="No limit"
+                    placeholder={t("settings.noLimit")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="monthlyLimit">Monthly Limit (optional)</Label>
+                  <Label htmlFor="monthlyLimit">{t("settings.monthlyLimit")}</Label>
                   <Input
                     id="monthlyLimit"
                     type="number"
                     value={editForm.monthlyLimit}
                     onChange={(e) => setEditForm({ ...editForm, monthlyLimit: e.target.value })}
                     disabled={!isEditing || client.status === "REVOKED"}
-                    placeholder="No limit"
+                    placeholder={t("settings.noLimit")}
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="redirectUris">Redirect URIs (one per line)</Label>
+                <Label htmlFor="redirectUris">{t("form.redirectUris")}</Label>
                 <Textarea
                   id="redirectUris"
                   value={editForm.redirectUris}
                   onChange={(e) => setEditForm({ ...editForm, redirectUris: e.target.value })}
                   disabled={!isEditing || client.status === "REVOKED"}
-                  placeholder="https://example.com/callback"
+                  placeholder={t("form.redirectUrisPlaceholder")}
                   rows={3}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="allowedScopes">Allowed Scopes (comma-separated)</Label>
+                <Label htmlFor="allowedScopes">{t("form.allowedScopes")}</Label>
                 <Input
                   id="allowedScopes"
                   value={editForm.allowedScopes}
                   onChange={(e) => setEditForm({ ...editForm, allowedScopes: e.target.value })}
                   disabled={!isEditing || client.status === "REVOKED"}
-                  placeholder="read, write, admin"
+                  placeholder={t("form.allowedScopesPlaceholder")}
                 />
               </div>
               {!isEditing && client.status !== "REVOKED" && (
                 <Button onClick={() => setIsEditing(true)} className="mt-4">
                   <Edit className="h-4 w-4 mr-2" />
-                  Edit Settings
+                  {t("settings.editSettings")}
                 </Button>
               )}
             </CardContent>
@@ -748,39 +751,39 @@ export default function APIClientDetailPage() {
           <div className="grid gap-4 md:grid-cols-3">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("usage.totalRequests")}</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{formatNumber(client.usageStats.totalRequests)}</div>
-                <p className="text-xs text-muted-foreground">All time</p>
+                <p className="text-xs text-muted-foreground">{t("usage.allTime")}</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Rate Limit</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("detail.rateLimit")}</CardTitle>
                 <Gauge className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{client.usageStats.rateLimit}</div>
-                <p className="text-xs text-muted-foreground">Requests per minute</p>
+                <p className="text-xs text-muted-foreground">{t("usage.requestsPerMinute")}</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Last Used</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("detail.lastUsed")}</CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
                   {client.usageStats.lastUsedAt
                     ? new Date(client.usageStats.lastUsedAt).toLocaleDateString()
-                    : "Never"}
+                    : t("table.never")}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   {client.usageStats.lastUsedAt
                     ? new Date(client.usageStats.lastUsedAt).toLocaleTimeString()
-                    : "No activity"}
+                    : t("usage.noActivity")}
                 </p>
               </CardContent>
             </Card>
@@ -788,34 +791,34 @@ export default function APIClientDetailPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Rate Limits</CardTitle>
-              <CardDescription>Configured rate limits for this client</CardDescription>
+              <CardTitle>{t("usage.rateLimits")}</CardTitle>
+              <CardDescription>{t("usage.rateLimitsDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex justify-between items-center p-4 border rounded-lg">
                   <div>
-                    <p className="font-medium">Per Minute</p>
-                    <p className="text-sm text-muted-foreground">Maximum requests per minute</p>
+                    <p className="font-medium">{t("usage.perMinute")}</p>
+                    <p className="text-sm text-muted-foreground">{t("usage.perMinuteDescription")}</p>
                   </div>
                   <div className="text-2xl font-bold">{client.rateLimit}</div>
                 </div>
                 <div className="flex justify-between items-center p-4 border rounded-lg">
                   <div>
-                    <p className="font-medium">Daily Limit</p>
-                    <p className="text-sm text-muted-foreground">Maximum requests per day</p>
+                    <p className="font-medium">{t("usage.dailyLimit")}</p>
+                    <p className="text-sm text-muted-foreground">{t("usage.dailyLimitDescription")}</p>
                   </div>
                   <div className="text-2xl font-bold">
-                    {client.dailyLimit ? formatNumber(client.dailyLimit) : "Unlimited"}
+                    {client.dailyLimit ? formatNumber(client.dailyLimit) : t("usage.unlimited")}
                   </div>
                 </div>
                 <div className="flex justify-between items-center p-4 border rounded-lg">
                   <div>
-                    <p className="font-medium">Monthly Limit</p>
-                    <p className="text-sm text-muted-foreground">Maximum requests per month</p>
+                    <p className="font-medium">{t("usage.monthlyLimit")}</p>
+                    <p className="text-sm text-muted-foreground">{t("usage.monthlyLimitDescription")}</p>
                   </div>
                   <div className="text-2xl font-bold">
-                    {client.monthlyLimit ? formatNumber(client.monthlyLimit) : "Unlimited"}
+                    {client.monthlyLimit ? formatNumber(client.monthlyLimit) : t("usage.unlimited")}
                   </div>
                 </div>
               </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -55,12 +56,21 @@ interface FeatureFlag {
 }
 
 export default function FeatureFlagsPage() {
+  const t = useTranslations("admin.features")
   const [flags, setFlags] = useState<FeatureFlag[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingFlag, setEditingFlag] = useState<FeatureFlag | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+
+  // Helper function to get plan name translation
+  const getPlanName = (plan: string): string => {
+    const planKey = `plans.${plan}`
+    const translated = (t as any)(planKey)
+    // If translation returns the key path (missing translation), return the plan name
+    return translated === planKey ? plan : translated
+  }
 
   // Form state
   const [formData, setFormData] = useState({
@@ -229,7 +239,7 @@ export default function FeatureFlagsPage() {
   const columns: Column<FeatureFlag>[] = [
     {
       id: "flag",
-      header: "Flag",
+      header: t("columns.flag"),
       cell: (flag) => (
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -246,12 +256,12 @@ export default function FeatureFlagsPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("columns.type"),
       cell: (flag) => <Badge variant="outline">{flag.type}</Badge>,
     },
     {
       id: "status",
-      header: "Status",
+      header: t("columns.status"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (flag) => (
@@ -265,7 +275,7 @@ export default function FeatureFlagsPage() {
     },
     {
       id: "rollout",
-      header: "Rollout",
+      header: t("columns.rollout"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (flag) => (
@@ -277,15 +287,15 @@ export default function FeatureFlagsPage() {
     },
     {
       id: "plans",
-      header: "Allowed Plans",
+      header: t("columns.allowedPlans"),
       cell: (flag) =>
         flag.allowedPlans.length === 0 ? (
-          <span className="text-xs text-muted-foreground">All Plans</span>
+          <span className="text-xs text-muted-foreground">{t("allPlans")}</span>
         ) : (
           <div className="flex flex-wrap gap-1">
             {flag.allowedPlans.map((plan) => (
               <Badge key={plan} variant="secondary" className="text-xs">
-                {plan}
+                {getPlanName(plan)}
               </Badge>
             ))}
           </div>
@@ -293,7 +303,7 @@ export default function FeatureFlagsPage() {
     },
     {
       id: "updated",
-      header: "Updated",
+      header: t("columns.updated"),
       cell: (flag) => (
         <span className="text-muted-foreground">
           {new Date(flag.updatedAt).toLocaleDateString()}
@@ -305,12 +315,12 @@ export default function FeatureFlagsPage() {
   // Define row actions
   const rowActions: RowAction<FeatureFlag>[] = [
     {
-      label: "Edit Flag",
+      label: t("actions.editFlag"),
       icon: <Flag className="h-4 w-4" />,
       onClick: (flag) => handleOpenDialog(flag),
     },
     {
-      label: "Copy Key",
+      label: t("actions.copyKey"),
       icon: <Copy className="h-4 w-4" />,
       onClick: (flag) => {
         navigator.clipboard.writeText(flag.key)
@@ -321,27 +331,27 @@ export default function FeatureFlagsPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Enable All",
+      label: t("actions.enableAll"),
       icon: <ToggleRight className="h-4 w-4" />,
       onClick: handleBulkEnable,
-      confirmTitle: "Enable Selected Flags",
-      confirmDescription: "Are you sure you want to enable all selected feature flags?",
+      confirmTitle: t("confirmations.enableTitle"),
+      confirmDescription: t("confirmations.enableDescription"),
     },
     {
-      label: "Disable All",
+      label: t("actions.disableAll"),
       icon: <ToggleLeft className="h-4 w-4" />,
       onClick: handleBulkDisable,
-      confirmTitle: "Disable Selected Flags",
-      confirmDescription: "Are you sure you want to disable all selected feature flags?",
+      confirmTitle: t("confirmations.disableTitle"),
+      confirmDescription: t("confirmations.disableDescription"),
     },
     {
-      label: "Delete All",
+      label: t("actions.deleteAll"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
       separator: true,
-      confirmTitle: "Delete Selected Flags",
-      confirmDescription: "Are you sure you want to permanently delete all selected feature flags? This action cannot be undone.",
+      confirmTitle: t("confirmations.deleteTitle"),
+      confirmDescription: t("confirmations.deleteDescription"),
     },
   ]
 
@@ -351,47 +361,47 @@ export default function FeatureFlagsPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Feature Flags</CardTitle>
+              <CardTitle>{t("title")}</CardTitle>
               <CardDescription>
-                Manage feature rollouts and A/B testing across the platform
+                {t("description")}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchFlags} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {t("refresh")}
               </Button>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
                   <Button size="sm" onClick={() => handleOpenDialog()}>
                     <Plus className="h-4 w-4 mr-2" />
-                    New Flag
+                    {t("newFlag")}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-lg">
                   <DialogHeader>
                     <DialogTitle>
-                      {editingFlag ? "Edit Feature Flag" : "Create Feature Flag"}
+                      {editingFlag ? t("editTitle") : t("createTitle")}
                     </DialogTitle>
                     <DialogDescription>
                       {editingFlag
-                        ? "Update the feature flag configuration"
-                        : "Create a new feature flag to control feature rollout"}
+                        ? t("updateDescription")
+                        : t("createDescription")}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Key</Label>
+                        <Label>{t("form.key")}</Label>
                         <Input
-                          placeholder="e.g., new_dashboard"
+                          placeholder={t("form.keyPlaceholder")}
                           value={formData.key}
                           onChange={(e) => setFormData(prev => ({ ...prev, key: e.target.value }))}
                           disabled={!!editingFlag}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Type</Label>
+                        <Label>{t("form.type")}</Label>
                         <Select
                           value={formData.type}
                           onValueChange={(v) => setFormData(prev => ({ ...prev, type: v }))}
@@ -400,26 +410,26 @@ export default function FeatureFlagsPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="BOOLEAN">Boolean</SelectItem>
-                            <SelectItem value="STRING">String</SelectItem>
-                            <SelectItem value="NUMBER">Number</SelectItem>
-                            <SelectItem value="JSON">JSON</SelectItem>
+                            <SelectItem value="BOOLEAN">{t("types.boolean")}</SelectItem>
+                            <SelectItem value="STRING">{t("types.string")}</SelectItem>
+                            <SelectItem value="NUMBER">{t("types.number")}</SelectItem>
+                            <SelectItem value="JSON">{t("types.json")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Name</Label>
+                      <Label>{t("form.name")}</Label>
                       <Input
-                        placeholder="Feature display name"
+                        placeholder={t("form.namePlaceholder")}
                         value={formData.name}
                         onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Description</Label>
+                      <Label>{t("form.description")}</Label>
                       <Textarea
-                        placeholder="What does this feature flag control?"
+                        placeholder={t("form.descriptionPlaceholder")}
                         value={formData.description}
                         onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                         rows={2}
@@ -427,8 +437,8 @@ export default function FeatureFlagsPage() {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Enabled</Label>
-                        <p className="text-xs text-muted-foreground">Turn this feature on or off</p>
+                        <Label>{t("form.enabled")}</Label>
+                        <p className="text-xs text-muted-foreground">{t("form.enabledDescription")}</p>
                       </div>
                       <Switch
                         checked={formData.isEnabled}
@@ -437,7 +447,7 @@ export default function FeatureFlagsPage() {
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <Label>Rollout Percentage</Label>
+                        <Label>{t("form.rolloutPercentage")}</Label>
                         <span className="text-sm font-medium">{formData.rolloutPercentage}%</span>
                       </div>
                       <Slider
@@ -448,7 +458,7 @@ export default function FeatureFlagsPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Allowed Plans</Label>
+                      <Label>{t("form.allowedPlans")}</Label>
                       <div className="flex gap-4">
                         {["STARTER", "PROFESSIONAL", "ENTERPRISE"].map((plan) => (
                           <div key={plan} className="flex items-center gap-2">
@@ -458,30 +468,30 @@ export default function FeatureFlagsPage() {
                               onCheckedChange={() => togglePlan(plan)}
                             />
                             <label htmlFor={plan} className="text-sm">
-                              {plan}
+                              {getPlanName(plan)}
                             </label>
                           </div>
                         ))}
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        Leave empty to allow all plans
+                        {t("form.allowAllPlans")}
                       </p>
                     </div>
                   </div>
                   <DialogFooter>
                     <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                      Cancel
+                      {t("cancel")}
                     </Button>
                     <Button onClick={handleSubmit} disabled={!formData.key || !formData.name || isSubmitting}>
                       {isSubmitting ? (
                         <>
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Saving...
+                          {t("saving")}
                         </>
                       ) : editingFlag ? (
-                        "Update Flag"
+                        t("updateFlag")
                       ) : (
-                        "Create Flag"
+                        t("createFlag")
                       )}
                     </Button>
                   </DialogFooter>
@@ -496,12 +506,12 @@ export default function FeatureFlagsPage() {
             columns={columns}
             getRowId={(flag) => flag.id}
             isLoading={isLoading}
-            emptyMessage="No feature flags configured"
+            emptyMessage={t("empty")}
             viewHref={(flag) => `/admin/features/${flag.id}`}
             onDelete={handleDelete}
-            deleteConfirmTitle="Delete Feature Flag"
+            deleteConfirmTitle={t("confirmations.deleteSingleTitle")}
             deleteConfirmDescription={(flag) =>
-              `Are you sure you want to delete the "${flag.name}" feature flag? This action cannot be undone.`
+              t("confirmations.deleteSingleDescription", { name: flag.name })
             }
             rowActions={rowActions}
             bulkActions={bulkActions}

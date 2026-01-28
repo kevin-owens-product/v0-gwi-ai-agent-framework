@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Target, TrendingUp, ArrowRight, CheckCircle2, Package, Calendar, Presentation, Settings, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,29 +8,41 @@ import { Badge } from "@/components/ui/badge"
 import { LandingHeader } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 import { adSalesAgents } from "@/lib/solution-agents"
+import { useTranslations } from "next-intl"
 
 export default function AdSalesPage() {
+  const t = useTranslations("solutions.adSales")
+
   const workflows = [
     {
-      name: "Advertiser RFP Response",
-      time: "2 hours",
-      description: "Analyze RFP, match inventory, generate proposal",
+      nameKey: "workflows.rfpResponse.name",
+      timeKey: "workflows.rfpResponse.time",
+      descriptionKey: "workflows.rfpResponse.description",
     },
     {
-      name: "Quarterly Upfront Package",
-      time: "4 hours",
-      description: "Build audience packages, pricing, and presentation",
+      nameKey: "workflows.upfrontPackage.name",
+      timeKey: "workflows.upfrontPackage.time",
+      descriptionKey: "workflows.upfrontPackage.description",
     },
     {
-      name: "Category Deep Dive",
-      time: "3 hours",
-      description: "Research category trends, competitor analysis, opportunity report",
+      nameKey: "workflows.categoryDeepDive.name",
+      timeKey: "workflows.categoryDeepDive.time",
+      descriptionKey: "workflows.categoryDeepDive.description",
     },
     {
-      name: "Campaign Performance Review",
-      time: "1 hour",
-      description: "Analyze results, generate insights, create renewal proposal",
+      nameKey: "workflows.campaignReview.name",
+      timeKey: "workflows.campaignReview.time",
+      descriptionKey: "workflows.campaignReview.description",
     },
+  ]
+
+  const challenges = [
+    "challenges.timeConsuming",
+    "challenges.matchingInventory",
+    "challenges.customProposals",
+    "challenges.limitedVisibility",
+    "challenges.marketOpportunities",
+    "challenges.lackOfInsights",
   ]
 
   return (
@@ -40,37 +54,36 @@ export default function AdSalesPage() {
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
             <Badge variant="secondary" className="mb-4">
-              Ad Sales & Revenue
+              {t("badge")}
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
-              Close More Deals with <span className="text-primary">AI-Powered Audience Intelligence</span>
+              {t("hero.titleStart")} <span className="text-primary">{t("hero.titleHighlight")}</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-3xl text-pretty">
-              Accelerate your ad sales process with AI agents that analyze audiences, optimize inventory, and generate
-              compelling proposals in minutes, not days.
+              {t("hero.description")}
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-12">
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">70% Faster</h3>
-                <p className="text-sm text-muted-foreground">RFP response time with automated proposal generation</p>
+                <h3 className="font-semibold mb-2">{t("stats.faster.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.faster.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">3x More</h3>
-                <p className="text-sm text-muted-foreground">Audience packages created per sales rep per quarter</p>
+                <h3 className="font-semibold mb-2">{t("stats.more.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.more.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">40% Higher</h3>
-                <p className="text-sm text-muted-foreground">Win rates with data-driven pitch customization</p>
+                <h3 className="font-semibold mb-2">{t("stats.higher.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.higher.description")}</p>
               </Card>
             </div>
 
             <div className="flex flex-wrap gap-4">
               <Button size="lg" asChild>
-                <Link href="/dashboard">Start Building Packages</Link>
+                <Link href="/dashboard">{t("cta.startBuilding")}</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Request Demo</Link>
+                <Link href="/contact">{t("cta.requestDemo")}</Link>
               </Button>
             </div>
           </div>
@@ -79,19 +92,12 @@ export default function AdSalesPage() {
         {/* Key Challenges */}
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-8">Key Challenges We Solve</h2>
+            <h2 className="text-3xl font-bold mb-8">{t("challengesTitle")}</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {[
-                "Manual audience package creation is time-consuming and inconsistent",
-                "Difficulty matching inventory to advertiser needs at scale",
-                "Creating custom proposals for every RFP requires hours of work",
-                "Limited visibility into advertiser trends and budget flows",
-                "Inability to quickly respond to market opportunities",
-                "Lack of data-driven insights in sales conversations",
-              ].map((challenge, i) => (
+              {challenges.map((challengeKey, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-muted-foreground">{challenge}</p>
+                  <p className="text-muted-foreground">{t(challengeKey)}</p>
                 </div>
               ))}
             </div>
@@ -101,9 +107,9 @@ export default function AdSalesPage() {
         {/* Recommended Agents */}
         <section className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Ad Sales AI Agents</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("agentsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Purpose-built agents designed to accelerate your ad sales workflow from prospecting to closing.
+              {t("agentsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -135,7 +141,7 @@ export default function AdSalesPage() {
                           </div>
                           <div className="mt-4">
                             <span className="text-sm text-primary flex items-center gap-1">
-                              Open Agent <ArrowRight className="h-3 w-3" />
+                              {t("openAgent")} <ArrowRight className="h-3 w-3" />
                             </span>
                           </div>
                         </div>
@@ -151,19 +157,19 @@ export default function AdSalesPage() {
         {/* Pre-built Workflows */}
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Pre-built Workflows</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("workflowsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Start selling faster with proven workflows that orchestrate multiple agents to complete complex tasks.
+              {t("workflowsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
               {workflows.map((workflow, i) => (
                 <Card key={i} className="p-6 border-border/40">
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-semibold">{workflow.name}</h3>
-                    <Badge variant="outline">{workflow.time}</Badge>
+                    <h3 className="font-semibold">{t(workflow.nameKey)}</h3>
+                    <Badge variant="outline">{t(workflow.timeKey)}</Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">{workflow.description}</p>
+                  <p className="text-sm text-muted-foreground">{t(workflow.descriptionKey)}</p>
                 </Card>
               ))}
             </div>
@@ -173,18 +179,18 @@ export default function AdSalesPage() {
         {/* CTA Section */}
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Ad Sales Process?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("finalCta.title")}</h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Join leading media companies using AI to close more deals, faster.
+              {t("finalCta.description")}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Button size="lg" asChild>
                 <Link href="/dashboard">
-                  Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("finalCta.getStarted")} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Talk to Sales</Link>
+                <Link href="/contact">{t("finalCta.talkToSales")}</Link>
               </Button>
             </div>
           </div>

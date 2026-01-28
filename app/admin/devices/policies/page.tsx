@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import {
   Shield,
@@ -93,15 +94,20 @@ interface Stats {
   enforcing: number
 }
 
-const scopeOptions = [
-  { value: "PLATFORM", label: "Platform-wide" },
-  { value: "ENTERPRISE_ONLY", label: "Enterprise Only" },
-  { value: "SPECIFIC_ORGS", label: "Specific Organizations" },
-  { value: "SPECIFIC_PLANS", label: "Specific Plans" },
-]
+// scopeOptions moved inside component to use translations
 
 export default function DevicePoliciesPage() {
   const router = useRouter()
+  const t = useTranslations("admin.devices.policies")
+  const tCommon = useTranslations("common")
+  
+  const scopeOptions = [
+    { value: "PLATFORM", label: t("scopes.platform") },
+    { value: "ENTERPRISE_ONLY", label: t("scopes.enterprise_only") },
+    { value: "SPECIFIC_ORGS", label: t("scopes.specific_orgs") },
+    { value: "SPECIFIC_PLANS", label: t("scopes.specific_plans") },
+  ]
+  
   const [policies, setPolicies] = useState<DevicePolicy[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -148,7 +154,7 @@ export default function DevicePoliciesPage() {
           router.push("/login?type=admin")
           return
         }
-        throw new Error("Failed to fetch policies")
+        throw new Error(t("errors.fetchFailed"))
       }
 
       const data = await response.json()
@@ -159,7 +165,7 @@ export default function DevicePoliciesPage() {
       }
     } catch (error) {
       console.error("Failed to fetch policies:", error)
-      toast.error("Failed to fetch device policies")
+      toast.error(t("errors.fetchFailed"))
     } finally {
       setLoading(false)
     }
@@ -174,7 +180,7 @@ export default function DevicePoliciesPage() {
 
   const handleCreatePolicy = async () => {
     if (!newPolicy.name) {
-      toast.error("Policy name is required")
+      toast.error(t("validation.policyNameRequired"))
       return
     }
 
@@ -187,10 +193,10 @@ export default function DevicePoliciesPage() {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to create policy")
+        throw new Error(error.error || t("errors.createFailed"))
       }
 
-      toast.success("Device policy created successfully")
+      toast.success(t("messages.policyCreated"))
       setIsCreateOpen(false)
       setNewPolicy({
         name: "",
@@ -207,7 +213,7 @@ export default function DevicePoliciesPage() {
       })
       fetchPolicies()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create policy")
+      toast.error(error instanceof Error ? error.message : t("errors.createFailed"))
     }
   }
 
@@ -220,13 +226,13 @@ export default function DevicePoliciesPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to update policy")
+        throw new Error(t("errors.updateFailed"))
       }
 
-      toast.success(`Policy ${policy.isActive ? "disabled" : "enabled"} successfully`)
+      toast.success(policy.isActive ? t("messages.policyDisabled") : t("messages.policyEnabled"))
       fetchPolicies()
     } catch (error) {
-      toast.error("Failed to update policy")
+      toast.error(t("errors.updateFailed"))
     }
   }
 
@@ -244,13 +250,13 @@ export default function DevicePoliciesPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to delete policy")
+        throw new Error(t("errors.deleteFailed"))
       }
 
-      toast.success("Policy deleted successfully")
+      toast.success(t("messages.policyDeleted"))
       fetchPolicies()
     } catch (error) {
-      toast.error("Failed to delete policy")
+      toast.error(t("errors.deleteFailed"))
     } finally {
       setShowDeleteConfirm(false)
       setPolicyToDelete(null)
@@ -259,10 +265,10 @@ export default function DevicePoliciesPage() {
 
   const getRequirementBadges = (policy: DevicePolicy) => {
     const badges = []
-    if (policy.requireEncryption) badges.push({ icon: Lock, label: "Encryption" })
-    if (policy.requirePasscode) badges.push({ icon: HardDrive, label: "Passcode" })
-    if (policy.requireBiometric) badges.push({ icon: Fingerprint, label: "Biometric" })
-    if (policy.requireMDM) badges.push({ icon: Smartphone, label: "MDM" })
+    if (policy.requireEncryption) badges.push({ icon: Lock, label: t("requirements.encryption") })
+    if (policy.requirePasscode) badges.push({ icon: HardDrive, label: t("requirements.passcode") })
+    if (policy.requireBiometric) badges.push({ icon: Fingerprint, label: t("requirements.biometric") })
+    if (policy.requireMDM) badges.push({ icon: Smartphone, label: t("requirements.mdm") })
     return badges
   }
 
@@ -274,44 +280,44 @@ export default function DevicePoliciesPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/devices">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Devices
+              {t("backToDevices")}
             </Link>
           </Button>
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-3">
               <Shield className="h-8 w-8 text-primary" />
-              Device Policies
+              {t("title")}
             </h1>
             <p className="text-muted-foreground">
-              Configure device compliance and trust requirements
+              {t("description")}
             </p>
           </div>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={fetchPolicies}>
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            {tCommon("refresh")}
           </Button>
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
-                Create Policy
+                {t("createPolicy")}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
-                <DialogTitle>Create Device Policy</DialogTitle>
+                <DialogTitle>{t("dialogs.createTitle")}</DialogTitle>
                 <DialogDescription>
-                  Define device requirements and compliance rules
+                  {t("dialogs.createDescription")}
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto">
                 <div className="grid gap-2">
-                  <Label htmlFor="name">Policy Name</Label>
+                  <Label htmlFor="name">{t("form.policyName")}</Label>
                   <Input
                     id="name"
-                    placeholder="e.g., Enterprise Device Requirements"
+                    placeholder={t("form.policyNamePlaceholder")}
                     value={newPolicy.name}
                     onChange={(e) =>
                       setNewPolicy({ ...newPolicy, name: e.target.value })
@@ -319,10 +325,10 @@ export default function DevicePoliciesPage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">{tCommon("description")}</Label>
                   <Textarea
                     id="description"
-                    placeholder="Describe what this policy enforces..."
+                    placeholder={t("form.descriptionPlaceholder")}
                     value={newPolicy.description}
                     onChange={(e) =>
                       setNewPolicy({ ...newPolicy, description: e.target.value })
@@ -331,7 +337,7 @@ export default function DevicePoliciesPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label>Scope</Label>
+                    <Label>{t("form.scope")}</Label>
                     <Select
                       value={newPolicy.scope}
                       onValueChange={(value) =>
@@ -344,14 +350,14 @@ export default function DevicePoliciesPage() {
                       <SelectContent>
                         {scopeOptions.map((scope) => (
                           <SelectItem key={scope.value} value={scope.value}>
-                            {scope.label}
+                            {t(`scopes.${scope.value.toLowerCase()}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="priority">Priority (higher = first)</Label>
+                    <Label htmlFor="priority">{t("form.priority")}</Label>
                     <Input
                       id="priority"
                       type="number"
@@ -364,13 +370,13 @@ export default function DevicePoliciesPage() {
                 </div>
 
                 <div className="border-t pt-4">
-                  <h4 className="text-sm font-medium mb-4">Device Requirements</h4>
+                  <h4 className="text-sm font-medium mb-4">{t("sections.deviceRequirements")}</h4>
                   <div className="grid gap-4">
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Require Encryption</Label>
+                        <Label>{t("form.requireEncryption")}</Label>
                         <p className="text-xs text-muted-foreground">
-                          Device must have storage encryption enabled
+                          {t("form.requireEncryptionHelp")}
                         </p>
                       </div>
                       <Switch
@@ -382,9 +388,9 @@ export default function DevicePoliciesPage() {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Require Passcode</Label>
+                        <Label>{t("form.requirePasscode")}</Label>
                         <p className="text-xs text-muted-foreground">
-                          Device must have a passcode/PIN configured
+                          {t("form.requirePasscodeHelp")}
                         </p>
                       </div>
                       <Switch
@@ -396,9 +402,9 @@ export default function DevicePoliciesPage() {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Require Biometric</Label>
+                        <Label>{t("form.requireBiometric")}</Label>
                         <p className="text-xs text-muted-foreground">
-                          Device must have biometric authentication
+                          {t("form.requireBiometricHelp")}
                         </p>
                       </div>
                       <Switch
@@ -410,9 +416,9 @@ export default function DevicePoliciesPage() {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Require MDM</Label>
+                        <Label>{t("form.requireMDM")}</Label>
                         <p className="text-xs text-muted-foreground">
-                          Device must be enrolled in MDM
+                          {t("form.requireMDMHelp")}
                         </p>
                       </div>
                       <Switch
@@ -426,13 +432,13 @@ export default function DevicePoliciesPage() {
                 </div>
 
                 <div className="border-t pt-4">
-                  <h4 className="text-sm font-medium mb-4">Enforcement Actions</h4>
+                  <h4 className="text-sm font-medium mb-4">{t("sections.enforcementActions")}</h4>
                   <div className="grid gap-4">
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Block on Violation</Label>
+                        <Label>{t("form.blockOnViolation")}</Label>
                         <p className="text-xs text-muted-foreground">
-                          Block access when device is non-compliant
+                          {t("form.blockOnViolationHelp")}
                         </p>
                       </div>
                       <Switch
@@ -444,9 +450,9 @@ export default function DevicePoliciesPage() {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Notify on Violation</Label>
+                        <Label>{t("form.notifyOnViolation")}</Label>
                         <p className="text-xs text-muted-foreground">
-                          Send notification when policy is violated
+                          {t("form.notifyOnViolationHelp")}
                         </p>
                       </div>
                       <Switch
@@ -467,15 +473,15 @@ export default function DevicePoliciesPage() {
                       setNewPolicy({ ...newPolicy, isActive: checked })
                     }
                   />
-                  <Label htmlFor="isActive">Enable policy immediately</Label>
+                  <Label htmlFor="isActive">{t("form.enableImmediately")}</Label>
                 </div>
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                  Cancel
+                  {tCommon("cancel")}
                 </Button>
                 <Button onClick={handleCreatePolicy} disabled={!newPolicy.name}>
-                  Create Policy
+                  {t("createPolicy")}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -488,19 +494,19 @@ export default function DevicePoliciesPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{stats.total}</div>
-            <p className="text-xs text-muted-foreground">Total Policies</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalPolicies")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-green-500">{stats.active}</div>
-            <p className="text-xs text-muted-foreground">Active Policies</p>
+            <p className="text-xs text-muted-foreground">{t("stats.activePolicies")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-blue-500">{stats.enforcing}</div>
-            <p className="text-xs text-muted-foreground">Enforcing (Block on Violation)</p>
+            <p className="text-xs text-muted-foreground">{t("stats.enforcing")}</p>
           </CardContent>
         </Card>
       </div>
@@ -513,7 +519,7 @@ export default function DevicePoliciesPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search policies..."
+                  placeholder={t("searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -523,25 +529,25 @@ export default function DevicePoliciesPage() {
             <Select value={scopeFilter} onValueChange={setScopeFilter}>
               <SelectTrigger className="w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Scope" />
+                <SelectValue placeholder={t("form.scope")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Scopes</SelectItem>
+                <SelectItem value="all">{t("filters.allScopes")}</SelectItem>
                 {scopeOptions.map((scope) => (
                   <SelectItem key={scope.value} value={scope.value}>
-                    {scope.label}
+                    {t(`scopes.${scope.value.toLowerCase()}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Select value={activeFilter} onValueChange={setActiveFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="true">Active</SelectItem>
-                <SelectItem value="false">Inactive</SelectItem>
+                <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
+                <SelectItem value="true">{tCommon("active")}</SelectItem>
+                <SelectItem value="false">{tCommon("inactive")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -554,11 +560,11 @@ export default function DevicePoliciesPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Policy Name</TableHead>
-                <TableHead>Scope</TableHead>
-                <TableHead>Requirements</TableHead>
-                <TableHead>Enforcement</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>{t("columns.policyName")}</TableHead>
+                <TableHead>{t("columns.scope")}</TableHead>
+                <TableHead>{t("columns.requirements")}</TableHead>
+                <TableHead>{t("columns.enforcement")}</TableHead>
+                <TableHead>{tCommon("status")}</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -575,14 +581,14 @@ export default function DevicePoliciesPage() {
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-12">
                     <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No device policies found</p>
+                    <p className="text-muted-foreground">{t("noPolicies")}</p>
                     <Button
                       variant="outline"
                       className="mt-4"
                       onClick={() => setIsCreateOpen(true)}
                     >
                       <Plus className="h-4 w-4 mr-2" />
-                      Create First Policy
+                      {t("createFirstPolicy")}
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -603,7 +609,7 @@ export default function DevicePoliciesPage() {
                     </TableCell>
                     <TableCell>
                       <Badge variant="secondary">
-                        {policy.scope.replace(/_/g, " ")}
+                        {t(`scopes.${policy.scope.toLowerCase()}`)}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -615,7 +621,7 @@ export default function DevicePoliciesPage() {
                           </Badge>
                         ))}
                         {getRequirementBadges(policy).length === 0 && (
-                          <span className="text-muted-foreground text-sm">None</span>
+                          <span className="text-muted-foreground text-sm">{tCommon("none")}</span>
                         )}
                       </div>
                     </TableCell>
@@ -623,18 +629,18 @@ export default function DevicePoliciesPage() {
                       {policy.blockOnViolation ? (
                         <Badge variant="destructive">
                           <XCircle className="h-3 w-3 mr-1" />
-                          Blocking
+                          {t("enforcement.blocking")}
                         </Badge>
                       ) : (
                         <Badge variant="secondary">
                           <CheckCircle className="h-3 w-3 mr-1" />
-                          Monitor
+                          {t("enforcement.monitor")}
                         </Badge>
                       )}
                     </TableCell>
                     <TableCell>
                       <Badge variant={policy.isActive ? "default" : "outline"}>
-                        {policy.isActive ? "Active" : "Inactive"}
+                        {policy.isActive ? tCommon("active") : tCommon("inactive")}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -648,19 +654,19 @@ export default function DevicePoliciesPage() {
                           <DropdownMenuItem asChild>
                             <Link href={`/admin/devices/policies/${policy.id}`}>
                               <Edit className="h-4 w-4 mr-2" />
-                              View / Edit
+                              {t("actions.viewEdit")}
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleTogglePolicy(policy)}>
                             {policy.isActive ? (
                               <>
                                 <PowerOff className="h-4 w-4 mr-2" />
-                                Disable
+                                {t("actions.disable")}
                               </>
                             ) : (
                               <>
                                 <Power className="h-4 w-4 mr-2" />
-                                Enable
+                                {t("actions.enable")}
                               </>
                             )}
                           </DropdownMenuItem>
@@ -670,7 +676,7 @@ export default function DevicePoliciesPage() {
                             onClick={() => handleDeleteClick(policy.id)}
                           >
                             <Trash className="h-4 w-4 mr-2" />
-                            Delete
+                            {tCommon("delete")}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -687,9 +693,11 @@ export default function DevicePoliciesPage() {
       {pagination.totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            Showing {(pagination.page - 1) * pagination.limit + 1} to{" "}
-            {Math.min(pagination.page * pagination.limit, pagination.total)} of{" "}
-            {pagination.total} policies
+            {t("pagination.showing", {
+              start: (pagination.page - 1) * pagination.limit + 1,
+              end: Math.min(pagination.page * pagination.limit, pagination.total),
+              total: pagination.total
+            })}
           </p>
           <div className="flex gap-2">
             <Button
@@ -698,7 +706,7 @@ export default function DevicePoliciesPage() {
               disabled={pagination.page === 1}
               onClick={() => setPagination({ ...pagination, page: pagination.page - 1 })}
             >
-              Previous
+              {tCommon("previous")}
             </Button>
             <Button
               variant="outline"
@@ -706,7 +714,7 @@ export default function DevicePoliciesPage() {
               disabled={pagination.page === pagination.totalPages}
               onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
             >
-              Next
+              {tCommon("next")}
             </Button>
           </div>
         </div>
@@ -715,9 +723,9 @@ export default function DevicePoliciesPage() {
       <ConfirmationDialog
         open={showDeleteConfirm}
         onOpenChange={setShowDeleteConfirm}
-        title="Delete Policy"
-        description="Are you sure you want to delete this policy? Devices currently using this policy will no longer be affected by its rules."
-        confirmText="Delete"
+        title={t("dialogs.deleteTitle")}
+        description={t("dialogs.deleteDescription")}
+        confirmText={tCommon("delete")}
         variant="destructive"
         onConfirm={handleConfirmDelete}
       />

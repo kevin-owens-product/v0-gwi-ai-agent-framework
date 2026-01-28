@@ -33,7 +33,8 @@ import {
   User,
   Activity,
 } from "lucide-react"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface MaintenanceWindow {
   id: string
@@ -93,6 +94,7 @@ export default function MaintenanceDetailPage() {
   const params = useParams()
   const router = useRouter()
   const windowId = params.id as string
+  const t = useTranslations("admin.operations.maintenance")
 
   const [window, setWindow] = useState<MaintenanceWindow | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -120,7 +122,7 @@ export default function MaintenanceDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch maintenance window:", error)
-      toast.error("Failed to load maintenance window")
+      showErrorToast(t("toast.loadFailed"))
     } finally {
       setIsLoading(false)
     }
@@ -137,12 +139,12 @@ export default function MaintenanceDetailPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       })
-      if (!response.ok) throw new Error("Failed to update status")
-      toast.success("Status updated")
+      if (!response.ok) throw new Error(t("toast.updateStatusFailed"))
+      showSuccessToast(t("toast.statusUpdated"))
       fetchWindow()
     } catch (error) {
       console.error(error)
-      toast.error("Failed to update status")
+      showErrorToast(t("toast.updateStatusFailed"))
     }
   }
 
@@ -153,13 +155,13 @@ export default function MaintenanceDetailPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editForm),
       })
-      if (!response.ok) throw new Error("Failed to update maintenance window")
-      toast.success("Maintenance window updated")
+      if (!response.ok) throw new Error(t("toast.updateFailed"))
+      showSuccessToast(t("toast.updated"))
       setIsEditing(false)
       fetchWindow()
     } catch (error) {
       console.error(error)
-      toast.error("Failed to update maintenance window")
+      showErrorToast(t("toast.updateFailed"))
     }
   }
 
@@ -172,10 +174,10 @@ export default function MaintenanceDetailPage() {
         const error = await response.json()
         throw new Error(error.error || "Failed to delete")
       }
-      toast.success("Maintenance window deleted")
+      showSuccessToast(t("toast.deleted"))
       router.push("/admin/operations/maintenance")
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete maintenance window")
+      showErrorToast(error instanceof Error ? error.message : t("toast.deleteFailed"))
     } finally {
       setShowDeleteDialog(false)
     }

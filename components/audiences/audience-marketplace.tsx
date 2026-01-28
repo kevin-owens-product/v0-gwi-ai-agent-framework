@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -225,6 +226,7 @@ interface AudienceMarketplaceProps {
 }
 
 export function AudienceMarketplace({ onAddAudience, className }: AudienceMarketplaceProps) {
+  const t = useTranslations("audiences")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [selectedPublisher, setSelectedPublisher] = useState<string>("all")
@@ -233,11 +235,11 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
 
   const categories = [
-    { id: "all", label: "All" },
-    { id: "demographic", label: "Demographic" },
-    { id: "behavioral", label: "Behavioral" },
-    { id: "psychographic", label: "Psychographic" },
-    { id: "industry", label: "Industry" },
+    { id: "all", label: t("marketplace.categories.all") },
+    { id: "demographic", label: t("marketplace.categories.demographic") },
+    { id: "behavioral", label: t("marketplace.categories.behavioral") },
+    { id: "psychographic", label: t("marketplace.categories.psychographic") },
+    { id: "industry", label: t("marketplace.categories.industry") },
   ]
 
   const filteredAudiences = useMemo(() => {
@@ -275,21 +277,21 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
         return (
           <Badge className="bg-primary text-primary-foreground">
             <Shield className="h-3 w-3 mr-1" />
-            GWI Official
+            {t("marketplace.publisher.gwiOfficial")}
           </Badge>
         )
       case "partner":
         return (
           <Badge variant="secondary">
             <CheckCircle2 className="h-3 w-3 mr-1" />
-            Verified Partner
+            {t("marketplace.publisher.verifiedPartner")}
           </Badge>
         )
       default:
         return (
           <Badge variant="outline">
             <Users className="h-3 w-3 mr-1" />
-            Community
+            {t("marketplace.publisher.community")}
           </Badge>
         )
     }
@@ -312,7 +314,7 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
               {audience.isPremium && (
                 <Badge className="bg-amber-100 text-amber-700 text-xs">
                   <Sparkles className="h-3 w-3 mr-1" />
-                  Premium
+                  {t("marketplace.premium")}
                 </Badge>
               )}
             </div>
@@ -361,7 +363,7 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
           </div>
           <div className="flex items-center gap-1">
             <Globe className="h-4 w-4 text-muted-foreground" />
-            <span>{audience.markets.length} markets</span>
+            <span>{t("marketplace.marketsCount", { count: audience.markets.length })}</span>
           </div>
         </div>
 
@@ -383,10 +385,10 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Store className="h-6 w-6 text-primary" />
-          <h2 className="text-xl font-semibold">Audience Marketplace</h2>
+          <h2 className="text-xl font-semibold">{t("marketplace.title")}</h2>
         </div>
         <Badge variant="secondary">
-          {marketplaceAudiences.length} audiences available
+          {t("marketplace.audiencesAvailable", { count: marketplaceAudiences.length })}
         </Badge>
       </div>
 
@@ -395,7 +397,7 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search audiences..."
+            placeholder={t("marketplace.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -420,7 +422,7 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
               onClick={() => setSelectedPublisher(selectedPublisher === "gwi" ? "all" : "gwi")}
             >
               <Shield className="h-4 w-4 mr-1" />
-              GWI Official
+              {t("marketplace.publisher.gwiOfficial")}
             </Button>
             <Button
               variant={showFeaturedOnly ? "default" : "outline"}
@@ -428,7 +430,7 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
               onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
             >
               <Star className="h-4 w-4 mr-1" />
-              Featured
+              {t("marketplace.featured")}
             </Button>
           </div>
         </div>
@@ -439,7 +441,7 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
         <div className="space-y-3">
           <h3 className="font-medium flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-primary" />
-            Featured Audiences
+            {t("marketplace.featuredAudiences")}
           </h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {featuredAudiences.map((aud) => (
@@ -452,7 +454,7 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
       {/* All Audiences */}
       <div className="space-y-3">
         <h3 className="font-medium">
-          {showFeaturedOnly ? "Featured Audiences" : "All Audiences"}
+          {showFeaturedOnly ? t("marketplace.featuredAudiences") : t("marketplace.allAudiences")}
         </h3>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {(showFeaturedOnly ? featuredAudiences : regularAudiences).map((aud) => (
@@ -465,9 +467,9 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
       {filteredAudiences.length === 0 && (
         <Card className="p-12 text-center">
           <Store className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-          <h3 className="font-medium mb-2">No audiences found</h3>
+          <h3 className="font-medium mb-2">{t("marketplace.noAudiencesFound")}</h3>
           <p className="text-sm text-muted-foreground">
-            Try adjusting your search or filters
+            {t("marketplace.tryAdjustingFilters")}
           </p>
         </Card>
       )}
@@ -500,7 +502,7 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
-                      Updated {previewAudience.lastUpdated}
+                      {t("marketplace.dialog.updated", { date: previewAudience.lastUpdated })}
                     </span>
                   </div>
                 </div>
@@ -510,23 +512,23 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
                   <Card className="p-3 text-center">
                     <Users className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
                     <div className="font-bold">{previewAudience.estimatedSize}</div>
-                    <div className="text-xs text-muted-foreground">Size</div>
+                    <div className="text-xs text-muted-foreground">{t("marketplace.dialog.size")}</div>
                   </Card>
                   <Card className="p-3 text-center">
                     <Star className="h-4 w-4 mx-auto mb-1 text-amber-500" />
                     <div className="font-bold">{previewAudience.rating}</div>
-                    <div className="text-xs text-muted-foreground">{previewAudience.reviews} reviews</div>
+                    <div className="text-xs text-muted-foreground">{t("marketplace.dialog.reviews", { count: previewAudience.reviews })}</div>
                   </Card>
                   <Card className="p-3 text-center">
                     <Download className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
                     <div className="font-bold">{previewAudience.downloads}</div>
-                    <div className="text-xs text-muted-foreground">Downloads</div>
+                    <div className="text-xs text-muted-foreground">{t("marketplace.dialog.downloads")}</div>
                   </Card>
                 </div>
 
                 {/* Markets */}
                 <div>
-                  <span className="text-sm font-medium">Available Markets</span>
+                  <span className="text-sm font-medium">{t("marketplace.dialog.availableMarkets")}</span>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {previewAudience.markets.map((market) => (
                       <Badge key={market} variant="outline">
@@ -538,7 +540,7 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
 
                 {/* Attributes */}
                 <div>
-                  <span className="text-sm font-medium">Included Attributes</span>
+                  <span className="text-sm font-medium">{t("marketplace.dialog.includedAttributes")}</span>
                   <div className="space-y-2 mt-2">
                     {previewAudience.attributes.map((attr, i) => (
                       <div key={i} className="flex items-center gap-2 p-2 bg-muted/50 rounded">
@@ -561,7 +563,7 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
 
               <DialogFooter className="gap-2">
                 <Button variant="outline" onClick={() => setPreviewAudience(null)}>
-                  Close
+                  {t("marketplace.dialog.close")}
                 </Button>
                 <Button
                   onClick={() => {
@@ -570,7 +572,7 @@ export function AudienceMarketplace({ onAddAudience, className }: AudienceMarket
                   }}
                 >
                   <Copy className="h-4 w-4 mr-2" />
-                  Add to My Audiences
+                  {t("marketplace.dialog.addToMyAudiences")}
                 </Button>
               </DialogFooter>
             </>

@@ -1,42 +1,46 @@
+"use client"
+import { useTranslations } from "next-intl"
 import { Card, CardContent } from "@/components/ui/card"
 import { ArrowUp, ArrowDown, Bot, FileText, Users, Zap } from "lucide-react"
 
-const stats = [
-  {
-    label: "Total Queries",
-    value: "24,589",
-    change: "+12.5%",
-    trend: "up",
-    icon: Zap,
-    description: "vs. last period",
-  },
-  {
-    label: "Reports Generated",
-    value: "342",
-    change: "+8.2%",
-    trend: "up",
-    icon: FileText,
-    description: "vs. last period",
-  },
-  {
-    label: "Active Agents",
-    value: "18",
-    change: "+3",
-    trend: "up",
-    icon: Bot,
-    description: "new agents added",
-  },
-  {
-    label: "Team Members",
-    value: "47",
-    change: "+5",
-    trend: "up",
-    icon: Users,
-    description: "joined this month",
-  },
-]
-
 export function AnalyticsOverview() {
+  const t = useTranslations("dashboard.analytics.overview")
+  
+  const stats = [
+    {
+      label: t("totalQueries"),
+      value: "24,589",
+      change: "+12.5%",
+      trend: "up",
+      icon: Zap,
+      description: t("vsLastPeriod"),
+    },
+    {
+      label: t("reportsGenerated"),
+      value: "342",
+      change: "+8.2%",
+      trend: "up",
+      icon: FileText,
+      description: t("vsLastPeriod"),
+    },
+    {
+      label: t("activeAgents"),
+      value: "18",
+      change: "+3",
+      trend: "up",
+      icon: Bot,
+      description: t("newAgentsAdded"),
+    },
+    {
+      label: t("teamMembers"),
+      value: "47",
+      change: "+5",
+      trend: "up",
+      icon: Users,
+      description: t("joinedThisMonth"),
+    },
+  ]
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat) => (

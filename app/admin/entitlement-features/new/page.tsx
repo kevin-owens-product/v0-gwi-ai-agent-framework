@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast } from "@/lib/toast-utils"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,29 +28,32 @@ import {
 import Link from "next/link"
 import { useAdmin } from "@/components/providers/admin-provider"
 
-const CATEGORIES = [
-  { value: "CORE", label: "Core" },
-  { value: "ANALYTICS", label: "Analytics" },
-  { value: "AGENTS", label: "Agents" },
-  { value: "INTEGRATIONS", label: "Integrations" },
-  { value: "SECURITY", label: "Security" },
-  { value: "SUPPORT", label: "Support" },
-  { value: "CUSTOMIZATION", label: "Customization" },
-  { value: "API", label: "API" },
-  { value: "ADVANCED", label: "Advanced" },
-]
-
-const VALUE_TYPES = [
-  { value: "BOOLEAN", label: "Boolean (on/off)", defaultValue: false },
-  { value: "NUMBER", label: "Number", defaultValue: 0 },
-  { value: "STRING", label: "String", defaultValue: "" },
-  { value: "JSON", label: "JSON", defaultValue: {} },
-]
-
 export default function NewEntitlementFeaturePage() {
   const router = useRouter()
+  const t = useTranslations("admin.entitlementFeatures.new")
+  const tMain = useTranslations("admin.entitlementFeatures")
+  const tCommon = useTranslations("common")
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
+
+  const CATEGORIES = [
+    { value: "CORE", label: tMain("categories.core") },
+    { value: "ANALYTICS", label: tMain("categories.analytics") },
+    { value: "AGENTS", label: tMain("categories.agents") },
+    { value: "INTEGRATIONS", label: tMain("categories.integrations") },
+    { value: "SECURITY", label: tMain("categories.security") },
+    { value: "SUPPORT", label: tMain("categories.support") },
+    { value: "CUSTOMIZATION", label: tMain("categories.customization") },
+    { value: "API", label: tMain("categories.api") },
+    { value: "ADVANCED", label: tMain("categories.advanced") },
+  ]
+
+  const VALUE_TYPES = [
+    { value: "BOOLEAN", label: tMain("valueTypes.boolean"), defaultValue: false },
+    { value: "NUMBER", label: tMain("valueTypes.number"), defaultValue: 0 },
+    { value: "STRING", label: tMain("valueTypes.string"), defaultValue: "" },
+    { value: "JSON", label: tMain("valueTypes.json"), defaultValue: {} },
+  ]
 
   const [formData, setFormData] = useState({
     key: "",
@@ -90,13 +94,13 @@ export default function NewEntitlementFeaturePage() {
 
   const handleCreate = async () => {
     if (!formData.key || !formData.name) {
-      toast.error("Key and name are required")
+      showErrorToast(t("validation.keyAndNameRequired"))
       return
     }
 
     // Validate key format
     if (!/^[a-z][a-z0-9_]*$/.test(formData.key)) {
-      toast.error("Key must be in snake_case format (lowercase letters, numbers, underscores, starting with a letter)")
+      showErrorToast(t("validation.keyFormatInvalid"))
       return
     }
 
@@ -123,11 +127,11 @@ export default function NewEntitlementFeaturePage() {
         router.push(`/admin/entitlement-features/${data.feature.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to create feature")
+        showErrorToast(data.error || t("toast.createFailed"))
       }
     } catch (error) {
       console.error("Failed to create feature:", error)
-      toast.error("Failed to create feature")
+      showErrorToast(t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -136,11 +140,11 @@ export default function NewEntitlementFeaturePage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to create entitlement features</p>
+        <p className="text-muted-foreground">{t("noPermission")}</p>
         <Link href="/admin/entitlement-features">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Features
+            {t("backToFeatures")}
           </Button>
         </Link>
       </div>
@@ -155,13 +159,13 @@ export default function NewEntitlementFeaturePage() {
           <Link href="/admin/entitlement-features">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold">Create Entitlement Feature</h1>
+            <h1 className="text-2xl font-bold">{t("title")}</h1>
             <p className="text-sm text-muted-foreground">
-              Define a new feature that can be assigned to subscription plans
+              {t("description")}
             </p>
           </div>
         </div>
@@ -169,12 +173,12 @@ export default function NewEntitlementFeaturePage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Feature
+              {t("createFeature")}
             </>
           )}
         </Button>
@@ -186,44 +190,44 @@ export default function NewEntitlementFeaturePage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5" />
-              Feature Details
+              {t("sections.featureDetails")}
             </CardTitle>
             <CardDescription>
-              Basic information about the entitlement feature
+              {t("sections.featureDetailsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="name">Display Name *</Label>
+                <Label htmlFor="name">{t("fields.displayName")} *</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  placeholder="Advanced Analytics"
+                  placeholder={t("placeholders.displayName")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="key">Feature Key *</Label>
+                <Label htmlFor="key">{t("fields.featureKey")} *</Label>
                 <Input
                   id="key"
                   value={formData.key}
                   onChange={(e) => setFormData(prev => ({ ...prev, key: e.target.value.toLowerCase().replace(/\s+/g, "_") }))}
-                  placeholder="advanced_analytics"
+                  placeholder={t("placeholders.featureKey")}
                 />
                 <p className="text-xs text-muted-foreground">
-                  snake_case format: lowercase letters, numbers, underscores
+                  {t("hints.snakeCaseFormat")}
                 </p>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("fields.description")}</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Describe what this feature enables for subscribers..."
+                placeholder={t("placeholders.description")}
                 rows={3}
               />
             </div>
@@ -234,16 +238,16 @@ export default function NewEntitlementFeaturePage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Tag className="h-5 w-5" />
-              Category & Classification
+              {t("sections.categoryClassification")}
             </CardTitle>
             <CardDescription>
-              Organize the feature for easier management
+              {t("sections.categoryDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Category</Label>
+                <Label>{t("fields.category")}</Label>
                 <Select
                   value={formData.category}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
@@ -261,7 +265,7 @@ export default function NewEntitlementFeaturePage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="sortOrder">Sort Order</Label>
+                <Label htmlFor="sortOrder">{t("fields.sortOrder")}</Label>
                 <Input
                   id="sortOrder"
                   type="number"
@@ -269,7 +273,7 @@ export default function NewEntitlementFeaturePage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, sortOrder: parseInt(e.target.value) || 0 }))}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Lower numbers appear first in lists
+                  {t("hints.sortOrderLower")}
                 </p>
               </div>
             </div>
@@ -280,16 +284,16 @@ export default function NewEntitlementFeaturePage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Settings className="h-5 w-5" />
-              Value Configuration
+              {t("sections.valueConfiguration")}
             </CardTitle>
             <CardDescription>
-              Configure the feature value type and default
+              {t("sections.valueDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Value Type</Label>
+                <Label>{t("fields.valueType")}</Label>
                 <Select
                   value={formData.valueType}
                   onValueChange={handleValueTypeChange}
@@ -307,7 +311,7 @@ export default function NewEntitlementFeaturePage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Default Value</Label>
+                <Label>{t("fields.defaultValue")}</Label>
                 {formData.valueType === "BOOLEAN" ? (
                   <div className="flex items-center gap-2 h-10">
                     <Switch
@@ -315,7 +319,7 @@ export default function NewEntitlementFeaturePage() {
                       onCheckedChange={(checked) => setFormData(prev => ({ ...prev, defaultValue: checked }))}
                     />
                     <span className="text-sm text-muted-foreground">
-                      {formData.defaultValue ? "Enabled" : "Disabled"}
+                      {formData.defaultValue ? t("status.enabled") : t("status.disabled")}
                     </span>
                   </div>
                 ) : formData.valueType === "NUMBER" ? (
@@ -328,7 +332,7 @@ export default function NewEntitlementFeaturePage() {
                   <Input
                     value={String(formData.defaultValue)}
                     onChange={(e) => setFormData(prev => ({ ...prev, defaultValue: e.target.value }))}
-                    placeholder={formData.valueType === "JSON" ? '{}' : ""}
+                    placeholder={formData.valueType === "JSON" ? t("placeholders.jsonDefault") : ""}
                   />
                 )}
               </div>
@@ -336,9 +340,9 @@ export default function NewEntitlementFeaturePage() {
 
             <div className="flex items-center justify-between pt-2">
               <div className="space-y-0.5">
-                <Label>Active</Label>
+                <Label>{t("fields.active")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Inactive features are not available for plan assignment
+                  {t("hints.inactiveFeatures")}
                 </p>
               </div>
               <Switch

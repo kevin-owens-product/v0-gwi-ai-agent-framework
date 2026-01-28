@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   AlertCircle,
   Plus,
@@ -63,45 +64,23 @@ interface Incident {
   updates: { id: string; message: string; status: string | null; createdAt: string }[]
 }
 
-const severityOptions = [
-  { value: "MINOR", label: "Minor", color: "bg-blue-500" },
-  { value: "MODERATE", label: "Moderate", color: "bg-yellow-500" },
-  { value: "MAJOR", label: "Major", color: "bg-orange-500" },
-  { value: "CRITICAL", label: "Critical", color: "bg-red-500" },
-]
-
-const statusOptions = [
-  { value: "INVESTIGATING", label: "Investigating" },
-  { value: "IDENTIFIED", label: "Identified" },
-  { value: "MONITORING", label: "Monitoring" },
-  { value: "RESOLVED", label: "Resolved" },
-  { value: "POSTMORTEM", label: "Postmortem" },
-]
-
-const typeOptions = [
-  { value: "OUTAGE", label: "Outage" },
-  { value: "DEGRADATION", label: "Degradation" },
-  { value: "SECURITY", label: "Security" },
-  { value: "DATA_ISSUE", label: "Data Issue" },
-  { value: "THIRD_PARTY", label: "Third Party" },
-  { value: "CAPACITY", label: "Capacity" },
-  { value: "NETWORK", label: "Network" },
-  { value: "DATABASE", label: "Database" },
-]
-
-const serviceOptions = [
-  "API Gateway",
-  "Authentication",
-  "Database",
-  "File Storage",
-  "Messaging",
-  "Search",
-  "Analytics",
-  "Payments",
-  "Notifications",
-]
-
 export default function IncidentsPage() {
+  const t = useTranslations("admin.operations.incidents")
+  const tCommon = useTranslations("common")
+  const tOps = useTranslations("admin.operations")
+
+  const serviceOptions = [
+    tOps("services.apiGateway"),
+    tOps("services.authentication"),
+    tOps("services.database"),
+    tOps("services.fileStorage"),
+    tOps("services.messaging"),
+    tOps("services.search"),
+    tOps("services.analytics"),
+    tOps("services.payments"),
+    tOps("services.notifications"),
+  ]
+
   const [incidents, setIncidents] = useState<Incident[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -119,6 +98,32 @@ export default function IncidentsPage() {
     type: "OUTAGE",
     affectedServices: [] as string[],
   })
+
+  const severityOptions = [
+    { value: "MINOR", label: tOps("severity.minor"), color: "bg-blue-500" },
+    { value: "MODERATE", label: tOps("severity.moderate"), color: "bg-yellow-500" },
+    { value: "MAJOR", label: tOps("severity.major"), color: "bg-orange-500" },
+    { value: "CRITICAL", label: tOps("severity.critical"), color: "bg-red-500" },
+  ]
+
+  const statusOptions = [
+    { value: "INVESTIGATING", label: t("status.investigating") },
+    { value: "IDENTIFIED", label: t("status.identified") },
+    { value: "MONITORING", label: t("status.monitoring") },
+    { value: "RESOLVED", label: t("status.resolved") },
+    { value: "POSTMORTEM", label: t("status.postmortem") },
+  ]
+
+  const typeOptions = [
+    { value: "OUTAGE", label: t("type.outage") },
+    { value: "DEGRADATION", label: t("type.degradation") },
+    { value: "SECURITY", label: t("type.security") },
+    { value: "DATA_ISSUE", label: t("type.dataIssue") },
+    { value: "THIRD_PARTY", label: t("type.thirdParty") },
+    { value: "CAPACITY", label: t("type.capacity") },
+    { value: "NETWORK", label: t("type.network") },
+    { value: "DATABASE", label: t("type.database") },
+  ]
 
   useEffect(() => {
     fetchIncidents()
@@ -153,7 +158,7 @@ export default function IncidentsPage() {
         throw new Error("Failed to create incident")
       }
 
-      toast.success("Incident has been logged and team notified")
+      toast.success(t("toast.incidentCreated"))
 
       setIsCreateOpen(false)
       setNewIncident({
@@ -165,7 +170,7 @@ export default function IncidentsPage() {
       })
       fetchIncidents()
     } catch (error) {
-      toast.error("Failed to create incident")
+      toast.error(t("toast.createFailed"))
     }
   }
 
@@ -181,13 +186,13 @@ export default function IncidentsPage() {
         throw new Error("Failed to update incident")
       }
 
-      toast.success("Incident status updated")
+      toast.success(t("toast.statusUpdated"))
       fetchIncidents()
       if (selectedIncident?.id === incidentId) {
         setSelectedIncident((prev) => prev ? { ...prev, status: newStatus } : null)
       }
     } catch (error) {
-      toast.error("Failed to update incident")
+      toast.error(t("toast.updateFailed"))
     }
   }
 
@@ -205,11 +210,11 @@ export default function IncidentsPage() {
         throw new Error("Failed to add update")
       }
 
-      toast.success("Update added to incident")
+      toast.success(t("toast.updateAdded"))
       setNewUpdate("")
       fetchIncidents()
     } catch (error) {
-      toast.error("Failed to add update")
+      toast.error(t("toast.addUpdateFailed"))
     }
   }
 
@@ -221,15 +226,15 @@ export default function IncidentsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "RESOLVED":
-        return <Badge className="bg-green-500">Resolved</Badge>
+        return <Badge className="bg-green-500">{t("status.resolved")}</Badge>
       case "MONITORING":
-        return <Badge className="bg-blue-500">Monitoring</Badge>
+        return <Badge className="bg-blue-500">{t("status.monitoring")}</Badge>
       case "IDENTIFIED":
-        return <Badge className="bg-yellow-500">Identified</Badge>
+        return <Badge className="bg-yellow-500">{t("status.identified")}</Badge>
       case "INVESTIGATING":
-        return <Badge className="bg-orange-500">Investigating</Badge>
+        return <Badge className="bg-orange-500">{t("status.investigating")}</Badge>
       case "POSTMORTEM":
-        return <Badge variant="secondary">Postmortem</Badge>
+        return <Badge variant="secondary">{t("status.postmortem")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -249,34 +254,34 @@ export default function IncidentsPage() {
   const columns: Column<Incident>[] = [
     {
       id: "incident",
-      header: "Incident",
+      header: t("table.incident"),
       cell: (incident) => (
         <div>
           <p className="font-medium">{incident.title}</p>
           <p className="text-xs text-muted-foreground">
-            Started {new Date(incident.startedAt).toLocaleString()}
+            {t("table.started")} {new Date(incident.startedAt).toLocaleString()}
           </p>
         </div>
       ),
     },
     {
       id: "severity",
-      header: "Severity",
+      header: t("table.severity"),
       cell: (incident) => getSeverityBadge(incident.severity),
     },
     {
       id: "status",
-      header: "Status",
+      header: t("table.status"),
       cell: (incident) => getStatusBadge(incident.status),
     },
     {
       id: "type",
-      header: "Type",
+      header: t("table.type"),
       cell: (incident) => <Badge variant="outline">{incident.type}</Badge>,
     },
     {
       id: "affectedServices",
-      header: "Affected Services",
+      header: t("table.affectedServices"),
       cell: (incident) => (
         <div className="flex flex-wrap gap-1 max-w-[200px]">
           {incident.affectedServices.slice(0, 2).map((service) => (
@@ -294,7 +299,7 @@ export default function IncidentsPage() {
     },
     {
       id: "duration",
-      header: "Duration",
+      header: t("table.duration"),
       cell: (incident) =>
         incident.resolvedAt ? (
           <span className="text-xs text-muted-foreground">
@@ -303,10 +308,10 @@ export default function IncidentsPage() {
                 new Date(incident.startedAt).getTime()) /
                 60000
             )}{" "}
-            min
+            {t("table.min")}
           </span>
         ) : (
-          <span className="text-xs text-yellow-500">Ongoing</span>
+          <span className="text-xs text-yellow-500">{t("table.ongoing")}</span>
         ),
     },
   ]
@@ -314,17 +319,17 @@ export default function IncidentsPage() {
   // Define row actions
   const rowActions: RowAction<Incident>[] = [
     {
-      label: "View Details",
+      label: t("actions.viewDetails"),
       icon: <ExternalLink className="h-4 w-4" />,
       onClick: (incident) => setSelectedIncident(incident),
     },
     {
-      label: "Change Status",
+      label: t("actions.changeStatus"),
       icon: <Activity className="h-4 w-4" />,
       onClick: (incident) => setSelectedIncident(incident),
     },
     {
-      label: "Add Update",
+      label: t("actions.addUpdate"),
       icon: <MessageSquare className="h-4 w-4" />,
       onClick: (incident) => {
         setSelectedIncident(incident)
@@ -337,7 +342,7 @@ export default function IncidentsPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Mark as Resolved",
+      label: t("bulk.markResolved"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: async (selectedIds) => {
         try {
@@ -350,17 +355,17 @@ export default function IncidentsPage() {
               })
             )
           )
-          toast.success(`${selectedIds.length} incident(s) marked as resolved`)
+          toast.success(t("toast.bulkResolved", { count: selectedIds.length }))
           fetchIncidents()
         } catch (error) {
-          toast.error("Failed to update incidents")
+          toast.error(t("toast.bulkUpdateFailed"))
         }
       },
-      confirmTitle: "Mark Incidents as Resolved",
-      confirmDescription: "Are you sure you want to mark the selected incidents as resolved?",
+      confirmTitle: t("bulk.confirmResolveTitle"),
+      confirmDescription: t("bulk.confirmResolveDescription"),
     },
     {
-      label: "Mark as Monitoring",
+      label: t("bulk.markMonitoring"),
       icon: <Activity className="h-4 w-4" />,
       onClick: async (selectedIds) => {
         try {
@@ -373,15 +378,15 @@ export default function IncidentsPage() {
               })
             )
           )
-          toast.success(`${selectedIds.length} incident(s) marked as monitoring`)
+          toast.success(t("toast.bulkMonitoring", { count: selectedIds.length }))
           fetchIncidents()
         } catch (error) {
-          toast.error("Failed to update incidents")
+          toast.error(t("toast.bulkUpdateFailed"))
         }
       },
     },
     {
-      label: "Mark as Investigating",
+      label: t("bulk.markInvestigating"),
       icon: <AlertTriangle className="h-4 w-4" />,
       onClick: async (selectedIds) => {
         try {
@@ -394,10 +399,10 @@ export default function IncidentsPage() {
               })
             )
           )
-          toast.success(`${selectedIds.length} incident(s) marked as investigating`)
+          toast.success(t("toast.bulkInvestigating", { count: selectedIds.length }))
           fetchIncidents()
         } catch (error) {
-          toast.error("Failed to update incidents")
+          toast.error(t("toast.bulkUpdateFailed"))
         }
       },
     },
@@ -417,20 +422,20 @@ export default function IncidentsPage() {
                 </div>
                 <SheetTitle>{selectedIncident.title}</SheetTitle>
                 <SheetDescription>
-                  Started {new Date(selectedIncident.startedAt).toLocaleString()}
+                  {t("table.started")} {new Date(selectedIncident.startedAt).toLocaleString()}
                 </SheetDescription>
               </SheetHeader>
 
               <div className="space-y-6 mt-6">
                 <div>
-                  <h4 className="font-medium mb-2">Description</h4>
+                  <h4 className="font-medium mb-2">{t("detail.description")}</h4>
                   <p className="text-sm text-muted-foreground">
                     {selectedIncident.description}
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">Affected Services</h4>
+                  <h4 className="font-medium mb-2">{t("detail.affectedServices")}</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedIncident.affectedServices.map((service) => (
                       <Badge key={service} variant="outline">
@@ -441,7 +446,7 @@ export default function IncidentsPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">Update Status</h4>
+                  <h4 className="font-medium mb-2">{t("detail.updateStatus")}</h4>
                   <Select
                     value={selectedIncident.status}
                     onValueChange={(value) =>
@@ -462,7 +467,7 @@ export default function IncidentsPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">Timeline</h4>
+                  <h4 className="font-medium mb-2">{t("detail.timeline")}</h4>
                   <div className="space-y-4">
                     {selectedIncident.updates.map((update) => (
                       <div key={update.id} className="flex gap-3">
@@ -479,9 +484,9 @@ export default function IncidentsPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">Add Update</h4>
+                  <h4 className="font-medium mb-2">{t("detail.addUpdate")}</h4>
                   <Textarea
-                    placeholder="Enter status update..."
+                    placeholder={t("detail.updatePlaceholder")}
                     value={newUpdate}
                     onChange={(e) => setNewUpdate(e.target.value)}
                   />
@@ -491,7 +496,7 @@ export default function IncidentsPage() {
                     disabled={!newUpdate}
                   >
                     <MessageSquare className="h-4 w-4 mr-2" />
-                    Post Update
+                    {t("detail.postUpdate")}
                   </Button>
                 </div>
               </div>
@@ -505,32 +510,32 @@ export default function IncidentsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <AlertCircle className="h-8 w-8 text-primary" />
-            Incidents
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Manage and track platform incidents and outages
+            {t("description")}
           </p>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              Report Incident
+              {t("reportIncident")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Report New Incident</DialogTitle>
+              <DialogTitle>{t("dialog.title")}</DialogTitle>
               <DialogDescription>
-                Log a new incident to track and communicate with users
+                {t("dialog.description")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="title">Incident Title</Label>
+                <Label htmlFor="title">{t("form.incidentTitle")}</Label>
                 <Input
                   id="title"
-                  placeholder="Brief description of the incident"
+                  placeholder={t("form.titlePlaceholder")}
                   value={newIncident.title}
                   onChange={(e) =>
                     setNewIncident({ ...newIncident, title: e.target.value })
@@ -538,10 +543,10 @@ export default function IncidentsPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{t("form.description")}</Label>
                 <Textarea
                   id="description"
-                  placeholder="Detailed description of the incident..."
+                  placeholder={t("form.descriptionPlaceholder")}
                   rows={4}
                   value={newIncident.description}
                   onChange={(e) =>
@@ -551,7 +556,7 @@ export default function IncidentsPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label>Severity</Label>
+                  <Label>{t("form.severity")}</Label>
                   <Select
                     value={newIncident.severity}
                     onValueChange={(value) =>
@@ -571,7 +576,7 @@ export default function IncidentsPage() {
                   </Select>
                 </div>
                 <div className="grid gap-2">
-                  <Label>Type</Label>
+                  <Label>{t("form.type")}</Label>
                   <Select
                     value={newIncident.type}
                     onValueChange={(value) =>
@@ -592,7 +597,7 @@ export default function IncidentsPage() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label>Affected Services</Label>
+                <Label>{t("form.affectedServices")}</Label>
                 <div className="flex flex-wrap gap-2">
                   {serviceOptions.map((service) => (
                     <Badge
@@ -618,13 +623,13 @@ export default function IncidentsPage() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button
                 onClick={handleCreateIncident}
                 disabled={!newIncident.title || !newIncident.description}
               >
-                Report Incident
+                {t("reportIncident")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -639,11 +644,13 @@ export default function IncidentsPage() {
               <AlertTriangle className="h-8 w-8 text-red-500" />
               <div>
                 <h3 className="font-semibold">
-                  {activeIncidents.length} Active Incident{activeIncidents.length !== 1 ? "s" : ""}
+                  {t("activeAlert.title", { count: activeIncidents.length })}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  {activeIncidents.filter((i) => i.severity === "CRITICAL").length} critical,{" "}
-                  {activeIncidents.filter((i) => i.severity === "MAJOR").length} major
+                  {t("activeAlert.breakdown", {
+                    critical: activeIncidents.filter((i) => i.severity === "CRITICAL").length,
+                    major: activeIncidents.filter((i) => i.severity === "MAJOR").length,
+                  })}
                 </p>
               </div>
             </div>
@@ -656,7 +663,7 @@ export default function IncidentsPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{incidents.length}</div>
-            <p className="text-xs text-muted-foreground">Total Incidents</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalIncidents")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -664,7 +671,7 @@ export default function IncidentsPage() {
             <div className="text-2xl font-bold text-red-500">
               {activeIncidents.length}
             </div>
-            <p className="text-xs text-muted-foreground">Active</p>
+            <p className="text-xs text-muted-foreground">{t("stats.active")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -672,7 +679,7 @@ export default function IncidentsPage() {
             <div className="text-2xl font-bold text-green-500">
               {incidents.filter((i) => i.status === "RESOLVED").length}
             </div>
-            <p className="text-xs text-muted-foreground">Resolved</p>
+            <p className="text-xs text-muted-foreground">{t("stats.resolved")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -680,7 +687,7 @@ export default function IncidentsPage() {
             <div className="text-2xl font-bold text-blue-500">
               {incidents.filter((i) => i.status === "POSTMORTEM").length}
             </div>
-            <p className="text-xs text-muted-foreground">In Postmortem</p>
+            <p className="text-xs text-muted-foreground">{t("stats.inPostmortem")}</p>
           </CardContent>
         </Card>
       </div>
@@ -693,7 +700,7 @@ export default function IncidentsPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search incidents..."
+                  placeholder={t("searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -702,10 +709,10 @@ export default function IncidentsPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("filter.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="all">{t("filter.allStatus")}</SelectItem>
                 {statusOptions.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -715,10 +722,10 @@ export default function IncidentsPage() {
             </Select>
             <Select value={severityFilter} onValueChange={setSeverityFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Severity" />
+                <SelectValue placeholder={t("filter.severity")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Severity</SelectItem>
+                <SelectItem value="all">{t("filter.allSeverity")}</SelectItem>
                 {severityOptions.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -736,7 +743,7 @@ export default function IncidentsPage() {
         columns={columns}
         getRowId={(incident) => incident.id}
         isLoading={loading}
-        emptyMessage="No incidents found"
+        emptyMessage={t("emptyMessage")}
         rowActions={rowActions}
         bulkActions={bulkActions}
         selectedIds={selectedIds}

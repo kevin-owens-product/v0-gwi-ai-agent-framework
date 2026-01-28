@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,14 +27,16 @@ import {
 import Link from "next/link"
 import { useAdmin } from "@/components/providers/admin-provider"
 
-const roleOptions = [
-  { value: "SUPER_ADMIN", label: "Super Admin", description: "Full platform access" },
-  { value: "ADMIN", label: "Admin", description: "Manage users and tenants" },
-  { value: "SUPPORT", label: "Support", description: "Handle support tickets and user issues" },
-  { value: "ANALYST", label: "Analyst", description: "View analytics and reports only" },
-]
-
 export default function NewAdminPage() {
+  const t = useTranslations("admin.admins")
+  const tCommon = useTranslations("common")
+
+  const roleOptions = [
+    { value: "SUPER_ADMIN", label: t("roles.superAdmin"), description: t("roleDescriptions.superAdmin") },
+    { value: "ADMIN", label: t("roles.admin"), description: t("roleDescriptions.admin") },
+    { value: "SUPPORT", label: t("roles.support"), description: t("roleDescriptions.support") },
+    { value: "ANALYST", label: t("roles.analyst"), description: t("roleDescriptions.analyst") },
+  ]
   const router = useRouter()
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
@@ -52,17 +54,17 @@ export default function NewAdminPage() {
 
   const handleCreate = async () => {
     if (!formData.email || !formData.name || !formData.password) {
-      toast.error("Email, name, and password are required")
+      showErrorToast(t("validation.requiredFields"))
       return
     }
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match")
+      showErrorToast(t("validation.passwordsDoNotMatch"))
       return
     }
 
     if (formData.password.length < 8) {
-      toast.error("Password must be at least 8 characters")
+      showErrorToast(t("validation.passwordMinLength"))
       return
     }
 
@@ -86,11 +88,11 @@ export default function NewAdminPage() {
         router.push(`/admin/admins/${data.admin.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to create admin")
+        showErrorToast(data.error || t("toast.createFailed"))
       }
     } catch (error) {
       console.error("Failed to create admin:", error)
-      toast.error("Failed to create admin")
+      showErrorToast(t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -99,11 +101,11 @@ export default function NewAdminPage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to create admins</p>
+        <p className="text-muted-foreground">{t("noPermissionCreate")}</p>
         <Link href="/admin/admins">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Admins
+            {t("backToAdmins")}
           </Button>
         </Link>
       </div>
@@ -118,13 +120,13 @@ export default function NewAdminPage() {
           <Link href="/admin/admins">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold">Create New Admin</h1>
+            <h1 className="text-2xl font-bold">{t("createNewAdmin")}</h1>
             <p className="text-sm text-muted-foreground">
-              Add a new administrator to the platform
+              {t("addNewAdmin")}
             </p>
           </div>
         </div>
@@ -135,12 +137,12 @@ export default function NewAdminPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Admin
+              {t("createAdmin")}
             </>
           )}
         </Button>
@@ -152,10 +154,10 @@ export default function NewAdminPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5" />
-              Admin Details
+              {t("details.title")}
             </CardTitle>
             <CardDescription>
-              Basic information about the new administrator
+              {t("details.newDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -164,7 +166,7 @@ export default function NewAdminPage() {
                 <Label htmlFor="email">
                   <div className="flex items-center gap-2">
                     <Mail className="h-4 w-4" />
-                    Email Address *
+                    {t("emailAddress")} *
                   </div>
                 </Label>
                 <Input
@@ -172,16 +174,16 @@ export default function NewAdminPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  placeholder="admin@example.com"
+                  placeholder={t("emailPlaceholder")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name *</Label>
+                <Label htmlFor="name">{t("fullName")} *</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Jane Smith"
+                  placeholder={t("namePlaceholder")}
                 />
               </div>
             </div>
@@ -191,7 +193,7 @@ export default function NewAdminPage() {
                 <Label htmlFor="password">
                   <div className="flex items-center gap-2">
                     <Key className="h-4 w-4" />
-                    Password *
+                    {t("password")} *
                   </div>
                 </Label>
                 <Input
@@ -199,17 +201,17 @@ export default function NewAdminPage() {
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
-                  placeholder="Minimum 8 characters"
+                  placeholder={t("passwordPlaceholder")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password *</Label>
+                <Label htmlFor="confirmPassword">{t("confirmPassword")} *</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                  placeholder="Re-enter password"
+                  placeholder={t("confirmPasswordPlaceholder")}
                 />
               </div>
             </div>
@@ -220,15 +222,15 @@ export default function NewAdminPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Shield className="h-5 w-5" />
-              Role & Permissions
+              {t("roleAndPermissions")}
             </CardTitle>
             <CardDescription>
-              Configure the admin role and access level
+              {t("roleAndPermissionsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label>Admin Role *</Label>
+              <Label>{t("adminRole")} *</Label>
               <Select
                 value={formData.role}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, role: value }))}
@@ -248,15 +250,15 @@ export default function NewAdminPage() {
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
-                The role determines what actions the admin can perform on the platform
+                {t("roleHelpText")}
               </p>
             </div>
 
             <div className="flex items-center justify-between pt-2">
               <div className="space-y-0.5">
-                <Label>Active Status</Label>
+                <Label>{t("details.activeStatus")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Inactive admins cannot log in to the admin portal
+                  {t("inactiveAdminsHelpText")}
                 </p>
               </div>
               <Switch

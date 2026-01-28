@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,6 +14,7 @@ interface SubscribeFormProps {
 }
 
 export function SubscribeForm({ className }: SubscribeFormProps) {
+  const t = useTranslations("status.subscribe")
   const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isSubscribed, setIsSubscribed] = useState(false)
@@ -21,7 +23,7 @@ export function SubscribeForm({ className }: SubscribeFormProps) {
     e.preventDefault()
 
     if (!email) {
-      toast.error("Please enter your email address")
+      toast.error(t("emailRequired"))
       return
     }
 
@@ -37,13 +39,13 @@ export function SubscribeForm({ className }: SubscribeFormProps) {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to subscribe")
+        throw new Error(data.error || t("failedToSubscribe"))
       }
 
       setIsSubscribed(true)
-      toast.success("Successfully subscribed to status updates")
+      toast.success(t("successMessage"))
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to subscribe")
+      toast.error(error instanceof Error ? error.message : t("failedToSubscribe"))
     } finally {
       setIsLoading(false)
     }
@@ -58,9 +60,9 @@ export function SubscribeForm({ className }: SubscribeFormProps) {
               <Check className="h-6 w-6 text-green-500" />
             </div>
             <div>
-              <h3 className="font-semibold">Subscribed!</h3>
+              <h3 className="font-semibold">{t("subscribed")}</h3>
               <p className="text-sm text-muted-foreground">
-                You will receive email notifications when there are status updates.
+                {t("subscribedDesc")}
               </p>
             </div>
           </div>
@@ -74,23 +76,23 @@ export function SubscribeForm({ className }: SubscribeFormProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Bell className="h-5 w-5" />
-          Subscribe to Updates
+          {t("title")}
         </CardTitle>
         <CardDescription>
-          Get notified via email when there are status updates or incidents.
+          {t("description")}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email Address</Label>
+            <Label htmlFor="email">{t("emailLabel")}</Label>
             <div className="flex gap-2">
               <div className="relative flex-1">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t("emailPlaceholder")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"
@@ -101,17 +103,16 @@ export function SubscribeForm({ className }: SubscribeFormProps) {
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Subscribing...
+                    {t("subscribing")}
                   </>
                 ) : (
-                  "Subscribe"
+                  t("subscribeButton")
                 )}
               </Button>
             </div>
           </div>
           <p className="text-xs text-muted-foreground">
-            We will only send you emails about status updates and incidents. You can
-            unsubscribe at any time.
+            {t("privacyNote")}
           </p>
         </form>
       </CardContent>

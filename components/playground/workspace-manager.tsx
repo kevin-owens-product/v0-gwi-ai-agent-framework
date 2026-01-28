@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Dialog,
   DialogContent,
@@ -46,6 +47,8 @@ export function WorkspaceManager({
   onSaveWorkspace,
   onCreateNew,
 }: WorkspaceManagerProps) {
+  const t = useTranslations("playground.workspaceManager")
+  const tCommon = useTranslations("common")
   const [isOpen, setIsOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [workspaceName, setWorkspaceName] = useState("")
@@ -153,31 +156,31 @@ export function WorkspaceManager({
         <DialogTrigger asChild>
           <Button variant="outline" size="sm">
             <FolderOpen className="h-4 w-4 mr-2" />
-            {currentWorkspaceName || "Save Workspace"}
+            {currentWorkspaceName || t("saveWorkspace")}
           </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Save Workspace</DialogTitle>
+            <DialogTitle>{t("saveWorkspace")}</DialogTitle>
             <DialogDescription>
-              Save your current playground session to continue later or share with your team.
+              {t("saveDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="workspace-name">Workspace Name</Label>
+              <Label htmlFor="workspace-name">{t("workspaceName")}</Label>
               <Input
                 id="workspace-name"
-                placeholder="e.g., Gen Z Sustainability Research"
+                placeholder={t("workspaceNamePlaceholder")}
                 value={workspaceName}
                 onChange={(e) => setWorkspaceName(e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="workspace-description">Description (optional)</Label>
+              <Label htmlFor="workspace-description">{t("descriptionLabel")}</Label>
               <Input
                 id="workspace-description"
-                placeholder="Brief description of what you're exploring..."
+                placeholder={t("descriptionPlaceholder")}
                 value={workspaceDescription}
                 onChange={(e) => setWorkspaceDescription(e.target.value)}
               />
@@ -185,10 +188,10 @@ export function WorkspaceManager({
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setWorkspaceName("")}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button onClick={handleSaveWorkspace} disabled={!workspaceName.trim() || isSaving}>
-              {isSaving ? "Saving..." : "Save Workspace"}
+              {isSaving ? t("saving") : t("saveWorkspace")}
             </Button>
           </div>
         </DialogContent>
@@ -199,14 +202,14 @@ export function WorkspaceManager({
         <DialogTrigger asChild>
           <Button variant="ghost" size="sm">
             <Clock className="h-4 w-4 mr-2" />
-            Workspaces
+            {t("workspaces")}
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
-            <DialogTitle>Your Workspaces</DialogTitle>
+            <DialogTitle>{t("yourWorkspaces")}</DialogTitle>
             <DialogDescription>
-              Load a previous session or create a new workspace
+              {t("loadDescription")}
             </DialogDescription>
           </DialogHeader>
 
@@ -220,7 +223,7 @@ export function WorkspaceManager({
                   : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
-              Recent
+              {t("recent")}
             </button>
             <button
               onClick={() => setActiveTab("starred")}
@@ -231,7 +234,7 @@ export function WorkspaceManager({
               }`}
             >
               <Star className="h-3.5 w-3.5 inline mr-1" />
-              Starred
+              {t("starred")}
             </button>
             <button
               onClick={() => setActiveTab("all")}
@@ -241,12 +244,12 @@ export function WorkspaceManager({
                   : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
-              All
+              {t("all")}
             </button>
             <div className="ml-auto">
               <Button size="sm" onClick={onCreateNew}>
                 <Plus className="h-4 w-4 mr-1" />
-                New Workspace
+                {t("newWorkspace")}
               </Button>
             </div>
           </div>
@@ -256,7 +259,7 @@ export function WorkspaceManager({
             {filteredWorkspaces.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <FolderOpen className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p>No workspaces found</p>
+                <p>{t("noWorkspaces")}</p>
               </div>
             ) : (
               filteredWorkspaces.map((workspace) => (
@@ -286,7 +289,7 @@ export function WorkspaceManager({
                           {workspace.agent}
                         </Badge>
                         <span className="text-xs text-muted-foreground">
-                          {workspace.messageCount} messages
+                          {t("messagesCount", { count: workspace.messageCount })}
                         </span>
                         <span className="text-xs text-muted-foreground">{workspace.lastAccessed}</span>
                       </div>
@@ -301,15 +304,15 @@ export function WorkspaceManager({
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => handleToggleStar(workspace.id)}>
                           <Star className="h-4 w-4 mr-2" />
-                          {workspace.starred ? "Unstar" : "Star"}
+                          {workspace.starred ? t("unstar") : t("star")}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleDuplicate(workspace)}>
                           <Copy className="h-4 w-4 mr-2" />
-                          Duplicate
+                          {tCommon("duplicate")}
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Edit2 className="h-4 w-4 mr-2" />
-                          Rename
+                          {t("rename")}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
@@ -317,7 +320,7 @@ export function WorkspaceManager({
                           className="text-destructive"
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
-                          Delete
+                          {tCommon("delete")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

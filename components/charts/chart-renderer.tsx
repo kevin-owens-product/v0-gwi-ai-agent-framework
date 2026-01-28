@@ -67,6 +67,7 @@ export function ChartRenderer({
   className = "",
 }: ChartRendererProps) {
   const t = useTranslations('ui.empty')
+  const tCharts = useTranslations('charts')
   const {
     colors = FALLBACK_COLORS,
     xAxisKey = "name",
@@ -274,7 +275,7 @@ export function ChartRenderer({
       default:
         return (
           <div className="flex items-center justify-center text-muted-foreground" style={{ height }}>
-            Unsupported chart type: {type}
+            {tCharts('unsupportedType', { type })}
           </div>
         )
     }

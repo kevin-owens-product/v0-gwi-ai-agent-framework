@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -34,14 +35,9 @@ interface Organization {
   slug: string
 }
 
-const STATUS_OPTIONS = [
-  { value: "NOT_STARTED", label: "Not Started" },
-  { value: "IN_PROGRESS", label: "In Progress" },
-  { value: "COMPLIANT", label: "Compliant" },
-  { value: "NON_COMPLIANT", label: "Non-Compliant" },
-]
-
 export default function NewAttestationPage() {
+  const t = useTranslations("admin.compliance")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const [isSaving, setIsSaving] = useState(false)
   const [frameworks, setFrameworks] = useState<Framework[]>([])
@@ -53,6 +49,13 @@ export default function NewAttestationPage() {
     validUntil: "",
     attestedBy: "",
   })
+
+  const STATUS_OPTIONS = [
+    { value: "NOT_STARTED", label: t("attestations.status.notStarted") },
+    { value: "IN_PROGRESS", label: t("attestations.status.inProgress") },
+    { value: "COMPLIANT", label: t("attestations.status.compliant") },
+    { value: "NON_COMPLIANT", label: t("attestations.status.nonCompliant") },
+  ]
 
   useEffect(() => {
     async function fetchData() {
@@ -83,7 +86,7 @@ export default function NewAttestationPage() {
 
   const handleCreate = async () => {
     if (!formData.frameworkId || !formData.orgId) {
-      toast.error("Framework and organization are required")
+      toast.error(t("attestations.errors.frameworkAndOrgRequired"))
       return
     }
 
@@ -108,14 +111,14 @@ export default function NewAttestationPage() {
           return
         }
         const data = await response.json()
-        throw new Error(data.error || "Failed to create attestation")
+        throw new Error(data.error || t("attestations.errors.createFailed"))
       }
 
       const data = await response.json()
       router.push(`/admin/compliance/attestations/${data.attestation?.id || ""}`)
     } catch (error) {
       console.error("Failed to create attestation:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to create attestation")
+      toast.error(error instanceof Error ? error.message : t("attestations.errors.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -129,16 +132,16 @@ export default function NewAttestationPage() {
           <Link href="/admin/compliance/attestations">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <FileText className="h-6 w-6 text-primary" />
-              Create Attestation
+              {t("attestations.new.title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Create a new compliance attestation for an organization
+              {t("attestations.new.description")}
             </p>
           </div>
         </div>
@@ -146,12 +149,12 @@ export default function NewAttestationPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {tCommon("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Attestation
+              {t("attestations.new.createAttestation")}
             </>
           )}
         </Button>
@@ -160,20 +163,20 @@ export default function NewAttestationPage() {
       {/* Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Attestation Details</CardTitle>
+          <CardTitle>{t("attestations.new.attestationDetails")}</CardTitle>
           <CardDescription>
-            Configure the compliance attestation for an organization
+            {t("attestations.new.configureAttestation")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label>Organization *</Label>
+            <Label>{t("attestations.fields.organization")} *</Label>
             <Select
               value={formData.orgId}
               onValueChange={(value) => setFormData({ ...formData, orgId: value })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select an organization" />
+                <SelectValue placeholder={t("attestations.new.selectOrganization")} />
               </SelectTrigger>
               <SelectContent>
                 {organizations.map((org) => (
@@ -186,13 +189,13 @@ export default function NewAttestationPage() {
           </div>
 
           <div className="space-y-2">
-            <Label>Framework *</Label>
+            <Label>{t("attestations.fields.framework")} *</Label>
             <Select
               value={formData.frameworkId}
               onValueChange={(value) => setFormData({ ...formData, frameworkId: value })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select a framework" />
+                <SelectValue placeholder={t("attestations.new.selectFramework")} />
               </SelectTrigger>
               <SelectContent>
                 {frameworks.map((framework) => (
@@ -206,7 +209,7 @@ export default function NewAttestationPage() {
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Initial Status</Label>
+              <Label>{t("attestations.fields.initialStatus")}</Label>
               <Select
                 value={formData.status}
                 onValueChange={(value) => setFormData({ ...formData, status: value })}
@@ -224,7 +227,7 @@ export default function NewAttestationPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="validUntil">Valid Until (Optional)</Label>
+              <Label htmlFor="validUntil">{t("attestations.fields.validUntilOptional")}</Label>
               <Input
                 id="validUntil"
                 type="date"
@@ -232,18 +235,18 @@ export default function NewAttestationPage() {
                 onChange={(e) => setFormData({ ...formData, validUntil: e.target.value })}
               />
               <p className="text-xs text-muted-foreground">
-                Expiration date for the attestation
+                {t("attestations.new.expirationDateHint")}
               </p>
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="attestedBy">Attested By (Optional)</Label>
+            <Label htmlFor="attestedBy">{t("attestations.fields.attestedByOptional")}</Label>
             <Input
               id="attestedBy"
               value={formData.attestedBy}
               onChange={(e) => setFormData({ ...formData, attestedBy: e.target.value })}
-              placeholder="Name of the person attesting"
+              placeholder={t("attestations.new.attestedByPlaceholder")}
             />
           </div>
         </CardContent>

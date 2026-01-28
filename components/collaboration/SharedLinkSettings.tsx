@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback } from 'react'
+import { useTranslations } from "next-intl"
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -49,34 +50,31 @@ interface SharedLinkSettingsProps {
   className?: string
 }
 
-const PERMISSION_OPTIONS: { value: SharedLinkPermission; label: string; icon: React.ReactNode; description: string }[] = [
+const PERMISSION_OPTIONS: { value: SharedLinkPermission; labelKey: string; icon: React.ReactNode }[] = [
   {
     value: 'VIEW',
-    label: 'View only',
+    labelKey: 'permissionViewOnly',
     icon: <Eye className="h-4 w-4" />,
-    description: 'Can view the content',
   },
   {
     value: 'COMMENT',
-    label: 'Can comment',
+    labelKey: 'permissionCanComment',
     icon: <MessageSquare className="h-4 w-4" />,
-    description: 'Can view and add comments',
   },
   {
     value: 'DOWNLOAD',
-    label: 'Can download',
+    labelKey: 'permissionCanDownload',
     icon: <Download className="h-4 w-4" />,
-    description: 'Can view and download content',
   },
 ]
 
 const EXPIRATION_PRESETS = [
-  { value: '', label: 'Never expires' },
-  { value: '1h', label: '1 hour' },
-  { value: '24h', label: '24 hours' },
-  { value: '7d', label: '7 days' },
-  { value: '30d', label: '30 days' },
-  { value: 'custom', label: 'Custom date' },
+  { value: '', labelKey: 'neverExpires' },
+  { value: '1h', labelKey: 'oneHour' },
+  { value: '24h', labelKey: 'twentyFourHours' },
+  { value: '7d', labelKey: 'sevenDays' },
+  { value: '30d', labelKey: 'thirtyDays' },
+  { value: 'custom', labelKey: 'customDate' },
 ]
 
 function getExpirationDate(preset: string): string | null {
@@ -108,6 +106,7 @@ export function SharedLinkSettings({
   isEditing = false,
   className,
 }: SharedLinkSettingsProps) {
+  const t = useTranslations("collaboration")
   const [usePassword, setUsePassword] = useState(hasExistingPassword || !!initialValues.password)
   const [password, setPassword] = useState(initialValues.password || '')
   const [removePassword, setRemovePassword] = useState(false)
@@ -181,7 +180,7 @@ export function SharedLinkSettings({
     <div className={cn('space-y-6', className)}>
       {/* Permissions */}
       <div className="space-y-3">
-        <Label>Permissions</Label>
+        <Label>{t("permissions")}</Label>
         <div className="grid grid-cols-3 gap-2">
           {PERMISSION_OPTIONS.map((option) => (
             <button
@@ -196,7 +195,7 @@ export function SharedLinkSettings({
               )}
             >
               {option.icon}
-              <span className="text-xs font-medium">{option.label}</span>
+              <span className="text-xs font-medium">{t(option.labelKey)}</span>
             </button>
           ))}
         </div>
@@ -207,7 +206,7 @@ export function SharedLinkSettings({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Lock className="h-4 w-4 text-muted-foreground" />
-            <Label htmlFor="use-password">Password protection</Label>
+            <Label htmlFor="use-password">{t("passwordProtection")}</Label>
           </div>
           <Switch
             id="use-password"
@@ -225,7 +224,7 @@ export function SharedLinkSettings({
         {usePassword && (
           <Input
             type="password"
-            placeholder={hasExistingPassword ? 'Enter new password to change' : 'Enter password'}
+            placeholder={hasExistingPassword ? t("enterNewPasswordToChange") : t("enterPassword")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -237,7 +236,7 @@ export function SharedLinkSettings({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 text-muted-foreground" />
-            <Label htmlFor="use-expiration">Set expiration</Label>
+            <Label htmlFor="use-expiration">{t("setExpiration")}</Label>
           </div>
           <Switch
             id="use-expiration"
@@ -249,12 +248,12 @@ export function SharedLinkSettings({
           <div className="space-y-2">
             <Select value={expirationPreset} onValueChange={setExpirationPreset}>
               <SelectTrigger>
-                <SelectValue placeholder="Select expiration" />
+                <SelectValue placeholder={t("selectExpiration")} />
               </SelectTrigger>
               <SelectContent>
                 {EXPIRATION_PRESETS.map((preset) => (
                   <SelectItem key={preset.value} value={preset.value}>
-                    {preset.label}
+                    {t(preset.labelKey)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -276,7 +275,7 @@ export function SharedLinkSettings({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Eye className="h-4 w-4 text-muted-foreground" />
-            <Label htmlFor="use-max-views">Limit views</Label>
+            <Label htmlFor="use-max-views">{t("limitViews")}</Label>
           </div>
           <Switch
             id="use-max-views"
@@ -287,7 +286,7 @@ export function SharedLinkSettings({
         {useMaxViews && (
           <Input
             type="number"
-            placeholder="Maximum views"
+            placeholder={t("maximumViews")}
             value={maxViews}
             onChange={(e) => setMaxViews(e.target.value)}
             min={1}
@@ -300,7 +299,7 @@ export function SharedLinkSettings({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4 text-muted-foreground" />
-            <Label htmlFor="use-email">Restrict to specific emails</Label>
+            <Label htmlFor="use-email">{t("restrictToSpecificEmails")}</Label>
           </div>
           <Switch
             id="use-email"
@@ -313,7 +312,7 @@ export function SharedLinkSettings({
             <div className="flex gap-2">
               <Input
                 type="email"
-                placeholder="Enter email address"
+                placeholder={t("enterEmailAddress")}
                 value={emailInput}
                 onChange={(e) => setEmailInput(e.target.value)}
                 onKeyDown={(e) => {
@@ -350,10 +349,10 @@ export function SharedLinkSettings({
       {/* Actions */}
       <div className="flex justify-end gap-2 pt-4 border-t">
         <Button type="button" variant="outline" onClick={onCancel} disabled={isSaving}>
-          Cancel
+          {t("cancel")}
         </Button>
         <Button type="button" onClick={handleSubmit} disabled={isSaving}>
-          {isSaving ? 'Saving...' : isEditing ? 'Update Link' : 'Create Link'}
+          {isSaving ? t("saving") : isEditing ? t("updateLink") : t("createLink")}
         </Button>
       </div>
     </div>

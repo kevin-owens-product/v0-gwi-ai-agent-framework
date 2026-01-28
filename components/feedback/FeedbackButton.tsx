@@ -7,6 +7,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { MessageSquarePlus } from "lucide-react"
 import { FeedbackModal } from "./FeedbackModal"
@@ -20,6 +21,7 @@ export function FeedbackButton({
   position = "bottom-right",
   variant = "floating",
 }: FeedbackButtonProps) {
+  const t = useTranslations("feedback.modal")
   const [isOpen, setIsOpen] = useState(false)
 
   const positionClasses = {
@@ -34,7 +36,7 @@ export function FeedbackButton({
       <>
         <Button onClick={() => setIsOpen(true)} variant="outline" size="sm">
           <MessageSquarePlus className="h-4 w-4 mr-2" />
-          Send Feedback
+          {t("sendFeedback")}
         </Button>
         <FeedbackModal open={isOpen} onOpenChange={setIsOpen} />
       </>
@@ -49,7 +51,7 @@ export function FeedbackButton({
         size="icon"
       >
         <MessageSquarePlus className="h-5 w-5" />
-        <span className="sr-only">Send feedback</span>
+        <span className="sr-only">{t("sendFeedback")}</span>
       </Button>
       <FeedbackModal open={isOpen} onOpenChange={setIsOpen} />
     </>

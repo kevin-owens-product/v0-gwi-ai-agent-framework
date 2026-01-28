@@ -37,7 +37,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 
 interface TenantEntitlement {
@@ -128,7 +128,7 @@ export default function FeatureDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch feature:", error)
-      toast.error(t("errors.fetchFailed"))
+      showErrorToast(t("errors.fetchFailed"))
       router.push("/admin/entitlement-features")
     } finally {
       setLoading(false)
@@ -151,7 +151,7 @@ export default function FeatureDetailPage() {
         try {
           parsedDefaultValue = JSON.parse(formData.defaultValue)
         } catch {
-          toast.error(t("errors.invalidJson"))
+          showErrorToast(t("errors.invalidJson"))
           return
         }
       }
@@ -169,10 +169,10 @@ export default function FeatureDetailPage() {
         throw new Error("Failed to update feature")
       }
 
-      toast.success(t("messages.featureUpdated"))
+      showSuccessToast(t("messages.featureUpdated"))
       fetchFeature()
     } catch (error) {
-      toast.error(t("errors.updateFailed"))
+      showErrorToast(t("errors.updateFailed"))
     } finally {
       setSaving(false)
     }
@@ -195,10 +195,10 @@ export default function FeatureDetailPage() {
         throw new Error("Failed to delete feature")
       }
 
-      toast.success(t("messages.featureDeleted"))
+      showSuccessToast(t("messages.featureDeleted"))
       router.push("/admin/entitlement-features")
     } catch (error) {
-      toast.error(t("errors.deleteFailed"))
+      showErrorToast(t("errors.deleteFailed"))
     } finally {
       setDeleting(false)
       setShowDeleteDialog(false)
@@ -219,10 +219,10 @@ export default function FeatureDetailPage() {
         throw new Error("Failed to update feature status")
       }
 
-      toast.success(feature.isActive ? t("messages.featureDisabled") : t("messages.featureEnabled"))
+      showSuccessToast(feature.isActive ? t("messages.featureDisabled") : t("messages.featureEnabled"))
       fetchFeature()
     } catch (error) {
-      toast.error(t("errors.statusUpdateFailed"))
+      showErrorToast(t("errors.statusUpdateFailed"))
     }
   }
 

@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-// Input import removed - unused
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import {
@@ -34,7 +34,7 @@ import {
   AlertTriangle,
 } from "lucide-react"
 import Link from "next/link"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 
 interface Organization {
@@ -68,17 +68,14 @@ interface Domain {
   ssoConfig: SSOConfig | null
 }
 
-const verificationMethods = [
-  { value: "DNS_TXT", label: "DNS TXT Record" },
-  { value: "DNS_CNAME", label: "DNS CNAME Record" },
-  { value: "META_TAG", label: "Meta Tag" },
-  { value: "FILE_UPLOAD", label: "File Upload" },
-]
+const verificationMethodKeys = ["DNS_TXT", "DNS_CNAME", "META_TAG", "FILE_UPLOAD"] as const
 
 export default function DomainDetailPage() {
   const params = useParams()
   const router = useRouter()
   const domainId = params.id as string
+  const t = useTranslations("admin.identity.domains")
+  const tCommon = useTranslations("common")
 
   const [domain, setDomain] = useState<Domain | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -97,7 +94,7 @@ export default function DomainDetailPage() {
     try {
       const response = await fetch(`/api/admin/identity/domains/${domainId}`)
       if (!response.ok) {
-        throw new Error("Failed to fetch domain")
+        throw new Error(t("errors.fetchFailed"))
       }
       const data = await response.json()
       setDomain(data.domain)
@@ -108,11 +105,11 @@ export default function DomainDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch domain:", error)
-      toast.error("Failed to fetch domain details")
+      showErrorToast(t("errors.fetchFailed"))
     } finally {
       setIsLoading(false)
     }
-  }, [domainId])
+  }, [domainId, t])
 
   useEffect(() => {
     fetchDomain()
@@ -127,15 +124,15 @@ export default function DomainDetailPage() {
         body: JSON.stringify(editForm),
       })
       if (response.ok) {
-        toast.success("Domain settings updated")
+        showSuccessToast(t("messages.settingsUpdated"))
         setIsEditing(false)
         fetchDomain()
       } else {
-        throw new Error("Failed to update domain")
+        throw new Error(t("errors.updateFailed"))
       }
     } catch (error) {
       console.error("Failed to update domain:", error)
-      toast.error("Failed to update domain settings")
+      showErrorToast(t("errors.updateFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -150,14 +147,14 @@ export default function DomainDetailPage() {
       const data = await response.json()
 
       if (data.verification?.success) {
-        toast.success("Domain verified successfully!")
+        showSuccessToast(t("messages.domainVerified"))
       } else {
-        toast.error(data.verification?.message || "Verification failed")
+        showErrorToast(data.verification?.message || t("errors.verificationFailed"))
       }
       fetchDomain()
     } catch (error) {
       console.error("Failed to verify domain:", error)
-      toast.error("Failed to verify domain")
+      showErrorToast(t("errors.verificationFailed"))
     } finally {
       setIsVerifying(false)
     }
@@ -173,22 +170,22 @@ export default function DomainDetailPage() {
         method: "DELETE",
       })
       if (response.ok) {
-        toast.success("Domain deleted successfully")
+        showSuccessToast(t("messages.domainDeleted"))
         router.push("/admin/identity/domains")
       } else {
-        throw new Error("Failed to delete domain")
+        throw new Error(t("errors.deleteFailed"))
       }
     } catch (error) {
       console.error("Failed to delete domain:", error)
-      toast.error("Failed to delete domain")
+      showErrorToast(t("errors.deleteFailed"))
     } finally {
       setShowDeleteDialog(false)
     }
-  }, [domainId, router])
+  }, [domainId, router, t])
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
-    toast.success("Copied to clipboard")
+    showSuccessToast(t("messages.copiedToClipboard"))
   }
 
   const getStatusBadge = (status: string) => {
@@ -197,28 +194,28 @@ export default function DomainDetailPage() {
         return (
           <Badge className="bg-green-500">
             <CheckCircle className="h-3 w-3 mr-1" />
-            Verified
+            {t("statuses.verified")}
           </Badge>
         )
       case "PENDING":
         return (
           <Badge variant="secondary">
             <Clock className="h-3 w-3 mr-1" />
-            Pending
+            {t("statuses.pending")}
           </Badge>
         )
       case "FAILED":
         return (
           <Badge variant="destructive">
             <XCircle className="h-3 w-3 mr-1" />
-            Failed
+            {t("statuses.failed")}
           </Badge>
         )
       case "EXPIRED":
         return (
           <Badge variant="outline" className="text-yellow-500">
             <AlertTriangle className="h-3 w-3 mr-1" />
-            Expired
+            {t("statuses.expired")}
           </Badge>
         )
       default:
@@ -226,20 +223,20 @@ export default function DomainDetailPage() {
     }
   }
 
-  const getVerificationInstructions = (method: string, token: string, domain: string) => {
+  const getVerificationInstructions = (method: string, token: string, domainName: string) => {
     switch (method) {
       case "DNS_TXT":
         return (
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">
-              Add a TXT record to your DNS settings:
+              {t("verification.dns_txt.instructions")}
             </p>
             <div className="bg-muted p-3 rounded-lg font-mono text-sm">
               <div className="flex justify-between items-center">
-                <span>Host: @</span>
+                <span>{t("verification.host")}: @</span>
               </div>
               <div className="flex justify-between items-center mt-2">
-                <span className="break-all">Value: {token}</span>
+                <span className="break-all">{t("verification.value")}: {token}</span>
                 <Button size="icon" variant="ghost" onClick={() => copyToClipboard(token)}>
                   <Copy className="h-4 w-4" />
                 </Button>
@@ -251,14 +248,14 @@ export default function DomainDetailPage() {
         return (
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">
-              Add a CNAME record to your DNS settings:
+              {t("verification.dns_cname.instructions")}
             </p>
             <div className="bg-muted p-3 rounded-lg font-mono text-sm">
               <div className="flex justify-between items-center">
-                <span>Host: _gwi-verification</span>
+                <span>{t("verification.host")}: _gwi-verification</span>
               </div>
               <div className="flex justify-between items-center mt-2">
-                <span>Points to: verify.gwi.com</span>
+                <span>{t("verification.pointsTo")}: verify.gwi.com</span>
               </div>
             </div>
           </div>
@@ -267,7 +264,7 @@ export default function DomainDetailPage() {
         return (
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">
-              Add this meta tag to your homepage HTML:
+              {t("verification.meta_tag.instructions")}
             </p>
             <div className="bg-muted p-3 rounded-lg font-mono text-sm break-all">
               <code>&lt;meta name="gwi-verification" content="{token}" /&gt;</code>
@@ -286,12 +283,12 @@ export default function DomainDetailPage() {
         return (
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">
-              Create a verification file at:
+              {t("verification.file_upload.instructions")}
             </p>
             <div className="bg-muted p-3 rounded-lg font-mono text-sm">
-              <div>https://{domain}/.well-known/gwi-verification.txt</div>
+              <div>https://{domainName}/.well-known/gwi-verification.txt</div>
               <div className="mt-2 flex justify-between items-center">
-                <span>Contents: {token}</span>
+                <span>{t("verification.contents")}: {token}</span>
                 <Button size="icon" variant="ghost" onClick={() => copyToClipboard(token)}>
                   <Copy className="h-4 w-4" />
                 </Button>
@@ -317,11 +314,11 @@ export default function DomainDetailPage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {tCommon("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Domain not found</p>
+            <p className="text-muted-foreground">{t("domainNotFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -336,7 +333,7 @@ export default function DomainDetailPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/identity/domains">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Link>
           </Button>
           <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -358,11 +355,11 @@ export default function DomainDetailPage() {
               ) : (
                 <RefreshCw className="h-4 w-4 mr-2" />
               )}
-              Verify Now
+              {t("actions.verifyNow")}
             </Button>
           )}
           <Button variant="destructive" onClick={handleDeleteClick}>
-            Delete
+            {tCommon("delete")}
           </Button>
         </div>
       </div>
@@ -370,18 +367,18 @@ export default function DomainDetailPage() {
       <ConfirmationDialog
         open={showDeleteDialog}
         onOpenChange={setShowDeleteDialog}
-        title="Delete Domain Verification"
-        description="Are you sure you want to delete this domain verification? This action cannot be undone."
-        confirmText="Delete"
+        title={t("dialogs.deleteTitle")}
+        description={t("dialogs.deleteDescription")}
+        confirmText={tCommon("delete")}
         onConfirm={handleDeleteConfirm}
         variant="destructive"
       />
 
       <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="verification">Verification</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="verification">{t("tabs.verification")}</TabsTrigger>
+          <TabsTrigger value="settings">{t("tabs.settings")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -389,7 +386,7 @@ export default function DomainDetailPage() {
           <div className="grid gap-4 md:grid-cols-3">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Status</CardTitle>
+                <CardTitle className="text-sm font-medium">{tCommon("status")}</CardTitle>
                 <Globe className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -398,23 +395,23 @@ export default function DomainDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Auto-Join</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("detail.autoJoin")}</CardTitle>
                 <Building2 className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <Badge variant={domain.autoJoin ? "default" : "secondary"}>
-                  {domain.autoJoin ? "Enabled" : "Disabled"}
+                  {domain.autoJoin ? tCommon("enabled") : tCommon("disabled")}
                 </Badge>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">SSO Enforced</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("detail.ssoEnforced")}</CardTitle>
                 <Shield className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <Badge variant={domain.ssoEnforced ? "default" : "secondary"}>
-                  {domain.ssoEnforced ? "Enforced" : "Optional"}
+                  {domain.ssoEnforced ? t("detail.enforced") : t("detail.optional")}
                 </Badge>
               </CardContent>
             </Card>
@@ -423,34 +420,34 @@ export default function DomainDetailPage() {
           {/* Domain Details */}
           <Card>
             <CardHeader>
-              <CardTitle>Domain Details</CardTitle>
+              <CardTitle>{t("detail.domainDetails")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Domain</span>
+                <span className="text-muted-foreground">{t("detail.domain")}</span>
                 <span className="font-medium">{domain.domain}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Organization</span>
+                <span className="text-muted-foreground">{t("detail.organization")}</span>
                 <span className="font-medium">
                   {domain.organization?.name || domain.orgId}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Verification Method</span>
+                <span className="text-muted-foreground">{t("detail.verificationMethod")}</span>
                 <Badge variant="outline">{domain.verificationMethod.replace("_", " ")}</Badge>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Verified At</span>
+                <span className="text-muted-foreground">{t("detail.verifiedAt")}</span>
                 <span className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
                   {domain.verifiedAt
                     ? new Date(domain.verifiedAt).toLocaleDateString()
-                    : "Not verified"}
+                    : t("detail.notVerified")}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Created</span>
+                <span className="text-muted-foreground">{t("detail.created")}</span>
                 <span className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
                   {new Date(domain.createdAt).toLocaleDateString()}
@@ -458,7 +455,7 @@ export default function DomainDetailPage() {
               </div>
               {domain.expiresAt && (
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Expires</span>
+                  <span className="text-muted-foreground">{t("detail.expires")}</span>
                   <span className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
                     {new Date(domain.expiresAt).toLocaleDateString()}
@@ -472,25 +469,25 @@ export default function DomainDetailPage() {
           {domain.ssoConfig && (
             <Card>
               <CardHeader>
-                <CardTitle>Linked SSO Configuration</CardTitle>
+                <CardTitle>{t("detail.linkedSsoConfig")}</CardTitle>
                 <CardDescription>
-                  SSO is configured for this organization
+                  {t("detail.ssoConfigured")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Provider</span>
+                  <span className="text-muted-foreground">{t("detail.provider")}</span>
                   <Badge variant="outline">{domain.ssoConfig.provider}</Badge>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Status</span>
+                  <span className="text-muted-foreground">{tCommon("status")}</span>
                   <Badge variant={domain.ssoConfig.status === "ACTIVE" ? "default" : "secondary"}>
                     {domain.ssoConfig.status}
                   </Badge>
                 </div>
                 <Button variant="outline" asChild>
                   <Link href={`/admin/identity/sso/${domain.ssoConfig.id}`}>
-                    View SSO Configuration
+                    {t("actions.viewSsoConfig")}
                   </Link>
                 </Button>
               </CardContent>
@@ -501,9 +498,9 @@ export default function DomainDetailPage() {
         <TabsContent value="verification" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Verification Instructions</CardTitle>
+              <CardTitle>{t("verification.title")}</CardTitle>
               <CardDescription>
-                Follow these instructions to verify ownership of {domain.domain}
+                {t("verification.description", { domain: domain.domain })}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -515,8 +512,7 @@ export default function DomainDetailPage() {
 
               <div className="pt-4 border-t">
                 <p className="text-sm text-muted-foreground mb-4">
-                  After configuring the verification record, click the button below to verify.
-                  DNS changes may take up to 24-48 hours to propagate.
+                  {t("verification.afterConfiguring")}
                 </p>
                 <Button onClick={handleVerify} disabled={isVerifying || domain.status === "VERIFIED"}>
                   {isVerifying ? (
@@ -524,7 +520,7 @@ export default function DomainDetailPage() {
                   ) : (
                     <RefreshCw className="h-4 w-4 mr-2" />
                   )}
-                  {domain.status === "VERIFIED" ? "Already Verified" : "Check Verification"}
+                  {domain.status === "VERIFIED" ? t("verification.alreadyVerified") : t("verification.checkVerification")}
                 </Button>
               </div>
             </CardContent>
@@ -534,17 +530,17 @@ export default function DomainDetailPage() {
           {domain.metadata && typeof domain.metadata === 'object' && 'lastVerificationAttempt' in domain.metadata && (
             <Card>
               <CardHeader>
-                <CardTitle>Last Verification Attempt</CardTitle>
+                <CardTitle>{t("verification.lastAttempt")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Time</span>
+                  <span className="text-muted-foreground">{t("verification.time")}</span>
                   <span>
                     {new Date(String((domain.metadata as Record<string, unknown>).lastVerificationAttempt)).toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Result</span>
+                  <span className="text-muted-foreground">{t("verification.result")}</span>
                   <span>{String((domain.metadata as Record<string, unknown>).lastVerificationResult || '')}</span>
                 </div>
               </CardContent>
@@ -556,7 +552,7 @@ export default function DomainDetailPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Domain Settings</CardTitle>
+                <CardTitle>{t("settings.title")}</CardTitle>
                 {isEditing ? (
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" onClick={() => setIsEditing(false)}>
@@ -577,7 +573,7 @@ export default function DomainDetailPage() {
               {isEditing ? (
                 <>
                   <div className="space-y-2">
-                    <Label>Verification Method</Label>
+                    <Label>{t("form.verificationMethod")}</Label>
                     <Select
                       value={editForm.verificationMethod}
                       onValueChange={(value) =>
@@ -588,9 +584,9 @@ export default function DomainDetailPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {verificationMethods.map((method) => (
-                          <SelectItem key={method.value} value={method.value}>
-                            {method.label}
+                        {verificationMethodKeys.map((method) => (
+                          <SelectItem key={method} value={method}>
+                            {t(`verificationMethods.${method.toLowerCase()}.label`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -599,9 +595,9 @@ export default function DomainDetailPage() {
 
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label>Auto-Join</Label>
+                      <Label>{t("form.autoJoin")}</Label>
                       <p className="text-sm text-muted-foreground">
-                        Automatically add users with this email domain to the organization
+                        {t("form.autoJoinDescription")}
                       </p>
                     </div>
                     <Switch
@@ -614,9 +610,9 @@ export default function DomainDetailPage() {
 
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label>Enforce SSO</Label>
+                      <Label>{t("form.ssoEnforced")}</Label>
                       <p className="text-sm text-muted-foreground">
-                        Require users with this domain to authenticate via SSO
+                        {t("form.ssoEnforcedDescription")}
                       </p>
                     </div>
                     <Switch
@@ -629,38 +625,38 @@ export default function DomainDetailPage() {
                   </div>
                   {!domain.ssoConfig && editForm.ssoEnforced === false && (
                     <p className="text-sm text-yellow-500">
-                      SSO enforcement requires an SSO configuration. Configure SSO first.
+                      {t("settings.ssoRequired")}
                     </p>
                   )}
                 </>
               ) : (
                 <>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Verification Method</span>
+                    <span className="text-muted-foreground">{t("form.verificationMethod")}</span>
                     <Badge variant="outline">
                       {domain.verificationMethod.replace("_", " ")}
                     </Badge>
                   </div>
                   <div className="flex justify-between">
                     <div>
-                      <span className="text-muted-foreground">Auto-Join</span>
+                      <span className="text-muted-foreground">{t("form.autoJoin")}</span>
                       <p className="text-xs text-muted-foreground">
-                        Auto-add users with this domain
+                        {t("settings.autoAddUsers")}
                       </p>
                     </div>
                     <Badge variant={domain.autoJoin ? "default" : "secondary"}>
-                      {domain.autoJoin ? "Enabled" : "Disabled"}
+                      {domain.autoJoin ? tCommon("enabled") : tCommon("disabled")}
                     </Badge>
                   </div>
                   <div className="flex justify-between">
                     <div>
-                      <span className="text-muted-foreground">Enforce SSO</span>
+                      <span className="text-muted-foreground">{t("form.ssoEnforced")}</span>
                       <p className="text-xs text-muted-foreground">
-                        Require SSO for this domain
+                        {t("settings.requireSso")}
                       </p>
                     </div>
                     <Badge variant={domain.ssoEnforced ? "default" : "secondary"}>
-                      {domain.ssoEnforced ? "Enforced" : "Optional"}
+                      {domain.ssoEnforced ? t("detail.enforced") : t("detail.optional")}
                     </Badge>
                   </div>
                 </>

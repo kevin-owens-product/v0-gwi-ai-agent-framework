@@ -35,6 +35,7 @@ interface CohortAnalysisTableProps {
 }
 
 export function CohortAnalysisTable({ data, isLoading }: CohortAnalysisTableProps) {
+  const t = useTranslations("admin.analytics.cohortAnalysis")
   const tTable = useTranslations('ui.table')
   const tLoading = useTranslations('ui.loading')
 
@@ -81,7 +82,7 @@ export function CohortAnalysisTable({ data, isLoading }: CohortAnalysisTableProp
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Cohort Analysis</CardTitle>
+          <CardTitle>{t("title")}</CardTitle>
           <CardDescription>{tLoading('loading')}</CardDescription>
         </CardHeader>
         <CardContent>
@@ -99,8 +100,8 @@ export function CohortAnalysisTable({ data, isLoading }: CohortAnalysisTableProp
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Cohort Analysis</CardTitle>
-          <CardDescription>Customer retention by signup cohort</CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-48 flex items-center justify-center text-muted-foreground">
@@ -125,18 +126,18 @@ export function CohortAnalysisTable({ data, isLoading }: CohortAnalysisTableProp
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Cohort Analysis</CardTitle>
-            <CardDescription>Customer retention by signup cohort</CardDescription>
+            <CardTitle>{t("title")}</CardTitle>
+            <CardDescription>{t("description")}</CardDescription>
           </div>
           <div className="flex gap-4 text-sm">
             <div className="text-right">
-              <div className="text-muted-foreground">Avg Logo Retention</div>
+              <div className="text-muted-foreground">{t("avgLogoRetention")}</div>
               <div className={`font-semibold ${getRetentionColor(avgRetention)}`}>
                 {avgRetention.toFixed(1)}%
               </div>
             </div>
             <div className="text-right">
-              <div className="text-muted-foreground">Avg Revenue Retention</div>
+              <div className="text-muted-foreground">{t("avgRevenueRetention")}</div>
               <div className={`font-semibold ${avgRevenueRetention >= 100 ? "text-green-500" : "text-yellow-500"}`}>
                 {avgRevenueRetention.toFixed(1)}%
               </div>
@@ -149,14 +150,14 @@ export function CohortAnalysisTable({ data, isLoading }: CohortAnalysisTableProp
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Cohort</TableHead>
-                <TableHead className="text-right">Initial</TableHead>
-                <TableHead className="text-right">Current</TableHead>
-                <TableHead className="text-right">Initial MRR</TableHead>
-                <TableHead className="text-right">Current MRR</TableHead>
-                <TableHead className="text-center">Logo Retention</TableHead>
-                <TableHead className="text-center">Revenue Retention</TableHead>
-                <TableHead className="text-right">Months</TableHead>
+                <TableHead>{t("table.cohort")}</TableHead>
+                <TableHead className="text-right">{t("table.initial")}</TableHead>
+                <TableHead className="text-right">{t("table.current")}</TableHead>
+                <TableHead className="text-right">{t("table.initialMrr")}</TableHead>
+                <TableHead className="text-right">{t("table.currentMrr")}</TableHead>
+                <TableHead className="text-center">{t("table.logoRetention")}</TableHead>
+                <TableHead className="text-center">{t("table.revenueRetention")}</TableHead>
+                <TableHead className="text-right">{t("table.months")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -215,7 +216,7 @@ export function CohortAnalysisTable({ data, isLoading }: CohortAnalysisTableProp
 
         {/* Retention Heatmap */}
         <div className="mt-6">
-          <h4 className="text-sm font-medium mb-3">Retention Heatmap</h4>
+          <h4 className="text-sm font-medium mb-3">{t("retentionHeatmap")}</h4>
           <div className="flex flex-wrap gap-2">
             {data.map((cohort) => {
               const intensity = cohort.retentionRate / 100

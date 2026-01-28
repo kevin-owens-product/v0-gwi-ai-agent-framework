@@ -82,7 +82,7 @@ export default function SignupPage() {
         router.push("/dashboard")
         router.refresh()
       }
-    } catch (err) {
+    } catch {
       setFormError(t('errors.genericError'))
     } finally {
       setIsLoading(false)

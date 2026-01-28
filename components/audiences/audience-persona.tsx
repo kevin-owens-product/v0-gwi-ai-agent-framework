@@ -418,6 +418,7 @@ export function AudiencePersona({
   audienceCriteria,
   className,
 }: AudiencePersonaProps) {
+  const t = useTranslations("audiences")
   const [persona, setPersona] = useState<PersonaProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isRegenerating, setIsRegenerating] = useState(false)

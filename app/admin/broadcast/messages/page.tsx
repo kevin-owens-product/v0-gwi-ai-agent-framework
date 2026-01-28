@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import {
   Megaphone,
   Plus,
@@ -75,23 +76,6 @@ interface Stats {
   cancelled: number
 }
 
-const messageTypes = [
-  { value: "ANNOUNCEMENT", label: "Announcement" },
-  { value: "PRODUCT_UPDATE", label: "Product Update" },
-  { value: "MAINTENANCE", label: "Maintenance" },
-  { value: "SECURITY_ALERT", label: "Security Alert" },
-  { value: "MARKETING", label: "Marketing" },
-  { value: "SURVEY", label: "Survey" },
-]
-
-const statusOptions = [
-  { value: "DRAFT", label: "Draft" },
-  { value: "SCHEDULED", label: "Scheduled" },
-  { value: "SENDING", label: "Sending" },
-  { value: "SENT", label: "Sent" },
-  { value: "CANCELLED", label: "Cancelled" },
-]
-
 const channelIcons: Record<string, typeof Bell> = {
   IN_APP: Bell,
   EMAIL: Mail,
@@ -101,6 +85,9 @@ const channelIcons: Record<string, typeof Bell> = {
 }
 
 export default function BroadcastMessagesPage() {
+  const t = useTranslations("admin.broadcast")
+  const tCommon = useTranslations("common")
+
   useRouter()
   const searchParams = useSearchParams()
 
@@ -127,6 +114,23 @@ export default function BroadcastMessagesPage() {
   const [messageToDelete, setMessageToDelete] = useState<BroadcastMessage | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
 
+  const messageTypes = [
+    { value: "ANNOUNCEMENT", label: t("types.announcement") },
+    { value: "PRODUCT_UPDATE", label: t("types.productUpdate") },
+    { value: "MAINTENANCE", label: t("types.maintenance") },
+    { value: "SECURITY_ALERT", label: t("types.securityAlert") },
+    { value: "MARKETING", label: t("types.marketing") },
+    { value: "SURVEY", label: t("types.survey") },
+  ]
+
+  const statusOptions = [
+    { value: "DRAFT", label: t("status.draft") },
+    { value: "SCHEDULED", label: t("status.scheduled") },
+    { value: "SENDING", label: t("status.sending") },
+    { value: "SENT", label: t("status.sent") },
+    { value: "CANCELLED", label: t("status.cancelled") },
+  ]
+
   const fetchMessages = useCallback(async () => {
     setLoading(true)
     try {
@@ -150,11 +154,11 @@ export default function BroadcastMessagesPage() {
       }))
     } catch (error) {
       console.error("Failed to fetch messages:", error)
-      toast.error("Failed to load broadcast messages")
+      toast.error(t("toast.loadFailed"))
     } finally {
       setLoading(false)
     }
-  }, [pagination.page, pagination.limit, search, typeFilter, statusFilter])
+  }, [pagination.page, pagination.limit, search, typeFilter, statusFilter, t])
 
   useEffect(() => {
     fetchMessages()
@@ -178,10 +182,10 @@ export default function BroadcastMessagesPage() {
         throw new Error(data.error || "Failed to send message")
       }
 
-      toast.success("Broadcast message sent successfully")
+      toast.success(t("toast.messageSent"))
       fetchMessages()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to send message")
+      toast.error(error instanceof Error ? error.message : t("toast.sendFailed"))
     }
   }
 
@@ -196,10 +200,10 @@ export default function BroadcastMessagesPage() {
         throw new Error(data.error || "Failed to cancel message")
       }
 
-      toast.success("Broadcast message cancelled")
+      toast.success(t("toast.messageCancelled"))
       fetchMessages()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to cancel message")
+      toast.error(error instanceof Error ? error.message : t("toast.cancelFailed"))
     }
   }
 
@@ -217,12 +221,12 @@ export default function BroadcastMessagesPage() {
         throw new Error(data.error || "Failed to delete message")
       }
 
-      toast.success("Broadcast message deleted")
+      toast.success(t("toast.messageDeleted"))
       setDeleteDialogOpen(false)
       setMessageToDelete(null)
       fetchMessages()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete message")
+      toast.error(error instanceof Error ? error.message : t("toast.deleteFailed"))
     } finally {
       setIsDeleting(false)
     }
@@ -242,13 +246,13 @@ export default function BroadcastMessagesPage() {
 
       const failed = results.filter((r) => !r.ok)
       if (failed.length > 0) {
-        toast.error(`Failed to send ${failed.length} message(s)`)
+        toast.error(t("toast.bulkSendPartialFailed", { count: failed.length }))
       } else {
-        toast.success(`Successfully sent ${ids.length} message(s)`)
+        toast.success(t("toast.bulkSendSuccess", { count: ids.length }))
       }
       fetchMessages()
-    } catch (error) {
-      toast.error("Failed to send messages")
+    } catch {
+      toast.error(t("toast.bulkSendFailed"))
     }
   }
 
@@ -264,13 +268,13 @@ export default function BroadcastMessagesPage() {
 
       const failed = results.filter((r) => !r.ok)
       if (failed.length > 0) {
-        toast.error(`Failed to delete ${failed.length} message(s)`)
+        toast.error(t("toast.bulkDeletePartialFailed", { count: failed.length }))
       } else {
-        toast.success(`Successfully deleted ${ids.length} message(s)`)
+        toast.success(t("toast.bulkDeleteSuccess", { count: ids.length }))
       }
       fetchMessages()
-    } catch (error) {
-      toast.error("Failed to delete messages")
+    } catch {
+      toast.error(t("toast.bulkDeleteFailed"))
     }
   }
 
@@ -280,30 +284,30 @@ export default function BroadcastMessagesPage() {
         return (
           <Badge className="bg-green-500">
             <CheckCircle className="h-3 w-3 mr-1" />
-            Sent
+            {t("status.sent")}
           </Badge>
         )
       case "SCHEDULED":
         return (
           <Badge className="bg-blue-500">
             <Clock className="h-3 w-3 mr-1" />
-            Scheduled
+            {t("status.scheduled")}
           </Badge>
         )
       case "SENDING":
         return (
           <Badge className="bg-yellow-500">
             <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-            Sending
+            {t("status.sending")}
           </Badge>
         )
       case "DRAFT":
-        return <Badge variant="secondary">Draft</Badge>
+        return <Badge variant="secondary">{t("status.draft")}</Badge>
       case "CANCELLED":
         return (
           <Badge variant="outline">
             <XCircle className="h-3 w-3 mr-1" />
-            Cancelled
+            {t("status.cancelled")}
           </Badge>
         )
       default:
@@ -314,13 +318,13 @@ export default function BroadcastMessagesPage() {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case "URGENT":
-        return <Badge variant="destructive">Urgent</Badge>
+        return <Badge variant="destructive">{t("priority.urgent")}</Badge>
       case "HIGH":
-        return <Badge className="bg-orange-500">High</Badge>
+        return <Badge className="bg-orange-500">{t("priority.high")}</Badge>
       case "NORMAL":
-        return <Badge variant="secondary">Normal</Badge>
+        return <Badge variant="secondary">{t("priority.normal")}</Badge>
       default:
-        return <Badge variant="outline">Low</Badge>
+        return <Badge variant="outline">{t("priority.low")}</Badge>
     }
   }
 
@@ -344,7 +348,7 @@ export default function BroadcastMessagesPage() {
   const columns: Column<BroadcastMessage>[] = [
     {
       id: "title",
-      header: "Title",
+      header: t("table.title"),
       cell: (message) => (
         <Link
           href={`/admin/broadcast/messages/${message.id}`}
@@ -361,22 +365,22 @@ export default function BroadcastMessagesPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("table.type"),
       cell: (message) => getTypeBadge(message.type),
     },
     {
       id: "priority",
-      header: "Priority",
+      header: t("table.priority"),
       cell: (message) => getPriorityBadge(message.priority),
     },
     {
       id: "status",
-      header: "Status",
+      header: t("table.status"),
       cell: (message) => getStatusBadge(message.status),
     },
     {
       id: "target",
-      header: "Target",
+      header: t("table.target"),
       cell: (message) => (
         <div className="flex items-center gap-1">
           {message.targetType === "ALL" ? (
@@ -392,7 +396,7 @@ export default function BroadcastMessagesPage() {
     },
     {
       id: "channels",
-      header: "Channels",
+      header: t("table.channels"),
       cell: (message) => (
         <div className="flex gap-1">
           {message.channels.map((channel) => {
@@ -412,25 +416,26 @@ export default function BroadcastMessagesPage() {
     },
     {
       id: "delivery",
-      header: "Delivery",
+      header: t("table.delivery"),
       cell: (message) => {
         if (message.status === "SENT") {
           return (
             <div className="text-xs">
-              <p>{message.delivered.toLocaleString()} delivered</p>
+              <p>{t("delivery.delivered", { count: message.delivered.toLocaleString() })}</p>
               <p className="text-muted-foreground">
-                {message.opened} opened (
-                {message.totalRecipients > 0
-                  ? Math.round((message.opened / message.totalRecipients) * 100)
-                  : 0}
-                %)
+                {t("delivery.opened", {
+                  count: message.opened,
+                  percent: message.totalRecipients > 0
+                    ? Math.round((message.opened / message.totalRecipients) * 100)
+                    : 0
+                })}
               </p>
             </div>
           )
         } else if (message.totalRecipients > 0) {
           return (
             <span className="text-xs text-muted-foreground">
-              {message.totalRecipients.toLocaleString()} recipients
+              {t("delivery.recipients", { count: message.totalRecipients.toLocaleString() })}
             </span>
           )
         } else {
@@ -440,13 +445,13 @@ export default function BroadcastMessagesPage() {
     },
     {
       id: "date",
-      header: "Date",
+      header: t("table.date"),
       cell: (message) => (
         <div className="text-xs">
           {message.sentAt
             ? new Date(message.sentAt).toLocaleDateString()
             : message.scheduledFor
-              ? `Scheduled: ${new Date(message.scheduledFor).toLocaleDateString()}`
+              ? `${t("delivery.scheduledFor")}: ${new Date(message.scheduledFor).toLocaleDateString()}`
               : new Date(message.createdAt).toLocaleDateString()}
         </div>
       ),
@@ -456,31 +461,31 @@ export default function BroadcastMessagesPage() {
   // Define row actions
   const rowActions: RowAction<BroadcastMessage>[] = [
     {
-      label: "Edit",
+      label: tCommon("edit"),
       icon: <Edit className="h-4 w-4" />,
       href: (message) => `/admin/broadcast/messages/${message.id}/edit`,
       hidden: (message) => message.status !== "DRAFT",
     },
     {
-      label: "Send Now",
+      label: t("actions.sendNow"),
       icon: <Send className="h-4 w-4" />,
       onClick: (message) => handleSendMessage(message.id),
       hidden: (message) => message.status !== "DRAFT",
     },
     {
-      label: "Schedule",
+      label: t("actions.schedule"),
       icon: <Calendar className="h-4 w-4" />,
       href: (message) => `/admin/broadcast/messages/${message.id}?schedule=true`,
       hidden: (message) => message.status !== "DRAFT",
     },
     {
-      label: "Cancel",
+      label: tCommon("cancel"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: (message) => handleCancelMessage(message.id),
       hidden: (message) => message.status !== "SCHEDULED",
     },
     {
-      label: "Delete",
+      label: tCommon("delete"),
       icon: <Trash className="h-4 w-4" />,
       onClick: (message) => {
         setMessageToDelete(message)
@@ -494,20 +499,20 @@ export default function BroadcastMessagesPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Send Selected",
+      label: t("bulk.sendSelected"),
       icon: <Send className="h-4 w-4" />,
       onClick: handleBulkSend,
-      confirmTitle: "Send Multiple Messages",
-      confirmDescription: "Are you sure you want to send the selected messages? This action cannot be undone.",
+      confirmTitle: t("bulk.sendMultipleTitle"),
+      confirmDescription: t("bulk.sendMultipleDescription"),
     },
     {
-      label: "Delete Selected",
+      label: t("bulk.deleteSelected"),
       icon: <Trash className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
       separator: true,
-      confirmTitle: "Delete Multiple Messages",
-      confirmDescription: "Are you sure you want to delete the selected messages? This action cannot be undone.",
+      confirmTitle: t("bulk.deleteMultipleTitle"),
+      confirmDescription: t("bulk.deleteMultipleDescription"),
     },
   ]
 
@@ -518,16 +523,16 @@ export default function BroadcastMessagesPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Megaphone className="h-8 w-8 text-primary" />
-            Broadcast Messages
+            {t("messagesTitle")}
           </h1>
           <p className="text-muted-foreground">
-            Manage and send platform-wide communications
+            {t("messagesDescription")}
           </p>
         </div>
         <Button asChild>
           <Link href="/admin/broadcast/messages/new">
             <Plus className="h-4 w-4 mr-2" />
-            New Broadcast
+            {t("newBroadcast")}
           </Link>
         </Button>
       </div>
@@ -538,31 +543,31 @@ export default function BroadcastMessagesPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-2xl font-bold">{stats.total}</div>
-              <p className="text-xs text-muted-foreground">Total Messages</p>
+              <p className="text-xs text-muted-foreground">{t("stats.totalMessages")}</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-yellow-500">{stats.draft}</div>
-              <p className="text-xs text-muted-foreground">Drafts</p>
+              <p className="text-xs text-muted-foreground">{t("stats.drafts")}</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-blue-500">{stats.scheduled}</div>
-              <p className="text-xs text-muted-foreground">Scheduled</p>
+              <p className="text-xs text-muted-foreground">{t("status.scheduled")}</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-green-500">{stats.sent}</div>
-              <p className="text-xs text-muted-foreground">Sent</p>
+              <p className="text-xs text-muted-foreground">{t("status.sent")}</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-gray-500">{stats.cancelled}</div>
-              <p className="text-xs text-muted-foreground">Cancelled</p>
+              <p className="text-xs text-muted-foreground">{t("status.cancelled")}</p>
             </CardContent>
           </Card>
         </div>
@@ -576,7 +581,7 @@ export default function BroadcastMessagesPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search messages..."
+                  placeholder={t("searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -587,10 +592,10 @@ export default function BroadcastMessagesPage() {
             <Select value={typeFilter} onValueChange={(v) => { setTypeFilter(v); setPagination(p => ({ ...p, page: 1 })) }}>
               <SelectTrigger className="w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={t("table.type")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="all">{t("filter.allTypes")}</SelectItem>
                 {messageTypes.map((type) => (
                   <SelectItem key={type.value} value={type.value}>
                     {type.label}
@@ -600,10 +605,10 @@ export default function BroadcastMessagesPage() {
             </Select>
             <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); setPagination(p => ({ ...p, page: 1 })) }}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="all">{t("filter.allStatus")}</SelectItem>
                 {statusOptions.map((status) => (
                   <SelectItem key={status.value} value={status.value}>
                     {status.label}
@@ -612,7 +617,7 @@ export default function BroadcastMessagesPage() {
               </SelectContent>
             </Select>
             <Button variant="outline" onClick={handleSearch}>
-              Search
+              {tCommon("search")}
             </Button>
           </div>
         </CardContent>
@@ -624,7 +629,7 @@ export default function BroadcastMessagesPage() {
         columns={columns}
         getRowId={(message) => message.id}
         isLoading={loading}
-        emptyMessage="No broadcast messages found"
+        emptyMessage={t("empty.noMessages")}
         viewHref={(message) => `/admin/broadcast/messages/${message.id}`}
         rowActions={rowActions}
         bulkActions={bulkActions}
@@ -643,15 +648,14 @@ export default function BroadcastMessagesPage() {
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-destructive" />
-              Delete Broadcast Message
+              {t("deleteDialog.title")}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete &quot;{messageToDelete?.title}&quot;? This action cannot be
-              undone.
+              {t("deleteDialog.description", { title: messageToDelete?.title ?? "" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteMessage}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -660,10 +664,10 @@ export default function BroadcastMessagesPage() {
               {isDeleting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Deleting...
+                  {t("deleteDialog.deleting")}
                 </>
               ) : (
-                "Delete"
+                tCommon("delete")
               )}
             </AlertDialogAction>
           </AlertDialogFooter>

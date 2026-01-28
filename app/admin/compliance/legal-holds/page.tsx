@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
-import { toast } from "sonner"
+import { showErrorToast } from "@/lib/toast-utils"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -68,14 +69,16 @@ interface LegalHold {
   custodianCount: number
 }
 
-const STATUS_OPTIONS = [
-  { value: "all", label: "All Status" },
-  { value: "ACTIVE", label: "Active" },
-  { value: "RELEASED", label: "Released" },
-  { value: "EXPIRED", label: "Expired" },
-]
-
 export default function LegalHoldsPage() {
+  const t = useTranslations("admin.compliance.legalHolds")
+  const tCommon = useTranslations("common")
+
+  const STATUS_OPTIONS = [
+    { value: "all", label: t("filters.allStatus") },
+    { value: "ACTIVE", label: t("status.active") },
+    { value: "RELEASED", label: t("status.released") },
+    { value: "EXPIRED", label: t("status.expired") },
+  ]
   const [legalHolds, setLegalHolds] = useState<LegalHold[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -148,7 +151,7 @@ export default function LegalHoldsPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to create legal hold")
+        throw new Error(data.error || t("errors.createFailed"))
       }
 
       setCreateDialogOpen(false)
@@ -161,7 +164,7 @@ export default function LegalHoldsPage() {
       fetchLegalHolds()
     } catch (error) {
       console.error("Failed to create legal hold:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to create legal hold")
+      showErrorToast(error instanceof Error ? error.message : t("errors.createFailed"))
     } finally {
       setIsSubmitting(false)
     }
@@ -180,13 +183,13 @@ export default function LegalHoldsPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to release legal hold")
+        throw new Error(data.error || t("errors.releaseFailed"))
       }
 
       fetchLegalHolds()
     } catch (error) {
       console.error("Failed to release legal hold:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to release legal hold")
+      toast.error(error instanceof Error ? error.message : t("errors.releaseFailed"))
     } finally {
       setHoldToRelease(null)
     }
@@ -207,24 +210,24 @@ export default function LegalHoldsPage() {
 
       const failed = results.filter(r => r.status === "rejected").length
       if (failed > 0) {
-        toast.error(`Failed to release ${failed} of ${ids.length} legal holds`)
+        toast.error(t("bulk.failedToRelease", { failed, total: ids.length }))
       }
 
       fetchLegalHolds()
     } catch (error) {
       console.error("Failed to release legal holds:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to release legal holds")
+      toast.error(error instanceof Error ? error.message : t("errors.releaseFailed"))
     }
   }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "ACTIVE":
-        return <Badge variant="destructive"><AlertTriangle className="h-3 w-3 mr-1" />Active</Badge>
+        return <Badge variant="destructive"><AlertTriangle className="h-3 w-3 mr-1" />{t("status.active")}</Badge>
       case "RELEASED":
-        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Released</Badge>
+        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />{t("status.released")}</Badge>
       case "EXPIRED":
-        return <Badge variant="secondary">Expired</Badge>
+        return <Badge variant="secondary">{t("status.expired")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -234,7 +237,7 @@ export default function LegalHoldsPage() {
   const columns: Column<LegalHold>[] = [
     {
       id: "name",
-      header: "Legal Hold",
+      header: t("columns.legalHold"),
       cell: (hold) => (
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-red-500/10 flex items-center justify-center">
@@ -253,7 +256,7 @@ export default function LegalHoldsPage() {
     },
     {
       id: "caseNumber",
-      header: "Case Number",
+      header: t("columns.caseNumber"),
       cell: (hold) => (
         hold.caseNumber ? (
           <Badge variant="outline" className="font-mono">
@@ -266,7 +269,7 @@ export default function LegalHoldsPage() {
     },
     {
       id: "organization",
-      header: "Organization",
+      header: t("columns.organization"),
       cell: (hold) => (
         hold.organization ? (
           <div className="flex items-center gap-2">
@@ -274,18 +277,18 @@ export default function LegalHoldsPage() {
             <span>{hold.organization.name}</span>
           </div>
         ) : (
-          <span className="text-muted-foreground">Platform-wide</span>
+          <span className="text-muted-foreground">{t("platformWide")}</span>
         )
       ),
     },
     {
       id: "status",
-      header: "Status",
+      header: t("columns.status"),
       cell: (hold) => getStatusBadge(hold.status),
     },
     {
       id: "custodians",
-      header: "Custodians",
+      header: t("columns.custodians"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (hold) => (
@@ -297,7 +300,7 @@ export default function LegalHoldsPage() {
     },
     {
       id: "exports",
-      header: "Exports",
+      header: t("columns.exports"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (hold) => (
@@ -309,7 +312,7 @@ export default function LegalHoldsPage() {
     },
     {
       id: "startDate",
-      header: "Start Date",
+      header: t("columns.startDate"),
       cell: (hold) => (
         <div className="flex items-center gap-1 text-muted-foreground">
           <Calendar className="h-3 w-3" />
@@ -322,13 +325,13 @@ export default function LegalHoldsPage() {
   // Define row actions
   const rowActions: RowAction<LegalHold>[] = [
     {
-      label: "View Organization",
+      label: t("actions.viewOrganization"),
       icon: <Building2 className="h-4 w-4" />,
       href: (hold) => `/admin/tenants/${hold.orgId}`,
       hidden: (hold) => !hold.organization,
     },
     {
-      label: "Release Hold",
+      label: t("actions.releaseHold"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (hold) => setHoldToRelease(hold),
       variant: "destructive",
@@ -340,12 +343,12 @@ export default function LegalHoldsPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Release Selected",
+      label: t("bulk.releaseSelected"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: handleBulkRelease,
       variant: "destructive",
-      confirmTitle: "Release Legal Holds",
-      confirmDescription: "Are you sure you want to release the selected legal holds? This action cannot be undone.",
+      confirmTitle: t("bulk.releaseHoldsTitle"),
+      confirmDescription: t("bulk.releaseHoldsConfirm"),
     },
   ]
 
@@ -358,27 +361,27 @@ export default function LegalHoldsPage() {
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/admin/compliance">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
+                  {tCommon("back")}
                 </Link>
               </Button>
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Gavel className="h-5 w-5 text-primary" />
-                  Legal Holds
+                  {t("title")}
                 </CardTitle>
                 <CardDescription>
-                  Manage data preservation orders and legal holds - {total} total
+                  {t("description", { total })}
                 </CardDescription>
               </div>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchLegalHolds} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {tCommon("refresh")}
               </Button>
               <Button onClick={() => setCreateDialogOpen(true)} size="sm">
                 <Plus className="h-4 w-4 mr-2" />
-                Create Legal Hold
+                {t("dialog.createTitle")}
               </Button>
             </div>
           </div>
@@ -389,7 +392,7 @@ export default function LegalHoldsPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search by name, case number, or description..."
+                placeholder={t("filters.searchPlaceholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-9"
@@ -397,7 +400,7 @@ export default function LegalHoldsPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("columns.status")} />
               </SelectTrigger>
               <SelectContent>
                 {STATUS_OPTIONS.map((option) => (
@@ -415,7 +418,7 @@ export default function LegalHoldsPage() {
             columns={columns}
             getRowId={(hold) => hold.id}
             isLoading={isLoading}
-            emptyMessage="No legal holds found"
+            emptyMessage={t("noLegalHolds")}
             viewHref={(hold) => `/admin/compliance/legal-holds/${hold.id}`}
             rowActions={rowActions}
             bulkActions={bulkActions}
@@ -433,33 +436,33 @@ export default function LegalHoldsPage() {
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Create Legal Hold</DialogTitle>
+            <DialogTitle>{t("dialog.createTitle")}</DialogTitle>
             <DialogDescription>
-              Create a new data preservation order.
+              {t("dialog.createDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Legal Hold Name *</Label>
+              <Label htmlFor="name">{t("fields.name")} {t("fields.required")}</Label>
               <Input
                 id="name"
-                placeholder="Investigation Q1 2024"
+                placeholder={t("placeholders.name")}
                 value={newHold.name}
                 onChange={(e) => setNewHold({ ...newHold, name: e.target.value })}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="caseNumber">Case Number</Label>
+                <Label htmlFor="caseNumber">{t("fields.caseNumber")}</Label>
                 <Input
                   id="caseNumber"
-                  placeholder="CASE-2024-001"
+                  placeholder={t("placeholders.caseNumber")}
                   value={newHold.caseNumber}
                   onChange={(e) => setNewHold({ ...newHold, caseNumber: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="startDate">Start Date *</Label>
+                <Label htmlFor="startDate">{t("fields.startDate")} {t("fields.required")}</Label>
                 <Input
                   id="startDate"
                   type="date"
@@ -469,10 +472,10 @@ export default function LegalHoldsPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("fields.description")}</Label>
               <Textarea
                 id="description"
-                placeholder="Describe the purpose and scope of this legal hold..."
+                placeholder={t("placeholders.description")}
                 value={newHold.description}
                 onChange={(e) => setNewHold({ ...newHold, description: e.target.value })}
                 rows={3}
@@ -481,7 +484,7 @@ export default function LegalHoldsPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               onClick={handleCreateHold}
@@ -490,10 +493,10 @@ export default function LegalHoldsPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Creating...
+                  {tCommon("creating")}
                 </>
               ) : (
-                "Create Legal Hold"
+                t("dialog.createTitle")
               )}
             </Button>
           </DialogFooter>
@@ -504,9 +507,9 @@ export default function LegalHoldsPage() {
       <ConfirmationDialog
         open={!!holdToRelease}
         onOpenChange={(open) => !open && setHoldToRelease(null)}
-        title="Release Legal Hold"
-        description={`Are you sure you want to release the legal hold "${holdToRelease?.name}"? This action cannot be undone.`}
-        confirmText="Release"
+        title={t("dialog.releaseTitle")}
+        description={t("dialog.releaseDescription", { name: holdToRelease?.name || "" })}
+        confirmText={tCommon("release")}
         onConfirm={handleReleaseHold}
         variant="destructive"
       />

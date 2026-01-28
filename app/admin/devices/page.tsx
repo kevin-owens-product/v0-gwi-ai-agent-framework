@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import {
   Smartphone,
@@ -33,7 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import Link from "next/link"
 
 interface Device {
@@ -73,25 +74,30 @@ interface Stats {
   nonCompliant: number
 }
 
-const deviceTypes = [
-  { value: "DESKTOP", label: "Desktop" },
-  { value: "LAPTOP", label: "Laptop" },
-  { value: "MOBILE", label: "Mobile" },
-  { value: "TABLET", label: "Tablet" },
-  { value: "OTHER", label: "Other" },
-]
-
-const trustStatuses = [
-  { value: "PENDING", label: "Pending" },
-  { value: "TRUSTED", label: "Trusted" },
-  { value: "BLOCKED", label: "Blocked" },
-  { value: "REVOKED", label: "Revoked" },
-]
+// deviceTypes and trustStatuses moved inside component to use translations
 
 // platforms array removed - unused
 
 export default function DevicesPage() {
+  const t = useTranslations("admin.devices")
+  const tCommon = useTranslations("common")
   const router = useRouter()
+  
+  const deviceTypes = [
+    { value: "DESKTOP", label: t("deviceTypes.desktop") },
+    { value: "LAPTOP", label: t("deviceTypes.laptop") },
+    { value: "MOBILE", label: t("deviceTypes.mobile") },
+    { value: "TABLET", label: t("deviceTypes.tablet") },
+    { value: "OTHER", label: t("deviceTypes.other") },
+  ]
+
+  const trustStatuses = [
+    { value: "PENDING", label: t("trustStatuses.pending") },
+    { value: "TRUSTED", label: t("trustStatuses.trusted") },
+    { value: "BLOCKED", label: t("trustStatuses.blocked") },
+    { value: "REVOKED", label: t("trustStatuses.revoked") },
+  ]
+  
   const [devices, setDevices] = useState<Device[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -137,11 +143,11 @@ export default function DevicesPage() {
       }
     } catch (error) {
       console.error("Failed to fetch devices:", error)
-      toast.error("Failed to fetch devices")
+      showErrorToast(t("errors.fetchFailed"))
     } finally {
       setLoading(false)
     }
-  }, [pagination.page, pagination.limit, search, typeFilter, statusFilter, complianceFilter, router])
+  }, [pagination.page, pagination.limit, search, typeFilter, statusFilter, complianceFilter, router, t])
 
   useEffect(() => {
     const debounce = setTimeout(() => {
@@ -157,12 +163,12 @@ export default function DevicesPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to trust device")
+        throw new Error(data.error || t("errors.trustFailed"))
       }
-      toast.success("Device trusted successfully")
+      showSuccessToast(t("messages.deviceTrusted"))
       fetchDevices()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to trust device")
+      showErrorToast(error instanceof Error ? error.message : t("errors.trustFailed"))
     }
   }
 
@@ -178,16 +184,16 @@ export default function DevicesPage() {
       const response = await fetch(`/api/admin/devices/${deviceToRevoke}/revoke`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reason: "Revoked by admin" }),
+        body: JSON.stringify({ reason: t("revokedByAdmin") }),
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to revoke device")
+        throw new Error(data.error || t("errors.revokeFailed"))
       }
-      toast.success("Device trust revoked")
+      showSuccessToast(t("messages.trustRevoked"))
       fetchDevices()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to revoke device")
+      showErrorToast(error instanceof Error ? error.message : t("errors.revokeFailed"))
     } finally {
       setShowRevokeConfirm(false)
       setDeviceToRevoke(null)
@@ -200,12 +206,12 @@ export default function DevicesPage() {
         method: "DELETE",
       })
       if (!response.ok) {
-        throw new Error("Failed to delete device")
+        throw new Error(t("errors.deleteFailed"))
       }
-      toast.success("Device deleted successfully")
+      showSuccessToast(t("messages.deviceDeleted"))
       fetchDevices()
-    } catch (error) {
-      toast.error("Failed to delete device")
+    } catch {
+      showErrorToast(t("errors.deleteFailed"))
     }
   }
 
@@ -215,14 +221,14 @@ export default function DevicesPage() {
         fetch(`/api/admin/devices/${deviceId}/revoke`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reason: "Bulk revoked by admin" }),
+          body: JSON.stringify({ reason: t("bulkRevokedByAdmin") }),
         })
       )
       await Promise.all(promises)
-      toast.success(`Successfully revoked ${selectedIds.length} device(s)`)
+      showSuccessToast(t("messages.bulkRevoked", { count: selectedIds.length }))
       fetchDevices()
-    } catch (error) {
-      toast.error("Failed to revoke some devices")
+    } catch {
+      showErrorToast(t("errors.bulkRevokeFailed"))
     }
   }
 
@@ -234,10 +240,10 @@ export default function DevicesPage() {
         })
       )
       await Promise.all(promises)
-      toast.success(`Successfully deleted ${selectedIds.length} device(s)`)
+      showSuccessToast(t("messages.bulkDeleted", { count: selectedIds.length }))
       fetchDevices()
-    } catch (error) {
-      toast.error("Failed to delete some devices")
+    } catch {
+      showErrorToast(t("errors.bulkDeleteFailed"))
     }
   }
 
@@ -262,28 +268,28 @@ export default function DevicesPage() {
         return (
           <Badge className="bg-green-500">
             <CheckCircle className="h-3 w-3 mr-1" />
-            Trusted
+            {t("trustStatuses.trusted")}
           </Badge>
         )
       case "PENDING":
         return (
           <Badge variant="secondary">
             <Clock className="h-3 w-3 mr-1" />
-            Pending
+            {t("trustStatuses.pending")}
           </Badge>
         )
       case "BLOCKED":
         return (
           <Badge variant="destructive">
             <XCircle className="h-3 w-3 mr-1" />
-            Blocked
+            {t("trustStatuses.blocked")}
           </Badge>
         )
       case "REVOKED":
         return (
           <Badge variant="outline" className="text-orange-600 border-orange-600">
             <ShieldX className="h-3 w-3 mr-1" />
-            Revoked
+            {t("trustStatuses.revoked")}
           </Badge>
         )
       default:
@@ -295,7 +301,7 @@ export default function DevicesPage() {
   const columns: Column<Device>[] = [
     {
       id: "device",
-      header: "Device",
+      header: t("columns.device"),
       cell: (device) => (
         <Link href={`/admin/devices/${device.id}`} className="hover:underline">
           <div className="flex items-center gap-3">
@@ -316,11 +322,11 @@ export default function DevicesPage() {
     },
     {
       id: "user",
-      header: "User",
+      header: t("columns.user"),
       cell: (device) => (
         <Link href={`/admin/users/${device.user.id}`} className="hover:underline">
           <div>
-            <p className="font-medium">{device.user.name || "No name"}</p>
+            <p className="font-medium">{device.user.name || t("noName")}</p>
             <p className="text-xs text-muted-foreground">{device.user.email}</p>
           </div>
         </Link>
@@ -328,10 +334,10 @@ export default function DevicesPage() {
     },
     {
       id: "platform",
-      header: "Platform",
+      header: t("columns.platform"),
       cell: (device) => (
         <div className="flex flex-col gap-1">
-          <Badge variant="outline">{device.platform || "Unknown"}</Badge>
+          <Badge variant="outline">{device.platform || t("unknown")}</Badge>
           {device.osVersion && (
             <span className="text-xs text-muted-foreground">v{device.osVersion}</span>
           )}
@@ -340,39 +346,39 @@ export default function DevicesPage() {
     },
     {
       id: "trustStatus",
-      header: "Trust Status",
+      header: t("columns.trustStatus"),
       cell: (device) => getTrustStatusBadge(device.trustStatus),
     },
     {
       id: "compliance",
-      header: "Compliance",
+      header: t("columns.compliance"),
       cell: (device) => (
         device.isCompliant ? (
           <Badge className="bg-green-500">
             <ShieldCheck className="h-3 w-3 mr-1" />
-            Compliant
+            {t("complianceStatuses.compliant")}
           </Badge>
         ) : (
           <Badge variant="destructive">
             <ShieldAlert className="h-3 w-3 mr-1" />
-            Non-Compliant
+            {t("complianceStatuses.nonCompliant")}
           </Badge>
         )
       ),
     },
     {
       id: "lastActive",
-      header: "Last Active",
+      header: t("columns.lastActive"),
       cell: (device) => (
         device.lastActiveAt ? (
           <div className="text-sm">
             <p>{new Date(device.lastActiveAt).toLocaleDateString()}</p>
             <p className="text-xs text-muted-foreground">
-              {device.lastIpAddress || "Unknown IP"}
+              {device.lastIpAddress || t("unknownIP")}
             </p>
           </div>
         ) : (
-          <span className="text-muted-foreground text-sm">Never</span>
+          <span className="text-muted-foreground text-sm">{t("never")}</span>
         )
       ),
     },
@@ -381,13 +387,13 @@ export default function DevicesPage() {
   // Define row actions
   const rowActions: RowAction<Device>[] = [
     {
-      label: "Approve Trust",
+      label: t("actions.approveTrust"),
       icon: <ShieldCheck className="h-4 w-4" />,
       onClick: (device) => handleTrustDevice(device.id),
       hidden: (device) => device.trustStatus !== "PENDING",
     },
     {
-      label: "Revoke Trust",
+      label: t("actions.revokeTrust"),
       icon: <ShieldX className="h-4 w-4" />,
       onClick: (device) => handleRevokeClick(device.id),
       hidden: (device) => device.trustStatus !== "TRUSTED",
@@ -397,21 +403,21 @@ export default function DevicesPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Revoke Trust",
+      label: t("actions.revokeTrust"),
       icon: <ShieldX className="h-4 w-4" />,
       onClick: handleBulkRevoke,
       variant: "destructive",
-      confirmTitle: "Revoke Trust for Selected Devices",
-      confirmDescription: "Are you sure you want to revoke trust for the selected devices?",
+      confirmTitle: t("dialogs.revokeMultiple"),
+      confirmDescription: t("dialogs.revokeMultipleDescription"),
     },
     {
-      label: "Delete Devices",
+      label: t("actions.deleteDevices"),
       icon: <Trash className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
       separator: true,
-      confirmTitle: "Delete Selected Devices",
-      confirmDescription: "Are you sure you want to delete the selected devices? This action cannot be undone.",
+      confirmTitle: t("dialogs.deleteMultiple"),
+      confirmDescription: t("dialogs.deleteMultipleDescription"),
     },
   ]
 
@@ -422,27 +428,27 @@ export default function DevicesPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Smartphone className="h-8 w-8 text-primary" />
-            Device Trust
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Manage enrolled devices and device trust policies
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={fetchDevices}>
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            {tCommon("refresh")}
           </Button>
           <Button asChild variant="outline">
             <Link href="/admin/devices/policies">
               <Settings className="h-4 w-4 mr-2" />
-              Manage Policies
+              {t("managePolicies")}
             </Link>
           </Button>
           <Button asChild>
             <Link href="/admin/devices/new">
               <Plus className="h-4 w-4 mr-2" />
-              Register Device
+              {t("registerDevice")}
             </Link>
           </Button>
         </div>
@@ -453,25 +459,25 @@ export default function DevicesPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{stats.total}</div>
-            <p className="text-xs text-muted-foreground">Total Devices</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalDevices")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-green-500">{stats.trusted}</div>
-            <p className="text-xs text-muted-foreground">Trusted Devices</p>
+            <p className="text-xs text-muted-foreground">{t("stats.trustedDevices")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-yellow-500">{stats.pending}</div>
-            <p className="text-xs text-muted-foreground">Pending Approval</p>
+            <p className="text-xs text-muted-foreground">{t("stats.pendingApproval")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-red-500">{stats.nonCompliant}</div>
-            <p className="text-xs text-muted-foreground">Non-Compliant</p>
+            <p className="text-xs text-muted-foreground">{t("stats.nonCompliant")}</p>
           </CardContent>
         </Card>
       </div>
@@ -484,7 +490,7 @@ export default function DevicesPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search devices, users..."
+                  placeholder={t("searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -494,10 +500,10 @@ export default function DevicesPage() {
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[150px]">
                 <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Device Type" />
+                <SelectValue placeholder={t("filters.deviceType")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="all">{t("filters.allTypes")}</SelectItem>
                 {deviceTypes.map((type) => (
                   <SelectItem key={type.value} value={type.value}>
                     {type.label}
@@ -507,10 +513,10 @@ export default function DevicesPage() {
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Trust Status" />
+                <SelectValue placeholder={t("filters.trustStatus")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
                 {trustStatuses.map((status) => (
                   <SelectItem key={status.value} value={status.value}>
                     {status.label}
@@ -520,12 +526,12 @@ export default function DevicesPage() {
             </Select>
             <Select value={complianceFilter} onValueChange={setComplianceFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Compliance" />
+                <SelectValue placeholder={t("filters.compliance")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="true">Compliant</SelectItem>
-                <SelectItem value="false">Non-Compliant</SelectItem>
+                <SelectItem value="all">{tCommon("all")}</SelectItem>
+                <SelectItem value="true">{t("complianceStatuses.compliant")}</SelectItem>
+                <SelectItem value="false">{t("complianceStatuses.nonCompliant")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -540,12 +546,12 @@ export default function DevicesPage() {
             columns={columns}
             getRowId={(device) => device.id}
             isLoading={loading}
-            emptyMessage="No devices found"
+            emptyMessage={t("noDevicesFound")}
             viewHref={(device) => `/admin/devices/${device.id}`}
             onDelete={(device) => handleDeleteDevice(device.id)}
-            deleteConfirmTitle="Delete Device"
+            deleteConfirmTitle={t("dialogs.deleteTitle")}
             deleteConfirmDescription={(device) =>
-              `Are you sure you want to delete ${device.name || device.deviceId}? This action cannot be undone.`
+              t("dialogs.deleteDescription", { deviceName: device.name || device.deviceId })
             }
             rowActions={rowActions}
             bulkActions={bulkActions}
@@ -563,9 +569,9 @@ export default function DevicesPage() {
       <ConfirmationDialog
         open={showRevokeConfirm}
         onOpenChange={setShowRevokeConfirm}
-        title="Revoke Device Trust"
-        description="Are you sure you want to revoke trust for this device? The device will need to be re-approved to regain access."
-        confirmText="Revoke Trust"
+        title={t("dialogs.revokeTitle")}
+        description={t("dialogs.revokeDescription")}
+        confirmText={t("actions.revokeTrust")}
         variant="destructive"
         onConfirm={handleConfirmRevoke}
       />

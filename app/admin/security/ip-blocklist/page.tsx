@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Ban,
   Plus,
@@ -36,7 +37,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface IPBlocklistEntry {
@@ -54,15 +55,17 @@ interface IPBlocklistEntry {
   updatedAt: string
 }
 
-const blockTypes = [
-  { value: "MANUAL", label: "Manual" },
-  { value: "AUTOMATIC", label: "Automatic" },
-  { value: "THREAT_INTEL", label: "Threat Intelligence" },
-  { value: "BRUTE_FORCE", label: "Brute Force" },
-  { value: "GEOGRAPHIC", label: "Geographic" },
-]
-
 export default function IPBlocklistPage() {
+  const t = useTranslations("admin.security.ipBlocklist")
+  const tCommon = useTranslations("common")
+
+  const blockTypes = [
+    { value: "MANUAL", label: t("types.manual") },
+    { value: "AUTOMATIC", label: t("types.automatic") },
+    { value: "THREAT_INTEL", label: t("types.threatIntel") },
+    { value: "BRUTE_FORCE", label: t("types.bruteForce") },
+    { value: "GEOGRAPHIC", label: t("types.geographic") },
+  ]
   const [blocklist, setBlocklist] = useState<IPBlocklistEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -124,7 +127,7 @@ export default function IPBlocklistPage() {
       }))
     } catch (error) {
       console.error("Failed to fetch blocklist:", error)
-      toast.error("Failed to fetch IP blocklist")
+      showErrorToast(t("toast.fetchError"))
     } finally {
       setLoading(false)
     }
@@ -152,7 +155,7 @@ export default function IPBlocklistPage() {
         throw new Error(data.error || "Failed to create entry")
       }
 
-      toast.success("IP address added to blocklist")
+      showSuccessToast(t("toast.addSuccess"))
       setIsCreateOpen(false)
       setNewEntry({
         ipAddress: "",
@@ -164,8 +167,8 @@ export default function IPBlocklistPage() {
       })
       fetchBlocklist()
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to add IP to blocklist"
-      toast.error(message)
+      const message = error instanceof Error ? error.message : t("toast.addError")
+      showErrorToast(message)
     }
   }
 
@@ -181,10 +184,10 @@ export default function IPBlocklistPage() {
         throw new Error("Failed to update entry")
       }
 
-      toast.success(`IP ${entry.isActive ? "disabled" : "enabled"} successfully`)
+      showSuccessToast(entry.isActive ? t("toast.disableSuccess") : t("toast.enableSuccess"))
       fetchBlocklist()
     } catch (error) {
-      toast.error("Failed to update entry")
+      showErrorToast(t("toast.updateError"))
     }
   }
 
@@ -198,10 +201,10 @@ export default function IPBlocklistPage() {
         throw new Error("Failed to delete entry")
       }
 
-      toast.success("IP removed from blocklist")
+      showSuccessToast(t("toast.removeSuccess"))
       fetchBlocklist()
     } catch (error) {
-      toast.error("Failed to remove IP from blocklist")
+      showErrorToast(t("toast.removeError"))
     }
   }
 
@@ -214,10 +217,10 @@ export default function IPBlocklistPage() {
           })
         )
       )
-      toast.success(`${ids.length} IP(s) removed from blocklist`)
+      showSuccessToast(t("toast.bulkRemoveSuccess", { count: ids.length }))
       fetchBlocklist()
     } catch (error) {
-      toast.error("Failed to remove IPs from blocklist")
+      showErrorToast(t("toast.bulkRemoveError"))
     }
   }
 
@@ -230,17 +233,17 @@ export default function IPBlocklistPage() {
   const getTypeBadge = (type: string) => {
     switch (type) {
       case "MANUAL":
-        return <Badge variant="outline">{type}</Badge>
+        return <Badge variant="outline">{t(`types.${type.toLowerCase()}`)}</Badge>
       case "AUTOMATIC":
-        return <Badge variant="default">{type}</Badge>
+        return <Badge variant="default">{t(`types.${type.toLowerCase()}`)}</Badge>
       case "THREAT_INTEL":
-        return <Badge variant="destructive">{type.replace("_", " ")}</Badge>
+        return <Badge variant="destructive">{t("types.threatIntelShort")}</Badge>
       case "BRUTE_FORCE":
-        return <Badge variant="destructive">{type.replace("_", " ")}</Badge>
+        return <Badge variant="destructive">{t(`types.${type.toLowerCase()}`)}</Badge>
       case "GEOGRAPHIC":
-        return <Badge variant="secondary">{type}</Badge>
+        return <Badge variant="secondary">{t(`types.${type.toLowerCase()}`)}</Badge>
       default:
-        return <Badge variant="outline">{type}</Badge>
+        return <Badge variant="outline">{t(`types.${type.toLowerCase()}`, { defaultValue: type })}</Badge>
     }
   }
 
@@ -264,14 +267,14 @@ export default function IPBlocklistPage() {
       header: (
         <div className="flex items-center gap-2">
           <Globe className="h-4 w-4" />
-          IP Address
+          {t("table.ipAddress")}
         </div>
       ),
       cell: (entry) => <code className="font-mono text-sm">{entry.ipAddress}</code>,
     },
     {
       id: "ipRange",
-      header: "Range",
+      header: t("table.range"),
       cell: (entry) =>
         entry.ipRange ? (
           <code className="font-mono text-sm text-muted-foreground">{entry.ipRange}</code>
@@ -281,26 +284,26 @@ export default function IPBlocklistPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("table.type"),
       cell: (entry) => getTypeBadge(entry.type),
     },
     {
       id: "reason",
-      header: "Reason",
+      header: t("table.reason"),
       cell: (entry) => <p className="truncate max-w-[200px]">{entry.reason}</p>,
     },
     {
       id: "status",
-      header: "Status",
+      header: t("table.status"),
       cell: (entry) => {
         if (!entry.isActive) {
-          return <Badge variant="outline">Disabled</Badge>
+          return <Badge variant="outline">{t("status.disabled")}</Badge>
         } else if (isExpired(entry.expiresAt)) {
-          return <Badge variant="secondary">Expired</Badge>
+          return <Badge variant="secondary">{t("status.expired")}</Badge>
         } else {
           return (
             <Badge variant="default" className="bg-green-500">
-              Active
+              {t("status.active")}
             </Badge>
           )
         }
@@ -308,7 +311,7 @@ export default function IPBlocklistPage() {
     },
     {
       id: "expiresAt",
-      header: "Expires",
+      header: t("table.expires"),
       cell: (entry) =>
         entry.expiresAt ? (
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -316,12 +319,12 @@ export default function IPBlocklistPage() {
             {new Date(entry.expiresAt).toLocaleDateString()}
           </div>
         ) : (
-          <span className="text-muted-foreground">Never</span>
+          <span className="text-muted-foreground">{t("expiresNever")}</span>
         ),
     },
     {
       id: "createdAt",
-      header: "Blocked At",
+      header: t("table.blockedAt"),
       cell: (entry) => (
         <div className="flex items-center gap-1 text-sm text-muted-foreground">
           <Clock className="h-3 w-3" />
@@ -334,13 +337,13 @@ export default function IPBlocklistPage() {
   // Define row actions
   const rowActions: RowAction<IPBlocklistEntry>[] = [
     {
-      label: "Disable",
+      label: t("actions.disable"),
       icon: <PowerOff className="h-4 w-4" />,
       onClick: handleToggleEntry,
       hidden: (entry) => !entry.isActive,
     },
     {
-      label: "Enable",
+      label: t("actions.enable"),
       icon: <Power className="h-4 w-4" />,
       onClick: handleToggleEntry,
       hidden: (entry) => entry.isActive,
@@ -350,12 +353,12 @@ export default function IPBlocklistPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Remove Selected",
+      label: t("actions.removeSelected"),
       icon: <Trash className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
-      confirmTitle: "Remove IPs from Blocklist",
-      confirmDescription: "Are you sure you want to remove the selected IP addresses from the blocklist? This action cannot be undone.",
+      confirmTitle: t("confirmations.bulkRemoveTitle"),
+      confirmDescription: t("confirmations.bulkRemoveDescription"),
     },
   ]
 
@@ -366,32 +369,32 @@ export default function IPBlocklistPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Ban className="h-8 w-8 text-destructive" />
-            IP Blocklist
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Manage blocked IP addresses across the platform
+            {t("description")}
           </p>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              Block IP
+              {t("blockIp")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-lg">
             <DialogHeader>
-              <DialogTitle>Add IP to Blocklist</DialogTitle>
+              <DialogTitle>{t("dialog.addTitle")}</DialogTitle>
               <DialogDescription>
-                Block an IP address from accessing the platform
+                {t("dialog.addDescription")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="ipAddress">IP Address *</Label>
+                <Label htmlFor="ipAddress">{t("form.ipAddress")} *</Label>
                 <Input
                   id="ipAddress"
-                  placeholder="e.g., 192.168.1.1"
+                  placeholder={t("form.ipAddressPlaceholder")}
                   value={newEntry.ipAddress}
                   onChange={(e) =>
                     setNewEntry({ ...newEntry, ipAddress: e.target.value })
@@ -399,10 +402,10 @@ export default function IPBlocklistPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="ipRange">IP Range (CIDR)</Label>
+                <Label htmlFor="ipRange">{t("form.ipRange")}</Label>
                 <Input
                   id="ipRange"
-                  placeholder="e.g., 192.168.1.0/24 (optional)"
+                  placeholder={t("form.ipRangePlaceholder")}
                   value={newEntry.ipRange}
                   onChange={(e) =>
                     setNewEntry({ ...newEntry, ipRange: e.target.value })
@@ -410,7 +413,7 @@ export default function IPBlocklistPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label>Block Type</Label>
+                <Label>{t("form.blockType")}</Label>
                 <Select
                   value={newEntry.type}
                   onValueChange={(value) =>
@@ -430,10 +433,10 @@ export default function IPBlocklistPage() {
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="reason">Reason *</Label>
+                <Label htmlFor="reason">{t("form.reason")} *</Label>
                 <Textarea
                   id="reason"
-                  placeholder="Why is this IP being blocked?"
+                  placeholder={t("form.reasonPlaceholder")}
                   value={newEntry.reason}
                   onChange={(e) =>
                     setNewEntry({ ...newEntry, reason: e.target.value })
@@ -441,7 +444,7 @@ export default function IPBlocklistPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="expiresAt">Expires At (optional)</Label>
+                <Label htmlFor="expiresAt">{t("form.expiresAt")}</Label>
                 <Input
                   id="expiresAt"
                   type="datetime-local"
@@ -459,18 +462,18 @@ export default function IPBlocklistPage() {
                     setNewEntry({ ...newEntry, isActive: checked })
                   }
                 />
-                <Label htmlFor="isActive">Block immediately</Label>
+                <Label htmlFor="isActive">{t("form.blockImmediately")}</Label>
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button
                 onClick={handleCreateEntry}
                 disabled={!newEntry.ipAddress || !newEntry.reason}
               >
-                Add to Blocklist
+                {t("addToBlocklist")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -482,31 +485,31 @@ export default function IPBlocklistPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{pagination.total}</div>
-            <p className="text-xs text-muted-foreground">Total Entries</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalEntries")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-green-500">{totalActive}</div>
-            <p className="text-xs text-muted-foreground">Active Blocks</p>
+            <p className="text-xs text-muted-foreground">{t("stats.activeBlocks")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-blue-500">{stats.MANUAL || 0}</div>
-            <p className="text-xs text-muted-foreground">Manual</p>
+            <p className="text-xs text-muted-foreground">{t("types.manual")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-orange-500">{stats.AUTOMATIC || 0}</div>
-            <p className="text-xs text-muted-foreground">Automatic</p>
+            <p className="text-xs text-muted-foreground">{t("types.automatic")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-red-500">{stats.BRUTE_FORCE || 0}</div>
-            <p className="text-xs text-muted-foreground">Brute Force</p>
+            <p className="text-xs text-muted-foreground">{t("types.bruteForce")}</p>
           </CardContent>
         </Card>
       </div>
@@ -519,7 +522,7 @@ export default function IPBlocklistPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search by IP or reason..."
+                  placeholder={t("searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -530,10 +533,10 @@ export default function IPBlocklistPage() {
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={t("filters.type")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="all">{t("filters.allTypes")}</SelectItem>
                 {blockTypes.map((type) => (
                   <SelectItem key={type.value} value={type.value}>
                     {type.label}
@@ -543,16 +546,16 @@ export default function IPBlocklistPage() {
             </Select>
             <Select value={activeFilter} onValueChange={setActiveFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("filters.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="true">Active Only</SelectItem>
-                <SelectItem value="false">Inactive Only</SelectItem>
+                <SelectItem value="all">{t("filters.all")}</SelectItem>
+                <SelectItem value="true">{t("filters.activeOnly")}</SelectItem>
+                <SelectItem value="false">{t("filters.inactiveOnly")}</SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline" onClick={handleSearch}>
-              Search
+              {tCommon("search")}
             </Button>
           </div>
         </CardContent>
@@ -564,11 +567,11 @@ export default function IPBlocklistPage() {
         columns={columns}
         getRowId={(entry) => entry.id}
         isLoading={loading}
-        emptyMessage="No blocked IPs found"
+        emptyMessage={t("noBlockedIps")}
         onDelete={handleDeleteEntry}
-        deleteConfirmTitle="Remove IP from Blocklist"
+        deleteConfirmTitle={t("confirmations.removeTitle")}
         deleteConfirmDescription={(entry) =>
-          `Are you sure you want to remove ${entry.ipAddress} from the blocklist? This action cannot be undone.`
+          t("confirmations.removeDescription", { ipAddress: entry.ipAddress })
         }
         rowActions={rowActions}
         bulkActions={bulkActions}

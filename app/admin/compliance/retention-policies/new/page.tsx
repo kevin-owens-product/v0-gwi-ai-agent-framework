@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { showErrorToast } from "@/lib/toast-utils"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -24,30 +25,32 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 
-const DATA_TYPE_OPTIONS = [
-  { value: "AGENT_RUNS", label: "Agent Runs" },
-  { value: "AUDIT_LOGS", label: "Audit Logs" },
-  { value: "USER_SESSIONS", label: "User Sessions" },
-  { value: "TEMP_FILES", label: "Temp Files" },
-  { value: "NOTIFICATIONS", label: "Notifications" },
-  { value: "ANALYTICS", label: "Analytics" },
-]
-
-const SCOPE_OPTIONS = [
-  { value: "PLATFORM", label: "Platform-wide" },
-  { value: "ORGANIZATION", label: "Organization" },
-  { value: "PLAN", label: "By Plan" },
-]
-
-const DELETE_ACTION_OPTIONS = [
-  { value: "SOFT_DELETE", label: "Soft Delete" },
-  { value: "HARD_DELETE", label: "Hard Delete" },
-  { value: "ARCHIVE", label: "Archive" },
-]
-
 export default function NewRetentionPolicyPage() {
   const router = useRouter()
+  const t = useTranslations("admin.compliance.retentionPolicies.new")
+  const tMain = useTranslations("admin.compliance.retentionPolicies")
   const [isSaving, setIsSaving] = useState(false)
+  
+  const DATA_TYPE_OPTIONS = [
+    { value: "AGENT_RUNS", label: tMain("dataTypes.agentRuns") },
+    { value: "AUDIT_LOGS", label: tMain("dataTypes.auditLogs") },
+    { value: "USER_SESSIONS", label: tMain("dataTypes.userSessions") },
+    { value: "TEMP_FILES", label: tMain("dataTypes.tempFiles") },
+    { value: "NOTIFICATIONS", label: tMain("dataTypes.notifications") },
+    { value: "ANALYTICS", label: tMain("dataTypes.analytics") },
+  ]
+
+  const SCOPE_OPTIONS = [
+    { value: "PLATFORM", label: tMain("filters.platformWide") },
+    { value: "ORGANIZATION", label: tMain("filters.organization") },
+    { value: "PLAN", label: tMain("filters.byPlan") },
+  ]
+
+  const DELETE_ACTION_OPTIONS = [
+    { value: "SOFT_DELETE", label: tMain("deleteAction.softDelete") },
+    { value: "HARD_DELETE", label: tMain("deleteAction.hardDelete") },
+    { value: "ARCHIVE", label: tMain("deleteAction.archive") },
+  ]
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -60,7 +63,7 @@ export default function NewRetentionPolicyPage() {
 
   const handleCreate = async () => {
     if (!formData.name || !formData.dataType) {
-      toast.error("Name and data type are required")
+      showErrorToast(t("validation.nameAndDataTypeRequired"))
       return
     }
 
@@ -87,25 +90,25 @@ export default function NewRetentionPolicyPage() {
           return
         }
         const data = await response.json()
-        throw new Error(data.error || "Failed to create retention policy")
+        throw new Error(data.error || t("errors.createFailed"))
       }
 
       const data = await response.json()
       router.push(`/admin/compliance/retention-policies/${data.policy?.id || ""}`)
     } catch (error) {
       console.error("Failed to create retention policy:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to create retention policy")
+      showErrorToast(error instanceof Error ? error.message : t("errors.createFailed"))
     } finally {
       setIsSaving(false)
     }
   }
 
   const getRetentionPeriodLabel = (days: number) => {
-    if (days === -1) return "Forever"
-    if (days === 0) return "Immediate"
-    if (days < 30) return `${days} days`
-    if (days < 365) return `${Math.round(days / 30)} months`
-    return `${Math.round(days / 365)} years`
+    if (days === -1) return tMain("periods.forever")
+    if (days === 0) return tMain("periods.immediate")
+    if (days < 30) return tMain("periods.days", { days })
+    if (days < 365) return tMain("periods.months", { months: Math.round(days / 30) })
+    return tMain("periods.years", { years: Math.round(days / 365) })
   }
 
   return (
@@ -116,16 +119,16 @@ export default function NewRetentionPolicyPage() {
           <Link href="/admin/compliance/retention-policies">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Calendar className="h-6 w-6 text-primary" />
-              Create Retention Policy
+              {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Configure data retention rules and automatic cleanup
+              {t("description")}
             </p>
           </div>
         </div>
@@ -133,12 +136,12 @@ export default function NewRetentionPolicyPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Policy
+              {t("createPolicy")}
             </>
           )}
         </Button>
@@ -147,25 +150,25 @@ export default function NewRetentionPolicyPage() {
       {/* Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Policy Details</CardTitle>
+          <CardTitle>{t("sections.policyDetails")}</CardTitle>
           <CardDescription>
-            Define the data retention rules for automatic cleanup
+            {t("sections.detailsDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="name">Policy Name *</Label>
+            <Label htmlFor="name">{t("fields.name")} *</Label>
             <Input
               id="name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="Agent Runs 90 Day Retention"
+              placeholder={t("placeholders.name")}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Data Type *</Label>
+              <Label>{t("fields.dataType")} *</Label>
               <Select
                 value={formData.dataType}
                 onValueChange={(value) => setFormData({ ...formData, dataType: value })}
@@ -183,24 +186,24 @@ export default function NewRetentionPolicyPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="retentionDays">Retention Days *</Label>
+              <Label htmlFor="retentionDays">{t("fields.retentionDays")} *</Label>
               <Input
                 id="retentionDays"
                 type="number"
                 min="-1"
                 value={formData.retentionDays}
                 onChange={(e) => setFormData({ ...formData, retentionDays: parseInt(e.target.value) || 0 })}
-                placeholder="90"
+                placeholder={tMain("placeholders.retentionDays")}
               />
               <p className="text-xs text-muted-foreground">
-                Use -1 for forever. Current: {getRetentionPeriodLabel(formData.retentionDays)}
+                {t("hints.retentionDaysForever", { period: getRetentionPeriodLabel(formData.retentionDays) })}
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Scope</Label>
+              <Label>{t("fields.scope")}</Label>
               <Select
                 value={formData.scope}
                 onValueChange={(value) => setFormData({ ...formData, scope: value })}
@@ -218,7 +221,7 @@ export default function NewRetentionPolicyPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Delete Action</Label>
+              <Label>{t("fields.deleteAction")}</Label>
               <Select
                 value={formData.deleteAction}
                 onValueChange={(value) => setFormData({ ...formData, deleteAction: value })}
@@ -238,21 +241,21 @@ export default function NewRetentionPolicyPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{t("fields.description")}</Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Describe the purpose of this retention policy..."
+              placeholder={t("placeholders.description")}
               rows={3}
             />
           </div>
 
           <div className="flex items-center justify-between rounded-lg border p-4">
             <div className="space-y-0.5">
-              <Label htmlFor="isActive">Active Status</Label>
+              <Label htmlFor="isActive">{t("fields.activeStatus")}</Label>
               <p className="text-sm text-muted-foreground">
-                Enable this policy for automatic data cleanup
+                {t("hints.activeStatusDescription")}
               </p>
             </div>
             <Switch
@@ -264,8 +267,7 @@ export default function NewRetentionPolicyPage() {
 
           <div className="rounded-lg border p-4 bg-muted/50">
             <p className="text-sm text-muted-foreground">
-              <strong>Note:</strong> Retention policies run automatically based on a scheduled job.
-              Data matching the criteria will be processed according to the delete action selected.
+              <strong>{t("note.title")}</strong> {t("note.text")}
             </p>
           </div>
         </CardContent>

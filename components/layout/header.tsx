@@ -28,6 +28,7 @@
 import * as React from "react"
 import { useState } from "react"
 import { Bell, Search, Menu, type LucideIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -97,7 +98,7 @@ export function AppHeader({
   variant = "dashboard",
   title,
   user,
-  searchPlaceholder = "Search...",
+  searchPlaceholder,
   onSearchChange,
   onSearchSubmit,
   onMenuClick,
@@ -110,8 +111,10 @@ export function AppHeader({
   children,
 }: AppHeaderProps) {
   const [searchValue, setSearchValue] = useState("")
+  const t = useTranslations("ui.header")
 
   const isAdminVariant = variant === "admin"
+  const finalSearchPlaceholder = searchPlaceholder || t("searchPlaceholder")
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -149,7 +152,7 @@ export function AppHeader({
         <button
           className="lg:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground"
           onClick={onMenuClick}
-          aria-label="Open menu"
+          aria-label={t("openMenu")}
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -162,13 +165,13 @@ export function AppHeader({
       {/* Title (Admin) or Search (Dashboard) */}
       <div className="flex-1 flex items-center gap-4">
         {isAdminVariant ? (
-          <h1 className="text-xl font-semibold">{title || "Dashboard"}</h1>
+          <h1 className="text-xl font-semibold">{title || t("defaultTitle")}</h1>
         ) : (
           showSearch && (
             <div className="relative max-w-md flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder={searchPlaceholder}
+                placeholder={finalSearchPlaceholder}
                 value={searchValue}
                 onChange={handleSearchChange}
                 onKeyDown={handleSearchKeyDown}
@@ -189,7 +192,7 @@ export function AppHeader({
           <div className="relative hidden md:block">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder={searchPlaceholder}
+              placeholder={finalSearchPlaceholder}
               value={searchValue}
               onChange={handleSearchChange}
               onKeyDown={handleSearchKeyDown}
@@ -231,7 +234,7 @@ export function AppHeader({
             size="icon"
             className="relative"
             onClick={onNotificationClick}
-            aria-label="Notifications"
+            aria-label={t("notifications")}
           >
             <Bell className={isAdminVariant ? "h-5 w-5" : "h-4 w-4"} />
             {notificationCount > 0 && (
@@ -252,7 +255,7 @@ export function AppHeader({
         {/* User Info (Admin) */}
         {isAdminVariant && user && (
           <div className="hidden md:flex items-center gap-2 text-sm">
-            <span className="text-muted-foreground">Logged in as</span>
+            <span className="text-muted-foreground">{t("loggedInAs")}</span>
             <span className="font-medium">{user.name}</span>
           </div>
         )}

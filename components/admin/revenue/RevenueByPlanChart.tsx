@@ -7,6 +7,7 @@
 "use client"
 
 import { useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
@@ -36,6 +37,8 @@ const PLAN_DISPLAY_NAMES: Record<string, string> = {
 }
 
 export function RevenueByPlanChart({ data, totalMrr, isLoading }: RevenueByPlanChartProps) {
+  const t = useTranslations("admin.analytics.revenueByPlan")
+
   const sortedData = useMemo(() => {
     const planOrder = ["ENTERPRISE", "PROFESSIONAL", "STARTER"]
     return [...data].sort((a, b) =>
@@ -53,8 +56,8 @@ export function RevenueByPlanChart({ data, totalMrr, isLoading }: RevenueByPlanC
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Revenue by Plan</CardTitle>
-          <CardDescription>Loading plan distribution...</CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{t("loading")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center h-64">
@@ -71,12 +74,12 @@ export function RevenueByPlanChart({ data, totalMrr, isLoading }: RevenueByPlanC
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Revenue by Plan</CardTitle>
-          <CardDescription>Distribution across plan tiers</CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-64 flex items-center justify-center text-muted-foreground">
-            No revenue data available
+            {t("noData")}
           </div>
         </CardContent>
       </Card>
@@ -134,8 +137,8 @@ export function RevenueByPlanChart({ data, totalMrr, isLoading }: RevenueByPlanC
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Revenue by Plan</CardTitle>
-        <CardDescription>Distribution across plan tiers</CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-center gap-8">
@@ -171,7 +174,7 @@ export function RevenueByPlanChart({ data, totalMrr, isLoading }: RevenueByPlanC
             {/* Center text */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-2xl font-bold">{formatCurrency(totalMrr)}</span>
-              <span className="text-xs text-muted-foreground">Total MRR</span>
+              <span className="text-xs text-muted-foreground">{t("totalMrr")}</span>
             </div>
           </div>
 
@@ -189,7 +192,7 @@ export function RevenueByPlanChart({ data, totalMrr, isLoading }: RevenueByPlanC
                       {PLAN_DISPLAY_NAMES[item.plan] || item.plan}
                     </span>
                     <Badge variant="outline" className="text-xs">
-                      {item.customerCount} customers
+                      {t("customers", { count: item.customerCount })}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -204,7 +207,7 @@ export function RevenueByPlanChart({ data, totalMrr, isLoading }: RevenueByPlanC
 
         {/* ARPU by plan */}
         <div className="mt-6 pt-4 border-t">
-          <h4 className="text-sm font-medium mb-3">ARPU by Plan</h4>
+          <h4 className="text-sm font-medium mb-3">{t("arpuByPlan")}</h4>
           <div className="grid grid-cols-3 gap-4">
             {sortedData.map((item) => (
               <div key={item.plan} className="text-center">

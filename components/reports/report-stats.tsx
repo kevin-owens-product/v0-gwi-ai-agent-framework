@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent } from "@/components/ui/card"
 import { FileText, Eye, Users, TrendingUp } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -14,6 +15,7 @@ interface StatsData {
 }
 
 export function ReportStats() {
+  const t = useTranslations("reports")
   const [stats, setStats] = useState<StatsData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const org = useCurrentOrganization()
@@ -67,30 +69,30 @@ export function ReportStats() {
 
   const statItems = [
     {
-      label: "Total Reports",
+      label: t("stats.totalReports"),
       value: stats?.totalReports.toString() || "0",
-      change: `${stats?.publishedCount || 0} published`,
+      change: t("stats.publishedCount", { count: stats?.publishedCount || 0 }),
       changeType: "positive" as const,
       icon: FileText,
     },
     {
-      label: "Total Views",
+      label: t("stats.totalViews"),
       value: stats?.totalViews.toLocaleString() || "0",
-      change: "All time",
+      change: t("stats.allTime"),
       changeType: "neutral" as const,
       icon: Eye,
     },
     {
-      label: "Published",
+      label: t("stats.published"),
       value: stats?.publishedCount.toString() || "0",
-      change: "Ready to share",
+      change: t("stats.readyToShare"),
       changeType: "positive" as const,
       icon: Users,
     },
     {
-      label: "Drafts",
+      label: t("stats.drafts"),
       value: stats?.draftCount.toString() || "0",
-      change: "In progress",
+      change: t("stats.inProgress"),
       changeType: "neutral" as const,
       icon: TrendingUp,
     },

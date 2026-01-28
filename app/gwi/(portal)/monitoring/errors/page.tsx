@@ -160,7 +160,7 @@ async function ErrorLogsContent() {
                 <TableRow>
                   <TableHead>{t('error')}</TableHead>
                   <TableHead>{t('source')}</TableHead>
-                  <TableHead>Type</TableHead>
+                  <TableHead>{t('type')}</TableHead>
                   <TableHead>{t('timestamp')}</TableHead>
                   <TableHead>{t('status')}</TableHead>
                   <TableHead className="w-[80px]"></TableHead>

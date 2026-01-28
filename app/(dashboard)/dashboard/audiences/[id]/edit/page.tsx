@@ -73,41 +73,41 @@ interface Audience {
 }
 
 const AVAILABLE_MARKETS = [
-  { value: "Global", label: "Global" },
-  { value: "US", label: "United States" },
-  { value: "UK", label: "United Kingdom" },
-  { value: "DE", label: "Germany" },
-  { value: "FR", label: "France" },
-  { value: "JP", label: "Japan" },
-  { value: "AU", label: "Australia" },
-  { value: "CA", label: "Canada" },
-  { value: "NL", label: "Netherlands" },
-  { value: "KR", label: "South Korea" },
-  { value: "SG", label: "Singapore" },
-  { value: "HK", label: "Hong Kong" },
-  { value: "UAE", label: "United Arab Emirates" },
-  { value: "BR", label: "Brazil" },
-  { value: "IT", label: "Italy" },
+  { value: "Global", labelKey: "markets.global" },
+  { value: "US", labelKey: "markets.us" },
+  { value: "UK", labelKey: "markets.uk" },
+  { value: "DE", labelKey: "markets.de" },
+  { value: "FR", labelKey: "markets.fr" },
+  { value: "JP", labelKey: "markets.jp" },
+  { value: "AU", labelKey: "markets.au" },
+  { value: "CA", labelKey: "markets.ca" },
+  { value: "NL", labelKey: "markets.nl" },
+  { value: "KR", labelKey: "markets.kr" },
+  { value: "SG", labelKey: "markets.sg" },
+  { value: "HK", labelKey: "markets.hk" },
+  { value: "UAE", labelKey: "markets.uae" },
+  { value: "BR", labelKey: "markets.br" },
+  { value: "IT", labelKey: "markets.it" },
 ]
 
 const DIMENSION_OPTIONS = [
-  { value: "age", label: "Age" },
-  { value: "gender", label: "Gender" },
-  { value: "income", label: "Income" },
-  { value: "education", label: "Education" },
-  { value: "location", label: "Location" },
-  { value: "interests", label: "Interests" },
-  { value: "behaviors", label: "Behaviors" },
-  { value: "lifestyle", label: "Lifestyle" },
+  { value: "age", labelKey: "dimensions.age" },
+  { value: "gender", labelKey: "dimensions.gender" },
+  { value: "income", labelKey: "dimensions.income" },
+  { value: "education", labelKey: "dimensions.education" },
+  { value: "location", labelKey: "dimensions.location" },
+  { value: "interests", labelKey: "dimensions.interests" },
+  { value: "behaviors", labelKey: "dimensions.behaviors" },
+  { value: "lifestyle", labelKey: "dimensions.lifestyle" },
 ]
 
 const OPERATOR_OPTIONS = [
-  { value: "is", label: "is" },
-  { value: "is_not", label: "is not" },
-  { value: "between", label: "between" },
-  { value: "contains", label: "contains" },
-  { value: "greater_than", label: "greater than" },
-  { value: "less_than", label: "less than" },
+  { value: "is", labelKey: "operators.is" },
+  { value: "is_not", labelKey: "operators.isNot" },
+  { value: "between", labelKey: "operators.between" },
+  { value: "contains", labelKey: "operators.contains" },
+  { value: "greater_than", labelKey: "operators.greaterThan" },
+  { value: "less_than", labelKey: "operators.lessThan" },
 ]
 
 export default function EditAudiencePage({ params }: { params: Promise<{ id: string }> }) {
@@ -176,14 +176,14 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
         setOriginalData(audience)
       } catch (err) {
         console.error("Error fetching audience:", err)
-        setError(err instanceof Error ? err.message : "Failed to load audience")
+        setError(err instanceof Error ? err.message : t("common.errors.audienceLoadFailed"))
       } finally {
         setIsLoading(false)
       }
     }
 
     fetchAudience()
-  }, [id, sessionStatus, router])
+  }, [id, sessionStatus, router, t])
 
   // Track changes
   useEffect(() => {
@@ -203,7 +203,7 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
   // Handle form submission
   const handleSave = async () => {
     if (!name.trim()) {
-      setError("Audience name is required")
+      setError(t("validation.nameRequired"))
       return
     }
 
@@ -228,14 +228,14 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.error || "Failed to update audience")
+        throw new Error(errorData.error || t("common.errors.audienceUpdateFailed"))
       }
 
       // Navigate back to audience detail page
       router.push(`/dashboard/audiences/${id}`)
     } catch (err) {
       console.error("Error updating audience:", err)
-      setError(err instanceof Error ? err.message : "Failed to update audience")
+      setError(err instanceof Error ? err.message : t("common.errors.audienceUpdateFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -476,7 +476,7 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
                         <SelectContent>
                           {DIMENSION_OPTIONS.map((opt) => (
                             <SelectItem key={opt.value} value={opt.value}>
-                              {opt.label}
+                              {t(opt.labelKey)}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -491,7 +491,7 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
                         <SelectContent>
                           {OPERATOR_OPTIONS.map((opt) => (
                             <SelectItem key={opt.value} value={opt.value}>
-                              {opt.label}
+                              {t(opt.labelKey)}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -540,7 +540,7 @@ export default function EditAudiencePage({ params }: { params: Promise<{ id: str
                     className="cursor-pointer hover:bg-primary/80 transition-colors"
                     onClick={() => toggleMarket(market.value)}
                   >
-                    {market.label}
+                    {t(market.labelKey)}
                     {selectedMarkets.includes(market.value) && (
                       <X className="h-3 w-3 ml-1" />
                     )}

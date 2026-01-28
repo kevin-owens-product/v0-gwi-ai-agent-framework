@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import {
   ArrowLeft,
@@ -32,32 +33,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { toast } from "sonner"
-
-const clientTypes = [
-  {
-    value: "CONFIDENTIAL",
-    label: "Confidential (Server-side)",
-    description: "For server-side applications that can securely store secrets",
-  },
-  {
-    value: "PUBLIC",
-    label: "Public (SPA/Mobile)",
-    description: "For browser or mobile apps that cannot store secrets securely",
-  },
-  {
-    value: "SERVICE",
-    label: "Service (Machine-to-Machine)",
-    description: "For backend services communicating with each other",
-  },
-]
-
-const scopeOptions = [
-  { value: "read", label: "Read", description: "Read-only access to resources" },
-  { value: "write", label: "Write", description: "Create and update resources" },
-  { value: "delete", label: "Delete", description: "Delete resources" },
-  { value: "admin", label: "Admin", description: "Administrative operations" },
-]
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface Organization {
   id: string
@@ -65,6 +41,34 @@ interface Organization {
 }
 
 export default function NewAPIClientPage() {
+  const t = useTranslations("admin.integrations.apiClients")
+  const tCommon = useTranslations("common")
+
+  const clientTypes = [
+    {
+      value: "CONFIDENTIAL",
+      label: t("clientTypes.confidential"),
+      description: t("clientTypeDescriptions.confidential"),
+    },
+    {
+      value: "PUBLIC",
+      label: t("clientTypes.public"),
+      description: t("clientTypeDescriptions.public"),
+    },
+    {
+      value: "SERVICE",
+      label: t("clientTypes.service"),
+      description: t("clientTypeDescriptions.service"),
+    },
+  ]
+
+  const scopeOptions = [
+    { value: "read", label: t("scopes.read"), description: t("scopeDescriptions.read") },
+    { value: "write", label: t("scopes.write"), description: t("scopeDescriptions.write") },
+    { value: "delete", label: t("scopes.delete"), description: t("scopeDescriptions.delete") },
+    { value: "admin", label: t("scopes.admin"), description: t("scopeDescriptions.admin") },
+  ]
+
   const router = useRouter()
   const [isSaving, setIsSaving] = useState(false)
   const [showSecret, setShowSecret] = useState<string | null>(null)
@@ -101,7 +105,7 @@ export default function NewAPIClientPage() {
 
   const handleCreate = async () => {
     if (!formData.name || !formData.orgId) {
-      toast.error("Name and organization are required")
+      showErrorToast(t("validation.nameAndOrgRequired"))
       return
     }
 
@@ -122,7 +126,7 @@ export default function NewAPIClientPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to create API client")
+        throw new Error(data.error || t("toast.createFailed"))
       }
 
       const data = await response.json()
@@ -131,11 +135,11 @@ export default function NewAPIClientPage() {
       if (data.clientSecret) {
         setShowSecret(data.clientSecret)
       } else {
-        toast.success("API client created successfully")
+        showSuccessToast(t("toast.clientCreatedSuccess"))
         router.push("/admin/integrations/api-clients")
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create API client")
+      showErrorToast(error instanceof Error ? error.message : t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -143,7 +147,7 @@ export default function NewAPIClientPage() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
-    toast.success("Copied to clipboard")
+    showSuccessToast(t("toast.copied"))
   }
 
   const handleSecretClose = () => {
@@ -166,9 +170,9 @@ export default function NewAPIClientPage() {
       <Dialog open={!!showSecret} onOpenChange={handleSecretClose}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Client Secret Generated</DialogTitle>
+            <DialogTitle>{t("secretDialog.title")}</DialogTitle>
             <DialogDescription>
-              Copy this secret now - it will not be shown again!
+              {t("secretDialog.description")}
             </DialogDescription>
           </DialogHeader>
           <div className="p-4 bg-muted rounded-lg font-mono text-sm break-all">
@@ -177,10 +181,10 @@ export default function NewAPIClientPage() {
           <DialogFooter>
             <Button onClick={() => copyToClipboard(showSecret!)}>
               <Copy className="h-4 w-4 mr-2" />
-              Copy Secret
+              {t("secretDialog.copySecret")}
             </Button>
             <Button variant="outline" onClick={handleSecretClose}>
-              Done
+              {t("secretDialog.done")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -192,16 +196,16 @@ export default function NewAPIClientPage() {
           <Link href="/admin/integrations/api-clients">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Key className="h-6 w-6 text-primary" />
-              Create API Client
+              {t("new.title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Create a new OAuth client for API access
+              {t("new.description")}
             </p>
           </div>
         </div>
@@ -209,12 +213,12 @@ export default function NewAPIClientPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {tCommon("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Client
+              {t("createButton")}
             </>
           )}
         </Button>
@@ -224,17 +228,17 @@ export default function NewAPIClientPage() {
         {/* Basic Info */}
         <Card>
           <CardHeader>
-            <CardTitle>Client Details</CardTitle>
+            <CardTitle>{t("detail.clientDetails")}</CardTitle>
             <CardDescription>
-              Basic information about the API client
+              {t("new.clientDetailsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Client Name *</Label>
+              <Label htmlFor="name">{t("form.clientNameRequired")}</Label>
               <Input
                 id="name"
-                placeholder="My API Client"
+                placeholder={t("form.clientNamePlaceholder")}
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
@@ -243,10 +247,10 @@ export default function NewAPIClientPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{tCommon("description")}</Label>
               <Textarea
                 id="description"
-                placeholder="What is this client used for?"
+                placeholder={t("form.descriptionPlaceholder")}
                 rows={3}
                 value={formData.description}
                 onChange={(e) =>
@@ -258,7 +262,7 @@ export default function NewAPIClientPage() {
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
                 <Building2 className="h-4 w-4" />
-                Organization *
+                {t("form.organizationRequired")}
               </Label>
               <Select
                 value={formData.orgId}
@@ -267,7 +271,7 @@ export default function NewAPIClientPage() {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={loadingOrgs ? "Loading..." : "Select organization"} />
+                  <SelectValue placeholder={loadingOrgs ? tCommon("loading") : t("form.selectOrganization")} />
                 </SelectTrigger>
                 <SelectContent>
                   {organizations.map((org) => (
@@ -280,7 +284,7 @@ export default function NewAPIClientPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Client Type</Label>
+              <Label>{t("form.clientType")}</Label>
               <Select
                 value={formData.type}
                 onValueChange={(value) =>
@@ -310,14 +314,14 @@ export default function NewAPIClientPage() {
         {/* Rate Limits */}
         <Card>
           <CardHeader>
-            <CardTitle>Rate Limits</CardTitle>
+            <CardTitle>{t("usage.rateLimits")}</CardTitle>
             <CardDescription>
-              Configure API usage limits for this client
+              {t("new.rateLimitsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="rateLimit">Rate Limit (requests/minute)</Label>
+              <Label htmlFor="rateLimit">{t("form.rateLimit")}</Label>
               <Input
                 id="rateLimit"
                 type="number"
@@ -330,12 +334,12 @@ export default function NewAPIClientPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="dailyLimit">Daily Limit (optional)</Label>
+              <Label htmlFor="dailyLimit">{t("settings.dailyLimit")}</Label>
               <Input
                 id="dailyLimit"
                 type="number"
                 min="1"
-                placeholder="No limit"
+                placeholder={t("settings.noLimit")}
                 value={formData.dailyLimit}
                 onChange={(e) =>
                   setFormData({ ...formData, dailyLimit: e.target.value })
@@ -344,12 +348,12 @@ export default function NewAPIClientPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="monthlyLimit">Monthly Limit (optional)</Label>
+              <Label htmlFor="monthlyLimit">{t("settings.monthlyLimit")}</Label>
               <Input
                 id="monthlyLimit"
                 type="number"
                 min="1"
-                placeholder="No limit"
+                placeholder={t("settings.noLimit")}
                 value={formData.monthlyLimit}
                 onChange={(e) =>
                   setFormData({ ...formData, monthlyLimit: e.target.value })
@@ -364,15 +368,15 @@ export default function NewAPIClientPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Shield className="h-5 w-5" />
-              Permissions
+              {t("new.permissions")}
             </CardTitle>
             <CardDescription>
-              Configure allowed scopes and redirect URIs
+              {t("new.permissionsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label>Allowed Scopes</Label>
+              <Label>{t("detail.allowedScopes")}</Label>
               <div className="grid grid-cols-2 gap-2">
                 {scopeOptions.map((scope) => (
                   <div
@@ -394,10 +398,10 @@ export default function NewAPIClientPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="redirectUris">Redirect URIs (one per line)</Label>
+              <Label htmlFor="redirectUris">{t("form.redirectUris")}</Label>
               <Textarea
                 id="redirectUris"
-                placeholder="https://example.com/callback&#10;https://localhost:3000/callback"
+                placeholder={t("form.redirectUrisPlaceholderMultiline")}
                 rows={4}
                 value={formData.redirectUris}
                 onChange={(e) =>
@@ -405,7 +409,7 @@ export default function NewAPIClientPage() {
                 }
               />
               <p className="text-xs text-muted-foreground">
-                URLs where users can be redirected after authentication
+                {t("form.redirectUrisHelp")}
               </p>
             </div>
           </CardContent>

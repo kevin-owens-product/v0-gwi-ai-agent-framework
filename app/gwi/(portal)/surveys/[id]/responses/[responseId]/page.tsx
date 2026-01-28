@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -62,6 +63,8 @@ interface SurveyResponse {
 export default function ResponseDetailPage() {
   const params = useParams()
   const router = useRouter()
+  const t = useTranslations("gwi.surveys.responseDetail")
+  const tCommon = useTranslations("common")
   const surveyId = params.id as string
   const responseId = params.responseId as string
 
@@ -84,9 +87,9 @@ export default function ResponseDetailPage() {
 
       if (!res.ok) {
         if (res.status === 404) {
-          setError("Response not found")
+          setError(t("errors.notFound"))
         } else {
-          setError("Failed to load response")
+          setError(t("errors.loadFailed"))
         }
         return
       }
@@ -94,8 +97,8 @@ export default function ResponseDetailPage() {
       const data = await res.json()
       setResponse(data)
       setEditedAnswers(data.answers || {})
-    } catch (err) {
-      setError("Failed to load response")
+    } catch {
+      setError(t("errors.loadFailed"))
     } finally {
       setLoading(false)
     }
@@ -119,8 +122,8 @@ export default function ResponseDetailPage() {
       const updated = await res.json()
       setResponse({ ...response, answers: updated.answers })
       setIsEditing(false)
-    } catch (err) {
-      toast.error("Failed to save changes")
+    } catch {
+      toast.error(t("toast.saveFailed"))
     } finally {
       setSaving(false)
     }
@@ -138,8 +141,8 @@ export default function ResponseDetailPage() {
       }
 
       router.push(`/gwi/surveys/${surveyId}`)
-    } catch (err) {
-      toast.error("Failed to delete response")
+    } catch {
+      toast.error(t("toast.deleteFailed"))
       setDeleting(false)
     }
   }
@@ -161,8 +164,8 @@ export default function ResponseDetailPage() {
 
       const updated = await res.json()
       setResponse({ ...response, completedAt: updated.completedAt })
-    } catch (err) {
-      toast.error("Failed to mark as complete")
+    } catch {
+      toast.error(t("toast.markCompleteFailed"))
     } finally {
       setSaving(false)
     }
@@ -179,7 +182,7 @@ export default function ResponseDetailPage() {
     const answer = response?.answers[question.code]
 
     if (answer === undefined || answer === null || answer === "") {
-      return <span className="text-muted-foreground italic">No answer provided</span>
+      return <span className="text-muted-foreground italic">{t("noAnswerProvided")}</span>
     }
 
     if (Array.isArray(answer)) {
@@ -273,13 +276,13 @@ export default function ResponseDetailPage() {
               <ArrowLeft className="h-4 w-4" />
             </Link>
           </Button>
-          <h1 className="text-3xl font-bold tracking-tight">Response Not Found</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t("notFoundTitle")}</h1>
         </div>
         <Card>
           <CardContent className="pt-6">
-            <p className="text-muted-foreground">{error || "The requested response could not be found."}</p>
+            <p className="text-muted-foreground">{error || t("notFoundDescription")}</p>
             <Button asChild className="mt-4">
-              <Link href={`/gwi/surveys/${surveyId}`}>Back to Survey</Link>
+              <Link href={`/gwi/surveys/${surveyId}`}>{t("backToSurvey")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -299,21 +302,21 @@ export default function ResponseDetailPage() {
           </Button>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold tracking-tight">Response Details</h1>
+              <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
               {response.completedAt ? (
                 <Badge className="bg-green-100 text-green-700">
                   <CheckCircle className="mr-1 h-3 w-3" />
-                  Completed
+                  {t("status.completed")}
                 </Badge>
               ) : (
                 <Badge className="bg-yellow-100 text-yellow-700">
                   <Clock className="mr-1 h-3 w-3" />
-                  In Progress
+                  {t("status.inProgress")}
                 </Badge>
               )}
             </div>
             <p className="text-muted-foreground mt-1">
-              Response for{" "}
+              {t("responseFor")}{" "}
               <Link href={`/gwi/surveys/${surveyId}`} className="hover:text-emerald-600">
                 {response.survey.name}
               </Link>
@@ -328,7 +331,7 @@ export default function ResponseDetailPage() {
                 setEditedAnswers(response.answers || {})
               }}>
                 <X className="mr-2 h-4 w-4" />
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button onClick={handleSave} disabled={saving}>
                 {saving ? (
@@ -336,7 +339,7 @@ export default function ResponseDetailPage() {
                 ) : (
                   <Save className="mr-2 h-4 w-4" />
                 )}
-                Save Changes
+                {t("actions.saveChanges")}
               </Button>
             </>
           ) : (
@@ -348,35 +351,35 @@ export default function ResponseDetailPage() {
                   ) : (
                     <CheckCircle className="mr-2 h-4 w-4" />
                   )}
-                  Mark Complete
+                  {t("actions.markComplete")}
                 </Button>
               )}
               <Button variant="outline" onClick={() => setIsEditing(true)}>
                 <Edit className="mr-2 h-4 w-4" />
-                Edit Response
+                {t("actions.editResponse")}
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="outline" className="text-red-600 border-red-200 hover:bg-red-50">
                     <Trash2 className="mr-2 h-4 w-4" />
-                    Delete
+                    {tCommon("delete")}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Response</AlertDialogTitle>
+                    <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Are you sure you want to delete this response? This action cannot be undone.
+                      {t("deleteDialog.description")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDelete}
                       className="bg-red-600 hover:bg-red-700"
                       disabled={deleting}
                     >
-                      {deleting ? "Deleting..." : "Delete"}
+                      {deleting ? t("deleteDialog.deleting") : tCommon("delete")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -391,23 +394,23 @@ export default function ResponseDetailPage() {
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <User className="h-5 w-5" />
-            Respondent Information
+            {t("respondentInfo.title")}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <dt className="text-sm text-muted-foreground">Respondent ID</dt>
+              <dt className="text-sm text-muted-foreground">{t("respondentInfo.respondentId")}</dt>
               <dd className="font-mono font-medium">{response.respondentId}</dd>
             </div>
             <div>
-              <dt className="text-sm text-muted-foreground">Started At</dt>
+              <dt className="text-sm text-muted-foreground">{t("respondentInfo.startedAt")}</dt>
               <dd className="font-medium">
                 {new Date(response.createdAt).toLocaleString()}
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-muted-foreground">Completed At</dt>
+              <dt className="text-sm text-muted-foreground">{t("respondentInfo.completedAt")}</dt>
               <dd className="font-medium">
                 {response.completedAt
                   ? new Date(response.completedAt).toLocaleString()
@@ -415,13 +418,13 @@ export default function ResponseDetailPage() {
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-muted-foreground">Response ID</dt>
+              <dt className="text-sm text-muted-foreground">{t("respondentInfo.responseId")}</dt>
               <dd className="font-mono text-sm">{response.id}</dd>
             </div>
           </dl>
           {response.metadata && Object.keys(response.metadata).length > 0 && (
             <div className="mt-4 pt-4 border-t">
-              <dt className="text-sm text-muted-foreground mb-2">Metadata</dt>
+              <dt className="text-sm text-muted-foreground mb-2">{t("respondentInfo.metadata")}</dt>
               <dd>
                 <pre className="text-sm bg-slate-50 p-3 rounded overflow-auto">
                   {JSON.stringify(response.metadata, null, 2)}
@@ -437,10 +440,10 @@ export default function ResponseDetailPage() {
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <FileText className="h-5 w-5" />
-            Question Answers
+            {t("questionAnswers.title")}
           </CardTitle>
           <CardDescription>
-            {response.survey.questions.length} question(s) in this survey
+            {t("questionAnswers.questionCount", { count: response.survey.questions.length })}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -455,7 +458,7 @@ export default function ResponseDetailPage() {
                     <div className="flex items-center gap-2">
                       <Label className="text-base font-medium">{question.text}</Label>
                       {question.required && (
-                        <Badge variant="outline" className="text-xs">Required</Badge>
+                        <Badge variant="outline" className="text-xs">{t("questionAnswers.required")}</Badge>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">

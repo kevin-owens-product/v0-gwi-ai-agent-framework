@@ -1,3 +1,6 @@
+"use client"
+
+import { useTranslations } from "next-intl"
 import { Header } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 import { Button } from "@/components/ui/button"
@@ -6,54 +9,56 @@ import { Target, Users, Zap, Shield } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
-const stats = [
-  { label: "Enterprise Clients", value: "2,000+" },
-  { label: "Markets", value: "50+" },
-  { label: "Consumers Represented", value: "3B" },
-  { label: "Team Members", value: "750+" },
-]
-
-const values = [
-  {
-    icon: Target,
-    title: "Accuracy First",
-    description: "Every insight is verified against real data with full citation and source transparency.",
-  },
-  {
-    icon: Users,
-    title: "Customer Obsessed",
-    description: "We build what our customers need, not what's trendy. Your success is our success.",
-  },
-  {
-    icon: Zap,
-    title: "Speed Matters",
-    description: "In the fast-paced world of consumer insights, we deliver answers in seconds, not days.",
-  },
-  {
-    icon: Shield,
-    title: "Trust & Security",
-    description: "Enterprise-grade security and compliance. Your data is always protected.",
-  },
-]
-
-const team = [
-  { name: "Tom Smith", role: "CEO & Founder", image: "/placeholder-user.jpg" },
-  { name: "Misha Williams", role: "Chief Operating Officer", image: "/placeholder-user.jpg" },
-  { name: "Nick Dearden", role: "Chief Technology Officer", image: "/placeholder-user.jpg" },
-  { name: "Kevin Owens", role: "Chief Product Officer", image: "/placeholder-user.jpg" },
-  { name: "Jason Mander", role: "Chief Insight Officer", image: "/placeholder-user.jpg" },
-  { name: "Birthe Emmerich", role: "Chief Marketing Officer", image: "/placeholder-user.jpg" },
-]
-
-const milestones = [
-  { year: "2009", title: "Founded", description: "Tom Smith founded GWI (GlobalWebIndex) in London" },
-  { year: "2014", title: "Global Expansion", description: "Expanded research to 40+ markets worldwide" },
-  { year: "2019", title: "Series A", description: "Raised funding led by Stripes Group" },
-  { year: "2022", title: "Series B", description: "Raised $179.9M led by Permira, total funding $220M" },
-  { year: "2024", title: "AI & Agent Framework", description: "Launched GWI Spark AI assistant and Agent Framework" },
-]
-
 export default function AboutPage() {
+  const t = useTranslations("landing.about")
+
+  const stats = [
+    { labelKey: "stats.enterpriseClients", value: "2,000+" },
+    { labelKey: "stats.markets", value: "50+" },
+    { labelKey: "stats.consumersRepresented", value: "3B" },
+    { labelKey: "stats.teamMembers", value: "750+" },
+  ]
+
+  const values = [
+    {
+      icon: Target,
+      titleKey: "values.accuracyFirst.title",
+      descriptionKey: "values.accuracyFirst.description",
+    },
+    {
+      icon: Users,
+      titleKey: "values.customerObsessed.title",
+      descriptionKey: "values.customerObsessed.description",
+    },
+    {
+      icon: Zap,
+      titleKey: "values.speedMatters.title",
+      descriptionKey: "values.speedMatters.description",
+    },
+    {
+      icon: Shield,
+      titleKey: "values.trustSecurity.title",
+      descriptionKey: "values.trustSecurity.description",
+    },
+  ]
+
+  const team = [
+    { name: "Tom Smith", roleKey: "team.roles.ceoFounder", image: "/placeholder-user.jpg" },
+    { name: "Misha Williams", roleKey: "team.roles.coo", image: "/placeholder-user.jpg" },
+    { name: "Nick Dearden", roleKey: "team.roles.cto", image: "/placeholder-user.jpg" },
+    { name: "Kevin Owens", roleKey: "team.roles.cpo", image: "/placeholder-user.jpg" },
+    { name: "Jason Mander", roleKey: "team.roles.cio", image: "/placeholder-user.jpg" },
+    { name: "Birthe Emmerich", roleKey: "team.roles.cmo", image: "/placeholder-user.jpg" },
+  ]
+
+  const milestones = [
+    { year: "2009", titleKey: "milestones.founded.title", descriptionKey: "milestones.founded.description" },
+    { year: "2014", titleKey: "milestones.globalExpansion.title", descriptionKey: "milestones.globalExpansion.description" },
+    { year: "2019", titleKey: "milestones.seriesA.title", descriptionKey: "milestones.seriesA.description" },
+    { year: "2022", titleKey: "milestones.seriesB.title", descriptionKey: "milestones.seriesB.description" },
+    { year: "2024", titleKey: "milestones.aiFramework.title", descriptionKey: "milestones.aiFramework.description" },
+  ]
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -63,9 +68,9 @@ export default function AboutPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">Transforming how the world understands consumers</h1>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">{t("hero.title")}</h1>
               <p className="text-xl text-muted-foreground mb-8">
-                We're on a mission to make consumer insights accessible, accurate, and actionable for every team.
+                {t("hero.subtitle")}
               </p>
             </div>
           </div>
@@ -76,9 +81,9 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((stat) => (
-                <div key={stat.label} className="text-center">
+                <div key={stat.labelKey} className="text-center">
                   <div className="text-4xl font-bold text-primary mb-2">{stat.value}</div>
-                  <div className="text-muted-foreground">{stat.label}</div>
+                  <div className="text-muted-foreground">{t(stat.labelKey)}</div>
                 </div>
               ))}
             </div>
@@ -90,25 +95,15 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
               <div>
-                <h2 className="text-3xl font-bold mb-6">Our Story</h2>
+                <h2 className="text-3xl font-bold mb-6">{t("story.title")}</h2>
                 <div className="space-y-4 text-muted-foreground">
-                  <p>
-                    GWI was founded in 2009 by Tom Smith with a vision to understand the digital consumer. From our
-                    headquarters in London, we've grown to become the world's leading audience research company.
-                  </p>
-                  <p>
-                    Today, we represent 3 billion consumers across 50+ markets worldwide. Our quarterly research
-                    surveys provide over 200,000+ profiling points, giving brands unprecedented insight into their
-                    audiences' behaviors, attitudes, and interests.
-                  </p>
-                  <p>
-                    With GWI Spark and our Agent Framework, we're pioneering the future where AI is trained on
-                    human truth—real-world, human-sourced data powering smarter business decisions.
-                  </p>
+                  <p>{t("story.paragraph1")}</p>
+                  <p>{t("story.paragraph2")}</p>
+                  <p>{t("story.paragraph3")}</p>
                 </div>
               </div>
               <div className="relative h-80 lg:h-96 rounded-lg overflow-hidden">
-                <Image src="/modern-office-collaboration.png" alt="GWI Team" fill className="object-cover" />
+                <Image src="/modern-office-collaboration.png" alt={t("story.imageAlt")} fill className="object-cover" />
               </div>
             </div>
           </div>
@@ -117,16 +112,16 @@ export default function AboutPage() {
         {/* Values */}
         <section className="py-20 bg-muted/30">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Our Values</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t("values.title")}</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               {values.map((value) => (
-                <Card key={value.title}>
+                <Card key={value.titleKey}>
                   <CardContent className="pt-6">
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                       <value.icon className="h-6 w-6 text-primary" />
                     </div>
-                    <h3 className="text-xl font-semibold mb-2">{value.title}</h3>
-                    <p className="text-muted-foreground">{value.description}</p>
+                    <h3 className="text-xl font-semibold mb-2">{t(value.titleKey)}</h3>
+                    <p className="text-muted-foreground">{t(value.descriptionKey)}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -137,19 +132,19 @@ export default function AboutPage() {
         {/* Timeline */}
         <section className="py-20">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Our Journey</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t("journey.title")}</h2>
             <div className="max-w-3xl mx-auto">
               <div className="relative">
                 <div className="absolute left-8 top-0 bottom-0 w-px bg-border" />
                 <div className="space-y-8">
-                  {milestones.map((milestone, _index) => (
+                  {milestones.map((milestone) => (
                     <div key={milestone.year} className="relative flex gap-6">
                       <div className="w-16 h-16 rounded-full bg-primary/10 border-4 border-background flex items-center justify-center flex-shrink-0 z-10">
                         <span className="font-bold text-primary">{milestone.year}</span>
                       </div>
                       <div className="pt-3">
-                        <h3 className="text-xl font-semibold">{milestone.title}</h3>
-                        <p className="text-muted-foreground">{milestone.description}</p>
+                        <h3 className="text-xl font-semibold">{t(milestone.titleKey)}</h3>
+                        <p className="text-muted-foreground">{t(milestone.descriptionKey)}</p>
                       </div>
                     </div>
                   ))}
@@ -162,9 +157,9 @@ export default function AboutPage() {
         {/* Team */}
         <section className="py-20 bg-muted/30">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-4">Leadership Team</h2>
+            <h2 className="text-3xl font-bold text-center mb-4">{t("team.title")}</h2>
             <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-              Meet the people driving GWI's mission to transform consumer insights.
+              {t("team.subtitle")}
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
               {team.map((member) => (
@@ -174,7 +169,7 @@ export default function AboutPage() {
                   </div>
                   <CardContent className="pt-4 text-center">
                     <h3 className="font-semibold text-lg">{member.name}</h3>
-                    <p className="text-muted-foreground">{member.role}</p>
+                    <p className="text-muted-foreground">{t(member.roleKey)}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -185,16 +180,16 @@ export default function AboutPage() {
         {/* CTA */}
         <section className="py-20">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">Join Our Team</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("cta.title")}</h2>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              We're always looking for talented people to help us transform consumer insights.
+              {t("cta.subtitle")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild>
-                <Link href="/careers">View Open Positions</Link>
+                <Link href="/careers">{t("cta.viewOpenPositions")}</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Contact Us</Link>
+                <Link href="/contact">{t("cta.contactUs")}</Link>
               </Button>
             </div>
           </div>

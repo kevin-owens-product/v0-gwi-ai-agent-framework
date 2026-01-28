@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import {
   Fingerprint,
@@ -50,6 +51,7 @@ interface RecentActivity {
 }
 
 export default function ComplianceOverviewPage() {
+  const t = useTranslations("admin.compliance")
   const [stats, setStats] = useState<ComplianceStats | null>(null)
   const [frameworks, setFrameworks] = useState<ComplianceFramework[]>([])
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([])
@@ -82,13 +84,13 @@ export default function ComplianceOverviewPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "COMPLIANT":
-        return <Badge className="bg-green-500">Compliant</Badge>
+        return <Badge className="bg-green-500">{t("statuses.compliant")}</Badge>
       case "NON_COMPLIANT":
-        return <Badge variant="destructive">Non-Compliant</Badge>
+        return <Badge variant="destructive">{t("statuses.nonCompliant")}</Badge>
       case "IN_PROGRESS":
-        return <Badge className="bg-blue-500">In Progress</Badge>
+        return <Badge className="bg-blue-500">{t("statuses.inProgress")}</Badge>
       case "PENDING":
-        return <Badge variant="secondary">Pending</Badge>
+        return <Badge variant="secondary">{t("statuses.pending")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -99,8 +101,8 @@ export default function ComplianceOverviewPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Compliance Center</h1>
-            <p className="text-muted-foreground">Loading compliance data...</p>
+            <h1 className="text-3xl font-bold">{t("title")}</h1>
+            <p className="text-muted-foreground">{t("loading")}</p>
           </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -126,23 +128,23 @@ export default function ComplianceOverviewPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Fingerprint className="h-8 w-8 text-primary" />
-            Compliance Center
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Regulatory compliance, legal holds, and data governance
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" asChild>
             <Link href="/admin/compliance/legal-holds">
               <Gavel className="h-4 w-4 mr-2" />
-              Legal Holds
+              {t("legalHolds")}
             </Link>
           </Button>
           <Button asChild>
             <Link href="/admin/compliance/data-exports">
               <Download className="h-4 w-4 mr-2" />
-              Data Exports
+              {t("dataExports")}
             </Link>
           </Button>
         </div>
@@ -153,7 +155,7 @@ export default function ComplianceOverviewPage() {
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Overall Compliance Score</p>
+              <p className="text-sm font-medium text-muted-foreground">{t("overallScore.title")}</p>
               <div className="flex items-center gap-4 mt-2">
                 <span className={`text-5xl font-bold ${getScoreColor(stats?.overallComplianceScore || 0)}`}>
                   {stats?.overallComplianceScore || 0}%
@@ -170,15 +172,15 @@ export default function ComplianceOverviewPage() {
             <div className="grid grid-cols-3 gap-8 text-center">
               <div>
                 <p className="text-2xl font-bold text-green-500">{stats?.compliantOrgs || 0}</p>
-                <p className="text-xs text-muted-foreground">Compliant Orgs</p>
+                <p className="text-xs text-muted-foreground">{t("overallScore.compliantOrgs")}</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-yellow-500">{stats?.pendingAudits || 0}</p>
-                <p className="text-xs text-muted-foreground">Pending Audits</p>
+                <p className="text-xs text-muted-foreground">{t("overallScore.pendingAudits")}</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-red-500">{stats?.nonCompliantOrgs || 0}</p>
-                <p className="text-xs text-muted-foreground">Non-Compliant</p>
+                <p className="text-xs text-muted-foreground">{t("overallScore.nonCompliant")}</p>
               </div>
             </div>
           </div>
@@ -189,76 +191,76 @@ export default function ComplianceOverviewPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Compliance Frameworks</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("stats.frameworks.title")}</CardTitle>
             <FileSearch className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.totalFrameworks || 0}</div>
             <p className="text-xs text-muted-foreground">
-              {stats?.activeFrameworks || 0} active
+              {stats?.activeFrameworks || 0} {t("stats.frameworks.active")}
             </p>
             <Link
               href="/admin/compliance/frameworks"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              Manage frameworks <ArrowRight className="h-3 w-3 ml-1" />
+              {t("stats.frameworks.manageLink")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Active Legal Holds</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("stats.legalHolds.title")}</CardTitle>
             <Gavel className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.activeLegalHolds || 0}</div>
             <p className="text-xs text-muted-foreground">
-              Data preservation orders
+              {t("stats.legalHolds.description")}
             </p>
             <Link
               href="/admin/compliance/legal-holds"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              View holds <ArrowRight className="h-3 w-3 ml-1" />
+              {t("stats.legalHolds.viewLink")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Pending Exports</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("stats.pendingExports.title")}</CardTitle>
             <Download className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.pendingExports || 0}</div>
             <p className="text-xs text-muted-foreground">
-              Data export requests
+              {t("stats.pendingExports.description")}
             </p>
             <Link
               href="/admin/compliance/data-exports"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              Process exports <ArrowRight className="h-3 w-3 ml-1" />
+              {t("stats.pendingExports.processLink")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Retention Policies</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("stats.retentionPolicies.title")}</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.retentionPolicies || 0}</div>
             <p className="text-xs text-muted-foreground">
-              Active data retention rules
+              {t("stats.retentionPolicies.description")}
             </p>
             <Link
               href="/admin/compliance/retention-policies"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              Manage policies <ArrowRight className="h-3 w-3 ml-1" />
+              {t("stats.retentionPolicies.manageLink")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
@@ -268,14 +270,14 @@ export default function ComplianceOverviewPage() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Compliance Frameworks</CardTitle>
-            <CardDescription>Framework compliance status</CardDescription>
+            <CardTitle>{t("frameworksOverview.title")}</CardTitle>
+            <CardDescription>{t("frameworksOverview.description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {frameworks.length === 0 ? (
                 <p className="text-center text-muted-foreground py-8">
-                  No compliance frameworks configured
+                  {t("frameworksOverview.noFrameworks")}
                 </p>
               ) : (
                 frameworks.slice(0, 5).map((framework) => (
@@ -292,8 +294,8 @@ export default function ComplianceOverviewPage() {
                     </div>
                     <Progress value={framework.score} className="h-2" />
                     <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>{framework.compliantCount} orgs compliant</span>
-                      <span>{framework.attestationCount} attestations</span>
+                      <span>{t("frameworksOverview.orgsCompliant", { count: framework.compliantCount })}</span>
+                      <span>{t("frameworksOverview.attestations", { count: framework.attestationCount })}</span>
                     </div>
                   </div>
                 ))
@@ -302,7 +304,7 @@ export default function ComplianceOverviewPage() {
             {frameworks.length > 0 && (
               <Button variant="outline" className="w-full mt-4" asChild>
                 <Link href="/admin/compliance/frameworks">
-                  View All Frameworks
+                  {t("frameworksOverview.viewAll")}
                 </Link>
               </Button>
             )}
@@ -311,14 +313,14 @@ export default function ComplianceOverviewPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Latest compliance-related events</CardDescription>
+            <CardTitle>{t("activity.title")}</CardTitle>
+            <CardDescription>{t("activity.description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {recentActivity.length === 0 ? (
                 <p className="text-center text-muted-foreground py-8">
-                  No recent compliance activity
+                  {t("activity.noActivity")}
                 </p>
               ) : (
                 recentActivity.slice(0, 5).map((activity) => (
@@ -362,8 +364,8 @@ export default function ComplianceOverviewPage() {
                   <FileSearch className="h-6 w-6 text-blue-500" />
                 </div>
                 <div>
-                  <p className="font-medium">Frameworks</p>
-                  <p className="text-sm text-muted-foreground">Manage compliance standards</p>
+                  <p className="font-medium">{t("quickActions.frameworks.title")}</p>
+                  <p className="text-sm text-muted-foreground">{t("quickActions.frameworks.description")}</p>
                 </div>
               </div>
             </CardContent>
@@ -378,8 +380,8 @@ export default function ComplianceOverviewPage() {
                   <Gavel className="h-6 w-6 text-red-500" />
                 </div>
                 <div>
-                  <p className="font-medium">Legal Holds</p>
-                  <p className="text-sm text-muted-foreground">Manage data preservation</p>
+                  <p className="font-medium">{t("quickActions.legalHolds.title")}</p>
+                  <p className="text-sm text-muted-foreground">{t("quickActions.legalHolds.description")}</p>
                 </div>
               </div>
             </CardContent>
@@ -394,8 +396,8 @@ export default function ComplianceOverviewPage() {
                   <Download className="h-6 w-6 text-green-500" />
                 </div>
                 <div>
-                  <p className="font-medium">Data Exports</p>
-                  <p className="text-sm text-muted-foreground">Process export requests</p>
+                  <p className="font-medium">{t("quickActions.dataExports.title")}</p>
+                  <p className="text-sm text-muted-foreground">{t("quickActions.dataExports.description")}</p>
                 </div>
               </div>
             </CardContent>
@@ -410,8 +412,8 @@ export default function ComplianceOverviewPage() {
                   <Calendar className="h-6 w-6 text-purple-500" />
                 </div>
                 <div>
-                  <p className="font-medium">Retention</p>
-                  <p className="text-sm text-muted-foreground">Data retention policies</p>
+                  <p className="font-medium">{t("quickActions.retention.title")}</p>
+                  <p className="text-sm text-muted-foreground">{t("quickActions.retention.description")}</p>
                 </div>
               </div>
             </CardContent>

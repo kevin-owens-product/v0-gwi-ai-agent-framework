@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -53,6 +54,7 @@ export function LookalikeGenerator({
   onCreateLookalike,
   className,
 }: LookalikeGeneratorProps) {
+  const t = useTranslations("audiences")
   const [lookalikes, setLookalikes] = useState<LookalikeAudience[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
@@ -137,7 +139,7 @@ export function LookalikeGenerator({
       <div className={cn("space-y-4", className)}>
         <div className="flex items-center gap-2">
           <Target className="h-5 w-5" />
-          <h3 className="font-semibold">Lookalike Audiences</h3>
+          <h3 className="font-semibold">{t("lookalike.title")}</h3>
         </div>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
@@ -158,7 +160,7 @@ export function LookalikeGenerator({
           </div>
           <Button variant="outline" size="sm" onClick={fetchLookalikes}>
             <RefreshCw className="h-4 w-4 mr-2" />
-            Retry
+            {t("lookalike.retry")}
           </Button>
         </div>
       </Card>
@@ -171,8 +173,8 @@ export function LookalikeGenerator({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Target className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">Lookalike Audiences</h3>
-          <Badge variant="secondary">{lookalikes.length} found</Badge>
+          <h3 className="font-semibold">{t("lookalike.title")}</h3>
+          <Badge variant="secondary">{t("lookalike.found", { count: lookalikes.length })}</Badge>
         </div>
         <Button variant="ghost" size="sm" onClick={fetchLookalikes}>
           <RefreshCw className="h-4 w-4" />
@@ -183,7 +185,7 @@ export function LookalikeGenerator({
       <Card className="p-3 bg-muted/50">
         <div className="flex items-center gap-2 text-sm">
           <Users className="h-4 w-4 text-muted-foreground" />
-          <span className="text-muted-foreground">Based on:</span>
+          <span className="text-muted-foreground">{t("lookalike.basedOn")}</span>
           <span className="font-medium">{sourceAudienceName}</span>
         </div>
       </Card>
@@ -191,7 +193,7 @@ export function LookalikeGenerator({
       {/* Similarity Threshold */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <Label className="text-sm">Similarity Threshold</Label>
+          <Label className="text-sm">{t("lookalike.similarityThreshold")}</Label>
           <span className="text-sm text-muted-foreground">
             {Math.round(similarityThreshold[0] * 100)}%
           </span>
@@ -206,8 +208,8 @@ export function LookalikeGenerator({
           className="w-full"
         />
         <div className="flex justify-between text-xs text-muted-foreground">
-          <span>Broader reach</span>
-          <span>Higher similarity</span>
+          <span>{t("lookalike.broaderReach")}</span>
+          <span>{t("lookalike.higherSimilarity")}</span>
         </div>
       </div>
 
@@ -227,22 +229,22 @@ export function LookalikeGenerator({
                 <div>
                   <h4 className="font-medium">{lookalike.name}</h4>
                   <p className="text-sm text-muted-foreground">
-                    {formatSize(lookalike.estimatedSize)} consumers
+                    {t("lookalike.consumers", { count: formatSize(lookalike.estimatedSize) })}
                   </p>
                 </div>
                 <Badge className={cn("text-xs", getSimilarityColor(lookalike.similarity))}>
-                  {Math.round(lookalike.similarity * 100)}% similar
+                  {t("lookalike.similar", { percent: Math.round(lookalike.similarity * 100) })}
                 </Badge>
               </div>
 
               <div className="flex items-center gap-4 text-xs">
                 <div className="flex items-center gap-1">
                   <Percent className="h-3 w-3 text-blue-500" />
-                  <span>{lookalike.overlapPercentage}% overlap</span>
+                  <span>{t("lookalike.overlap", { percent: lookalike.overlapPercentage })}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <TrendingUp className="h-3 w-3 text-green-500" />
-                  <span>{lookalike.uniquePercentage}% unique</span>
+                  <span>{t("lookalike.unique", { percent: lookalike.uniquePercentage })}</span>
                 </div>
               </div>
 
@@ -265,7 +267,7 @@ export function LookalikeGenerator({
                   }}
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Create This Audience
+                  {t("lookalike.createThisAudience")}
                 </Button>
               )}
             </div>
@@ -277,9 +279,9 @@ export function LookalikeGenerator({
       {lookalikes.length === 0 && (
         <Card className="p-8 text-center">
           <Sparkles className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-          <h4 className="font-medium mb-2">No lookalikes at this threshold</h4>
+          <h4 className="font-medium mb-2">{t("lookalike.noLookalikesAtThreshold")}</h4>
           <p className="text-sm text-muted-foreground">
-            Try lowering the similarity threshold to find more audiences
+            {t("lookalike.tryLoweringThreshold")}
           </p>
         </Card>
       )}
@@ -290,17 +292,17 @@ export function LookalikeGenerator({
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5" />
-              Create Lookalike Audience
+              {t("lookalike.dialog.title")}
             </DialogTitle>
             <DialogDescription>
-              This will create a new audience based on the selected lookalike profile.
+              {t("lookalike.dialog.description")}
             </DialogDescription>
           </DialogHeader>
 
           {selectedLookalike && (
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Audience Name</Label>
+                <Label htmlFor="name">{t("lookalike.dialog.audienceName")}</Label>
                 <Input
                   id="name"
                   value={newName}
@@ -312,18 +314,18 @@ export function LookalikeGenerator({
               <Card className="p-3 bg-muted/50">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-muted-foreground">Estimated Size</p>
+                    <p className="text-muted-foreground">{t("lookalike.dialog.estimatedSize")}</p>
                     <p className="font-medium">{formatSize(selectedLookalike.estimatedSize)}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">Similarity</p>
+                    <p className="text-muted-foreground">{t("lookalike.dialog.similarity")}</p>
                     <p className="font-medium">{Math.round(selectedLookalike.similarity * 100)}%</p>
                   </div>
                 </div>
               </Card>
 
               <div>
-                <p className="text-sm font-medium mb-2">Key Characteristics</p>
+                <p className="text-sm font-medium mb-2">{t("lookalike.dialog.keyCharacteristics")}</p>
                 <div className="flex flex-wrap gap-2">
                   {selectedLookalike.keyDifferentiators.map((diff, i) => (
                     <Badge key={i} variant="secondary">
@@ -337,18 +339,18 @@ export function LookalikeGenerator({
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
-              Cancel
+              {t("lookalike.dialog.cancel")}
             </Button>
             <Button onClick={handleCreateLookalike} disabled={isCreating}>
               {isCreating ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Creating...
+                  {t("lookalike.dialog.creating")}
                 </>
               ) : (
                 <>
                   <Check className="h-4 w-4 mr-2" />
-                  Create Audience
+                  {t("lookalike.dialog.createAudience")}
                 </>
               )}
             </Button>

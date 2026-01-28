@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo, useCallback, useRef, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import {
   Table,
   TableBody,
@@ -218,6 +219,7 @@ export function AdvancedCrosstabGrid({
   onConfigChange,
   className,
 }: AdvancedCrosstabGridProps) {
+  const t = useTranslations("dashboard.crosstabs.components.grid")
   const [columns, _setColumns] = useState(initialColumns)
   const [data, setData] = useState(initialData)
   const [config, setConfig] = useState<CrosstabConfig>({ ...DEFAULT_CONFIG, ...initialConfig })
@@ -606,12 +608,12 @@ export function AdvancedCrosstabGrid({
                       {stats && typeof stats.mean === 'number' && (
                         <>
                           <Separator className="my-1" />
-                          <p>Mean: {stats.mean.toFixed(1)}%</p>
-                          <p>Range: {typeof stats.min === 'number' ? stats.min.toFixed(1) : 'N/A'} - {typeof stats.max === 'number' ? stats.max.toFixed(1) : 'N/A'}%</p>
-                          {significant && <p className="text-green-600">Statistically significant</p>}
+                          <p>{t("tooltip.mean")}: {stats.mean.toFixed(1)}%</p>
+                          <p>{t("tooltip.range")}: {typeof stats.min === 'number' ? stats.min.toFixed(1) : 'N/A'} - {typeof stats.max === 'number' ? stats.max.toFixed(1) : 'N/A'}%</p>
+                          {significant && <p className="text-green-600">{t("tooltip.statisticallySignificant")}</p>}
                         </>
                       )}
-                      <p className="text-muted-foreground pt-1">Double-click to drill down</p>
+                      <p className="text-muted-foreground pt-1">{t("tooltip.doubleclickToDrillDown")}</p>
                     </div>
                   </TooltipContent>
                 </Tooltip>
@@ -622,44 +624,44 @@ export function AdvancedCrosstabGrid({
         <ContextMenuContent>
           <ContextMenuItem onClick={() => handleDrillDown({ rowId: row.id, columnKey: col.key }, row)}>
             <ZoomIn className="h-4 w-4 mr-2" />
-            Drill Down
+            {t("contextMenu.drillDown")}
           </ContextMenuItem>
           <ContextMenuItem onClick={() => {
             setEditingCell({ rowId: row.id, columnKey: col.key })
             setEditValue(value?.toString() || "")
           }}>
             <Edit2 className="h-4 w-4 mr-2" />
-            Edit Value
+            {t("contextMenu.editValue")}
           </ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem onClick={copyToClipboard}>
             <Copy className="h-4 w-4 mr-2" />
-            Copy
+            {t("contextMenu.copy")}
           </ContextMenuItem>
           <ContextMenuSub>
             <ContextMenuSubTrigger>
               <BarChart3 className="h-4 w-4 mr-2" />
-              Visualize
+              {t("contextMenu.visualize")}
             </ContextMenuSubTrigger>
             <ContextMenuSubContent>
               <ContextMenuItem>
                 <BarChart3 className="h-4 w-4 mr-2" />
-                Bar Chart
+                {t("contextMenu.barChart")}
               </ContextMenuItem>
               <ContextMenuItem>
                 <LineChart className="h-4 w-4 mr-2" />
-                Line Chart
+                {t("contextMenu.lineChart")}
               </ContextMenuItem>
               <ContextMenuItem>
                 <PieChart className="h-4 w-4 mr-2" />
-                Pie Chart
+                {t("contextMenu.pieChart")}
               </ContextMenuItem>
             </ContextMenuSubContent>
           </ContextMenuSub>
           <ContextMenuSeparator />
           <ContextMenuItem onClick={() => updateConfig({ baseColumn: col.key })}>
             <Target className="h-4 w-4 mr-2" />
-            Set as Base
+            {t("contextMenu.setAsBase")}
           </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
@@ -671,7 +673,7 @@ export function AdvancedCrosstabGrid({
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-lg">{title || "Crosstab Analysis"}</CardTitle>
+            <CardTitle className="text-lg">{title || t("title")}</CardTitle>
             {description && <CardDescription>{description}</CardDescription>}
           </div>
           <div className="flex items-center gap-2">
@@ -679,7 +681,7 @@ export function AdvancedCrosstabGrid({
             <div className="relative">
               <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search metrics..."
+                placeholder={t("searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-8 h-8 w-48"
@@ -695,10 +697,10 @@ export function AdvancedCrosstabGrid({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="percentage">Percentage</SelectItem>
-                <SelectItem value="index">Index</SelectItem>
-                <SelectItem value="difference">Difference</SelectItem>
-                <SelectItem value="raw">Raw Values</SelectItem>
+                <SelectItem value="percentage">{t("viewMode.percentage")}</SelectItem>
+                <SelectItem value="index">{t("viewMode.index")}</SelectItem>
+                <SelectItem value="difference">{t("viewMode.difference")}</SelectItem>
+                <SelectItem value="raw">{t("viewMode.raw")}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -709,7 +711,7 @@ export function AdvancedCrosstabGrid({
                 onValueChange={(v) => updateConfig({ baseColumn: v })}
               >
                 <SelectTrigger className="h-8 w-40">
-                  <SelectValue placeholder="Base column" />
+                  <SelectValue placeholder={t("baseColumn")} />
                 </SelectTrigger>
                 <SelectContent>
                   {columns.map(col => (
@@ -724,11 +726,11 @@ export function AdvancedCrosstabGrid({
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
                   <Eye className="h-4 w-4 mr-2" />
-                  Columns
+                  {t("columns")}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>Visible Columns</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("visibleColumns")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <ScrollArea className="h-64">
                   {columns.map(col => (
@@ -766,7 +768,7 @@ export function AdvancedCrosstabGrid({
               onClick={() => updateConfig({ editMode: !config.editMode })}
             >
               <Edit2 className="h-4 w-4 mr-2" />
-              Edit
+              {t("edit")}
             </Button>
 
             {/* Export */}
@@ -787,16 +789,16 @@ export function AdvancedCrosstabGrid({
         {/* Info badges */}
         <div className="flex items-center gap-2 mt-2">
           <Badge variant="outline" className="text-xs">
-            {sortedData.length} metrics × {visibleColumnsList.length} audiences
+            {t("badges.metricsAudiences", { metrics: sortedData.length, audiences: visibleColumnsList.length })}
           </Badge>
           {selectedCells.length > 0 && (
             <Badge variant="secondary" className="text-xs">
-              {selectedCells.length} selected
+              {t("badges.selected", { count: selectedCells.length })}
             </Badge>
           )}
           {config.viewMode !== "percentage" && (
             <Badge variant="secondary" className="text-xs">
-              Base: {columns.find(c => c.key === config.baseColumn)?.label || columns[0]?.label}
+              {t("badges.base", { name: columns.find(c => c.key === config.baseColumn)?.label || columns[0]?.label })}
             </Badge>
           )}
         </div>
@@ -819,7 +821,7 @@ export function AdvancedCrosstabGrid({
                     onClick={() => handleSort("metric")}
                   >
                     <div className="flex items-center gap-2">
-                      Metric
+                      {t("table.metric")}
                       {sortConfig?.column === "metric" ? (
                         sortConfig.direction === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
                       ) : (
@@ -828,7 +830,7 @@ export function AdvancedCrosstabGrid({
                     </div>
                   </TableHead>
                   {config.showSparklines && (
-                    <TableHead className="text-center w-20">Trend</TableHead>
+                    <TableHead className="text-center w-20">{t("table.trend")}</TableHead>
                   )}
                   {visibleColumnsList.map(col => (
                     <TableHead
@@ -853,9 +855,9 @@ export function AdvancedCrosstabGrid({
                   ))}
                   {config.showStatistics && (
                     <>
-                      <TableHead className="text-center w-16 bg-muted/30">Avg</TableHead>
-                      <TableHead className="text-center w-16 bg-muted/30">Min</TableHead>
-                      <TableHead className="text-center w-16 bg-muted/30">Max</TableHead>
+                      <TableHead className="text-center w-16 bg-muted/30">{t("table.avg")}</TableHead>
+                      <TableHead className="text-center w-16 bg-muted/30">{t("table.min")}</TableHead>
+                      <TableHead className="text-center w-16 bg-muted/30">{t("table.max")}</TableHead>
                     </>
                   )}
                 </TableRow>
@@ -918,7 +920,7 @@ export function AdvancedCrosstabGrid({
                                       <Calculator className="h-3 w-3 text-blue-500" />
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                      Calculated field: {row.formula}
+                                      {t("calculatedField")}: {row.formula}
                                     </TooltipContent>
                                   </Tooltip>
                                 </TooltipProvider>
@@ -955,7 +957,7 @@ export function AdvancedCrosstabGrid({
                   <TableRow className="bg-muted/50 font-medium">
                     {config.showRowNumbers && <TableCell />}
                     <TableCell className={cn(config.freezeFirstColumn && "sticky left-0 bg-muted/50 z-10")}>
-                      Total / Average
+                      {t("table.totalAverage")}
                     </TableCell>
                     {config.showSparklines && <TableCell />}
                     {visibleColumnsList.map(col => {
@@ -980,83 +982,83 @@ export function AdvancedCrosstabGrid({
       <div className="px-4 py-2 border-t text-xs text-muted-foreground flex items-center gap-4">
         <span className="flex items-center gap-1">
           <TrendingUp className="h-3 w-3 text-green-500" />
-          Highest in row
+          {t("legend.highestInRow")}
         </span>
         <span className="flex items-center gap-1">
           <TrendingDown className="h-3 w-3 text-red-500" />
-          Lowest in row
+          {t("legend.lowestInRow")}
         </span>
         {config.showSignificance && (
-          <span>* Statistically significant (p &lt; 0.05)</span>
+          <span>* {t("legend.significant")}</span>
         )}
-        <span className="ml-auto">Double-click cell to drill down • Ctrl+Click to multi-select</span>
+        <span className="ml-auto">{t("legend.drillDownHint")} {t("legend.multiSelectHint")}</span>
       </div>
 
       {/* Settings Dialog */}
       <Dialog open={showSettingsDialog} onOpenChange={setShowSettingsDialog}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Grid Settings</DialogTitle>
+            <DialogTitle>{t("settings")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="flex items-center justify-between">
-              <Label>Show Statistics Columns</Label>
+              <Label>{t("settingsOptions.showStatistics")}</Label>
               <Switch
                 checked={config.showStatistics}
                 onCheckedChange={(v) => updateConfig({ showStatistics: v })}
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label>Show Sparklines</Label>
+              <Label>{t("settingsOptions.showSparklines")}</Label>
               <Switch
                 checked={config.showSparklines}
                 onCheckedChange={(v) => updateConfig({ showSparklines: v })}
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label>Show Significance Indicators</Label>
+              <Label>{t("settingsOptions.showSignificance")}</Label>
               <Switch
                 checked={config.showSignificance}
                 onCheckedChange={(v) => updateConfig({ showSignificance: v })}
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label>Show Totals Row</Label>
+              <Label>{t("settingsOptions.showTotals")}</Label>
               <Switch
                 checked={config.showTotals}
                 onCheckedChange={(v) => updateConfig({ showTotals: v })}
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label>Show Row Numbers</Label>
+              <Label>{t("settingsOptions.showRowNumbers")}</Label>
               <Switch
                 checked={config.showRowNumbers}
                 onCheckedChange={(v) => updateConfig({ showRowNumbers: v })}
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label>Freeze First Column</Label>
+              <Label>{t("settingsOptions.freezeFirstColumn")}</Label>
               <Switch
                 checked={config.freezeFirstColumn}
                 onCheckedChange={(v) => updateConfig({ freezeFirstColumn: v })}
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label>Highlight on Hover</Label>
+              <Label>{t("settingsOptions.highlightOnHover")}</Label>
               <Switch
                 checked={config.highlightOnHover}
                 onCheckedChange={(v) => updateConfig({ highlightOnHover: v })}
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label>Group by Category</Label>
+              <Label>{t("settingsOptions.groupByCategory")}</Label>
               <Switch
                 checked={config.groupByCategory}
                 onCheckedChange={(v) => updateConfig({ groupByCategory: v })}
               />
             </div>
             <div className="space-y-2">
-              <Label>Decimal Places</Label>
+              <Label>{t("settingsOptions.decimalPlaces")}</Label>
               <Select
                 value={config.decimalPlaces.toString()}
                 onValueChange={(v) => updateConfig({ decimalPlaces: parseInt(v) })}
@@ -1074,7 +1076,7 @@ export function AdvancedCrosstabGrid({
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={() => setShowSettingsDialog(false)}>Done</Button>
+            <Button onClick={() => setShowSettingsDialog(false)}>{t("done")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -1083,8 +1085,8 @@ export function AdvancedCrosstabGrid({
       <Dialog open={showFormatDialog} onOpenChange={setShowFormatDialog}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Conditional Formatting</DialogTitle>
-            <DialogDescription>Configure rules to highlight cells based on their values</DialogDescription>
+            <DialogTitle>{t("conditionalFormatting.title")}</DialogTitle>
+            <DialogDescription>{t("conditionalFormatting.description")}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             {conditionalFormats.map((format, index) => (
@@ -1131,12 +1133,12 @@ export function AdvancedCrosstabGrid({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="greater">Greater than</SelectItem>
-                      <SelectItem value="less">Less than</SelectItem>
-                      <SelectItem value="equal">Equal to</SelectItem>
-                      <SelectItem value="between">Between</SelectItem>
-                      <SelectItem value="top">Top %</SelectItem>
-                      <SelectItem value="bottom">Bottom %</SelectItem>
+                      <SelectItem value="greater">{t("conditionalFormatting.conditions.greaterThan")}</SelectItem>
+                      <SelectItem value="less">{t("conditionalFormatting.conditions.lessThan")}</SelectItem>
+                      <SelectItem value="equal">{t("conditionalFormatting.conditions.equalTo")}</SelectItem>
+                      <SelectItem value="between">{t("conditionalFormatting.conditions.between")}</SelectItem>
+                      <SelectItem value="top">{t("conditionalFormatting.conditions.topPercent")}</SelectItem>
+                      <SelectItem value="bottom">{t("conditionalFormatting.conditions.bottomPercent")}</SelectItem>
                     </SelectContent>
                   </Select>
                   <Input
@@ -1159,7 +1161,7 @@ export function AdvancedCrosstabGrid({
                         setConditionalFormats(newFormats)
                       }}
                       className="w-8 h-8 p-0 border-0"
-                      title="Background"
+                      title={t("conditionalFormatting.background")}
                     />
                     <Input
                       type="color"
@@ -1170,7 +1172,7 @@ export function AdvancedCrosstabGrid({
                         setConditionalFormats(newFormats)
                       }}
                       className="w-8 h-8 p-0 border-0"
-                      title="Text"
+                      title={t("conditionalFormatting.text")}
                     />
                   </div>
                 </div>
@@ -1183,7 +1185,7 @@ export function AdvancedCrosstabGrid({
                 ...conditionalFormats,
                 {
                   id: crypto.randomUUID(),
-                  name: "New Rule",
+                  name: t("conditionalFormatting.newRule"),
                   condition: "greater",
                   value: 50,
                   backgroundColor: "rgba(59, 130, 246, 0.15)",
@@ -1193,15 +1195,15 @@ export function AdvancedCrosstabGrid({
               ])}
             >
               <Plus className="h-4 w-4 mr-2" />
-              Add Rule
+              {t("conditionalFormatting.addRule")}
             </Button>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowFormatDialog(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setShowFormatDialog(false)}>{t("conditionalFormatting.cancel")}</Button>
             <Button onClick={() => {
               updateConfig({ showConditionalFormatting: true })
               setShowFormatDialog(false)
-            }}>Apply</Button>
+            }}>{t("conditionalFormatting.apply")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -1210,7 +1212,7 @@ export function AdvancedCrosstabGrid({
       <Dialog open={showDrillDownModal} onOpenChange={setShowDrillDownModal}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Drill Down Analysis</DialogTitle>
+            <DialogTitle>{t("drillDown.title")}</DialogTitle>
             <DialogDescription>
               {drillDownData && `${drillDownData.row.metric} - ${columns.find(c => c.key === drillDownData.cell.columnKey)?.label}`}
             </DialogDescription>
@@ -1219,20 +1221,20 @@ export function AdvancedCrosstabGrid({
             {drillDownData && (
               <Tabs defaultValue="details">
                 <TabsList>
-                  <TabsTrigger value="details">Details</TabsTrigger>
-                  <TabsTrigger value="breakdown">Breakdown</TabsTrigger>
-                  <TabsTrigger value="trend">Trend</TabsTrigger>
+                  <TabsTrigger value="details">{t("drillDown.tabs.details")}</TabsTrigger>
+                  <TabsTrigger value="breakdown">{t("drillDown.tabs.breakdown")}</TabsTrigger>
+                  <TabsTrigger value="trend">{t("drillDown.tabs.trend")}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="details" className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <Card className="p-4">
-                      <h4 className="text-sm font-medium text-muted-foreground">Current Value</h4>
+                      <h4 className="text-sm font-medium text-muted-foreground">{t("drillDown.currentValue")}</h4>
                       <p className="text-3xl font-bold">
                         {drillDownData.row.values[drillDownData.cell.columnKey]}%
                       </p>
                     </Card>
                     <Card className="p-4">
-                      <h4 className="text-sm font-medium text-muted-foreground">Average</h4>
+                      <h4 className="text-sm font-medium text-muted-foreground">{t("drillDown.average")}</h4>
                       <p className="text-3xl font-bold">
                         {typeof statistics[drillDownData.row.id]?.mean === 'number' ? statistics[drillDownData.row.id].mean.toFixed(1) : 'N/A'}%
                       </p>
@@ -1240,37 +1242,37 @@ export function AdvancedCrosstabGrid({
                   </div>
                   {drillDownData.row.metadata && (
                     <Card className="p-4">
-                      <h4 className="text-sm font-medium mb-2">Metadata</h4>
+                      <h4 className="text-sm font-medium mb-2">{t("drillDown.metadata")}</h4>
                       {drillDownData.row.metadata.description && (
                         <p className="text-sm text-muted-foreground">{drillDownData.row.metadata.description}</p>
                       )}
                       {drillDownData.row.metadata.source && (
-                        <p className="text-xs text-muted-foreground mt-2">Source: {drillDownData.row.metadata.source}</p>
+                        <p className="text-xs text-muted-foreground mt-2">{t("drillDown.source")}: {drillDownData.row.metadata.source}</p>
                       )}
                     </Card>
                   )}
                 </TabsContent>
                 <TabsContent value="breakdown">
                   <div className="text-sm text-muted-foreground">
-                    Breakdown view would show demographic or segmentation details for this data point.
+                    {t("drillDown.breakdownPlaceholder")}
                   </div>
                 </TabsContent>
                 <TabsContent value="trend">
                   <div className="text-sm text-muted-foreground">
-                    Trend view would show historical data for this metric over time.
+                    {t("drillDown.trendPlaceholder")}
                   </div>
                 </TabsContent>
               </Tabs>
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDrillDownModal(false)}>Close</Button>
+            <Button variant="outline" onClick={() => setShowDrillDownModal(false)}>{t("drillDown.close")}</Button>
             <Button onClick={() => {
               // Export drill down data
               setShowDrillDownModal(false)
             }}>
               <Download className="h-4 w-4 mr-2" />
-              Export
+              {t("drillDown.export")}
             </Button>
           </DialogFooter>
         </DialogContent>

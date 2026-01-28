@@ -7,6 +7,7 @@
 "use client"
 
 import { useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
@@ -19,6 +20,8 @@ export function NPSDistributionChart({
   scoreDistribution,
   className,
 }: NPSDistributionChartProps) {
+  const t = useTranslations("admin.analytics.npsDistribution")
+
   const { maxCount, scores, totalResponses } = useMemo(() => {
     const allScores = Array.from({ length: 11 }, (_, i) => ({
       score: i,
@@ -44,9 +47,9 @@ export function NPSDistributionChart({
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Score Distribution</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <CardDescription>
-          {totalResponses} total responses
+          {t("totalResponses", { count: totalResponses })}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -81,15 +84,15 @@ export function NPSDistributionChart({
           <div className="flex justify-center gap-6 pt-4 border-t">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-red-500" />
-              <span className="text-xs text-muted-foreground">Detractors (0-6)</span>
+              <span className="text-xs text-muted-foreground">{t("legend.detractors")}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-amber-500" />
-              <span className="text-xs text-muted-foreground">Passives (7-8)</span>
+              <span className="text-xs text-muted-foreground">{t("legend.passives")}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-green-500" />
-              <span className="text-xs text-muted-foreground">Promoters (9-10)</span>
+              <span className="text-xs text-muted-foreground">{t("legend.promoters")}</span>
             </div>
           </div>
 

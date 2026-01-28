@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, use } from "react"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -76,7 +76,8 @@ const colorOptions = [
 
 export default function RoleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
-  useRouter()
+  const t = useTranslations("admin.roles")
+  const tCommon = useTranslations("common")
   const { admin: currentAdmin } = useAdmin()
   const [role, setRole] = useState<Role | null>(null)
   const [, setEffectivePermissions] = useState<string[]>([])
@@ -177,11 +178,11 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
         }
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to save role")
+        toast.error(data.error || t("saveError"))
       }
     } catch (error) {
       console.error("Failed to save role:", error)
-      toast.error("Failed to save role")
+      toast.error(t("saveError"))
     } finally {
       setIsSaving(false)
     }
@@ -200,11 +201,11 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
   if (!role) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">Role not found</p>
+        <p className="text-muted-foreground">{t("notFound")}</p>
         <Link href="/admin/roles">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Roles
+            {t("backToRoles")}
           </Button>
         </Link>
       </div>
@@ -219,7 +220,7 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
           <Link href="/admin/roles">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div className="flex items-center gap-3">
@@ -239,7 +240,7 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
                 {role.isSystem && (
                   <Badge variant="secondary" className="flex items-center gap-1">
                     <Lock className="h-3 w-3" />
-                    System
+                    {t("system")}
                   </Badge>
                 )}
               </div>
@@ -252,12 +253,12 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
             {isSaving ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Saving...
+                {t("saving")}
               </>
             ) : (
               <>
                 <Save className="h-4 w-4 mr-2" />
-                Save Changes
+                {t("saveChanges")}
               </>
             )}
           </Button>
@@ -269,34 +270,34 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
         <TabsList>
           <TabsTrigger value="details" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
-            Details
+            {t("tabs.details")}
           </TabsTrigger>
           <TabsTrigger value="permissions" className="flex items-center gap-2">
             <Key className="h-4 w-4" />
-            Permissions
+            {t("tabs.permissions")}
           </TabsTrigger>
           <TabsTrigger value="admins" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
-            Assigned Admins
+            {t("tabs.assignedAdmins")}
           </TabsTrigger>
           <TabsTrigger value="audit" className="flex items-center gap-2">
             <History className="h-4 w-4" />
-            Audit Log
+            {t("tabs.auditLog")}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="details" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Role Details</CardTitle>
+              <CardTitle>{t("details.title")}</CardTitle>
               <CardDescription>
-                Basic information about this role
+                {t("details.description")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label>Display Name</Label>
+                  <Label>{t("form.displayName")}</Label>
                   <Input
                     value={formData.displayName}
                     onChange={(e) => setFormData(prev => ({ ...prev, displayName: e.target.value }))}
@@ -304,20 +305,20 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Scope</Label>
+                  <Label>{t("form.scope")}</Label>
                   <Input
-                    value={role.scope === "PLATFORM" ? "Platform (Super Admin)" : "Organization (Tenant)"}
+                    value={role.scope === "PLATFORM" ? t("scopes.platform") : t("scopes.organization")}
                     disabled
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label>Description</Label>
+                <Label>{t("form.description")}</Label>
                 <Textarea
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  placeholder="Describe what this role is for..."
+                  placeholder={t("form.descriptionPlaceholder")}
                   disabled={!canEdit}
                 />
               </div>
@@ -326,17 +327,17 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
 
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label>Parent Role (Inherits Permissions)</Label>
+                  <Label>{t("form.parentRole")}</Label>
                   <Select
                     value={formData.parentRoleId || "none"}
                     onValueChange={(v) => setFormData(prev => ({ ...prev, parentRoleId: v === "none" ? null : v }))}
                     disabled={!canEdit}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="No parent role" />
+                      <SelectValue placeholder={t("form.noParentRole")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">No parent role</SelectItem>
+                      <SelectItem value="none">{t("form.noParentRole")}</SelectItem>
                       {allRoles
                         .filter(r => r.id !== id)
                         .map(r => (
@@ -348,7 +349,7 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Priority</Label>
+                  <Label>{t("form.priority")}</Label>
                   <Input
                     type="number"
                     value={formData.priority}
@@ -356,24 +357,24 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
                     disabled={!canEdit}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Higher priority roles have more privileges in the hierarchy
+                    {t("form.priorityHintShort")}
                   </p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label>Color</Label>
+                  <Label>{t("form.color")}</Label>
                   <Select
                     value={formData.color || "none"}
                     onValueChange={(v) => setFormData(prev => ({ ...prev, color: v === "none" ? "" : v }))}
                     disabled={!canEdit}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a color" />
+                      <SelectValue placeholder={t("form.selectColor")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">Default</SelectItem>
+                      <SelectItem value="none">{t("form.default")}</SelectItem>
                       {colorOptions.map(color => (
                         <SelectItem key={color.value} value={color.value}>
                           <div className="flex items-center gap-2">
@@ -389,12 +390,12 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Status</Label>
+                  <Label>{t("form.status")}</Label>
                   <div className="flex items-center justify-between rounded-md border p-3">
                     <div>
-                      <p className="font-medium">Active</p>
+                      <p className="font-medium">{t("status.active")}</p>
                       <p className="text-xs text-muted-foreground">
-                        Allow this role to be assigned
+                        {t("form.activeHint")}
                       </p>
                     </div>
                     <Switch
@@ -410,13 +411,13 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
 
               <div className="grid grid-cols-2 gap-6 text-sm text-muted-foreground">
                 <div>
-                  <p>Created: {new Date(role.createdAt).toLocaleString()}</p>
+                  <p>{t("details.created")}: {new Date(role.createdAt).toLocaleString()}</p>
                   {role.creator && (
-                    <p>By: {role.creator.name} ({role.creator.email})</p>
+                    <p>{t("details.by")}: {role.creator.name} ({role.creator.email})</p>
                   )}
                 </div>
                 <div>
-                  <p>Last Updated: {new Date(role.updatedAt).toLocaleString()}</p>
+                  <p>{t("details.lastUpdated")}: {new Date(role.updatedAt).toLocaleString()}</p>
                 </div>
               </div>
             </CardContent>
@@ -426,12 +427,12 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
         <TabsContent value="permissions" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Permissions</CardTitle>
+              <CardTitle>{t("permissions.title")}</CardTitle>
               <CardDescription>
-                Select which permissions this role should have.
+                {t("permissions.description")}
                 {inheritedPermissions.length > 0 && (
                   <span className="block mt-1">
-                    This role inherits {inheritedPermissions.length} permission(s) from its parent role.
+                    {t("permissions.inheritedCount", { count: inheritedPermissions.length })}
                   </span>
                 )}
               </CardDescription>
@@ -451,15 +452,15 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
         <TabsContent value="admins" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Assigned Admins</CardTitle>
+              <CardTitle>{t("assignedAdmins.title")}</CardTitle>
               <CardDescription>
-                Admins currently assigned to this role
+                {t("assignedAdmins.description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               {role.superAdmins.length === 0 ? (
                 <p className="text-muted-foreground text-center py-8">
-                  No admins assigned to this role
+                  {t("assignedAdmins.noAdmins")}
                 </p>
               ) : (
                 <div className="space-y-2">
@@ -478,7 +479,7 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
                         </div>
                       </div>
                       <Link href={`/admin/admins/${admin.id}`}>
-                        <Button variant="ghost" size="sm">View</Button>
+                        <Button variant="ghost" size="sm">{tCommon("view")}</Button>
                       </Link>
                     </div>
                   ))}
@@ -491,15 +492,15 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
         <TabsContent value="audit" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Audit Log</CardTitle>
+              <CardTitle>{t("auditLog.title")}</CardTitle>
               <CardDescription>
-                Recent changes to this role
+                {t("auditLog.description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               {auditLogs.length === 0 ? (
                 <p className="text-muted-foreground text-center py-8">
-                  No audit logs found
+                  {t("auditLog.noLogs")}
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -519,7 +520,7 @@ export default function RoleDetailPage({ params }: { params: Promise<{ id: strin
                           </span>
                         </div>
                         <p className="text-sm mt-1">
-                          By {log.performedBy.name} ({log.performedBy.email})
+                          {t("auditLog.by")} {log.performedBy.name} ({log.performedBy.email})
                         </p>
                         {log.changes && (
                           <pre className="text-xs text-muted-foreground mt-2 p-2 bg-muted rounded overflow-auto">

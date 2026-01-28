@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Users, TrendingUp, Target, ArrowRight, CheckCircle2, PenTool, LineChart, MessageCircle, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,29 +8,41 @@ import { Badge } from "@/components/ui/badge"
 import { LandingHeader } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 import { marketingAgents } from "@/lib/solution-agents"
+import { useTranslations } from "next-intl"
 
 export default function MarketingPage() {
+  const t = useTranslations("solutions.marketing")
+
   const workflows = [
     {
-      name: "Campaign Launch Plan",
-      time: "3 hours",
-      description: "Research audience, develop strategy, create content brief",
+      nameKey: "workflows.campaignLaunch.name",
+      timeKey: "workflows.campaignLaunch.time",
+      descriptionKey: "workflows.campaignLaunch.description",
     },
     {
-      name: "Seasonal Campaign Ideation",
-      time: "2 hours",
-      description: "Identify trends, generate concepts, validate with data",
+      nameKey: "workflows.seasonalIdeation.name",
+      timeKey: "workflows.seasonalIdeation.time",
+      descriptionKey: "workflows.seasonalIdeation.description",
     },
     {
-      name: "Influencer Partnership Strategy",
-      time: "2 hours",
-      description: "Find aligned influencers, analyze audience fit, create brief",
+      nameKey: "workflows.influencerStrategy.name",
+      timeKey: "workflows.influencerStrategy.time",
+      descriptionKey: "workflows.influencerStrategy.description",
     },
     {
-      name: "Competitive Campaign Analysis",
-      time: "1 hour",
-      description: "Track competitor campaigns, extract insights, recommend actions",
+      nameKey: "workflows.competitiveAnalysis.name",
+      timeKey: "workflows.competitiveAnalysis.time",
+      descriptionKey: "workflows.competitiveAnalysis.description",
     },
+  ]
+
+  const challenges = [
+    "challenges.genericCampaigns",
+    "challenges.limitedResources",
+    "challenges.predictingMessages",
+    "challenges.keepingUp",
+    "challenges.measuringImpact",
+    "challenges.authenticCampaigns",
   ]
 
   return (
@@ -39,37 +53,36 @@ export default function MarketingPage() {
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
             <Badge variant="secondary" className="mb-4">
-              Marketing & Brand
+              {t("badge")}
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
-              Create Campaigns That <span className="text-primary">Resonate with Real People</span>
+              {t("hero.titleStart")} <span className="text-primary">{t("hero.titleHighlight")}</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-3xl text-pretty">
-              Build marketing strategies grounded in human insights. Understand what your audience truly cares about and
-              create campaigns that drive authentic engagement.
+              {t("hero.description")}
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-12">
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">60% Faster</h3>
-                <p className="text-sm text-muted-foreground">Campaign planning with AI-powered audience research</p>
+                <h3 className="font-semibold mb-2">{t("stats.faster.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.faster.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">2.5x Higher</h3>
-                <p className="text-sm text-muted-foreground">Engagement rates with insight-driven messaging</p>
+                <h3 className="font-semibold mb-2">{t("stats.higher.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.higher.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">50% Better</h3>
-                <p className="text-sm text-muted-foreground">Brand perception scores from authentic positioning</p>
+                <h3 className="font-semibold mb-2">{t("stats.better.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.better.description")}</p>
               </Card>
             </div>
 
             <div className="flex flex-wrap gap-4">
               <Button size="lg" asChild>
-                <Link href="/dashboard">Start Creating Campaigns</Link>
+                <Link href="/dashboard">{t("cta.startCreating")}</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Request Demo</Link>
+                <Link href="/contact">{t("cta.requestDemo")}</Link>
               </Button>
             </div>
           </div>
@@ -77,19 +90,12 @@ export default function MarketingPage() {
 
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-8">Key Challenges We Solve</h2>
+            <h2 className="text-3xl font-bold mb-8">{t("challengesTitle")}</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {[
-                "Generic campaigns that fail to resonate with target audiences",
-                "Limited time and resources for deep audience research",
-                "Difficulty predicting which messages will perform best",
-                "Keeping up with rapidly changing consumer trends and values",
-                "Measuring emotional impact and brand perception",
-                "Creating authentic campaigns in an oversaturated market",
-              ].map((challenge, i) => (
+              {challenges.map((challengeKey, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-muted-foreground">{challenge}</p>
+                  <p className="text-muted-foreground">{t(challengeKey)}</p>
                 </div>
               ))}
             </div>
@@ -98,9 +104,9 @@ export default function MarketingPage() {
 
         <section className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Marketing AI Agents</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("agentsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Intelligent agents that understand your audience and help you create campaigns that connect.
+              {t("agentsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -132,7 +138,7 @@ export default function MarketingPage() {
                           </div>
                           <div className="mt-4">
                             <span className="text-sm text-primary flex items-center gap-1">
-                              Open Agent <ArrowRight className="h-3 w-3" />
+                              {t("openAgent")} <ArrowRight className="h-3 w-3" />
                             </span>
                           </div>
                         </div>
@@ -147,19 +153,19 @@ export default function MarketingPage() {
 
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Pre-built Workflows</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("workflowsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Accelerate your marketing process with ready-to-use workflows for common scenarios.
+              {t("workflowsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
               {workflows.map((workflow, i) => (
                 <Card key={i} className="p-6 border-border/40">
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-semibold">{workflow.name}</h3>
-                    <Badge variant="outline">{workflow.time}</Badge>
+                    <h3 className="font-semibold">{t(workflow.nameKey)}</h3>
+                    <Badge variant="outline">{t(workflow.timeKey)}</Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">{workflow.description}</p>
+                  <p className="text-sm text-muted-foreground">{t(workflow.descriptionKey)}</p>
                 </Card>
               ))}
             </div>
@@ -168,18 +174,18 @@ export default function MarketingPage() {
 
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Create More Impactful Campaigns?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("finalCta.title")}</h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Join innovative brands using human insights to drive authentic engagement.
+              {t("finalCta.description")}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Button size="lg" asChild>
                 <Link href="/dashboard">
-                  Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("finalCta.getStarted")} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Talk to Sales</Link>
+                <Link href="/contact">{t("finalCta.talkToSales")}</Link>
               </Button>
             </div>
           </div>

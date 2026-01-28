@@ -7,6 +7,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -46,6 +47,7 @@ export function VariableInserter({
   previewData,
   onPreviewDataChange,
 }: VariableInserterProps) {
+  const t = useTranslations("admin.emailTemplates")
   const [copiedVariable, setCopiedVariable] = useState<string | null>(null)
 
   const copyToClipboard = async (variableName: string) => {
@@ -64,12 +66,12 @@ export function VariableInserter({
         <CardHeader className="pb-4">
           <div className="flex items-center gap-2">
             <Variable className="h-5 w-5" />
-            <CardTitle className="text-base">Variables</CardTitle>
+            <CardTitle className="text-base">{t("variables.title")}</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-xs text-muted-foreground">
-            Click a variable to insert it at the cursor position, or copy to clipboard.
+            {t("variables.clickToInsert")}
           </p>
 
           <Accordion type="multiple" defaultValue={["required", "optional", "preview"]}>
@@ -78,7 +80,7 @@ export function VariableInserter({
               <AccordionItem value="required">
                 <AccordionTrigger className="text-sm py-2">
                   <div className="flex items-center gap-2">
-                    Required Variables
+                    {t("variables.requiredVariables")}
                     <Badge variant="destructive" className="text-xs">
                       {requiredVars.length}
                     </Badge>
@@ -105,7 +107,7 @@ export function VariableInserter({
               <AccordionItem value="optional">
                 <AccordionTrigger className="text-sm py-2">
                   <div className="flex items-center gap-2">
-                    Optional Variables
+                    {t("variables.optionalVariables")}
                     <Badge variant="secondary" className="text-xs">
                       {optionalVars.length}
                     </Badge>
@@ -130,12 +132,12 @@ export function VariableInserter({
             {/* Preview Data */}
             <AccordionItem value="preview">
               <AccordionTrigger className="text-sm py-2">
-                Preview Values
+                {t("variables.previewValues")}
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-3">
                   <p className="text-xs text-muted-foreground">
-                    Set values for live preview while editing.
+                    {t("variables.setValuesHint")}
                   </p>
                   {variables.map((variable) => (
                     <div key={variable.name} className="space-y-1">
@@ -151,7 +153,7 @@ export function VariableInserter({
                             [variable.name]: e.target.value,
                           })
                         }
-                        placeholder={variable.defaultValue || "Enter value..."}
+                        placeholder={variable.defaultValue || t("variables.enterValue")}
                         className="text-sm h-8"
                       />
                     </div>
@@ -163,7 +165,7 @@ export function VariableInserter({
 
           {/* Common Variables Helper */}
           <div className="pt-4 border-t">
-            <h4 className="text-xs font-medium mb-2">Common Variables</h4>
+            <h4 className="text-xs font-medium mb-2">{t("variables.commonVariables")}</h4>
             <div className="flex flex-wrap gap-1">
               {["platformName", "userName", "userEmail", "supportUrl", "dashboardUrl"].map(
                 (name) => (
@@ -194,6 +196,7 @@ interface VariableItemProps {
 }
 
 function VariableItem({ variable, onInsert, onCopy, isCopied }: VariableItemProps) {
+  const t = useTranslations("admin.emailTemplates")
   return (
     <div className="flex items-center gap-2 p-2 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
       <button
@@ -206,7 +209,7 @@ function VariableItem({ variable, onInsert, onCopy, isCopied }: VariableItemProp
           </code>
           {variable.required && (
             <Badge variant="destructive" className="text-[10px] h-4 px-1">
-              Required
+              {t("variables.required")}
             </Badge>
           )}
         </div>
@@ -215,7 +218,7 @@ function VariableItem({ variable, onInsert, onCopy, isCopied }: VariableItemProp
         )}
         {variable.defaultValue && (
           <p className="text-xs text-muted-foreground mt-0.5">
-            Default: <code className="text-xs">{variable.defaultValue}</code>
+            {t("variables.default")}: <code className="text-xs">{variable.defaultValue}</code>
           </p>
         )}
       </button>
@@ -238,7 +241,7 @@ function VariableItem({ variable, onInsert, onCopy, isCopied }: VariableItemProp
               )}
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Copy to clipboard</TooltipContent>
+          <TooltipContent>{t("variables.copyToClipboard")}</TooltipContent>
         </Tooltip>
       </div>
     </div>

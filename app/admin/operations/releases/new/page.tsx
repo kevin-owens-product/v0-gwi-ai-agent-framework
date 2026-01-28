@@ -26,26 +26,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { toast } from "sonner"
-
-const typeOptions = [
-  { value: "MAJOR", label: "Major", description: "Breaking changes, significant new features" },
-  { value: "MINOR", label: "Minor", description: "New features, backward compatible" },
-  { value: "PATCH", label: "Patch", description: "Bug fixes, minor improvements" },
-  { value: "HOTFIX", label: "Hotfix", description: "Critical bug fixes" },
-]
-
-const strategyOptions = [
-  { value: "BIG_BANG", label: "Big Bang", description: "Deploy to all users at once" },
-  { value: "STAGED", label: "Staged", description: "Deploy in stages by percentage" },
-  { value: "CANARY", label: "Canary", description: "Deploy to small group first" },
-  { value: "BLUE_GREEN", label: "Blue-Green", description: "Switch between environments" },
-  { value: "RING", label: "Ring", description: "Deploy by user rings" },
-]
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 export default function NewReleasePage() {
   const router = useRouter()
+  const t = useTranslations("admin.operations.releases.new")
+  const tMain = useTranslations("admin.operations.releases")
+  const tCommon = useTranslations("common")
   const [isSaving, setIsSaving] = useState(false)
+
+  const typeOptions = [
+    { value: "MAJOR", label: tMain("type.major"), description: t("typeDescriptions.major") },
+    { value: "MINOR", label: tMain("type.minor"), description: t("typeDescriptions.minor") },
+    { value: "PATCH", label: tMain("type.patch"), description: t("typeDescriptions.patch") },
+    { value: "HOTFIX", label: tMain("type.hotfix"), description: t("typeDescriptions.hotfix") },
+  ]
+
+  const strategyOptions = [
+    { value: "BIG_BANG", label: tMain("strategy.bigBang"), description: t("strategyDescriptions.bigBang") },
+    { value: "STAGED", label: tMain("strategy.staged"), description: t("strategyDescriptions.staged") },
+    { value: "CANARY", label: tMain("strategy.canary"), description: t("strategyDescriptions.canary") },
+    { value: "BLUE_GREEN", label: tMain("strategy.blueGreen"), description: t("strategyDescriptions.blueGreen") },
+    { value: "RING", label: tMain("strategy.ring"), description: t("strategyDescriptions.ring") },
+  ]
   const [newFeature, setNewFeature] = useState("")
   const [newBugFix, setNewBugFix] = useState("")
 
@@ -63,7 +67,7 @@ export default function NewReleasePage() {
 
   const handleCreate = async () => {
     if (!formData.version) {
-      toast.error("Version is required")
+      showErrorToast(t("validation.versionRequired"))
       return
     }
 
@@ -83,14 +87,14 @@ export default function NewReleasePage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to create release")
+        throw new Error(data.error || t("toast.createFailed"))
       }
 
       const data = await response.json()
-      toast.success("Release created successfully")
+      showSuccessToast(t("toast.createSuccess"))
       router.push(`/admin/operations/releases/${data.release.id}`)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create release")
+      showErrorToast(error instanceof Error ? error.message : t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -138,16 +142,16 @@ export default function NewReleasePage() {
           <Link href="/admin/operations/releases">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Rocket className="h-6 w-6 text-primary" />
-              Create New Release
+              {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Plan and schedule a new platform release
+              {t("description")}
             </p>
           </div>
         </div>
@@ -155,12 +159,12 @@ export default function NewReleasePage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Release
+              {t("createRelease")}
             </>
           )}
         </Button>
@@ -170,18 +174,18 @@ export default function NewReleasePage() {
         {/* Basic Info */}
         <Card>
           <CardHeader>
-            <CardTitle>Release Details</CardTitle>
+            <CardTitle>{t("sections.releaseDetails")}</CardTitle>
             <CardDescription>
-              Basic information about this release
+              {t("sections.releaseDetailsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="version">Version *</Label>
+                <Label htmlFor="version">{t("fields.version")} *</Label>
                 <Input
                   id="version"
-                  placeholder="e.g., 2.5.0"
+                  placeholder={t("placeholders.version")}
                   value={formData.version}
                   onChange={(e) =>
                     setFormData({ ...formData, version: e.target.value })
@@ -189,10 +193,10 @@ export default function NewReleasePage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="name">Name (optional)</Label>
+                <Label htmlFor="name">{t("fields.name")}</Label>
                 <Input
                   id="name"
-                  placeholder="e.g., Phoenix"
+                  placeholder={t("placeholders.name")}
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
@@ -202,10 +206,10 @@ export default function NewReleasePage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("fields.description")}</Label>
               <Textarea
                 id="description"
-                placeholder="Describe the release..."
+                placeholder={t("placeholders.description")}
                 rows={3}
                 value={formData.description}
                 onChange={(e) =>
@@ -216,7 +220,7 @@ export default function NewReleasePage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Type</Label>
+                <Label>{t("fields.type")}</Label>
                 <Select
                   value={formData.type}
                   onValueChange={(value) =>
@@ -241,7 +245,7 @@ export default function NewReleasePage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Rollout Strategy</Label>
+                <Label>{t("fields.rolloutStrategy")}</Label>
                 <Select
                   value={formData.rolloutStrategy}
                   onValueChange={(value) =>
@@ -269,7 +273,7 @@ export default function NewReleasePage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="plannedDate">Planned Date</Label>
+                <Label htmlFor="plannedDate">{t("fields.plannedDate")}</Label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -284,10 +288,10 @@ export default function NewReleasePage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="changelogUrl">Changelog URL</Label>
+                <Label htmlFor="changelogUrl">{t("fields.changelogUrl")}</Label>
                 <Input
                   id="changelogUrl"
-                  placeholder="https://..."
+                  placeholder={t("placeholders.changelogUrl")}
                   value={formData.changelogUrl}
                   onChange={(e) =>
                     setFormData({ ...formData, changelogUrl: e.target.value })
@@ -304,16 +308,16 @@ export default function NewReleasePage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Tag className="h-5 w-5" />
-                Features
+                {t("sections.features")}
               </CardTitle>
               <CardDescription>
-                New features included in this release
+                {t("sections.featuresDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Add a feature..."
+                  placeholder={t("actions.addFeature")}
                   value={newFeature}
                   onChange={(e) => setNewFeature(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && addFeature()}
@@ -332,7 +336,7 @@ export default function NewReleasePage() {
                   </Badge>
                 ))}
                 {formData.features.length === 0 && (
-                  <p className="text-sm text-muted-foreground">No features added yet</p>
+                  <p className="text-sm text-muted-foreground">{t("actions.noFeatures")}</p>
                 )}
               </div>
             </CardContent>
@@ -342,16 +346,16 @@ export default function NewReleasePage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Tag className="h-5 w-5" />
-                Bug Fixes
+                {t("sections.bugFixes")}
               </CardTitle>
               <CardDescription>
-                Bug fixes included in this release
+                {t("sections.bugFixesDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Add a bug fix..."
+                  placeholder={t("actions.addBugFix")}
                   value={newBugFix}
                   onChange={(e) => setNewBugFix(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && addBugFix()}
@@ -370,7 +374,7 @@ export default function NewReleasePage() {
                   </Badge>
                 ))}
                 {formData.bugFixes.length === 0 && (
-                  <p className="text-sm text-muted-foreground">No bug fixes added yet</p>
+                  <p className="text-sm text-muted-foreground">{t("actions.noBugFixes")}</p>
                 )}
               </div>
             </CardContent>

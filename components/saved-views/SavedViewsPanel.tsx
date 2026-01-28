@@ -8,6 +8,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { useFavorites, useRecentViews, type SavedView } from '@/hooks/use-saved-views'
 import { Button } from '@/components/ui/button'
@@ -72,6 +73,7 @@ interface SavedViewItemProps {
 }
 
 function SavedViewItem({ view, onRemove, onTogglePin, isRemoving }: SavedViewItemProps) {
+  const t = useTranslations('savedViews')
   const IconComponent = entityTypeIcons[view.entityType] || FileText
   const basePath = entityTypeRoutes[view.entityType] || '/dashboard'
   const href = `${basePath}/${view.entityId}`
@@ -102,13 +104,13 @@ function SavedViewItem({ view, onRemove, onTogglePin, isRemoving }: SavedViewIte
             className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
           >
             <MoreHorizontal className="h-3.5 w-3.5" />
-            <span className="sr-only">Actions</span>
+            <span className="sr-only">{t('actions')}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem onClick={() => onTogglePin(view.id, view.isPinned)}>
             <Pin className="mr-2 h-4 w-4" />
-            {view.isPinned ? 'Unpin' : 'Pin to top'}
+            {view.isPinned ? t('unpin') : t('pinToTop')}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -116,7 +118,7 @@ function SavedViewItem({ view, onRemove, onTogglePin, isRemoving }: SavedViewIte
             className="text-destructive focus:text-destructive"
           >
             <Trash2 className="mr-2 h-4 w-4" />
-            Remove
+            {t('remove')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -229,6 +231,7 @@ export function SavedViewsPanel({
   showFavorites = true,
   entityType,
 }: SavedViewsPanelProps) {
+  const t = useTranslations('savedViews')
   const [removingIds, setRemovingIds] = useState<Set<string>>(new Set())
 
   const {
@@ -286,11 +289,11 @@ export function SavedViewsPanel({
           <div className="p-2">
             {showFavorites && (
               <Section
-                title="Favorites"
+                title={t('favorites')}
                 icon={Star}
                 views={sortedFavorites}
                 isLoading={favoritesLoading}
-                emptyMessage="Star items to add them to favorites"
+                emptyMessage={t('emptyFavorites')}
                 onRemove={(id) => handleRemove(id, deleteFavorite)}
                 onTogglePin={(id, isPinned) => handleTogglePin(id, isPinned, toggleFavoritePinned)}
                 defaultOpen={true}
@@ -300,11 +303,11 @@ export function SavedViewsPanel({
 
             {showRecent && (
               <Section
-                title="Recent"
+                title={t('recent')}
                 icon={Clock}
                 views={recentViews}
                 isLoading={recentLoading}
-                emptyMessage="No recent items"
+                emptyMessage={t('emptyRecent')}
                 onRemove={(id) => handleRemove(id, deleteRecent)}
                 onTogglePin={(id, isPinned) => handleTogglePin(id, isPinned, toggleRecentPinned)}
                 defaultOpen={true}

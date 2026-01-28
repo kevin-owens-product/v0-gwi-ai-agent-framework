@@ -90,6 +90,7 @@ async function SurveyList({
   const surveys = await getSurveys(searchParams)
   const t = await getTranslations('gwi.surveys')
   const tc = await getTranslations('gwi.common')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="space-y-6">
@@ -146,7 +147,7 @@ async function SurveyList({
               <TableHeader>
                 <TableRow>
                   <TableHead>{t('surveyName')}</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>{tCommon("status")}</TableHead>
                   <TableHead className="text-center">{t('questions')}</TableHead>
                   <TableHead className="text-center">{t('responses')}</TableHead>
                   <TableHead>{t('createdBy')}</TableHead>

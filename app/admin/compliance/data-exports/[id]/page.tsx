@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -80,15 +81,9 @@ interface DataExport {
   legalHold: LegalHold | null
 }
 
-const STATUS_OPTIONS = [
-  { value: "PENDING", label: "Pending" },
-  { value: "PROCESSING", label: "Processing" },
-  { value: "COMPLETED", label: "Completed" },
-  { value: "FAILED", label: "Failed" },
-  { value: "EXPIRED", label: "Expired" },
-]
-
 export default function DataExportDetailPage() {
+  const t = useTranslations("admin.compliance")
+  const tCommon = useTranslations("common")
   const params = useParams()
   const router = useRouter()
   const exportId = params.id as string
@@ -101,6 +96,14 @@ export default function DataExportDetailPage() {
   })
   const [isSaving, setIsSaving] = useState(false)
 
+  const STATUS_OPTIONS = [
+    { value: "PENDING", label: t("dataExports.status.pending") },
+    { value: "PROCESSING", label: t("dataExports.status.processing") },
+    { value: "COMPLETED", label: t("dataExports.status.completed") },
+    { value: "FAILED", label: t("dataExports.status.failed") },
+    { value: "EXPIRED", label: t("dataExports.status.expired") },
+  ]
+
   const fetchDataExport = useCallback(async () => {
     setIsLoading(true)
     try {
@@ -112,7 +115,7 @@ export default function DataExportDetailPage() {
           window.location.href = "/login?type=admin"
           return
         }
-        throw new Error("Failed to fetch data export")
+        throw new Error(t("dataExports.errors.fetchFailed"))
       }
       const data = await response.json()
       setDataExport(data.export)
@@ -124,7 +127,7 @@ export default function DataExportDetailPage() {
     } finally {
       setIsLoading(false)
     }
-  }, [exportId])
+  }, [exportId, t])
 
   useEffect(() => {
     fetchDataExport()
@@ -146,7 +149,7 @@ export default function DataExportDetailPage() {
         fetchDataExport()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to update data export")
+        toast.error(data.error || t("dataExports.errors.updateFailed"))
       }
     } catch (error) {
       console.error("Failed to update data export:", error)
@@ -158,15 +161,15 @@ export default function DataExportDetailPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "COMPLETED":
-        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Completed</Badge>
+        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />{t("dataExports.status.completed")}</Badge>
       case "PROCESSING":
-        return <Badge className="bg-blue-500"><Clock className="h-3 w-3 mr-1" />Processing</Badge>
+        return <Badge className="bg-blue-500"><Clock className="h-3 w-3 mr-1" />{t("dataExports.status.processing")}</Badge>
       case "PENDING":
-        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />Pending</Badge>
+        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />{t("dataExports.status.pending")}</Badge>
       case "FAILED":
-        return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Failed</Badge>
+        return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />{t("dataExports.status.failed")}</Badge>
       case "EXPIRED":
-        return <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
+        return <Badge variant="outline" className="text-muted-foreground">{t("dataExports.status.expired")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -175,15 +178,15 @@ export default function DataExportDetailPage() {
   const getTypeBadge = (type: string) => {
     switch (type) {
       case "GDPR_EXPORT":
-        return <Badge variant="outline" className="border-blue-500 text-blue-500">GDPR</Badge>
+        return <Badge variant="outline" className="border-blue-500 text-blue-500">{t("dataExports.types.gdpr")}</Badge>
       case "USER_DATA":
-        return <Badge variant="outline">User Data</Badge>
+        return <Badge variant="outline">{t("dataExports.types.userData")}</Badge>
       case "ORG_DATA":
-        return <Badge variant="outline">Org Data</Badge>
+        return <Badge variant="outline">{t("dataExports.types.orgData")}</Badge>
       case "LEGAL_HOLD":
-        return <Badge variant="outline" className="border-red-500 text-red-500">Legal Hold</Badge>
+        return <Badge variant="outline" className="border-red-500 text-red-500">{t("dataExports.types.legalHold")}</Badge>
       case "BACKUP":
-        return <Badge variant="outline" className="border-purple-500 text-purple-500">Backup</Badge>
+        return <Badge variant="outline" className="border-purple-500 text-purple-500">{t("dataExports.types.backup")}</Badge>
       default:
         return <Badge variant="outline">{type}</Badge>
     }
@@ -210,11 +213,11 @@ export default function DataExportDetailPage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {tCommon("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Data export not found</p>
+            <p className="text-muted-foreground">{t("dataExports.notFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -229,7 +232,7 @@ export default function DataExportDetailPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/compliance/data-exports">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Link>
           </Button>
           <div className="h-12 w-12 rounded-lg bg-green-500/10 flex items-center justify-center">
@@ -237,7 +240,7 @@ export default function DataExportDetailPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              Data Export
+              {t("dataExports.detail.title")}
               {getTypeBadge(dataExport.type)}
             </h1>
             <p className="text-muted-foreground font-mono text-sm">
@@ -251,7 +254,7 @@ export default function DataExportDetailPage() {
             <Button asChild>
               <a href={dataExport.fileUrl} target="_blank" rel="noopener noreferrer">
                 <Download className="h-4 w-4 mr-2" />
-                Download
+                {tCommon("download")}
                 <ExternalLink className="h-3 w-3 ml-2" />
               </a>
             </Button>
@@ -266,7 +269,7 @@ export default function DataExportDetailPage() {
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-red-500" />
               <div>
-                <p className="font-medium text-red-500">Export Failed</p>
+                <p className="font-medium text-red-500">{t("dataExports.detail.exportFailed")}</p>
                 <p className="text-sm text-muted-foreground">{dataExport.error}</p>
               </div>
             </div>
@@ -281,9 +284,9 @@ export default function DataExportDetailPage() {
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-yellow-500" />
               <div>
-                <p className="font-medium text-yellow-500">Export Expired</p>
+                <p className="font-medium text-yellow-500">{t("dataExports.detail.exportExpired")}</p>
                 <p className="text-sm text-muted-foreground">
-                  This export expired on {new Date(dataExport.expiresAt).toLocaleDateString()}
+                  {t("dataExports.detail.expiredOn", { date: new Date(dataExport.expiresAt).toLocaleDateString() })}
                 </p>
               </div>
             </div>
@@ -293,10 +296,10 @@ export default function DataExportDetailPage() {
 
       <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
           <TabsTrigger value="scope">
             <FileText className="h-4 w-4 mr-1" />
-            Scope
+            {t("dataExports.tabs.scope")}
           </TabsTrigger>
         </TabsList>
 
@@ -305,7 +308,7 @@ export default function DataExportDetailPage() {
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Status</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("dataExports.fields.status")}</CardTitle>
                 <Download className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -314,7 +317,7 @@ export default function DataExportDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">File Size</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("dataExports.detail.fileSize")}</CardTitle>
                 <HardDrive className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -323,7 +326,7 @@ export default function DataExportDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Format</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("dataExports.fields.format")}</CardTitle>
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -332,7 +335,7 @@ export default function DataExportDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Type</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("dataExports.fields.type")}</CardTitle>
                 <Download className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -346,7 +349,7 @@ export default function DataExportDetailPage() {
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>Export Details</CardTitle>
+                  <CardTitle>{t("dataExports.detail.exportDetails")}</CardTitle>
                   {isEditing ? (
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" onClick={() => setIsEditing(false)}>
@@ -367,7 +370,7 @@ export default function DataExportDetailPage() {
                 {isEditing ? (
                   <>
                     <div className="space-y-2">
-                      <Label>Status</Label>
+                      <Label>{t("dataExports.fields.status")}</Label>
                       <Select
                         value={editForm.status}
                         onValueChange={(value) => setEditForm({ ...editForm, status: value })}
@@ -388,23 +391,23 @@ export default function DataExportDetailPage() {
                 ) : (
                   <>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Status</span>
+                      <span className="text-muted-foreground">{t("dataExports.fields.status")}</span>
                       {getStatusBadge(dataExport.status)}
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Type</span>
+                      <span className="text-muted-foreground">{t("dataExports.fields.type")}</span>
                       {getTypeBadge(dataExport.type)}
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Format</span>
+                      <span className="text-muted-foreground">{t("dataExports.fields.format")}</span>
                       <Badge variant="outline" className="uppercase">{dataExport.format}</Badge>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">File Size</span>
+                      <span className="text-muted-foreground">{t("dataExports.detail.fileSize")}</span>
                       <span className="font-medium">{formatFileSize(dataExport.fileSize)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Requested</span>
+                      <span className="text-muted-foreground">{t("dataExports.detail.requested")}</span>
                       <span className="font-medium flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {new Date(dataExport.createdAt).toLocaleString()}
@@ -412,7 +415,7 @@ export default function DataExportDetailPage() {
                     </div>
                     {dataExport.startedAt && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Started</span>
+                        <span className="text-muted-foreground">{t("dataExports.detail.started")}</span>
                         <span className="font-medium">
                           {new Date(dataExport.startedAt).toLocaleString()}
                         </span>
@@ -420,7 +423,7 @@ export default function DataExportDetailPage() {
                     )}
                     {dataExport.completedAt && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Completed</span>
+                        <span className="text-muted-foreground">{t("dataExports.detail.completed")}</span>
                         <span className="font-medium">
                           {new Date(dataExport.completedAt).toLocaleString()}
                         </span>
@@ -428,7 +431,7 @@ export default function DataExportDetailPage() {
                     )}
                     {dataExport.expiresAt && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Expires</span>
+                        <span className="text-muted-foreground">{t("dataExports.detail.expires")}</span>
                         <span className={`font-medium ${
                           new Date(dataExport.expiresAt) < new Date() ? "text-red-500" : ""
                         }`}>
@@ -448,25 +451,25 @@ export default function DataExportDetailPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <User className="h-5 w-5" />
-                    Requested By
+                    {t("dataExports.detail.requestedBy")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {dataExport.requestedByUser ? (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Name</span>
+                        <span className="text-muted-foreground">{t("fields.name")}</span>
                         <span className="font-medium">
                           {dataExport.requestedByUser.name || "-"}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Email</span>
+                        <span className="text-muted-foreground">{t("fields.email")}</span>
                         <span className="font-medium">{dataExport.requestedByUser.email}</span>
                       </div>
                     </>
                   ) : (
-                    <p className="text-muted-foreground">Unknown requester</p>
+                    <p className="text-muted-foreground">{t("dataExports.detail.unknownRequester")}</p>
                   )}
                 </CardContent>
               </Card>
@@ -476,13 +479,13 @@ export default function DataExportDetailPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     {dataExport.user ? (
-                      <><User className="h-5 w-5" /> Subject User</>
+                      <><User className="h-5 w-5" /> {t("dataExports.detail.subjectUser")}</>
                     ) : dataExport.organization ? (
-                      <><Building2 className="h-5 w-5" /> Subject Organization</>
+                      <><Building2 className="h-5 w-5" /> {t("dataExports.detail.subjectOrganization")}</>
                     ) : dataExport.legalHold ? (
-                      <><Gavel className="h-5 w-5" /> Legal Hold</>
+                      <><Gavel className="h-5 w-5" /> {t("dataExports.detail.legalHold")}</>
                     ) : (
-                      <><FileText className="h-5 w-5" /> Export Subject</>
+                      <><FileText className="h-5 w-5" /> {t("dataExports.detail.exportSubject")}</>
                     )}
                   </CardTitle>
                 </CardHeader>
@@ -490,63 +493,63 @@ export default function DataExportDetailPage() {
                   {dataExport.user ? (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Name</span>
+                        <span className="text-muted-foreground">{t("fields.name")}</span>
                         <span className="font-medium">{dataExport.user.name || "-"}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Email</span>
+                        <span className="text-muted-foreground">{t("fields.email")}</span>
                         <span className="font-medium">{dataExport.user.email}</span>
                       </div>
                       <Button variant="outline" className="w-full" asChild>
                         <Link href={`/admin/users/${dataExport.userId}`}>
-                          View User
+                          {t("dataExports.actions.viewUser")}
                         </Link>
                       </Button>
                     </>
                   ) : dataExport.organization ? (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Name</span>
+                        <span className="text-muted-foreground">{t("fields.name")}</span>
                         <span className="font-medium">{dataExport.organization.name}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Slug</span>
+                        <span className="text-muted-foreground">{t("fields.slug")}</span>
                         <span className="font-mono text-sm">{dataExport.organization.slug}</span>
                       </div>
                       <Button variant="outline" className="w-full" asChild>
                         <Link href={`/admin/tenants/${dataExport.orgId}`}>
-                          View Organization
+                          {t("dataExports.actions.viewOrganization")}
                         </Link>
                       </Button>
                     </>
                   ) : dataExport.legalHold ? (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Hold Name</span>
+                        <span className="text-muted-foreground">{t("dataExports.detail.holdName")}</span>
                         <span className="font-medium">{dataExport.legalHold.name}</span>
                       </div>
                       {dataExport.legalHold.caseNumber && (
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Case Number</span>
+                          <span className="text-muted-foreground">{t("dataExports.detail.caseNumber")}</span>
                           <Badge variant="outline" className="font-mono">
                             {dataExport.legalHold.caseNumber}
                           </Badge>
                         </div>
                       )}
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Status</span>
+                        <span className="text-muted-foreground">{t("dataExports.fields.status")}</span>
                         <Badge variant={dataExport.legalHold.status === "ACTIVE" ? "destructive" : "secondary"}>
                           {dataExport.legalHold.status}
                         </Badge>
                       </div>
                       <Button variant="outline" className="w-full" asChild>
                         <Link href={`/admin/compliance/legal-holds/${dataExport.legalHoldId}`}>
-                          View Legal Hold
+                          {t("dataExports.actions.viewLegalHold")}
                         </Link>
                       </Button>
                     </>
                   ) : (
-                    <p className="text-muted-foreground">No specific subject for this export</p>
+                    <p className="text-muted-foreground">{t("dataExports.detail.noSpecificSubject")}</p>
                   )}
                 </CardContent>
               </Card>
@@ -557,8 +560,8 @@ export default function DataExportDetailPage() {
         <TabsContent value="scope">
           <Card>
             <CardHeader>
-              <CardTitle>Export Scope</CardTitle>
-              <CardDescription>Data types and parameters included in this export</CardDescription>
+              <CardTitle>{t("dataExports.detail.exportScope")}</CardTitle>
+              <CardDescription>{t("dataExports.detail.exportScopeDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {Object.keys(dataExport.scope).length > 0 ? (
@@ -567,7 +570,7 @@ export default function DataExportDetailPage() {
                 </pre>
               ) : (
                 <p className="text-muted-foreground text-center py-8">
-                  No specific scope configuration defined - all relevant data included
+                  {t("dataExports.detail.noScopeConfiguration")}
                 </p>
               )}
             </CardContent>

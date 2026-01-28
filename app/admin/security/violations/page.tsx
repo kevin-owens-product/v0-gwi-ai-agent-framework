@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import {
   AlertTriangle,
   Search,
@@ -27,7 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface SecurityViolation {
@@ -55,37 +56,27 @@ interface SecurityViolation {
   }
 }
 
-const violationTypes = [
-  { value: "WEAK_PASSWORD", label: "Weak Password" },
-  { value: "FAILED_MFA", label: "Failed MFA" },
-  { value: "SUSPICIOUS_LOGIN", label: "Suspicious Login" },
-  { value: "IP_BLOCKED", label: "IP Blocked" },
-  { value: "UNAUTHORIZED_ACCESS", label: "Unauthorized Access" },
-  { value: "DATA_EXFILTRATION", label: "Data Exfiltration" },
-  { value: "FILE_POLICY_VIOLATION", label: "File Policy Violation" },
-  { value: "EXTERNAL_SHARING_BLOCKED", label: "External Sharing Blocked" },
-  { value: "SESSION_VIOLATION", label: "Session Violation" },
-  { value: "DEVICE_NOT_COMPLIANT", label: "Device Not Compliant" },
-  { value: "API_ABUSE", label: "API Abuse" },
-  { value: "RATE_LIMIT_EXCEEDED", label: "Rate Limit Exceeded" },
-  { value: "BRUTE_FORCE_DETECTED", label: "Brute Force Detected" },
-  { value: "IMPOSSIBLE_TRAVEL", label: "Impossible Travel" },
-  { value: "ANOMALOUS_BEHAVIOR", label: "Anomalous Behavior" },
-]
+const violationTypeKeys = [
+  "WEAK_PASSWORD",
+  "FAILED_MFA",
+  "SUSPICIOUS_LOGIN",
+  "IP_BLOCKED",
+  "UNAUTHORIZED_ACCESS",
+  "DATA_EXFILTRATION",
+  "FILE_POLICY_VIOLATION",
+  "EXTERNAL_SHARING_BLOCKED",
+  "SESSION_VIOLATION",
+  "DEVICE_NOT_COMPLIANT",
+  "API_ABUSE",
+  "RATE_LIMIT_EXCEEDED",
+  "BRUTE_FORCE_DETECTED",
+  "IMPOSSIBLE_TRAVEL",
+  "ANOMALOUS_BEHAVIOR",
+] as const
 
-const severities = [
-  { value: "INFO", label: "Info" },
-  { value: "WARNING", label: "Warning" },
-  { value: "CRITICAL", label: "Critical" },
-]
+const severityKeys = ["INFO", "WARNING", "CRITICAL"] as const
 
-const statuses = [
-  { value: "OPEN", label: "Open" },
-  { value: "INVESTIGATING", label: "Investigating" },
-  { value: "RESOLVED", label: "Resolved" },
-  { value: "FALSE_POSITIVE", label: "False Positive" },
-  { value: "ESCALATED", label: "Escalated" },
-]
+const statusKeys = ["OPEN", "INVESTIGATING", "RESOLVED", "FALSE_POSITIVE", "ESCALATED"] as const
 
 const violationTypeIcons: Record<string, React.ReactNode> = {
   WEAK_PASSWORD: <Shield className="h-4 w-4" />,
@@ -99,6 +90,7 @@ const violationTypeIcons: Record<string, React.ReactNode> = {
 }
 
 export default function SecurityViolationsPage() {
+  const t = useTranslations("admin.security.violations")
   useRouter()
   const [violations, setViolations] = useState<SecurityViolation[]>([])
   const [loading, setLoading] = useState(true)
@@ -143,7 +135,7 @@ export default function SecurityViolationsPage() {
       }))
     } catch (error) {
       console.error("Failed to fetch violations:", error)
-      toast.error("Failed to fetch security violations")
+      showErrorToast(t("toast.fetchFailed"))
     } finally {
       setLoading(false)
     }
@@ -166,10 +158,10 @@ export default function SecurityViolationsPage() {
         throw new Error("Failed to update violation")
       }
 
-      toast.success(`Violation status updated to ${newStatus}`)
+      showSuccessToast(t("toast.statusUpdated", { status: t(`statuses.${newStatus}`) }))
       fetchViolations()
     } catch (error) {
-      toast.error("Failed to update violation status")
+      showErrorToast(t("toast.updateFailed"))
     }
   }
 
@@ -187,13 +179,13 @@ export default function SecurityViolationsPage() {
 
       const failedCount = results.filter((r) => !r.ok).length
       if (failedCount > 0) {
-        toast.error(`${failedCount} violation(s) failed to update`)
+        showErrorToast(t("toast.bulkUpdatePartialFailed", { count: failedCount }))
       } else {
-        toast.success(`${ids.length} violation(s) updated to ${newStatus}`)
+        showSuccessToast(t("toast.bulkUpdateSuccess", { count: ids.length, status: t(`statuses.${newStatus}`) }))
       }
       fetchViolations()
     } catch (error) {
-      toast.error("Failed to update violations")
+      showErrorToast(t("toast.bulkUpdateFailed"))
     }
   }
 
@@ -209,30 +201,30 @@ export default function SecurityViolationsPage() {
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "CRITICAL":
-        return <Badge variant="destructive">{severity}</Badge>
+        return <Badge variant="destructive">{t(`severities.${severity}`)}</Badge>
       case "WARNING":
-        return <Badge variant="default" className="bg-yellow-500">{severity}</Badge>
+        return <Badge variant="default" className="bg-yellow-500">{t(`severities.${severity}`)}</Badge>
       case "INFO":
-        return <Badge variant="secondary">{severity}</Badge>
+        return <Badge variant="secondary">{t(`severities.${severity}`)}</Badge>
       default:
-        return <Badge variant="outline">{severity}</Badge>
+        return <Badge variant="outline">{t(`severities.${severity}`, { defaultValue: severity })}</Badge>
     }
   }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "OPEN":
-        return <Badge variant="destructive">{status}</Badge>
+        return <Badge variant="destructive">{t(`statuses.${status}`)}</Badge>
       case "INVESTIGATING":
-        return <Badge variant="default" className="bg-blue-500">{status}</Badge>
+        return <Badge variant="default" className="bg-blue-500">{t(`statuses.${status}`)}</Badge>
       case "RESOLVED":
-        return <Badge variant="default" className="bg-green-500">{status}</Badge>
+        return <Badge variant="default" className="bg-green-500">{t(`statuses.${status}`)}</Badge>
       case "FALSE_POSITIVE":
-        return <Badge variant="secondary">{status.replace("_", " ")}</Badge>
+        return <Badge variant="secondary">{t(`statuses.${status}`)}</Badge>
       case "ESCALATED":
-        return <Badge variant="destructive" className="bg-purple-500">{status}</Badge>
+        return <Badge variant="destructive" className="bg-purple-500">{t(`statuses.${status}`)}</Badge>
       default:
-        return <Badge variant="outline">{status}</Badge>
+        return <Badge variant="outline">{t(`statuses.${status}`, { defaultValue: status })}</Badge>
     }
   }
 
@@ -256,19 +248,19 @@ export default function SecurityViolationsPage() {
       id: "type",
       header: (
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSort("violationType")}>
-          Type
+          {t("table.type")}
           <ArrowUpDown className="h-4 w-4" />
         </div>
       ),
       cell: (violation) => (
         <Badge variant="outline">
-          {violation.violationType.replace(/_/g, " ")}
+          {t(`violationTypes.${violation.violationType}`)}
         </Badge>
       ),
     },
     {
       id: "description",
-      header: "Description",
+      header: t("table.description"),
       cell: (violation) => (
         <p className="truncate max-w-[250px]">{violation.description}</p>
       ),
@@ -277,7 +269,7 @@ export default function SecurityViolationsPage() {
       id: "severity",
       header: (
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSort("severity")}>
-          Severity
+          {t("table.severity")}
           <ArrowUpDown className="h-4 w-4" />
         </div>
       ),
@@ -285,10 +277,10 @@ export default function SecurityViolationsPage() {
     },
     {
       id: "policy",
-      header: "Policy",
+      header: t("table.policy"),
       cell: (violation) => (
         <p className="text-sm truncate max-w-[150px]">
-          {violation.policy?.name || "N/A"}
+          {violation.policy?.name || t("common.na")}
         </p>
       ),
     },
@@ -296,7 +288,7 @@ export default function SecurityViolationsPage() {
       id: "status",
       header: (
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSort("status")}>
-          Status
+          {t("table.status")}
           <ArrowUpDown className="h-4 w-4" />
         </div>
       ),
@@ -304,11 +296,11 @@ export default function SecurityViolationsPage() {
     },
     {
       id: "ipAddress",
-      header: "IP Address",
+      header: t("table.ipAddress"),
       cell: (violation) => (
         <div className="flex items-center gap-1 text-sm text-muted-foreground">
           <Globe className="h-3 w-3" />
-          {violation.ipAddress || "N/A"}
+          {violation.ipAddress || t("common.na")}
         </div>
       ),
     },
@@ -316,7 +308,7 @@ export default function SecurityViolationsPage() {
       id: "createdAt",
       header: (
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSort("createdAt")}>
-          Time
+          {t("table.time")}
           <ArrowUpDown className="h-4 w-4" />
         </div>
       ),
@@ -332,19 +324,19 @@ export default function SecurityViolationsPage() {
   // Row actions for individual violations
   const rowActions: RowAction<SecurityViolation>[] = [
     {
-      label: "Mark Investigating",
+      label: t("actions.markInvestigating"),
       icon: <Clock className="h-4 w-4" />,
       onClick: (violation) => handleStatusChange(violation, "INVESTIGATING"),
       hidden: (violation) => violation.status === "INVESTIGATING",
     },
     {
-      label: "Mark Resolved",
+      label: t("actions.markResolved"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (violation) => handleStatusChange(violation, "RESOLVED"),
       hidden: (violation) => violation.status === "RESOLVED",
     },
     {
-      label: "Mark False Positive",
+      label: t("actions.markFalsePositive"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: (violation) => handleStatusChange(violation, "FALSE_POSITIVE"),
       hidden: (violation) => violation.status === "FALSE_POSITIVE",
@@ -355,25 +347,25 @@ export default function SecurityViolationsPage() {
   // Bulk actions for selected violations
   const bulkActions: BulkAction[] = [
     {
-      label: "Mark as Investigating",
+      label: t("actions.markAsInvestigating"),
       icon: <Clock className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusChange(ids, "INVESTIGATING"),
-      confirmTitle: "Mark as Investigating",
-      confirmDescription: "Are you sure you want to mark these violations as investigating?",
+      confirmTitle: t("confirmations.markInvestigatingTitle"),
+      confirmDescription: t("confirmations.markInvestigatingDescription"),
     },
     {
-      label: "Mark as Resolved",
+      label: t("actions.markAsResolved"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusChange(ids, "RESOLVED"),
-      confirmTitle: "Mark as Resolved",
-      confirmDescription: "Are you sure you want to mark these violations as resolved?",
+      confirmTitle: t("confirmations.markResolvedTitle"),
+      confirmDescription: t("confirmations.markResolvedDescription"),
     },
     {
-      label: "Mark as False Positive",
+      label: t("actions.markAsFalsePositive"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusChange(ids, "FALSE_POSITIVE"),
-      confirmTitle: "Mark as False Positive",
-      confirmDescription: "Are you sure you want to mark these violations as false positives?",
+      confirmTitle: t("confirmations.markFalsePositiveTitle"),
+      confirmDescription: t("confirmations.markFalsePositiveDescription"),
       separator: true,
     },
   ]
@@ -392,10 +384,10 @@ export default function SecurityViolationsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <AlertTriangle className="h-8 w-8 text-destructive" />
-            Security Violations
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Monitor and manage security policy violations across the platform
+            {t("description")}
           </p>
         </div>
       </div>
@@ -405,25 +397,25 @@ export default function SecurityViolationsPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{stats.total}</div>
-            <p className="text-xs text-muted-foreground">Total Violations</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalViolations")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-red-500">{stats.open}</div>
-            <p className="text-xs text-muted-foreground">Open</p>
+            <p className="text-xs text-muted-foreground">{t("stats.open")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-orange-500">{stats.critical}</div>
-            <p className="text-xs text-muted-foreground">Critical</p>
+            <p className="text-xs text-muted-foreground">{t("stats.critical")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold text-green-500">{stats.resolved}</div>
-            <p className="text-xs text-muted-foreground">Resolved</p>
+            <p className="text-xs text-muted-foreground">{t("stats.resolved")}</p>
           </CardContent>
         </Card>
       </div>
@@ -436,7 +428,7 @@ export default function SecurityViolationsPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search violations..."
+                  placeholder={t("searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -447,45 +439,45 @@ export default function SecurityViolationsPage() {
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={t("filters.type")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                {violationTypes.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
+                <SelectItem value="all">{t("filters.allTypes")}</SelectItem>
+                {violationTypeKeys.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {t(`violationTypes.${type}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Select value={severityFilter} onValueChange={setSeverityFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Severity" />
+                <SelectValue placeholder={t("filters.severity")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Severities</SelectItem>
-                {severities.map((severity) => (
-                  <SelectItem key={severity.value} value={severity.value}>
-                    {severity.label}
+                <SelectItem value="all">{t("filters.allSeverities")}</SelectItem>
+                {severityKeys.map((severity) => (
+                  <SelectItem key={severity} value={severity}>
+                    {t(`severities.${severity}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("filters.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                {statuses.map((status) => (
-                  <SelectItem key={status.value} value={status.value}>
-                    {status.label}
+                <SelectItem value="all">{t("filters.allStatuses")}</SelectItem>
+                {statusKeys.map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {t(`statuses.${status}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Button variant="outline" onClick={handleSearch}>
-              Search
+              {t("actions.search")}
             </Button>
           </div>
         </CardContent>
@@ -497,7 +489,7 @@ export default function SecurityViolationsPage() {
         columns={columns}
         getRowId={(violation) => violation.id}
         isLoading={loading}
-        emptyMessage="No security violations found"
+        emptyMessage={t("noViolationsFound")}
         viewHref={(violation) => `/admin/security/violations/${violation.id}`}
         rowActions={rowActions}
         bulkActions={bulkActions}

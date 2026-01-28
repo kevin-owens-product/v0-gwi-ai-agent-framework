@@ -1,5 +1,5 @@
 "use client"
-
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
@@ -22,17 +22,19 @@ const dailyData = [
 ]
 
 export function UsageCharts() {
+  const t = useTranslations("dashboard.analytics.usageCharts")
+  
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Usage Over Time</CardTitle>
-        <CardDescription>Daily query and report generation trends</CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="queries">
           <TabsList className="mb-4">
-            <TabsTrigger value="queries">Queries</TabsTrigger>
-            <TabsTrigger value="reports">Reports</TabsTrigger>
+            <TabsTrigger value="queries">{t("tabs.queries")}</TabsTrigger>
+            <TabsTrigger value="reports">{t("tabs.reports")}</TabsTrigger>
           </TabsList>
           <TabsContent value="queries">
             <div className="h-72">

@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,41 +17,33 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ArrowLeft, Save, Loader2, Zap } from "lucide-react"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { useAdmin } from "@/components/providers/admin-provider"
 
-const threatTypes = [
-  { value: "BRUTE_FORCE", label: "Brute Force" },
-  { value: "CREDENTIAL_STUFFING", label: "Credential Stuffing" },
-  { value: "PHISHING_ATTEMPT", label: "Phishing Attempt" },
-  { value: "ACCOUNT_TAKEOVER", label: "Account Takeover" },
-  { value: "DATA_BREACH", label: "Data Breach" },
-  { value: "MALWARE_DETECTED", label: "Malware Detected" },
-  { value: "RANSOMWARE", label: "Ransomware" },
-  { value: "DLP_VIOLATION", label: "DLP Violation" },
-  { value: "INSIDER_THREAT", label: "Insider Threat" },
-  { value: "API_ABUSE", label: "API Abuse" },
-  { value: "BOT_ATTACK", label: "Bot Attack" },
-  { value: "DDOS_ATTEMPT", label: "DDoS Attempt" },
-  { value: "SUSPICIOUS_ACTIVITY", label: "Suspicious Activity" },
-  { value: "COMPLIANCE_VIOLATION", label: "Compliance Violation" },
-]
+const threatTypeValues = [
+  "BRUTE_FORCE",
+  "CREDENTIAL_STUFFING",
+  "PHISHING_ATTEMPT",
+  "ACCOUNT_TAKEOVER",
+  "DATA_BREACH",
+  "MALWARE_DETECTED",
+  "RANSOMWARE",
+  "DLP_VIOLATION",
+  "INSIDER_THREAT",
+  "API_ABUSE",
+  "BOT_ATTACK",
+  "DDOS_ATTEMPT",
+  "SUSPICIOUS_ACTIVITY",
+  "COMPLIANCE_VIOLATION",
+] as const
 
-const severities = [
-  { value: "INFO", label: "Info" },
-  { value: "WARNING", label: "Warning" },
-  { value: "CRITICAL", label: "Critical" },
-]
+const severityValues = ["INFO", "WARNING", "CRITICAL"] as const
 
-const statuses = [
-  { value: "ACTIVE", label: "Active" },
-  { value: "CONTAINED", label: "Contained" },
-  { value: "MITIGATED", label: "Mitigated" },
-  { value: "RESOLVED", label: "Resolved" },
-  { value: "FALSE_POSITIVE", label: "False Positive" },
-]
+const statusValues = ["ACTIVE", "CONTAINED", "MITIGATED", "RESOLVED", "FALSE_POSITIVE"] as const
 
 export default function NewThreatEventPage() {
+  const t = useTranslations("admin.security.threats")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
@@ -70,7 +63,7 @@ export default function NewThreatEventPage() {
 
   const handleCreate = async () => {
     if (!formData.type || !formData.source || !formData.description) {
-      toast.error("Type, source, and description are required")
+      showErrorToast(t("new.errors.requiredFields"))
       return
     }
 
@@ -99,15 +92,15 @@ export default function NewThreatEventPage() {
 
       if (response.ok) {
         const data = await response.json()
-        toast.success("Threat event created successfully")
+        showSuccessToast(t("new.messages.createSuccess"))
         router.push(`/admin/security/threats/${data.threat.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to create threat event")
+        showErrorToast(data.error || t("new.errors.createFailed"))
       }
     } catch (error) {
       console.error("Failed to create threat:", error)
-      toast.error("Failed to create threat event")
+      showErrorToast(t("new.errors.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -116,11 +109,11 @@ export default function NewThreatEventPage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to create threat events</p>
+        <p className="text-muted-foreground">{t("new.noPermission")}</p>
         <Link href="/admin/security/threats">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Threats
+            {t("new.backToThreats")}
           </Button>
         </Link>
       </div>
@@ -135,16 +128,16 @@ export default function NewThreatEventPage() {
           <Link href="/admin/security/threats">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Zap className="h-6 w-6 text-orange-500" />
-              Log Threat Event
+              {t("new.title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Manually record a security threat or incident
+              {t("new.subtitle")}
             </p>
           </div>
         </div>
@@ -155,12 +148,12 @@ export default function NewThreatEventPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {tCommon("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Log Threat
+              {t("new.logThreat")}
             </>
           )}
         </Button>
@@ -169,16 +162,16 @@ export default function NewThreatEventPage() {
       {/* Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Threat Details</CardTitle>
+          <CardTitle>{t("new.threatDetails")}</CardTitle>
           <CardDescription>
-            Provide information about the security threat or incident
+            {t("new.threatDetailsDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label>Threat Type *</Label>
+                <Label>{t("new.threatType")} *</Label>
                 <Select
                   value={formData.type}
                   onValueChange={(value) => setFormData({ ...formData, type: value })}
@@ -187,9 +180,9 @@ export default function NewThreatEventPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {threatTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
-                        {type.label}
+                    {threatTypeValues.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {t(`types.${type.toLowerCase()}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -197,7 +190,7 @@ export default function NewThreatEventPage() {
               </div>
 
               <div className="grid gap-2">
-                <Label>Severity *</Label>
+                <Label>{t("new.severity")} *</Label>
                 <Select
                   value={formData.severity}
                   onValueChange={(value) => setFormData({ ...formData, severity: value })}
@@ -206,9 +199,9 @@ export default function NewThreatEventPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {severities.map((severity) => (
-                      <SelectItem key={severity.value} value={severity.value}>
-                        {severity.label}
+                    {severityValues.map((severity) => (
+                      <SelectItem key={severity} value={severity}>
+                        {t(`severities.${severity.toLowerCase()}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -217,23 +210,23 @@ export default function NewThreatEventPage() {
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="source">Source *</Label>
+              <Label htmlFor="source">{t("new.source")} *</Label>
               <Input
                 id="source"
-                placeholder="e.g., IP address, system name, or user agent"
+                placeholder={t("new.sourcePlaceholder")}
                 value={formData.source}
                 onChange={(e) => setFormData({ ...formData, source: e.target.value })}
               />
               <p className="text-xs text-muted-foreground">
-                The origin of the threat (IP address, user agent, system, etc.)
+                {t("new.sourceHint")}
               </p>
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="description">Description *</Label>
+              <Label htmlFor="description">{t("new.description")} *</Label>
               <Textarea
                 id="description"
-                placeholder="Describe the threat event in detail..."
+                placeholder={t("new.descriptionPlaceholder")}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
@@ -241,7 +234,7 @@ export default function NewThreatEventPage() {
             </div>
 
             <div className="grid gap-2">
-              <Label>Initial Status</Label>
+              <Label>{t("new.initialStatus")}</Label>
               <Select
                 value={formData.status}
                 onValueChange={(value) => setFormData({ ...formData, status: value })}
@@ -250,9 +243,9 @@ export default function NewThreatEventPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {statuses.map((status) => (
-                    <SelectItem key={status.value} value={status.value}>
-                      {status.label}
+                  {statusValues.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {t(`statuses.${status === "FALSE_POSITIVE" ? "falsePositive" : status.toLowerCase()}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -260,16 +253,16 @@ export default function NewThreatEventPage() {
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="indicators">Indicators of Compromise (IOCs)</Label>
+              <Label htmlFor="indicators">{t("new.iocs")}</Label>
               <Textarea
                 id="indicators"
-                placeholder="Enter IOCs separated by commas (e.g., malicious-domain.com, 192.168.1.100, hash:abc123...)"
+                placeholder={t("new.iocsPlaceholder")}
                 value={formData.indicators}
                 onChange={(e) => setFormData({ ...formData, indicators: e.target.value })}
                 rows={2}
               />
               <p className="text-xs text-muted-foreground">
-                IP addresses, domains, file hashes, or other threat indicators
+                {t("new.iocsHint")}
               </p>
             </div>
           </div>
@@ -279,36 +272,36 @@ export default function NewThreatEventPage() {
       {/* Optional Context */}
       <Card>
         <CardHeader>
-          <CardTitle>Additional Context</CardTitle>
+          <CardTitle>{t("new.additionalContext")}</CardTitle>
           <CardDescription>
-            Optional information to associate this threat with specific resources
+            {t("new.additionalContextDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="orgId">Organization ID</Label>
+              <Label htmlFor="orgId">{t("new.organizationId")}</Label>
               <Input
                 id="orgId"
-                placeholder="e.g., org_xxxxx"
+                placeholder={t("new.organizationIdPlaceholder")}
                 value={formData.orgId}
                 onChange={(e) => setFormData({ ...formData, orgId: e.target.value })}
               />
               <p className="text-xs text-muted-foreground">
-                If this threat is related to a specific organization
+                {t("new.organizationIdHint")}
               </p>
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="userId">User ID</Label>
+              <Label htmlFor="userId">{t("new.userId")}</Label>
               <Input
                 id="userId"
-                placeholder="e.g., user_xxxxx"
+                placeholder={t("new.userIdPlaceholder")}
                 value={formData.userId}
                 onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
               />
               <p className="text-xs text-muted-foreground">
-                If this threat is related to a specific user
+                {t("new.userIdHint")}
               </p>
             </div>
           </div>

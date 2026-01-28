@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -55,6 +56,8 @@ interface HealthScore {
 }
 
 export default function HealthScoresPage() {
+  const t = useTranslations("admin.health")
+  const tCommon = useTranslations("common")
   const [scores, setScores] = useState<HealthScore[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [riskFilter, setRiskFilter] = useState("all")
@@ -95,11 +98,11 @@ export default function HealthScoresPage() {
   const getRiskBadge = (level: string) => {
     switch (level) {
       case "CRITICAL":
-        return <Badge variant="destructive" className="gap-1"><AlertTriangle className="h-3 w-3" />Critical</Badge>
+        return <Badge variant="destructive" className="gap-1"><AlertTriangle className="h-3 w-3" />{t("critical")}</Badge>
       case "AT_RISK":
-        return <Badge variant="default" className="bg-amber-500 gap-1"><TrendingDown className="h-3 w-3" />At Risk</Badge>
+        return <Badge variant="default" className="bg-amber-500 gap-1"><TrendingDown className="h-3 w-3" />{t("atRisk")}</Badge>
       default:
-        return <Badge variant="default" className="bg-green-500 gap-1"><CheckCircle className="h-3 w-3" />Healthy</Badge>
+        return <Badge variant="default" className="bg-green-500 gap-1"><CheckCircle className="h-3 w-3" />{t("healthy")}</Badge>
     }
   }
 
@@ -125,7 +128,7 @@ export default function HealthScoresPage() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Average Health</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("averageHealth")}</CardTitle>
             <HeartPulse className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -136,34 +139,34 @@ export default function HealthScoresPage() {
 
         <Card className={criticalCount > 0 ? "border-red-500/50" : ""}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Critical</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("critical")}</CardTitle>
             <AlertTriangle className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-500">{criticalCount}</div>
-            <p className="text-xs text-muted-foreground">Require immediate attention</p>
+            <p className="text-xs text-muted-foreground">{t("requireImmediateAttention")}</p>
           </CardContent>
         </Card>
 
         <Card className={atRiskCount > 0 ? "border-amber-500/50" : ""}>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">At Risk</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("atRisk")}</CardTitle>
             <TrendingDown className="h-4 w-4 text-amber-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-amber-500">{atRiskCount}</div>
-            <p className="text-xs text-muted-foreground">Need proactive outreach</p>
+            <p className="text-xs text-muted-foreground">{t("needProactiveOutreach")}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Healthy</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("healthy")}</CardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-500">{healthyCount}</div>
-            <p className="text-xs text-muted-foreground">Performing well</p>
+            <p className="text-xs text-muted-foreground">{t("performingWell")}</p>
           </CardContent>
         </Card>
       </div>
@@ -173,15 +176,15 @@ export default function HealthScoresPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Tenant Health Scores</CardTitle>
+              <CardTitle>{t("tenantHealthScores")}</CardTitle>
               <CardDescription>
-                Monitor tenant engagement and identify at-risk accounts
+                {t("description")}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchScores} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {t("refresh")}
               </Button>
               <Button
                 onClick={calculateAllScores}
@@ -193,7 +196,7 @@ export default function HealthScoresPage() {
                 ) : (
                   <Calculator className="h-4 w-4 mr-2" />
                 )}
-                Recalculate All
+                {t("recalculateAll")}
               </Button>
             </div>
           </div>
@@ -203,13 +206,13 @@ export default function HealthScoresPage() {
           <div className="flex gap-4 mb-6">
             <Select value={riskFilter} onValueChange={setRiskFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Risk Level" />
+                <SelectValue placeholder={t("columns.riskLevel")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Levels</SelectItem>
-                <SelectItem value="CRITICAL">Critical</SelectItem>
-                <SelectItem value="AT_RISK">At Risk</SelectItem>
-                <SelectItem value="HEALTHY">Healthy</SelectItem>
+                <SelectItem value="all">{t("filters.allRisk")}</SelectItem>
+                <SelectItem value="CRITICAL">{t("critical")}</SelectItem>
+                <SelectItem value="AT_RISK">{t("atRisk")}</SelectItem>
+                <SelectItem value="HEALTHY">{t("healthy")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -219,14 +222,14 @@ export default function HealthScoresPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Organization</TableHead>
-                  <TableHead className="text-center">Overall</TableHead>
-                  <TableHead className="text-center">Engagement</TableHead>
-                  <TableHead className="text-center">Usage</TableHead>
-                  <TableHead>Risk Level</TableHead>
-                  <TableHead>Churn Prob.</TableHead>
-                  <TableHead>Recommendations</TableHead>
-                  <TableHead>Updated</TableHead>
+                  <TableHead>{t("columns.organization")}</TableHead>
+                  <TableHead className="text-center">{t("columns.overallScore")}</TableHead>
+                  <TableHead className="text-center">{t("columns.engagementScore")}</TableHead>
+                  <TableHead className="text-center">{t("columns.usageScore")}</TableHead>
+                  <TableHead>{t("columns.riskLevel")}</TableHead>
+                  <TableHead>{t("columns.churnProbability")}</TableHead>
+                  <TableHead>{tCommon("recommendations")}</TableHead>
+                  <TableHead>{t("columns.calculatedAt")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -239,7 +242,7 @@ export default function HealthScoresPage() {
                 ) : scores.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No health scores available. Click "Recalculate All" to generate scores.
+                      {tCommon("noData")} {t("recalculateAll")}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -300,7 +303,7 @@ export default function HealthScoresPage() {
                             )}
                           </div>
                         ) : (
-                          <span className="text-xs text-muted-foreground">None</span>
+                          <span className="text-xs text-muted-foreground">{tCommon("none")}</span>
                         )}
                       </TableCell>
                       <TableCell className="text-muted-foreground">

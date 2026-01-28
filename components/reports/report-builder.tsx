@@ -44,6 +44,7 @@ import { useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Controller } from "react-hook-form"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -104,6 +105,7 @@ export function ReportBuilder({
   templateDescription,
 }: ReportBuilderProps) {
   const router = useRouter()
+  const t = useTranslations("reports")
   const isTemplateMode = !!templateId
 
   // Event tracking
@@ -206,14 +208,14 @@ export function ReportBuilder({
           <div className="flex items-center gap-3 p-4 rounded-lg bg-destructive/10 border border-destructive/20">
             <AlertCircle className="h-6 w-6 text-destructive" />
             <div>
-              <p className="font-medium text-destructive">Error Loading Report</p>
+              <p className="font-medium text-destructive">{t("builder.errorLoadingReport")}</p>
               <p className="text-sm text-muted-foreground">{loadError}</p>
             </div>
           </div>
           <Button variant="outline" asChild>
             <Link href="/dashboard/reports">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Reports
+              {t("builder.backToReports")}
             </Link>
           </Button>
         </div>
@@ -232,18 +234,18 @@ export function ReportBuilder({
         </Button>
         <div className="flex-1">
           <h1 className="text-2xl font-bold">
-            {isEditMode ? "Edit Report" : isTemplateMode ? `Create ${templateTitle}` : "Create New Report"}
+            {isEditMode ? t("builder.editReport") : isTemplateMode ? t("builder.createTemplate", { title: templateTitle || "" }) : t("builder.createNewReport")}
           </h1>
           <p className="text-muted-foreground">
             {isEditMode
-              ? "Modify your report settings"
+              ? t("builder.modifySettings")
               : isTemplateMode
-                ? "Customize your template and generate insights"
-                : "Generate insights powered by AI agents"}
+                ? t("builder.customizeTemplate")
+                : t("builder.generateInsights")}
           </p>
         </div>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          Step {step} of {totalSteps}
+          {t("builder.stepOf", { step, totalSteps })}
         </div>
       </div>
 
@@ -263,10 +265,10 @@ export function ReportBuilder({
               {s < step ? <CheckCircle2 className="h-5 w-5" /> : s}
             </div>
             <span className={`text-sm hidden sm:block ${s === step ? "font-medium" : "text-muted-foreground"}`}>
-              {s === 1 && "Output Type"}
-              {s === 2 && "Data Sources"}
-              {s === 3 && "Configure"}
-              {s === 4 && "Generate"}
+              {s === 1 && t("builder.steps.outputType")}
+              {s === 2 && t("builder.steps.dataSources")}
+              {s === 3 && t("builder.steps.configure")}
+              {s === 4 && t("builder.steps.generate")}
             </span>
             {s < 4 && <div className={`flex-1 h-0.5 ${s < step ? "bg-primary" : "bg-muted"}`} />}
           </div>
@@ -277,7 +279,7 @@ export function ReportBuilder({
       {step === 1 && (
         <div className="space-y-6">
           <div className="space-y-4">
-            <Label className="text-lg font-semibold">What type of output do you need?</Label>
+            <Label className="text-lg font-semibold">{t("builder.whatOutputType")}</Label>
             <Controller
               name="type"
               control={control}
@@ -321,7 +323,7 @@ export function ReportBuilder({
 
           <div className="flex justify-end">
             <Button onClick={handleNextStep}>
-              Continue
+              {t("builder.continue")}
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -337,9 +339,9 @@ export function ReportBuilder({
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5" />
-                  Data Sources
+                  {t("builder.dataSources")}
                 </CardTitle>
-                <CardDescription>Select which GWI datasets to include</CardDescription>
+                <CardDescription>{t("builder.selectDatasets")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
                 {DATA_SOURCE_OPTIONS.map((source) => (
@@ -380,9 +382,9 @@ export function ReportBuilder({
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Globe className="h-5 w-5" />
-                  Markets
+                  {t("builder.markets")}
                 </CardTitle>
-                <CardDescription>Choose geographic markets to analyze</CardDescription>
+                <CardDescription>{t("builder.chooseMarkets")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
@@ -418,9 +420,9 @@ export function ReportBuilder({
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="h-5 w-5" />
-                  Target Audiences
+                  {t("builder.targetAudiences")}
                 </CardTitle>
-                <CardDescription>Select audience segments to analyze</CardDescription>
+                <CardDescription>{t("builder.selectAudiences")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -459,10 +461,10 @@ export function ReportBuilder({
 
           <div className="flex justify-between">
             <Button variant="outline" onClick={handlePrevStep}>
-              Back
+              {t("builder.back")}
             </Button>
             <Button onClick={handleNextStep}>
-              Continue
+              {t("builder.continue")}
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -474,14 +476,14 @@ export function ReportBuilder({
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Report Details</CardTitle>
-              <CardDescription>Provide information about your report</CardDescription>
+              <CardTitle>{t("builder.reportDetails")}</CardTitle>
+              <CardDescription>{t("builder.provideInformation")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Title */}
               <div className="space-y-2">
                 <Label htmlFor="title">
-                  Title <span className="text-destructive">*</span>
+                  {t("builder.title")} <span className="text-destructive">*</span>
                 </Label>
                 <Controller
                   name="title"
@@ -490,7 +492,7 @@ export function ReportBuilder({
                     <Input
                       {...field}
                       id="title"
-                      placeholder="e.g., Q4 2024 Consumer Insights Report"
+                      placeholder={t("builder.titlePlaceholder")}
                     />
                   )}
                 />
@@ -501,7 +503,7 @@ export function ReportBuilder({
 
               {/* Description */}
               <div className="space-y-2">
-                <Label htmlFor="description">Description (optional)</Label>
+                <Label htmlFor="description">{t("builder.descriptionOptional")}</Label>
                 <Controller
                   name="description"
                   control={control}
@@ -509,7 +511,7 @@ export function ReportBuilder({
                     <Textarea
                       {...field}
                       id="description"
-                      placeholder="Brief description of what this report should cover..."
+                      placeholder={t("builder.descriptionPlaceholder")}
                     />
                   )}
                 />
@@ -518,14 +520,14 @@ export function ReportBuilder({
               <div className="grid gap-4 sm:grid-cols-2">
                 {/* Agent */}
                 <div className="space-y-2">
-                  <Label htmlFor="agent">AI Agent</Label>
+                  <Label htmlFor="agent">{t("builder.aiAgent")}</Label>
                   <Controller
                     name="agent"
                     control={control}
                     render={({ field }) => (
                       <Select value={field.value} onValueChange={field.onChange}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select an agent" />
+                          <SelectValue placeholder={t("builder.selectAgent")} />
                         </SelectTrigger>
                         <SelectContent>
                           {AGENT_OPTIONS.map((agent) => (
@@ -544,7 +546,7 @@ export function ReportBuilder({
 
                 {/* Timeframe */}
                 <div className="space-y-2">
-                  <Label htmlFor="timeframe">Timeframe</Label>
+                  <Label htmlFor="timeframe">{t("builder.timeframe")}</Label>
                   <Controller
                     name="timeframe"
                     control={control}
@@ -568,7 +570,7 @@ export function ReportBuilder({
 
               {/* Prompt */}
               <div className="space-y-2">
-                <Label htmlFor="prompt">What would you like to learn?</Label>
+                <Label htmlFor="prompt">{t("builder.whatToLearn")}</Label>
                 <Controller
                   name="prompt"
                   control={control}
@@ -576,7 +578,7 @@ export function ReportBuilder({
                     <Textarea
                       {...field}
                       id="prompt"
-                      placeholder="Describe the insights you're looking for. Be specific about topics, comparisons, or questions you want answered..."
+                      placeholder={t("builder.promptPlaceholder")}
                       className="min-h-32"
                     />
                   )}
@@ -594,7 +596,7 @@ export function ReportBuilder({
                     }
                   >
                     <Wand2 className="mr-1 h-3 w-3" />
-                    Media habits comparison
+                    {t("builder.mediaHabitsComparison")}
                   </Button>
                   <Button
                     type="button"
@@ -608,7 +610,7 @@ export function ReportBuilder({
                     }
                   >
                     <Wand2 className="mr-1 h-3 w-3" />
-                    Sustainability trends
+                    {t("builder.sustainabilityTrends")}
                   </Button>
                 </div>
               </div>
@@ -617,10 +619,10 @@ export function ReportBuilder({
 
           <div className="flex justify-between">
             <Button variant="outline" onClick={handlePrevStep}>
-              Back
+              {t("builder.back")}
             </Button>
             <Button onClick={handleNextStep}>
-              Continue
+              {t("builder.continue")}
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -632,40 +634,40 @@ export function ReportBuilder({
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Review & Generate</CardTitle>
-              <CardDescription>Review your configuration before generating</CardDescription>
+              <CardTitle>{t("builder.reviewAndGenerate")}</CardTitle>
+              <CardDescription>{t("builder.reviewConfiguration")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Summary Grid */}
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Output Type</p>
+                  <p className="text-sm text-muted-foreground">{t("builder.summary.outputType")}</p>
                   <p className="font-medium">
-                    {REPORT_TYPE_OPTIONS.find((t) => t.value === watchedType)?.label || watchedType}
+                    {REPORT_TYPE_OPTIONS.find((rt) => rt.value === watchedType)?.label || watchedType}
                   </p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">AI Agent</p>
+                  <p className="text-sm text-muted-foreground">{t("builder.summary.aiAgent")}</p>
                   <p className="font-medium">
-                    {AGENT_OPTIONS.find((a) => a.id === form.getValues("agent"))?.name || "Not selected"}
+                    {AGENT_OPTIONS.find((a) => a.id === form.getValues("agent"))?.name || t("builder.notSelected")}
                   </p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Data Sources</p>
-                  <p className="font-medium">{watchedDataSources.length} selected</p>
+                  <p className="text-sm text-muted-foreground">{t("builder.summary.dataSources")}</p>
+                  <p className="font-medium">{t("builder.selected", { count: watchedDataSources.length })}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Markets</p>
-                  <p className="font-medium">{watchedMarkets.length} selected</p>
+                  <p className="text-sm text-muted-foreground">{t("builder.summary.markets")}</p>
+                  <p className="font-medium">{t("builder.selected", { count: watchedMarkets.length })}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Audiences</p>
-                  <p className="font-medium">{watchedAudiences.length} selected</p>
+                  <p className="text-sm text-muted-foreground">{t("builder.summary.audiences")}</p>
+                  <p className="font-medium">{t("builder.selected", { count: watchedAudiences.length })}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Timeframe</p>
+                  <p className="text-sm text-muted-foreground">{t("builder.summary.timeframe")}</p>
                   <p className="font-medium">
-                    {TIMEFRAME_OPTIONS.find((t) => t.value === form.getValues("timeframe"))?.label ||
+                    {TIMEFRAME_OPTIONS.find((tf) => tf.value === form.getValues("timeframe"))?.label ||
                       form.getValues("timeframe")}
                   </p>
                 </div>
@@ -673,14 +675,14 @@ export function ReportBuilder({
 
               {form.getValues("title") && (
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Title</p>
+                  <p className="text-sm text-muted-foreground">{t("builder.summary.title")}</p>
                   <p className="font-medium">{form.getValues("title")}</p>
                 </div>
               )}
 
               {form.getValues("prompt") && (
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Query</p>
+                  <p className="text-sm text-muted-foreground">{t("builder.summary.query")}</p>
                   <p className="text-sm">{form.getValues("prompt")}</p>
                 </div>
               )}
@@ -689,17 +691,17 @@ export function ReportBuilder({
               {isSaving && (
                 <div className="space-y-3 pt-4 border-t">
                   <div className="flex items-center justify-between text-sm">
-                    <span>Generating report...</span>
+                    <span>{t("builder.progress.generating")}</span>
                     <span className="text-muted-foreground">{generationProgress}%</span>
                   </div>
                   <Progress value={generationProgress} />
                   <p className="text-sm text-muted-foreground">
-                    {generationProgress < 20 && "Analyzing data sources..."}
-                    {generationProgress >= 20 && generationProgress < 40 && "Processing audience segments..."}
-                    {generationProgress >= 40 && generationProgress < 60 && "Generating insights..."}
-                    {generationProgress >= 60 && generationProgress < 80 && "Creating visualizations..."}
-                    {generationProgress >= 80 && generationProgress < 100 && "Formatting output..."}
-                    {generationProgress === 100 && "Complete!"}
+                    {generationProgress < 20 && t("builder.progress.analyzingData")}
+                    {generationProgress >= 20 && generationProgress < 40 && t("builder.progress.processingAudiences")}
+                    {generationProgress >= 40 && generationProgress < 60 && t("builder.progress.generatingInsights")}
+                    {generationProgress >= 60 && generationProgress < 80 && t("builder.progress.creatingVisualizations")}
+                    {generationProgress >= 80 && generationProgress < 100 && t("builder.progress.formattingOutput")}
+                    {generationProgress === 100 && t("builder.progress.complete")}
                   </p>
                 </div>
               )}
@@ -711,21 +713,21 @@ export function ReportBuilder({
                     <CheckCircle2 className="h-6 w-6 text-emerald-500" />
                     <div>
                       <p className="font-medium text-emerald-500">
-                        {isEditMode ? "Report Updated Successfully!" : "Report Generated Successfully!"}
+                        {isEditMode ? t("builder.success.reportUpdated") : t("builder.success.reportGenerated")}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Your {REPORT_TYPE_OPTIONS.find((t) => t.value === watchedType)?.label?.toLowerCase() || "report"} is ready to view and download.
+                        {t("builder.success.readyToView", { type: REPORT_TYPE_OPTIONS.find((rt) => rt.value === watchedType)?.label?.toLowerCase() || "report" })}
                       </p>
                     </div>
                   </div>
                   <div className="flex gap-2">
                     <Button onClick={handleViewReport} className="flex-1">
                       <FileText className="mr-2 h-4 w-4" />
-                      View Report
+                      {t("builder.viewReport")}
                     </Button>
                     <Button variant="outline" onClick={handleDownloadReport} className="flex-1">
                       <Download className="mr-2 h-4 w-4" />
-                      Download
+                      {t("builder.download")}
                     </Button>
                   </div>
                 </div>
@@ -738,14 +740,14 @@ export function ReportBuilder({
                     <AlertCircle className="h-6 w-6 text-destructive" />
                     <div>
                       <p className="font-medium text-destructive">
-                        {isEditMode ? "Failed to Update Report" : "Failed to Generate Report"}
+                        {isEditMode ? t("builder.error.failedToUpdate") : t("builder.error.failedToGenerate")}
                       </p>
                       <p className="text-sm text-muted-foreground">{saveError}</p>
                     </div>
                   </div>
                   <Button onClick={handleSubmit} className="w-full">
                     <Sparkles className="mr-2 h-4 w-4" />
-                    Try Again
+                    {t("builder.tryAgain")}
                   </Button>
                 </div>
               )}
@@ -761,25 +763,25 @@ export function ReportBuilder({
               }}
               disabled={isSaving || generationComplete}
             >
-              Back
+              {t("builder.back")}
             </Button>
             <div className="flex gap-2">
               {!generationComplete && !saveError && (
                 <>
                   <Button variant="outline" disabled={isSaving}>
                     <Settings2 className="mr-2 h-4 w-4" />
-                    Advanced Options
+                    {t("builder.advancedOptions")}
                   </Button>
                   <Button onClick={handleSubmit} disabled={isSaving}>
                     {isSaving ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        {isEditMode ? "Updating..." : "Generating..."}
+                        {isEditMode ? t("builder.updating") : t("builder.generatingButton")}
                       </>
                     ) : (
                       <>
                         <Sparkles className="mr-2 h-4 w-4" />
-                        {isEditMode ? "Update Report" : "Generate Report"}
+                        {isEditMode ? t("builder.updateReport") : t("builder.generateReport")}
                       </>
                     )}
                   </Button>
@@ -787,7 +789,7 @@ export function ReportBuilder({
               )}
               {(generationComplete || saveError) && !isSaving && (
                 <Button variant="outline" onClick={() => router.push("/dashboard/reports")}>
-                  Back to Reports
+                  {t("builder.backToReports")}
                 </Button>
               )}
             </div>

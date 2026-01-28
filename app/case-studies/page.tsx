@@ -1,3 +1,6 @@
+"use client"
+
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { ArrowLeft, TrendingUp, Users, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,44 +9,45 @@ import { Header } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 
 export default function CaseStudiesPage() {
+  const t = useTranslations("landing.caseStudies")
+
   const caseStudies = [
     {
       company: "Nike",
-      industry: "Retail & E-commerce",
-      title: "How Nike Increased Campaign ROI by 340% with AI-Powered Insights",
-      challenge: "Nike needed to understand Gen Z preferences across 12 markets for their sustainability campaign.",
-      solution:
-        "Used GWI Insights' Audience Explorer and Motivation Decoder agents to analyze 2.8B consumer data points.",
+      industryKey: "industries.retailEcommerce",
+      titleKey: "studies.nike.title",
+      challengeKey: "studies.nike.challenge",
+      solutionKey: "studies.nike.solution",
       results: [
-        { metric: "340%", label: "Campaign ROI" },
-        { metric: "2.5x", label: "Engagement Rate" },
-        { metric: "85%", label: "Time Saved" },
+        { metric: "340%", labelKey: "results.campaignRoi" },
+        { metric: "2.5x", labelKey: "results.engagementRate" },
+        { metric: "85%", labelKey: "results.timeSaved" },
       ],
       icon: TrendingUp,
     },
     {
       company: "Unilever",
-      industry: "Consumer Goods",
-      title: "Unilever Launches 5 Products in 6 Months Using AI Agents",
-      challenge: "Traditional research methods were too slow for fast-moving consumer trends.",
-      solution: "Implemented automated workflows with Persona Architect and Culture Tracker agents.",
+      industryKey: "industries.consumerGoods",
+      titleKey: "studies.unilever.title",
+      challengeKey: "studies.unilever.challenge",
+      solutionKey: "studies.unilever.solution",
       results: [
-        { metric: "5", label: "Products Launched" },
-        { metric: "6", label: "Months Timeline" },
-        { metric: "92%", label: "Accuracy Rate" },
+        { metric: "5", labelKey: "results.productsLaunched" },
+        { metric: "6", labelKey: "results.monthsTimeline" },
+        { metric: "92%", labelKey: "results.accuracyRate" },
       ],
       icon: Zap,
     },
     {
       company: "Spotify",
-      industry: "Media & Entertainment",
-      title: "Spotify Discovers Untapped Audience Segments with AI",
-      challenge: "Needed to identify emerging music consumption patterns across generations.",
-      solution: "Leveraged Global Perspective Agent and custom workflows for cross-market analysis.",
+      industryKey: "industries.mediaEntertainment",
+      titleKey: "studies.spotify.title",
+      challengeKey: "studies.spotify.challenge",
+      solutionKey: "studies.spotify.solution",
       results: [
-        { metric: "12", label: "New Segments" },
-        { metric: "45%", label: "User Growth" },
-        { metric: "3.2M", label: "New Subscribers" },
+        { metric: "12", labelKey: "results.newSegments" },
+        { metric: "45%", labelKey: "results.userGrowth" },
+        { metric: "3.2M", labelKey: "results.newSubscribers" },
       ],
       icon: Users,
     },
@@ -58,13 +62,13 @@ export default function CaseStudiesPage() {
           <Link href="/">
             <Button variant="ghost" size="sm" className="mb-8">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
+              {t("backToHome")}
             </Button>
           </Link>
 
           <div className="mb-12">
-            <h1 className="text-4xl font-bold text-foreground mb-4">Case Studies</h1>
-            <p className="text-lg text-muted-foreground">See how leading brands use GWI Insights to drive growth.</p>
+            <h1 className="text-4xl font-bold text-foreground mb-4">{t("title")}</h1>
+            <p className="text-lg text-muted-foreground">{t("subtitle")}</p>
           </div>
 
           <div className="space-y-12">
@@ -77,25 +81,25 @@ export default function CaseStudiesPage() {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold text-foreground">{study.company}</h3>
-                      <Badge variant="secondary">{study.industry}</Badge>
+                      <Badge variant="secondary">{t(study.industryKey)}</Badge>
                     </div>
                   </div>
-                  <h2 className="text-2xl font-bold text-foreground mb-6">{study.title}</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-6">{t(study.titleKey)}</h2>
                   <div className="grid md:grid-cols-2 gap-8 mb-8">
                     <div>
-                      <h4 className="font-medium text-foreground mb-2">Challenge</h4>
-                      <p className="text-muted-foreground">{study.challenge}</p>
+                      <h4 className="font-medium text-foreground mb-2">{t("labels.challenge")}</h4>
+                      <p className="text-muted-foreground">{t(study.challengeKey)}</p>
                     </div>
                     <div>
-                      <h4 className="font-medium text-foreground mb-2">Solution</h4>
-                      <p className="text-muted-foreground">{study.solution}</p>
+                      <h4 className="font-medium text-foreground mb-2">{t("labels.solution")}</h4>
+                      <p className="text-muted-foreground">{t(study.solutionKey)}</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-6 pt-6 border-t border-border">
                     {study.results.map((result, ridx) => (
                       <div key={ridx} className="text-center">
                         <div className="text-3xl font-bold text-accent mb-1">{result.metric}</div>
-                        <div className="text-sm text-muted-foreground">{result.label}</div>
+                        <div className="text-sm text-muted-foreground">{t(result.labelKey)}</div>
                       </div>
                     ))}
                   </div>

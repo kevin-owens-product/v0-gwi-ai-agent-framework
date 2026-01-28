@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ArrowLeft, Save, Loader2, AlertTriangle } from "lucide-react"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { useAdmin } from "@/components/providers/admin-provider"
 
 interface SecurityPolicy {
@@ -25,39 +26,30 @@ interface SecurityPolicy {
   type: string
 }
 
-const violationTypes = [
-  { value: "WEAK_PASSWORD", label: "Weak Password" },
-  { value: "FAILED_MFA", label: "Failed MFA" },
-  { value: "SUSPICIOUS_LOGIN", label: "Suspicious Login" },
-  { value: "IP_BLOCKED", label: "IP Blocked" },
-  { value: "UNAUTHORIZED_ACCESS", label: "Unauthorized Access" },
-  { value: "DATA_EXFILTRATION", label: "Data Exfiltration" },
-  { value: "FILE_POLICY_VIOLATION", label: "File Policy Violation" },
-  { value: "EXTERNAL_SHARING_BLOCKED", label: "External Sharing Blocked" },
-  { value: "SESSION_VIOLATION", label: "Session Violation" },
-  { value: "DEVICE_NOT_COMPLIANT", label: "Device Not Compliant" },
-  { value: "API_ABUSE", label: "API Abuse" },
-  { value: "RATE_LIMIT_EXCEEDED", label: "Rate Limit Exceeded" },
-  { value: "BRUTE_FORCE_DETECTED", label: "Brute Force Detected" },
-  { value: "IMPOSSIBLE_TRAVEL", label: "Impossible Travel" },
-  { value: "ANOMALOUS_BEHAVIOR", label: "Anomalous Behavior" },
-]
+const violationTypeKeys = [
+  "WEAK_PASSWORD",
+  "FAILED_MFA",
+  "SUSPICIOUS_LOGIN",
+  "IP_BLOCKED",
+  "UNAUTHORIZED_ACCESS",
+  "DATA_EXFILTRATION",
+  "FILE_POLICY_VIOLATION",
+  "EXTERNAL_SHARING_BLOCKED",
+  "SESSION_VIOLATION",
+  "DEVICE_NOT_COMPLIANT",
+  "API_ABUSE",
+  "RATE_LIMIT_EXCEEDED",
+  "BRUTE_FORCE_DETECTED",
+  "IMPOSSIBLE_TRAVEL",
+  "ANOMALOUS_BEHAVIOR",
+] as const
 
-const severities = [
-  { value: "INFO", label: "Info" },
-  { value: "WARNING", label: "Warning" },
-  { value: "CRITICAL", label: "Critical" },
-]
+const severityKeys = ["INFO", "WARNING", "CRITICAL"] as const
 
-const statuses = [
-  { value: "OPEN", label: "Open" },
-  { value: "INVESTIGATING", label: "Investigating" },
-  { value: "RESOLVED", label: "Resolved" },
-  { value: "FALSE_POSITIVE", label: "False Positive" },
-  { value: "ESCALATED", label: "Escalated" },
-]
+const statusKeys = ["OPEN", "INVESTIGATING", "RESOLVED", "FALSE_POSITIVE", "ESCALATED"] as const
 
 export default function NewSecurityViolationPage() {
+  const t = useTranslations("admin.security.violations")
   const router = useRouter()
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
@@ -90,7 +82,7 @@ export default function NewSecurityViolationPage() {
         }
       } catch (error) {
         console.error("Failed to fetch policies:", error)
-        toast.error("Failed to load security policies")
+        showErrorToast(t("toast.loadPoliciesFailed"))
       } finally {
         setLoadingPolicies(false)
       }
@@ -100,7 +92,7 @@ export default function NewSecurityViolationPage() {
 
   const handleCreate = async () => {
     if (!formData.policyId || !formData.violationType || !formData.description) {
-      toast.error("Policy, violation type, and description are required")
+      showErrorToast(t("validation.requiredFields"))
       return
     }
 
@@ -127,15 +119,15 @@ export default function NewSecurityViolationPage() {
 
       if (response.ok) {
         const data = await response.json()
-        toast.success("Security violation recorded successfully")
+        showSuccessToast(t("toast.createSuccess"))
         router.push(`/admin/security/violations/${data.violation.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to create security violation")
+        showErrorToast(data.error || t("toast.createFailed"))
       }
     } catch (error) {
       console.error("Failed to create violation:", error)
-      toast.error("Failed to create security violation")
+      showErrorToast(t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -144,11 +136,11 @@ export default function NewSecurityViolationPage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to create violation records</p>
+        <p className="text-muted-foreground">{t("noPermissionCreate")}</p>
         <Link href="/admin/security/violations">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Violations
+            {t("backToViolations")}
           </Button>
         </Link>
       </div>
@@ -163,16 +155,16 @@ export default function NewSecurityViolationPage() {
           <Link href="/admin/security/violations">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("actions.back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <AlertTriangle className="h-6 w-6 text-destructive" />
-              Record Security Violation
+              {t("new.title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Manually log a security policy violation
+              {t("new.description")}
             </p>
           </div>
         </div>
@@ -183,12 +175,12 @@ export default function NewSecurityViolationPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("actions.creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Record Violation
+              {t("actions.recordViolation")}
             </>
           )}
         </Button>
@@ -197,22 +189,22 @@ export default function NewSecurityViolationPage() {
       {/* Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Violation Details</CardTitle>
+          <CardTitle>{t("form.violationDetails")}</CardTitle>
           <CardDescription>
-            Specify the policy violation and associated information
+            {t("form.violationDetailsDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label>Security Policy *</Label>
+              <Label>{t("form.securityPolicy")} *</Label>
               <Select
                 value={formData.policyId}
                 onValueChange={(value) => setFormData({ ...formData, policyId: value })}
                 disabled={loadingPolicies}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={loadingPolicies ? "Loading policies..." : "Select a policy"} />
+                  <SelectValue placeholder={loadingPolicies ? t("form.loadingPolicies") : t("form.selectPolicy")} />
                 </SelectTrigger>
                 <SelectContent>
                   {policies.map((policy) => (
@@ -223,13 +215,13 @@ export default function NewSecurityViolationPage() {
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
-                The security policy that was violated
+                {t("form.policyHint")}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label>Violation Type *</Label>
+                <Label>{t("form.violationType")} *</Label>
                 <Select
                   value={formData.violationType}
                   onValueChange={(value) => setFormData({ ...formData, violationType: value })}
@@ -238,9 +230,9 @@ export default function NewSecurityViolationPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {violationTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
-                        {type.label}
+                    {violationTypeKeys.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {t(`violationTypes.${type}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -248,7 +240,7 @@ export default function NewSecurityViolationPage() {
               </div>
 
               <div className="grid gap-2">
-                <Label>Severity *</Label>
+                <Label>{t("form.severity")} *</Label>
                 <Select
                   value={formData.severity}
                   onValueChange={(value) => setFormData({ ...formData, severity: value })}
@@ -257,9 +249,9 @@ export default function NewSecurityViolationPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {severities.map((severity) => (
-                      <SelectItem key={severity.value} value={severity.value}>
-                        {severity.label}
+                    {severityKeys.map((severity) => (
+                      <SelectItem key={severity} value={severity}>
+                        {t(`severities.${severity}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -268,10 +260,10 @@ export default function NewSecurityViolationPage() {
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="description">Description *</Label>
+              <Label htmlFor="description">{t("form.description")} *</Label>
               <Textarea
                 id="description"
-                placeholder="Describe the violation in detail..."
+                placeholder={t("form.descriptionPlaceholder")}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
@@ -279,7 +271,7 @@ export default function NewSecurityViolationPage() {
             </div>
 
             <div className="grid gap-2">
-              <Label>Initial Status</Label>
+              <Label>{t("form.initialStatus")}</Label>
               <Select
                 value={formData.status}
                 onValueChange={(value) => setFormData({ ...formData, status: value })}
@@ -288,9 +280,9 @@ export default function NewSecurityViolationPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {statuses.map((status) => (
-                    <SelectItem key={status.value} value={status.value}>
-                      {status.label}
+                  {statusKeys.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {t(`statuses.${status}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -303,28 +295,28 @@ export default function NewSecurityViolationPage() {
       {/* Source Information */}
       <Card>
         <CardHeader>
-          <CardTitle>Source Information</CardTitle>
+          <CardTitle>{t("form.sourceInformation")}</CardTitle>
           <CardDescription>
-            Details about where the violation originated
+            {t("form.sourceInformationDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="ipAddress">IP Address</Label>
+              <Label htmlFor="ipAddress">{t("form.ipAddress")}</Label>
               <Input
                 id="ipAddress"
-                placeholder="e.g., 192.168.1.100"
+                placeholder={t("form.ipAddressPlaceholder")}
                 value={formData.ipAddress}
                 onChange={(e) => setFormData({ ...formData, ipAddress: e.target.value })}
               />
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="userAgent">User Agent</Label>
+              <Label htmlFor="userAgent">{t("form.userAgent")}</Label>
               <Input
                 id="userAgent"
-                placeholder="e.g., Mozilla/5.0..."
+                placeholder={t("form.userAgentPlaceholder")}
                 value={formData.userAgent}
                 onChange={(e) => setFormData({ ...formData, userAgent: e.target.value })}
               />
@@ -336,28 +328,28 @@ export default function NewSecurityViolationPage() {
       {/* Context */}
       <Card>
         <CardHeader>
-          <CardTitle>Additional Context</CardTitle>
+          <CardTitle>{t("form.additionalContext")}</CardTitle>
           <CardDescription>
-            Optional information to associate this violation with specific resources
+            {t("form.additionalContextDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="orgId">Organization ID</Label>
+              <Label htmlFor="orgId">{t("form.organizationId")}</Label>
               <Input
                 id="orgId"
-                placeholder="e.g., org_xxxxx"
+                placeholder={t("form.organizationIdPlaceholder")}
                 value={formData.orgId}
                 onChange={(e) => setFormData({ ...formData, orgId: e.target.value })}
               />
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="userId">User ID</Label>
+              <Label htmlFor="userId">{t("form.userId")}</Label>
               <Input
                 id="userId"
-                placeholder="e.g., user_xxxxx"
+                placeholder={t("form.userIdPlaceholder")}
                 value={formData.userId}
                 onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
               />
@@ -366,20 +358,20 @@ export default function NewSecurityViolationPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="resourceType">Resource Type</Label>
+              <Label htmlFor="resourceType">{t("form.resourceType")}</Label>
               <Input
                 id="resourceType"
-                placeholder="e.g., file, api_endpoint, document"
+                placeholder={t("form.resourceTypePlaceholder")}
                 value={formData.resourceType}
                 onChange={(e) => setFormData({ ...formData, resourceType: e.target.value })}
               />
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="resourceId">Resource ID</Label>
+              <Label htmlFor="resourceId">{t("form.resourceId")}</Label>
               <Input
                 id="resourceId"
-                placeholder="e.g., file_xxxxx"
+                placeholder={t("form.resourceIdPlaceholder")}
                 value={formData.resourceId}
                 onChange={(e) => setFormData({ ...formData, resourceId: e.target.value })}
               />

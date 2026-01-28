@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -45,53 +46,21 @@ interface LLMConfigurationEditorProps {
   configuration?: LLMConfiguration
 }
 
-const PROVIDERS = [
-  { value: "openai", label: "OpenAI" },
-  { value: "anthropic", label: "Anthropic" },
-  { value: "google", label: "Google AI" },
-  { value: "azure", label: "Azure OpenAI" },
-  { value: "cohere", label: "Cohere" },
-  { value: "mistral", label: "Mistral AI" },
-]
+const PROVIDER_VALUES = ["openai", "anthropic", "google", "azure", "cohere", "mistral"] as const
 
-const MODELS_BY_PROVIDER: Record<string, { value: string; label: string }[]> = {
-  openai: [
-    { value: "gpt-4o", label: "GPT-4o" },
-    { value: "gpt-4o-mini", label: "GPT-4o Mini" },
-    { value: "gpt-4-turbo", label: "GPT-4 Turbo" },
-    { value: "gpt-4", label: "GPT-4" },
-    { value: "gpt-3.5-turbo", label: "GPT-3.5 Turbo" },
-  ],
-  anthropic: [
-    { value: "claude-3-5-sonnet-20241022", label: "Claude 3.5 Sonnet" },
-    { value: "claude-3-opus-20240229", label: "Claude 3 Opus" },
-    { value: "claude-3-sonnet-20240229", label: "Claude 3 Sonnet" },
-    { value: "claude-3-haiku-20240307", label: "Claude 3 Haiku" },
-  ],
-  google: [
-    { value: "gemini-1.5-pro", label: "Gemini 1.5 Pro" },
-    { value: "gemini-1.5-flash", label: "Gemini 1.5 Flash" },
-    { value: "gemini-pro", label: "Gemini Pro" },
-  ],
-  azure: [
-    { value: "gpt-4o", label: "GPT-4o (Azure)" },
-    { value: "gpt-4", label: "GPT-4 (Azure)" },
-    { value: "gpt-35-turbo", label: "GPT-3.5 Turbo (Azure)" },
-  ],
-  cohere: [
-    { value: "command-r-plus", label: "Command R+" },
-    { value: "command-r", label: "Command R" },
-    { value: "command", label: "Command" },
-  ],
-  mistral: [
-    { value: "mistral-large-latest", label: "Mistral Large" },
-    { value: "mistral-medium-latest", label: "Mistral Medium" },
-    { value: "mistral-small-latest", label: "Mistral Small" },
-  ],
+const MODELS_BY_PROVIDER: Record<string, string[]> = {
+  openai: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"],
+  anthropic: ["claude-3-5-sonnet-20241022", "claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240307"],
+  google: ["gemini-1.5-pro", "gemini-1.5-flash", "gemini-pro"],
+  azure: ["gpt-4o", "gpt-4", "gpt-35-turbo"],
+  cohere: ["command-r-plus", "command-r", "command"],
+  mistral: ["mistral-large-latest", "mistral-medium-latest", "mistral-small-latest"],
 }
 
 export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditorProps) {
   const router = useRouter()
+  const t = useTranslations("gwi.editors.llmConfiguration")
+  const tCommon = useTranslations("gwi.editors.common")
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -115,19 +84,19 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
 
   const validateForm = (): boolean => {
     if (!formData.name.trim()) {
-      setError("Configuration name is required")
+      setError(t("validation.nameRequired"))
       return false
     }
     if (!formData.provider) {
-      setError("Provider is required")
+      setError(t("validation.providerRequired"))
       return false
     }
     if (!formData.model) {
-      setError("Model is required")
+      setError(t("validation.modelRequired"))
       return false
     }
     if (!formData.apiKeyRef.trim()) {
-      setError("API key reference is required")
+      setError(t("validation.apiKeyRefRequired"))
       return false
     }
 
@@ -135,14 +104,14 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
     try {
       JSON.parse(formData.defaultParams)
     } catch {
-      setError("Default parameters must be valid JSON")
+      setError(t("validation.invalidParamsJson"))
       return false
     }
 
     try {
       JSON.parse(formData.rateLimits)
     } catch {
-      setError("Rate limits must be valid JSON")
+      setError(t("validation.invalidRateLimitsJson"))
       return false
     }
 
@@ -183,7 +152,7 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to save configuration")
+        throw new Error(data.error || t("errors.failedToSave"))
       }
 
       const data = await response.json()
@@ -193,7 +162,7 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
         router.refresh()
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save configuration")
+      setError(err instanceof Error ? err.message : t("errors.failedToSave"))
     } finally {
       setIsLoading(false)
     }
@@ -212,12 +181,12 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to delete configuration")
+        throw new Error(data.error || t("errors.failedToDelete"))
       }
 
       router.push("/gwi/llm")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete configuration")
+      setError(err instanceof Error ? err.message : t("errors.failedToDelete"))
     } finally {
       setIsDeleting(false)
     }
@@ -242,42 +211,42 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
 
         <Card>
           <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
+            <CardTitle>{t("basicInformation")}</CardTitle>
             <CardDescription>
-              Configure the basic settings for this LLM configuration
+              {t("basicInformationDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Configuration Name</Label>
+              <Label htmlFor="name">{t("configurationName")}</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                placeholder="e.g., Production GPT-4o, Analysis Claude"
+                placeholder={t("placeholders.configurationName")}
                 required
               />
               <p className="text-sm text-muted-foreground">
-                A descriptive name to identify this configuration
+                {t("configurationNameHint")}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="provider">Provider</Label>
+                <Label htmlFor="provider">{t("provider")}</Label>
                 <Select
                   value={formData.provider}
                   onValueChange={handleProviderChange}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select provider" />
+                    <SelectValue placeholder={t("placeholders.selectProvider")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {PROVIDERS.map((provider) => (
-                      <SelectItem key={provider.value} value={provider.value}>
-                        {provider.label}
+                    {PROVIDER_VALUES.map((providerValue) => (
+                      <SelectItem key={providerValue} value={providerValue}>
+                        {t(`providers.${providerValue}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -285,7 +254,7 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="model">Model</Label>
+                <Label htmlFor="model">{t("model")}</Label>
                 <Select
                   value={formData.model}
                   onValueChange={(value) =>
@@ -294,12 +263,12 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
                   disabled={!formData.provider}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select model" />
+                    <SelectValue placeholder={t("placeholders.selectModel")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {availableModels.map((model) => (
-                      <SelectItem key={model.value} value={model.value}>
-                        {model.label}
+                    {availableModels.map((modelValue) => (
+                      <SelectItem key={modelValue} value={modelValue}>
+                        {t(`models.${modelValue.replace(/[.-]/g, "_")}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -308,26 +277,26 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="apiKeyRef">API Key Reference</Label>
+              <Label htmlFor="apiKeyRef">{t("apiKeyRef")}</Label>
               <Input
                 id="apiKeyRef"
                 value={formData.apiKeyRef}
                 onChange={(e) =>
                   setFormData({ ...formData, apiKeyRef: e.target.value })
                 }
-                placeholder="e.g., OPENAI_API_KEY, env:ANTHROPIC_KEY"
+                placeholder={t("placeholders.apiKeyRef")}
                 required
               />
               <p className="text-sm text-muted-foreground">
-                Environment variable name or secret reference for the API key
+                {t("apiKeyRefHint")}
               </p>
             </div>
 
             <div className="flex items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
-                <Label htmlFor="isActive">Active Status</Label>
+                <Label htmlFor="isActive">{t("activeStatus")}</Label>
                 <p className="text-sm text-muted-foreground">
-                  Enable or disable this configuration for use
+                  {t("activeStatusDescription")}
                 </p>
               </div>
               <Switch
@@ -343,14 +312,14 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
 
         <Card>
           <CardHeader>
-            <CardTitle>Model Parameters</CardTitle>
+            <CardTitle>{t("modelParameters")}</CardTitle>
             <CardDescription>
-              Default parameters sent with each request to the model
+              {t("modelParametersDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <Label htmlFor="defaultParams">Default Parameters (JSON)</Label>
+              <Label htmlFor="defaultParams">{t("defaultParamsJson")}</Label>
               <Textarea
                 id="defaultParams"
                 value={formData.defaultParams}
@@ -361,7 +330,7 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
                 rows={6}
               />
               <p className="text-sm text-muted-foreground">
-                Common parameters: temperature, max_tokens, top_p, frequency_penalty
+                {t("defaultParamsHint")}
               </p>
             </div>
           </CardContent>
@@ -369,14 +338,14 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
 
         <Card>
           <CardHeader>
-            <CardTitle>Rate Limits</CardTitle>
+            <CardTitle>{t("rateLimits")}</CardTitle>
             <CardDescription>
-              Configure rate limiting for this model configuration
+              {t("rateLimitsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <Label htmlFor="rateLimits">Rate Limits (JSON)</Label>
+              <Label htmlFor="rateLimits">{t("rateLimitsJson")}</Label>
               <Textarea
                 id="rateLimits"
                 value={formData.rateLimits}
@@ -387,7 +356,7 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
                 rows={6}
               />
               <p className="text-sm text-muted-foreground">
-                Configure requests_per_minute, tokens_per_minute, concurrent_requests
+                {t("rateLimitsHint")}
               </p>
             </div>
           </CardContent>
@@ -397,31 +366,31 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Configuration Information
+                {t("configurationInformation")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <dl className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <dt className="text-muted-foreground">ID</dt>
+                  <dt className="text-muted-foreground">{t("id")}</dt>
                   <dd className="font-mono text-xs">{configuration.id}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Created At</dt>
+                  <dt className="text-muted-foreground">{t("createdAt")}</dt>
                   <dd className="font-medium">
                     {new Date(configuration.createdAt).toLocaleDateString()}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Last Updated</dt>
+                  <dt className="text-muted-foreground">{t("lastUpdated")}</dt>
                   <dd className="font-medium">
                     {new Date(configuration.updatedAt).toLocaleDateString()}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Status</dt>
+                  <dt className="text-muted-foreground">{tCommon("status")}</dt>
                   <dd className="font-medium">
-                    {configuration.isActive ? "Active" : "Inactive"}
+                    {configuration.isActive ? tCommon("active") : tCommon("inactive")}
                   </dd>
                 </div>
               </dl>
@@ -438,32 +407,30 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
                     {isDeleting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Deleting...
+                        {tCommon("deleting")}
                       </>
                     ) : (
                       <>
                         <Trash2 className="mr-2 h-4 w-4" />
-                        Delete Configuration
+                        {t("deleteConfiguration")}
                       </>
                     )}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Configuration</AlertDialogTitle>
+                    <AlertDialogTitle>{t("deleteDialogTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Are you sure you want to delete this LLM configuration? This action
-                      cannot be undone. All usage records associated with this
-                      configuration will also be deleted.
+                      {t("deleteDialogDescription")}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDelete}
                       className="bg-red-600 hover:bg-red-700"
                     >
-                      Delete
+                      {tCommon("delete")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -472,18 +439,18 @@ export function LLMConfigurationEditor({ configuration }: LLMConfigurationEditor
           </div>
           <div className="flex gap-2">
             <Button type="button" variant="outline" onClick={() => router.back()}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {tCommon("saving")}
                 </>
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  {configuration ? "Save Changes" : "Create Configuration"}
+                  {configuration ? tCommon("saveChanges") : t("createConfiguration")}
                 </>
               )}
             </Button>

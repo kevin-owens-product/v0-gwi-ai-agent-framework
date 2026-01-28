@@ -1,3 +1,5 @@
+"use client"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { MessageSquare } from "lucide-react"
@@ -43,11 +45,13 @@ const categoryColors: Record<string, string> = {
 }
 
 export function TopQueries() {
+  const t = useTranslations("dashboard.analytics.topQueries")
+  
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Top Queries</CardTitle>
-        <CardDescription>Most frequently asked questions this period</CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {queries.map((query, index) => (

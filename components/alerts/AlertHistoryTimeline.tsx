@@ -7,6 +7,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -48,20 +49,13 @@ interface AlertHistoryTimelineProps {
   className?: string
 }
 
-const CHANNEL_LABELS: Record<string, string> = {
-  EMAIL: 'Email',
-  SLACK: 'Slack',
-  WEBHOOK: 'Webhook',
-  IN_APP: 'In-App',
-  SMS: 'SMS',
-}
-
 export function AlertHistoryTimeline({
   history,
   isLoading = false,
   onAcknowledge,
   className,
 }: AlertHistoryTimelineProps) {
+  const t = useTranslations("alerts")
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
   const [acknowledgeDialog, setAcknowledgeDialog] = useState<{
     historyId: string
@@ -105,11 +99,11 @@ export function AlertHistoryTimeline({
     const diffHours = Math.floor(diffMs / 3600000)
     const diffDays = Math.floor(diffMs / 86400000)
 
-    if (diffMins < 1) return 'Just now'
-    if (diffMins < 60) return `${diffMins}m ago`
-    if (diffHours < 24) return `${diffHours}h ago`
-    if (diffDays === 1) return 'Yesterday'
-    if (diffDays < 7) return `${diffDays} days ago`
+    if (diffMins < 1) return t("history.justNow")
+    if (diffMins < 60) return t("history.minutesAgo", { count: diffMins })
+    if (diffHours < 24) return t("history.hoursAgo", { count: diffHours })
+    if (diffDays === 1) return t("history.yesterday")
+    if (diffDays < 7) return t("history.daysAgo", { count: diffDays })
     return formatDate(dateString)
   }
 
@@ -165,9 +159,9 @@ export function AlertHistoryTimeline({
     return (
       <Card className={cn("p-8 text-center", className)}>
         <Bell className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <h4 className="font-medium mb-2">No Alert History</h4>
+        <h4 className="font-medium mb-2">{t("history.noHistory")}</h4>
         <p className="text-sm text-muted-foreground">
-          This alert has not been triggered yet.
+          {t("history.noHistoryDescription")}
         </p>
       </Card>
     )
@@ -232,13 +226,13 @@ export function AlertHistoryTimeline({
 
                           {/* Current value */}
                           <div className="mt-2 text-sm">
-                            <span className="text-muted-foreground">Current value: </span>
+                            <span className="text-muted-foreground">{t("history.currentValue")}: </span>
                             <span className="font-medium text-red-600 dark:text-red-400">
                               {JSON.stringify(entry.currentValue)}
                             </span>
                             {entry.previousValue !== null && (
                               <>
-                                <span className="text-muted-foreground"> (was </span>
+                                <span className="text-muted-foreground"> ({t("history.was")} </span>
                                 <span>{JSON.stringify(entry.previousValue)}</span>
                                 <span className="text-muted-foreground">)</span>
                               </>
@@ -247,10 +241,10 @@ export function AlertHistoryTimeline({
 
                           {/* Notification channels */}
                           <div className="flex items-center gap-2 mt-2">
-                            <span className="text-xs text-muted-foreground">Notified via:</span>
+                            <span className="text-xs text-muted-foreground">{t("history.notifiedVia")}:</span>
                             {entry.notifiedVia.map((channel) => (
                               <Badge key={channel} variant="outline" className="text-xs">
-                                {CHANNEL_LABELS[channel] || channel}
+                                {t(`form.channels.${channel}`)}
                               </Badge>
                             ))}
                           </div>
@@ -260,7 +254,7 @@ export function AlertHistoryTimeline({
                             <div className="mt-3 p-2 bg-muted rounded-md text-sm">
                               <div className="flex items-center gap-1 text-muted-foreground mb-1">
                                 <MessageSquare className="h-3 w-3" />
-                                <span>Notes</span>
+                                <span>{t("history.notes")}</span>
                               </div>
                               {entry.notes}
                             </div>
@@ -269,10 +263,10 @@ export function AlertHistoryTimeline({
                           {/* Acknowledged info */}
                           {entry.acknowledgedAt && (
                             <div className="mt-2 text-xs text-muted-foreground">
-                              {entry.status === 'ACKNOWLEDGED' ? 'Acknowledged' :
-                               entry.status === 'RESOLVED' ? 'Resolved' : 'Ignored'}{' '}
+                              {entry.status === 'ACKNOWLEDGED' ? t("history.acknowledged") :
+                               entry.status === 'RESOLVED' ? t("history.resolved") : t("history.ignored")}{' '}
                               {formatRelativeTime(entry.acknowledgedAt)}
-                              {entry.acknowledgedBy && ` by ${entry.acknowledgedBy}`}
+                              {entry.acknowledgedBy && ` ${t("history.by")} ${entry.acknowledgedBy}`}
                             </div>
                           )}
                         </div>
@@ -295,7 +289,7 @@ export function AlertHistoryTimeline({
                                 })}
                               >
                                 <Bell className="h-4 w-4 mr-2" />
-                                Acknowledge
+                                {t("history.actions.acknowledge")}
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => setAcknowledgeDialog({
@@ -304,7 +298,7 @@ export function AlertHistoryTimeline({
                                 })}
                               >
                                 <CheckCircle className="h-4 w-4 mr-2" />
-                                Mark Resolved
+                                {t("history.actions.markResolved")}
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => setAcknowledgeDialog({
@@ -313,7 +307,7 @@ export function AlertHistoryTimeline({
                                 })}
                               >
                                 <XCircle className="h-4 w-4 mr-2" />
-                                Ignore
+                                {t("history.actions.ignore")}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -340,20 +334,20 @@ export function AlertHistoryTimeline({
                       <div className="mt-4 pt-4 border-t text-sm">
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <span className="text-muted-foreground">Alert ID:</span>
+                            <span className="text-muted-foreground">{t("history.alertId")}:</span>
                             <p className="font-mono text-xs">{entry.alertId}</p>
                           </div>
                           <div>
-                            <span className="text-muted-foreground">History ID:</span>
+                            <span className="text-muted-foreground">{t("history.historyId")}:</span>
                             <p className="font-mono text-xs">{entry.id}</p>
                           </div>
                           <div>
-                            <span className="text-muted-foreground">Triggered At:</span>
+                            <span className="text-muted-foreground">{t("history.triggeredAt")}:</span>
                             <p>{new Date(entry.triggeredAt).toLocaleString()}</p>
                           </div>
                           {entry.resolvedAt && (
                             <div>
-                              <span className="text-muted-foreground">Resolved At:</span>
+                              <span className="text-muted-foreground">{t("history.resolvedAt")}:</span>
                               <p>{new Date(entry.resolvedAt).toLocaleString()}</p>
                             </div>
                           )}
@@ -373,24 +367,24 @@ export function AlertHistoryTimeline({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {acknowledgeDialog?.status === 'ACKNOWLEDGED' && 'Acknowledge Alert'}
-              {acknowledgeDialog?.status === 'RESOLVED' && 'Resolve Alert'}
-              {acknowledgeDialog?.status === 'IGNORED' && 'Ignore Alert'}
+              {acknowledgeDialog?.status === 'ACKNOWLEDGED' && t("history.dialog.acknowledgeTitle")}
+              {acknowledgeDialog?.status === 'RESOLVED' && t("history.dialog.resolveTitle")}
+              {acknowledgeDialog?.status === 'IGNORED' && t("history.dialog.ignoreTitle")}
             </DialogTitle>
             <DialogDescription>
               {acknowledgeDialog?.status === 'ACKNOWLEDGED' &&
-                'Mark this alert as acknowledged. You can add notes to track your response.'}
+                t("history.dialog.acknowledgeDescription")}
               {acknowledgeDialog?.status === 'RESOLVED' &&
-                'Mark this alert as resolved. Add notes explaining how the issue was addressed.'}
+                t("history.dialog.resolveDescription")}
               {acknowledgeDialog?.status === 'IGNORED' &&
-                'Mark this alert as ignored. Consider adding notes explaining why.'}
+                t("history.dialog.ignoreDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Notes (optional)</label>
+              <label className="text-sm font-medium">{t("history.dialog.notesLabel")}</label>
               <Textarea
-                placeholder="Add notes about this alert..."
+                placeholder={t("history.dialog.notesPlaceholder")}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
@@ -399,10 +393,10 @@ export function AlertHistoryTimeline({
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setAcknowledgeDialog(null)}>
-              Cancel
+              {t("history.dialog.cancel")}
             </Button>
             <Button onClick={handleAcknowledge} disabled={isSubmitting}>
-              {isSubmitting ? 'Saving...' : 'Confirm'}
+              {isSubmitting ? t("history.dialog.saving") : t("history.dialog.confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>

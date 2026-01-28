@@ -26,26 +26,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { toast } from "sonner"
-
-const categories = [
-  { value: "PRODUCTIVITY", label: "Productivity", description: "Tools to improve workflow efficiency" },
-  { value: "COMMUNICATION", label: "Communication", description: "Messaging, chat, and collaboration" },
-  { value: "PROJECT_MANAGEMENT", label: "Project Management", description: "Task tracking and planning" },
-  { value: "CRM", label: "CRM", description: "Customer relationship management" },
-  { value: "ANALYTICS", label: "Analytics", description: "Data analysis and reporting" },
-  { value: "SECURITY", label: "Security", description: "Security and compliance tools" },
-  { value: "DEVELOPER_TOOLS", label: "Developer Tools", description: "Development and DevOps" },
-  { value: "HR", label: "HR", description: "Human resources management" },
-  { value: "FINANCE", label: "Finance", description: "Financial management tools" },
-  { value: "MARKETING", label: "Marketing", description: "Marketing automation" },
-  { value: "CUSTOMER_SUPPORT", label: "Customer Support", description: "Help desk and support" },
-  { value: "OTHER", label: "Other", description: "Other integrations" },
-]
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 export default function NewIntegrationAppPage() {
   const router = useRouter()
+  const t = useTranslations("admin.integrations.apps.new")
+  const tMain = useTranslations("admin.integrations.apps")
+  const tCommon = useTranslations("common")
   const [isSaving, setIsSaving] = useState(false)
+
+  const categories = [
+    { value: "PRODUCTIVITY", label: tMain("categories.productivity"), description: t("categoryDescriptions.productivity") },
+    { value: "COMMUNICATION", label: tMain("categories.communication"), description: t("categoryDescriptions.communication") },
+    { value: "PROJECT_MANAGEMENT", label: tMain("categories.projectManagement"), description: t("categoryDescriptions.projectManagement") },
+    { value: "CRM", label: tMain("categories.crm"), description: t("categoryDescriptions.crm") },
+    { value: "ANALYTICS", label: tMain("categories.analytics"), description: t("categoryDescriptions.analytics") },
+    { value: "SECURITY", label: tMain("categories.security"), description: t("categoryDescriptions.security") },
+    { value: "DEVELOPER_TOOLS", label: tMain("categories.developerTools"), description: t("categoryDescriptions.developerTools") },
+    { value: "HR", label: tMain("categories.hr"), description: t("categoryDescriptions.hr") },
+    { value: "FINANCE", label: tMain("categories.finance"), description: t("categoryDescriptions.finance") },
+    { value: "MARKETING", label: tMain("categories.marketing"), description: t("categoryDescriptions.marketing") },
+    { value: "CUSTOMER_SUPPORT", label: tMain("categories.customerSupport"), description: t("categoryDescriptions.customerSupport") },
+    { value: "OTHER", label: tMain("categories.other"), description: t("categoryDescriptions.other") },
+  ]
 
   const [formData, setFormData] = useState({
     name: "",
@@ -64,7 +68,7 @@ export default function NewIntegrationAppPage() {
 
   const handleCreate = async () => {
     if (!formData.name || !formData.developer) {
-      toast.error("Name and developer are required")
+      showErrorToast(t("validation.nameAndDeveloperRequired"))
       return
     }
 
@@ -87,14 +91,14 @@ export default function NewIntegrationAppPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to create app")
+        throw new Error(data.error || t("toast.createFailed"))
       }
 
       const data = await response.json()
-      toast.success("Integration app created successfully")
+      showSuccessToast(t("toast.createSuccess"))
       router.push(`/admin/integrations/apps/${data.app.id}`)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create app")
+      showErrorToast(error instanceof Error ? error.message : t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -108,16 +112,16 @@ export default function NewIntegrationAppPage() {
           <Link href="/admin/integrations/apps">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Puzzle className="h-6 w-6 text-primary" />
-              Add Integration App
+              {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Add a new integration app to the marketplace
+              {t("description")}
             </p>
           </div>
         </div>
@@ -125,12 +129,12 @@ export default function NewIntegrationAppPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create App
+              {t("createApp")}
             </>
           )}
         </Button>
@@ -140,17 +144,17 @@ export default function NewIntegrationAppPage() {
         {/* Basic Info */}
         <Card>
           <CardHeader>
-            <CardTitle>App Details</CardTitle>
+            <CardTitle>{t("sections.appDetails")}</CardTitle>
             <CardDescription>
-              Basic information about the integration app
+              {t("sections.appDetailsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">App Name *</Label>
+              <Label htmlFor="name">{t("fields.appName")} *</Label>
               <Input
                 id="name"
-                placeholder="My Integration"
+                placeholder={t("placeholders.appName")}
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
@@ -159,25 +163,25 @@ export default function NewIntegrationAppPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="shortDescription">Short Description</Label>
+              <Label htmlFor="shortDescription">{t("fields.shortDescription")}</Label>
               <Input
                 id="shortDescription"
-                placeholder="A brief description of the app"
+                placeholder={t("placeholders.shortDescription")}
                 value={formData.shortDescription}
                 onChange={(e) =>
                   setFormData({ ...formData, shortDescription: e.target.value })
                 }
               />
               <p className="text-xs text-muted-foreground">
-                Displayed in app listings and search results
+                {t("hints.shortDescription")}
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Full Description</Label>
+              <Label htmlFor="description">{t("fields.fullDescription")}</Label>
               <Textarea
                 id="description"
-                placeholder="Detailed description of the integration..."
+                placeholder={t("placeholders.fullDescription")}
                 rows={4}
                 value={formData.description}
                 onChange={(e) =>
@@ -187,7 +191,7 @@ export default function NewIntegrationAppPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Category</Label>
+              <Label>{t("fields.category")}</Label>
               <Select
                 value={formData.category}
                 onValueChange={(value) =>
@@ -219,18 +223,18 @@ export default function NewIntegrationAppPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Building2 className="h-5 w-5" />
-              Developer Information
+              {t("sections.developerInformation")}
             </CardTitle>
             <CardDescription>
-              Information about the app developer
+              {t("sections.developerInformationDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="developer">Developer Name *</Label>
+              <Label htmlFor="developer">{t("fields.developerName")} *</Label>
               <Input
                 id="developer"
-                placeholder="Company or developer name"
+                placeholder={t("placeholders.developerName")}
                 value={formData.developer}
                 onChange={(e) =>
                   setFormData({ ...formData, developer: e.target.value })
@@ -239,11 +243,11 @@ export default function NewIntegrationAppPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="developerUrl">Developer Website</Label>
+              <Label htmlFor="developerUrl">{t("fields.developerWebsite")}</Label>
               <Input
                 id="developerUrl"
                 type="url"
-                placeholder="https://developer.com"
+                placeholder={t("placeholders.developerWebsite")}
                 value={formData.developerUrl}
                 onChange={(e) =>
                   setFormData({ ...formData, developerUrl: e.target.value })
@@ -252,11 +256,11 @@ export default function NewIntegrationAppPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="supportEmail">Support Email</Label>
+              <Label htmlFor="supportEmail">{t("fields.supportEmail")}</Label>
               <Input
                 id="supportEmail"
                 type="email"
-                placeholder="support@developer.com"
+                placeholder={t("placeholders.supportEmail")}
                 value={formData.supportEmail}
                 onChange={(e) =>
                   setFormData({ ...formData, supportEmail: e.target.value })
@@ -271,19 +275,19 @@ export default function NewIntegrationAppPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <ImageIcon className="h-5 w-5" />
-              Assets & Links
+              {t("sections.assetsLinks")}
             </CardTitle>
             <CardDescription>
-              App icon and related URLs
+              {t("sections.assetsLinksDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="iconUrl">Icon URL</Label>
+              <Label htmlFor="iconUrl">{t("fields.iconUrl")}</Label>
               <Input
                 id="iconUrl"
                 type="url"
-                placeholder="https://example.com/icon.png"
+                placeholder={t("placeholders.iconUrl")}
                 value={formData.iconUrl}
                 onChange={(e) =>
                   setFormData({ ...formData, iconUrl: e.target.value })
@@ -291,10 +295,10 @@ export default function NewIntegrationAppPage() {
               />
               {formData.iconUrl && (
                 <div className="mt-2 flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">Preview:</span>
+                  <span className="text-sm text-muted-foreground">{tCommon("preview")}:</span>
                   <img
                     src={formData.iconUrl}
-                    alt="Icon preview"
+                    alt={t("fields.iconUrl")}
                     className="h-10 w-10 rounded-lg object-cover border"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = "none"
@@ -305,11 +309,11 @@ export default function NewIntegrationAppPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="websiteUrl">App Website</Label>
+              <Label htmlFor="websiteUrl">{t("fields.appWebsite")}</Label>
               <Input
                 id="websiteUrl"
                 type="url"
-                placeholder="https://myapp.com"
+                placeholder={t("placeholders.appWebsite")}
                 value={formData.websiteUrl}
                 onChange={(e) =>
                   setFormData({ ...formData, websiteUrl: e.target.value })
@@ -318,11 +322,11 @@ export default function NewIntegrationAppPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="documentationUrl">Documentation URL</Label>
+              <Label htmlFor="documentationUrl">{t("fields.documentationUrl")}</Label>
               <Input
                 id="documentationUrl"
                 type="url"
-                placeholder="https://docs.myapp.com"
+                placeholder={t("placeholders.documentationUrl")}
                 value={formData.documentationUrl}
                 onChange={(e) =>
                   setFormData({ ...formData, documentationUrl: e.target.value })
@@ -335,9 +339,9 @@ export default function NewIntegrationAppPage() {
         {/* Flags */}
         <Card>
           <CardHeader>
-            <CardTitle>App Status</CardTitle>
+            <CardTitle>{t("sections.appStatus")}</CardTitle>
             <CardDescription>
-              Configure app visibility and badges
+              {t("sections.appStatusDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -352,10 +356,10 @@ export default function NewIntegrationAppPage() {
               <div className="flex-1">
                 <Label htmlFor="isOfficial" className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-blue-500" />
-                  Official App
+                  {t("fields.officialApp")}
                 </Label>
                 <p className="text-xs text-muted-foreground">
-                  Mark as an officially supported integration
+                  {t("hints.officialApp")}
                 </p>
               </div>
             </div>
@@ -371,18 +375,17 @@ export default function NewIntegrationAppPage() {
               <div className="flex-1">
                 <Label htmlFor="isFeatured" className="flex items-center gap-2">
                   <Star className="h-4 w-4 text-yellow-500" />
-                  Featured App
+                  {t("fields.featuredApp")}
                 </Label>
                 <p className="text-xs text-muted-foreground">
-                  Highlight this app in the marketplace
+                  {t("hints.featuredApp")}
                 </p>
               </div>
             </div>
 
             <div className="p-4 rounded-md bg-muted">
               <p className="text-sm text-muted-foreground">
-                The app will be created with <strong>Draft</strong> status.
-                You can publish it later from the app details page.
+                {t("hints.draftStatus")}
               </p>
             </div>
           </CardContent>

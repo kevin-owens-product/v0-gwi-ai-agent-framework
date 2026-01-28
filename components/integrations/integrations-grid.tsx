@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -16,12 +17,12 @@ import {
 import { Plus, ExternalLink, CheckCircle2 } from "lucide-react"
 
 const categories = [
-  { id: "all", label: "All" },
-  { id: "productivity", label: "Productivity" },
-  { id: "analytics", label: "Analytics" },
-  { id: "advertising", label: "Advertising" },
-  { id: "crm", label: "CRM" },
-  { id: "data", label: "Data & Storage" },
+  { id: "all", labelKey: "categories.all" },
+  { id: "productivity", labelKey: "categories.productivity" },
+  { id: "analytics", labelKey: "categories.analytics" },
+  { id: "advertising", labelKey: "categories.advertising" },
+  { id: "crm", labelKey: "categories.crm" },
+  { id: "data", labelKey: "categories.data" },
 ]
 
 const integrations = [
@@ -163,7 +164,50 @@ const integrations = [
 ]
 
 export function IntegrationsGrid() {
+  const t = useTranslations("dashboard.integrations.available")
+  const tIntegrations = useTranslations("dashboard.integrations.integrations")
   const [selectedCategory, setSelectedCategory] = useState("all")
+
+  // Map integration IDs to translation keys
+  const integrationKeyMap: Record<string, string> = {
+    "google-docs": "googleDocs",
+    "google-slides": "googleSlides",
+    "powerpoint": "powerpoint",
+    "notion": "notion",
+    "tableau": "tableau",
+    "power-bi": "powerBi",
+    "looker": "looker",
+    "meta-ads": "metaAds",
+    "dv360": "dv360",
+    "trade-desk": "tradeDesk",
+    "salesforce": "salesforce",
+    "hubspot": "hubspot",
+    "snowflake": "snowflake",
+    "bigquery": "bigquery",
+    "aws-s3": "awsS3",
+  }
+
+  // Helper function to get integration name
+  const getIntegrationName = (id: string): string => {
+    const key = integrationKeyMap[id] || id
+    try {
+      const translated = (tIntegrations as any)(`${key}.name`)
+      return translated && translated !== `${key}.name` ? translated : integrations.find(i => i.id === id)?.name || id
+    } catch {
+      return integrations.find(i => i.id === id)?.name || id
+    }
+  }
+
+  // Helper function to get integration description
+  const getIntegrationDescription = (id: string): string => {
+    const key = integrationKeyMap[id] || id
+    try {
+      const translated = (tIntegrations as any)(`${key}.description`)
+      return translated && translated !== `${key}.description` ? translated : integrations.find(i => i.id === id)?.description || ""
+    } catch {
+      return integrations.find(i => i.id === id)?.description || ""
+    }
+  }
 
   const filteredIntegrations =
     selectedCategory === "all" ? integrations : integrations.filter((i) => i.category === selectedCategory)
@@ -171,15 +215,15 @@ export function IntegrationsGrid() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Available Integrations</h2>
-        <span className="text-sm text-muted-foreground">{integrations.length} integrations</span>
+        <h2 className="text-xl font-semibold">{t("title")}</h2>
+        <span className="text-sm text-muted-foreground">{t("count", { count: integrations.length })}</span>
       </div>
 
       <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="space-y-6">
         <TabsList>
           {categories.map((category) => (
             <TabsTrigger key={category.id} value={category.id}>
-              {category.label}
+              {t(category.labelKey)}
             </TabsTrigger>
           ))}
         </TabsList>
@@ -201,7 +245,50 @@ function IntegrationCard({
 }: {
   integration: (typeof integrations)[0]
 }) {
+  const t = useTranslations("dashboard.integrations.available")
+  const tIntegrations = useTranslations("dashboard.integrations.integrations")
   const [isOpen, setIsOpen] = useState(false)
+
+  // Map integration IDs to translation keys
+  const integrationKeyMap: Record<string, string> = {
+    "google-docs": "googleDocs",
+    "google-slides": "googleSlides",
+    "powerpoint": "powerpoint",
+    "notion": "notion",
+    "tableau": "tableau",
+    "power-bi": "powerBi",
+    "looker": "looker",
+    "meta-ads": "metaAds",
+    "dv360": "dv360",
+    "trade-desk": "tradeDesk",
+    "salesforce": "salesforce",
+    "hubspot": "hubspot",
+    "snowflake": "snowflake",
+    "bigquery": "bigquery",
+    "aws-s3": "awsS3",
+  }
+
+  // Helper function to get integration name
+  const getIntegrationName = (id: string): string => {
+    const key = integrationKeyMap[id] || id
+    try {
+      const translated = (tIntegrations as any)(`${key}.name`)
+      return translated && translated !== `${key}.name` ? translated : integration.name
+    } catch {
+      return integration.name
+    }
+  }
+
+  // Helper function to get integration description
+  const getIntegrationDescription = (id: string): string => {
+    const key = integrationKeyMap[id] || id
+    try {
+      const translated = (tIntegrations as any)(`${key}.description`)
+      return translated && translated !== `${key}.description` ? translated : integration.description
+    } catch {
+      return integration.description
+    }
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -211,30 +298,30 @@ function IntegrationCard({
             <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
               <img
                 src={integration.icon || "/placeholder.svg"}
-                alt={integration.name}
+                alt={getIntegrationName(integration.id)}
                 className="h-10 w-10 object-contain"
               />
             </div>
             {integration.connected && (
               <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">
                 <CheckCircle2 className="mr-1 h-3 w-3" />
-                Connected
+                {t("connected")}
               </Badge>
             )}
-            {integration.popular && !integration.connected && <Badge variant="secondary">Popular</Badge>}
+            {integration.popular && !integration.connected && <Badge variant="secondary">{t("popular")}</Badge>}
           </div>
 
-          <h3 className="font-semibold mb-1">{integration.name}</h3>
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{integration.description}</p>
+          <h3 className="font-semibold mb-1">{getIntegrationName(integration.id)}</h3>
+          <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{getIntegrationDescription(integration.id)}</p>
 
           <DialogTrigger asChild>
             <Button variant={integration.connected ? "outline" : "default"} size="sm" className="w-full">
               {integration.connected ? (
-                <>Manage</>
+                <>{t("manage")}</>
               ) : (
                 <>
                   <Plus className="mr-2 h-3 w-3" />
-                  Connect
+                  {t("connect")}
                 </>
               )}
             </Button>
@@ -248,38 +335,38 @@ function IntegrationCard({
             <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
               <img
                 src={integration.icon || "/placeholder.svg"}
-                alt={integration.name}
+                alt={getIntegrationName(integration.id)}
                 className="h-10 w-10 object-contain"
               />
             </div>
             <div>
-              <DialogTitle>{integration.name}</DialogTitle>
-              <DialogDescription>{integration.description}</DialogDescription>
+              <DialogTitle>{getIntegrationName(integration.id)}</DialogTitle>
+              <DialogDescription>{getIntegrationDescription(integration.id)}</DialogDescription>
             </div>
           </div>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <h4 className="text-sm font-medium">Features</h4>
+            <h4 className="text-sm font-medium">{t("features.title")}</h4>
             <ul className="text-sm text-muted-foreground space-y-1">
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                Automatic data sync
+                {t("features.autoSync")}
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                Real-time export capabilities
+                {t("features.realTimeExport")}
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                Secure OAuth authentication
+                {t("features.secureOAuth")}
               </li>
             </ul>
           </div>
 
           <div className="flex items-center gap-2">
-            <Button className="flex-1">{integration.connected ? "Reconnect" : "Connect"}</Button>
+            <Button className="flex-1">{integration.connected ? t("reconnect") : t("connect")}</Button>
             <Button variant="outline" size="icon">
               <ExternalLink className="h-4 w-4" />
             </Button>

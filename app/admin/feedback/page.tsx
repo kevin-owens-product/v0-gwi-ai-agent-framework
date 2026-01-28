@@ -31,6 +31,7 @@ import {
   Minus,
 } from "lucide-react"
 import { FeedbackTable } from "@/components/admin/feedback"
+import { useTranslations } from "next-intl"
 
 interface FeedbackItem {
   id: string
@@ -60,6 +61,8 @@ interface FeedbackStats {
 }
 
 export default function FeedbackPage() {
+  const t = useTranslations("admin.feedback")
+  const tCommon = useTranslations("common")
   const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState<FeedbackStats | null>(null)
@@ -144,27 +147,27 @@ export default function FeedbackPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>New Feedback</CardDescription>
+            <CardDescription>{t("newFeedback")}</CardDescription>
             <CardTitle className="text-3xl">{stats?.totalNew || 0}</CardTitle>
           </CardHeader>
           <CardContent>
-            <Badge className="bg-blue-500">Needs attention</Badge>
+            <Badge className="bg-blue-500">{t("needsAttention")}</Badge>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Under Review</CardDescription>
+            <CardDescription>{t("underReview")}</CardDescription>
             <CardTitle className="text-3xl">{stats?.totalUnderReview || 0}</CardTitle>
           </CardHeader>
           <CardContent>
-            <Badge className="bg-amber-500">In progress</Badge>
+            <Badge className="bg-amber-500">{t("inProgress")}</Badge>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Sentiment</CardDescription>
+            <CardDescription>{t("sentiment")}</CardDescription>
             <CardTitle className="text-3xl flex items-center gap-2">
               {stats?.bySentiment?.POSITIVE || 0}
               {getSentimentIcon("POSITIVE")}
@@ -172,14 +175,14 @@ export default function FeedbackPage() {
           </CardHeader>
           <CardContent>
             <span className="text-sm text-muted-foreground">
-              {stats?.bySentiment?.NEGATIVE || 0} negative
+              {stats?.bySentiment?.NEGATIVE || 0} {t("negative")}
             </span>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>By Type</CardDescription>
+            <CardDescription>{t("byType")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
@@ -223,14 +226,14 @@ export default function FeedbackPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Customer Feedback</CardTitle>
+              <CardTitle>{t("customerFeedback")}</CardTitle>
               <CardDescription>
-                Manage and respond to customer feedback ({total} total)
+                {t("manageAndRespond", { total })}
               </CardDescription>
             </div>
             <Button onClick={fetchFeedback} variant="outline" size="sm">
               <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh
+              {tCommon("refresh")}
             </Button>
           </div>
         </CardHeader>
@@ -242,48 +245,48 @@ export default function FeedbackPage() {
               <Input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search feedback..."
+                placeholder={t("searchPlaceholder")}
                 className="pl-9"
               />
             </div>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={t("columns.type")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="BUG_REPORT">Bug Report</SelectItem>
-                <SelectItem value="FEATURE_REQUEST">Feature Request</SelectItem>
-                <SelectItem value="GENERAL">General</SelectItem>
-                <SelectItem value="COMPLAINT">Complaint</SelectItem>
-                <SelectItem value="PRAISE">Praise</SelectItem>
+                <SelectItem value="all">{t("allTypes")}</SelectItem>
+                <SelectItem value="BUG_REPORT">{t("types.bugReport")}</SelectItem>
+                <SelectItem value="FEATURE_REQUEST">{t("types.featureRequest")}</SelectItem>
+                <SelectItem value="GENERAL">{t("types.general")}</SelectItem>
+                <SelectItem value="COMPLAINT">{t("types.complaint")}</SelectItem>
+                <SelectItem value="PRAISE">{t("types.praise")}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("columns.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="NEW">New</SelectItem>
-                <SelectItem value="UNDER_REVIEW">Under Review</SelectItem>
-                <SelectItem value="PLANNED">Planned</SelectItem>
-                <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                <SelectItem value="COMPLETED">Completed</SelectItem>
-                <SelectItem value="WONT_DO">Won't Do</SelectItem>
-                <SelectItem value="DUPLICATE">Duplicate</SelectItem>
+                <SelectItem value="all">{t("allStatus")}</SelectItem>
+                <SelectItem value="NEW">{t("status.new")}</SelectItem>
+                <SelectItem value="UNDER_REVIEW">{t("status.underReview")}</SelectItem>
+                <SelectItem value="PLANNED">{t("status.planned")}</SelectItem>
+                <SelectItem value="IN_PROGRESS">{t("status.inProgress")}</SelectItem>
+                <SelectItem value="COMPLETED">{t("status.completed")}</SelectItem>
+                <SelectItem value="WONT_DO">{t("status.wontDo")}</SelectItem>
+                <SelectItem value="DUPLICATE">{t("status.duplicate")}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={priorityFilter} onValueChange={setPriorityFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Priority" />
+                <SelectValue placeholder={t("columns.priority")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Priority</SelectItem>
-                <SelectItem value="URGENT">Urgent</SelectItem>
-                <SelectItem value="HIGH">High</SelectItem>
-                <SelectItem value="MEDIUM">Medium</SelectItem>
-                <SelectItem value="LOW">Low</SelectItem>
+                <SelectItem value="all">{t("allPriority")}</SelectItem>
+                <SelectItem value="URGENT">{t("priority.urgent")}</SelectItem>
+                <SelectItem value="HIGH">{t("priority.high")}</SelectItem>
+                <SelectItem value="MEDIUM">{t("priority.medium")}</SelectItem>
+                <SelectItem value="LOW">{t("priority.low")}</SelectItem>
               </SelectContent>
             </Select>
           </div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,7 +31,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useAdmin } from "@/components/providers/admin-provider"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface Organization {
   id: string
@@ -38,16 +39,13 @@ interface Organization {
   slug: string
 }
 
-const verificationMethods = [
-  { value: "DNS_TXT", label: "DNS TXT Record", description: "Add a TXT record to your DNS" },
-  { value: "DNS_CNAME", label: "DNS CNAME Record", description: "Add a CNAME record to your DNS" },
-  { value: "META_TAG", label: "Meta Tag", description: "Add a meta tag to your website" },
-  { value: "FILE_UPLOAD", label: "File Upload", description: "Upload a verification file to your website" },
-]
+const verificationMethodKeys = ["DNS_TXT", "DNS_CNAME", "META_TAG", "FILE_UPLOAD"] as const
 
 export default function NewDomainPage() {
   const router = useRouter()
   const { admin: currentAdmin } = useAdmin()
+  const t = useTranslations("admin.identity.domains")
+  const tCommon = useTranslations("common")
   const [isSaving, setIsSaving] = useState(false)
   const [organizations, setOrganizations] = useState<Organization[]>([])
   const [orgSearch, setOrgSearch] = useState("")
@@ -89,12 +87,12 @@ export default function NewDomainPage() {
 
   const handleCreate = async () => {
     if (!formData.domain || !formData.orgId) {
-      toast.error("Domain and organization are required")
+      showErrorToast(t("errors.domainAndOrgRequired"))
       return
     }
 
     if (!validateDomain(formData.domain)) {
-      toast.error("Please enter a valid domain (e.g., example.com)")
+      showErrorToast(t("errors.invalidDomain"))
       return
     }
 
@@ -114,15 +112,15 @@ export default function NewDomainPage() {
 
       if (response.ok) {
         const data = await response.json()
-        toast.success("Domain added successfully. Please complete verification.")
+        showSuccessToast(t("messages.domainAdded"))
         router.push(`/admin/identity/domains/${data.domain.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to add domain")
+        showErrorToast(data.error || t("errors.addFailed"))
       }
     } catch (error) {
       console.error("Failed to add domain:", error)
-      toast.error("Failed to add domain")
+      showErrorToast(t("errors.addFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -131,18 +129,24 @@ export default function NewDomainPage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to add domains</p>
+        <p className="text-muted-foreground">{t("errors.noPermission")}</p>
         <Link href="/admin/identity/domains">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Domain Management
+            {t("backToDomains")}
           </Button>
         </Link>
       </div>
     )
   }
 
-  const selectedMethod = verificationMethods.find((m) => m.value === formData.verificationMethod)
+  const getMethodLabel = (method: string) => {
+    return t(`verificationMethods.${method.toLowerCase()}.label`)
+  }
+
+  const getMethodDescription = (method: string) => {
+    return t(`verificationMethods.${method.toLowerCase()}.description`)
+  }
 
   return (
     <div className="space-y-6">
@@ -152,16 +156,16 @@ export default function NewDomainPage() {
           <Link href="/admin/identity/domains">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Globe className="h-6 w-6 text-primary" />
-              Add Domain
+              {t("new.title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Verify a domain for an organization
+              {t("new.description")}
             </p>
           </div>
         </div>
@@ -169,12 +173,12 @@ export default function NewDomainPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Adding...
+              {t("new.adding")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Add Domain
+              {t("new.addDomain")}
             </>
           )}
         </Button>
@@ -184,39 +188,39 @@ export default function NewDomainPage() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Domain Details</CardTitle>
+            <CardTitle>{t("new.domainDetails")}</CardTitle>
             <CardDescription>
-              Enter the domain and select the organization to associate it with
+              {t("new.domainDetailsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label>Domain *</Label>
+              <Label>{t("form.domain")} *</Label>
               <Input
                 value={formData.domain}
                 onChange={(e) => setFormData((prev) => ({ ...prev, domain: e.target.value }))}
-                placeholder="example.com"
+                placeholder={t("form.domainPlaceholder")}
               />
               <p className="text-xs text-muted-foreground">
-                Enter the domain without http:// or www
+                {t("form.domainHint")}
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label>Organization *</Label>
+              <Label>{t("form.organization")} *</Label>
               <Select
                 value={formData.orgId}
                 onValueChange={(v) => setFormData((prev) => ({ ...prev, orgId: v }))}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select an organization" />
+                  <SelectValue placeholder={t("form.selectOrganization")} />
                 </SelectTrigger>
                 <SelectContent>
                   <div className="p-2">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Search organizations..."
+                        placeholder={t("form.searchOrganizations")}
                         value={orgSearch}
                         onChange={(e) => {
                           setOrgSearch(e.target.value)
@@ -227,9 +231,9 @@ export default function NewDomainPage() {
                     </div>
                   </div>
                   {loadingOrgs ? (
-                    <div className="p-4 text-center text-muted-foreground">Loading...</div>
+                    <div className="p-4 text-center text-muted-foreground">{tCommon("loading")}</div>
                   ) : organizations.length === 0 ? (
-                    <div className="p-4 text-center text-muted-foreground">No organizations found</div>
+                    <div className="p-4 text-center text-muted-foreground">{t("form.noOrganizationsFound")}</div>
                   ) : (
                     organizations.map((org) => (
                       <SelectItem key={org.id} value={org.id}>
@@ -246,7 +250,7 @@ export default function NewDomainPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Verification Method</Label>
+              <Label>{t("form.verificationMethod")}</Label>
               <Select
                 value={formData.verificationMethod}
                 onValueChange={(v) => setFormData((prev) => ({ ...prev, verificationMethod: v }))}
@@ -255,11 +259,11 @@ export default function NewDomainPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {verificationMethods.map((method) => (
-                    <SelectItem key={method.value} value={method.value}>
+                  {verificationMethodKeys.map((method) => (
+                    <SelectItem key={method} value={method}>
                       <div>
-                        <p>{method.label}</p>
-                        <p className="text-xs text-muted-foreground">{method.description}</p>
+                        <p>{getMethodLabel(method)}</p>
+                        <p className="text-xs text-muted-foreground">{getMethodDescription(method)}</p>
                       </div>
                     </SelectItem>
                   ))}
@@ -271,17 +275,17 @@ export default function NewDomainPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Domain Settings</CardTitle>
+            <CardTitle>{t("new.domainSettings")}</CardTitle>
             <CardDescription>
-              Configure how this domain should behave once verified
+              {t("new.domainSettingsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label>Auto-Join</Label>
+                <Label>{t("form.autoJoin")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Users with this email domain can automatically join the organization
+                  {t("form.autoJoinDescription")}
                 </p>
               </div>
               <Switch
@@ -294,9 +298,9 @@ export default function NewDomainPage() {
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label>SSO Enforced</Label>
+                <Label>{t("form.ssoEnforced")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Users with this email domain must use SSO to sign in
+                  {t("form.ssoEnforcedDescription")}
                 </p>
               </div>
               <Switch
@@ -309,11 +313,9 @@ export default function NewDomainPage() {
 
             <Alert>
               <Info className="h-4 w-4" />
-              <AlertTitle>Verification Required</AlertTitle>
+              <AlertTitle>{t("new.verificationRequired")}</AlertTitle>
               <AlertDescription>
-                After adding the domain, you will need to complete the verification process
-                using the {selectedMethod?.label.toLowerCase()} method. Instructions will be
-                provided on the domain details page.
+                {t("new.verificationRequiredDescription", { method: getMethodLabel(formData.verificationMethod).toLowerCase() })}
               </AlertDescription>
             </Alert>
           </CardContent>

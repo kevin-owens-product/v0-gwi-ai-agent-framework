@@ -54,7 +54,8 @@ import {
   RefreshCw,
 } from "lucide-react"
 import Link from "next/link"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface Organization {
   id: string
@@ -143,6 +144,7 @@ export default function IntegrationAppDetailPage() {
   const params = useParams()
   const router = useRouter()
   const appId = params.id as string
+  const t = useTranslations("admin.integrations.apps")
 
   const [app, setApp] = useState<IntegrationApp | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -203,7 +205,7 @@ export default function IntegrationAppDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch app:", error)
-      toast.error("Failed to load integration app")
+      showErrorToast(t("toast.loadFailed"))
     } finally {
       setIsLoading(false)
     }
@@ -261,13 +263,13 @@ export default function IntegrationAppDetailPage() {
       if (response.ok) {
         setIsEditing(false)
         fetchApp()
-        toast.success("Integration app updated")
+        showSuccessToast(t("toast.updated"))
       } else {
-        toast.error("Failed to update app")
+        showErrorToast(t("toast.updateFailed"))
       }
     } catch (error) {
       console.error("Failed to update app:", error)
-      toast.error("Failed to update app")
+      showErrorToast(t("toast.updateFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -463,9 +465,9 @@ export default function IntegrationAppDetailPage() {
 
       <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="installations">Installations ({app._count.installations})</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="installations">{t("tabs.installations", { count: app._count.installations })}</TabsTrigger>
+          <TabsTrigger value="settings">{t("tabs.settings")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -473,7 +475,7 @@ export default function IntegrationAppDetailPage() {
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Status</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("overview.status")}</CardTitle>
                 <Shield className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -482,7 +484,7 @@ export default function IntegrationAppDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Installs</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("overview.totalInstalls")}</CardTitle>
                 <Download className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -491,7 +493,7 @@ export default function IntegrationAppDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Rating</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("overview.rating")}</CardTitle>
                 <Star className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -501,13 +503,13 @@ export default function IntegrationAppDetailPage() {
                     <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" />
                   </div>
                 ) : (
-                  <span className="text-muted-foreground">No reviews</span>
+                  <span className="text-muted-foreground">{t("overview.noReviews")}</span>
                 )}
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Category</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("overview.category")}</CardTitle>
                 <Puzzle className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -522,38 +524,38 @@ export default function IntegrationAppDetailPage() {
             {/* App Details */}
             <Card>
               <CardHeader>
-                <CardTitle>App Details</CardTitle>
+                <CardTitle>{t("overview.appDetails")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Name</span>
+                  <span className="text-muted-foreground">{t("overview.name")}</span>
                   <span className="font-medium">{app.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Slug</span>
+                  <span className="text-muted-foreground">{t("overview.slug")}</span>
                   <code className="text-xs bg-muted px-2 py-1 rounded">{app.slug}</code>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Category</span>
+                  <span className="text-muted-foreground">{t("overview.category")}</span>
                   <Badge variant="outline">
                     {categories.find(c => c.value === app.category)?.label}
                   </Badge>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Developer</span>
+                  <span className="text-muted-foreground">{t("overview.developer")}</span>
                   <span className="font-medium">{app.developer}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Published</span>
+                  <span className="text-muted-foreground">{t("overview.published")}</span>
                   <span className="font-medium flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
                     {app.publishedAt
                       ? new Date(app.publishedAt).toLocaleDateString()
-                      : "Not published"}
+                      : t("overview.notPublished")}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Created</span>
+                  <span className="text-muted-foreground">{t("overview.created")}</span>
                   <span className="font-medium flex items-center gap-1">
                     <Clock className="h-3 w-3" />
                     {new Date(app.createdAt).toLocaleDateString()}
@@ -565,8 +567,8 @@ export default function IntegrationAppDetailPage() {
             {/* Links */}
             <Card>
               <CardHeader>
-                <CardTitle>Links</CardTitle>
-                <CardDescription>External resources</CardDescription>
+                <CardTitle>{t("overview.links")}</CardTitle>
+                <CardDescription>{t("overview.linksDescription")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {app.developerUrl && (
@@ -618,7 +620,7 @@ export default function IntegrationAppDetailPage() {
           {/* Description */}
           <Card>
             <CardHeader>
-              <CardTitle>Description</CardTitle>
+              <CardTitle>{t("overview.description")}</CardTitle>
             </CardHeader>
             <CardContent>
               {app.description ? (
@@ -634,8 +636,8 @@ export default function IntegrationAppDetailPage() {
           {/* Scopes */}
           <Card>
             <CardHeader>
-              <CardTitle>Required Scopes</CardTitle>
-              <CardDescription>Permissions required by this integration</CardDescription>
+              <CardTitle>{t("overview.requiredScopes")}</CardTitle>
+              <CardDescription>{t("overview.requiredScopesDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
@@ -704,8 +706,8 @@ export default function IntegrationAppDetailPage() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Installation History</CardTitle>
-                  <CardDescription>Organizations using this app</CardDescription>
+                  <CardTitle>{t("installations.title")}</CardTitle>
+                  <CardDescription>{t("installations.description")}</CardDescription>
                 </div>
                 <Button variant="outline" size="sm" onClick={fetchInstallations} disabled={installsLoading}>
                   <RefreshCw className={`h-4 w-4 mr-2 ${installsLoading ? "animate-spin" : ""}`} />
@@ -718,7 +720,7 @@ export default function IntegrationAppDetailPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Organization</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>{t("installations.status")}</TableHead>
                     <TableHead>Plan</TableHead>
                     <TableHead>Installed</TableHead>
                     <TableHead>Last Used</TableHead>
@@ -813,8 +815,8 @@ export default function IntegrationAppDetailPage() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Edit App Settings</CardTitle>
-                  <CardDescription>Update integration app configuration</CardDescription>
+                  <CardTitle>{t("settings.editTitle")}</CardTitle>
+                  <CardDescription>{t("settings.editDescription")}</CardDescription>
                 </div>
                 {isEditing && (
                   <div className="flex gap-2">

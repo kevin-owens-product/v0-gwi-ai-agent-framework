@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -40,6 +41,8 @@ const agentNames: Record<string, string> = {
 }
 
 export function PlaygroundHeader() {
+  const t = useTranslations("playground.header")
+  const tCommon = useTranslations("common")
   const { config, messages, resetChat, contextPanelOpen, setContextPanelOpen, customAgent, setShowWelcome, setConfig: _setConfig, setMessages: _setMessages } = usePlayground()
   const [showShareDialog, setShowShareDialog] = useState(false)
   const [showWorkflowDialog, setShowWorkflowDialog] = useState(false)
@@ -128,8 +131,8 @@ export function PlaygroundHeader() {
               <Sparkles className="h-4 w-4 text-accent-foreground" />
             </div>
             <div>
-              <h1 className="text-sm font-semibold text-foreground">Agent Playground</h1>
-              <p className="text-xs text-muted-foreground">Interactive insights workspace</p>
+              <h1 className="text-sm font-semibold text-foreground">{t("title")}</h1>
+              <p className="text-xs text-muted-foreground">{t("subtitle")}</p>
             </div>
           </div>
           <Badge variant="secondary" className="text-xs font-medium">
@@ -137,14 +140,14 @@ export function PlaygroundHeader() {
           </Badge>
           {config.enableMemory && (
             <Badge variant="outline" className="text-xs text-emerald-500 border-emerald-500/30">
-              Memory Active
+              {t("memoryActive")}
             </Badge>
           )}
         </div>
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="sm" className="gap-2 h-8 text-xs" onClick={resetChat}>
             <RotateCcw className="h-3.5 w-3.5" />
-            Reset
+            {t("reset")}
           </Button>
 
           <WorkspaceManager
@@ -154,41 +157,41 @@ export function PlaygroundHeader() {
             onCreateNew={handleCreateNew}
           />
 
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setShowWelcome(true)} title="Show tutorial">
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setShowWelcome(true)} title={t("showTutorial")}>
             <HelpCircle className="h-4 w-4" />
           </Button>
 
           <Button variant="ghost" size="sm" className="gap-2 h-8 text-xs" onClick={() => setShowWorkflowDialog(true)}>
             <Workflow className="h-3.5 w-3.5" />
-            To Workflow
+            {t("toWorkflow")}
           </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="gap-2 h-8 text-xs">
                 <Download className="h-3.5 w-3.5" />
-                Export
+                {t("export")}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => handleExport("json")}>
                 <FileJson className="h-4 w-4 mr-2" />
-                Export as JSON
+                {t("exportAsJson")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleExport("markdown")}>
                 <FileCode className="h-4 w-4 mr-2" />
-                Export as Markdown
+                {t("exportAsMarkdown")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleExport("txt")}>
                 <FileText className="h-4 w-4 mr-2" />
-                Export as Text
+                {t("exportAsText")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
           <Button variant="secondary" size="sm" className="gap-2 h-8 text-xs" onClick={() => setShowShareDialog(true)}>
             <Share2 className="h-3.5 w-3.5" />
-            Share
+            {t("share")}
           </Button>
 
           <div className="w-px h-6 bg-border mx-1" />

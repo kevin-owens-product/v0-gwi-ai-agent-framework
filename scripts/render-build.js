@@ -137,7 +137,7 @@ function clearCaches() {
 
 async function main() {
   const phases = [];
-  let success = true;
+  const success = true;
 
   // Phase 0: Clean stale build artifacts
   console.log('\n--- PHASE 0: Clean Stale Artifacts ---');

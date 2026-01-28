@@ -7,6 +7,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -120,6 +121,8 @@ interface EmailTemplate {
 }
 
 export default function EmailTemplateDetailPage() {
+  const t = useTranslations("admin.emailTemplates")
+  const tCommon = useTranslations("common")
   const params = useParams()
   const router = useRouter()
   const templateId = params.id as string
@@ -315,11 +318,11 @@ export default function EmailTemplateDetailPage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {tCommon("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Template not found</p>
+            <p className="text-muted-foreground">{t("detail.templateNotFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -334,7 +337,7 @@ export default function EmailTemplateDetailPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/email-templates">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Link>
           </Button>
           <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -346,38 +349,38 @@ export default function EmailTemplateDetailPage() {
               {template.isSystem && (
                 <Badge variant="outline">
                   <Lock className="h-3 w-3 mr-1" />
-                  System
+                  {t("system")}
                 </Badge>
               )}
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <code className="bg-muted px-2 py-0.5 rounded">{template.slug}</code>
               <span>-</span>
-              <span>Version {template.version}</span>
+              <span>{t("detail.version", { version: template.version })}</span>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant={template.isActive ? "default" : "secondary"}>
-            {template.isActive ? "Active" : "Inactive"}
+            {template.isActive ? tCommon("active") : tCommon("inactive")}
           </Badge>
           <Dialog open={testDialogOpen} onOpenChange={setTestDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="outline">
                 <Send className="h-4 w-4 mr-2" />
-                Send Test
+                {t("detail.sendTest")}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Send Test Email</DialogTitle>
+                <DialogTitle>{t("detail.sendTestEmail")}</DialogTitle>
                 <DialogDescription>
-                  Send a test email to verify the template renders correctly
+                  {t("detail.sendTestDescription")}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Recipient Email</Label>
+                  <Label>{t("detail.recipientEmail")}</Label>
                   <Input
                     type="email"
                     placeholder="test@example.com"
@@ -386,7 +389,7 @@ export default function EmailTemplateDetailPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Test Data</Label>
+                  <Label>{t("detail.testData")}</Label>
                   <div className="space-y-2">
                     {template.variables.map((variable) => (
                       <div key={variable.name} className="flex items-center gap-2">
@@ -427,18 +430,18 @@ export default function EmailTemplateDetailPage() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setTestDialogOpen(false)}>
-                  Cancel
+                  {tCommon("cancel")}
                 </Button>
                 <Button onClick={handleSendTest} disabled={!testEmail || isSendingTest}>
                   {isSendingTest ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Sending...
+                      {t("detail.sending")}
                     </>
                   ) : (
                     <>
                       <Send className="h-4 w-4 mr-2" />
-                      Send Test Email
+                      {t("detail.sendTestEmail")}
                     </>
                   )}
                 </Button>
@@ -449,12 +452,12 @@ export default function EmailTemplateDetailPage() {
             {isSaving ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Saving...
+                {tCommon("saving")}
               </>
             ) : (
               <>
                 <Save className="h-4 w-4 mr-2" />
-                Save Changes
+                {tCommon("saveChanges")}
               </>
             )}
           </Button>
@@ -467,16 +470,15 @@ export default function EmailTemplateDetailPage() {
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Delete Template</AlertDialogTitle>
+                  <AlertDialogTitle>{t("detail.deleteTemplate")}</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Are you sure you want to delete this template? This action cannot be
-                    undone.
+                    {t("detail.deleteConfirmation")}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
                   <AlertDialogAction onClick={handleDelete} className="bg-destructive">
-                    Delete
+                    {tCommon("delete")}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -489,19 +491,19 @@ export default function EmailTemplateDetailPage() {
         <TabsList>
           <TabsTrigger value="editor">
             <Code className="h-4 w-4 mr-2" />
-            Editor
+            {t("detail.tabs.editor")}
           </TabsTrigger>
           <TabsTrigger value="preview">
             <Eye className="h-4 w-4 mr-2" />
-            Preview
+            {t("detail.tabs.preview")}
           </TabsTrigger>
           <TabsTrigger value="variables">
             <Variable className="h-4 w-4 mr-2" />
-            Variables
+            {t("detail.tabs.variables")}
           </TabsTrigger>
           <TabsTrigger value="history">
             <History className="h-4 w-4 mr-2" />
-            History
+            {t("detail.tabs.history")}
           </TabsTrigger>
         </TabsList>
 
@@ -511,12 +513,12 @@ export default function EmailTemplateDetailPage() {
             <div className="lg:col-span-2 space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Template Content</CardTitle>
+                  <CardTitle>{t("detail.templateContent")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Template Name</Label>
+                      <Label>{t("form.templateName")}</Label>
                       <Input
                         value={editForm.name}
                         onChange={(e) =>
@@ -525,7 +527,7 @@ export default function EmailTemplateDetailPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Category</Label>
+                      <Label>{t("form.category")}</Label>
                       <Select
                         value={editForm.category}
                         onValueChange={(v) =>
@@ -536,19 +538,19 @@ export default function EmailTemplateDetailPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="AUTHENTICATION">Authentication</SelectItem>
-                          <SelectItem value="ONBOARDING">Onboarding</SelectItem>
-                          <SelectItem value="NOTIFICATION">Notification</SelectItem>
-                          <SelectItem value="MARKETING">Marketing</SelectItem>
-                          <SelectItem value="TRANSACTIONAL">Transactional</SelectItem>
-                          <SelectItem value="SYSTEM">System</SelectItem>
+                          <SelectItem value="AUTHENTICATION">{t("categories.authentication")}</SelectItem>
+                          <SelectItem value="ONBOARDING">{t("categories.onboarding")}</SelectItem>
+                          <SelectItem value="NOTIFICATION">{t("categories.notification")}</SelectItem>
+                          <SelectItem value="MARKETING">{t("categories.marketing")}</SelectItem>
+                          <SelectItem value="TRANSACTIONAL">{t("categories.transactional")}</SelectItem>
+                          <SelectItem value="SYSTEM">{t("categories.system")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Description</Label>
+                    <Label>{tCommon("description")}</Label>
                     <Textarea
                       value={editForm.description}
                       onChange={(e) =>
@@ -559,7 +561,7 @@ export default function EmailTemplateDetailPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Subject Line</Label>
+                    <Label>{t("form.subjectLine")}</Label>
                     <Input
                       value={editForm.subject}
                       onChange={(e) =>
@@ -578,7 +580,7 @@ export default function EmailTemplateDetailPage() {
                   />
 
                   <div className="space-y-2">
-                    <Label>Plain Text Version (Optional)</Label>
+                    <Label>{t("form.plainTextContent")}</Label>
                     <Textarea
                       value={editForm.textContent}
                       onChange={(e) =>
@@ -586,26 +588,26 @@ export default function EmailTemplateDetailPage() {
                       }
                       rows={6}
                       className="font-mono text-sm"
-                      placeholder="Plain text fallback for email clients that don't support HTML"
+                      placeholder={t("form.plainTextPlaceholder")}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Change Note (for version history)</Label>
+                    <Label>{t("detail.changeNote")}</Label>
                     <Input
                       value={editForm.changeNote}
                       onChange={(e) =>
                         setEditForm((prev) => ({ ...prev, changeNote: e.target.value }))
                       }
-                      placeholder="Describe the changes made..."
+                      placeholder={t("detail.changeNotePlaceholder")}
                     />
                   </div>
 
                   <div className="flex items-center justify-between pt-4">
                     <div className="space-y-0.5">
-                      <Label>Active</Label>
+                      <Label>{tCommon("active")}</Label>
                       <p className="text-xs text-muted-foreground">
-                        Template can be used for sending emails
+                        {t("form.activeDescription")}
                       </p>
                     </div>
                     <Switch
@@ -644,20 +646,19 @@ export default function EmailTemplateDetailPage() {
         <TabsContent value="variables">
           <Card>
             <CardHeader>
-              <CardTitle>Template Variables</CardTitle>
+              <CardTitle>{t("detail.templateVariables")}</CardTitle>
               <CardDescription>
-                Variables available in this template. Use {"{{variableName}}"} syntax in the
-                content.
+                {t("detail.variablesDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Variable Name</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Required</TableHead>
-                    <TableHead>Default Value</TableHead>
+                    <TableHead>{t("detail.variableName")}</TableHead>
+                    <TableHead>{tCommon("description")}</TableHead>
+                    <TableHead>{tCommon("required")}</TableHead>
+                    <TableHead>{t("detail.defaultValue")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -671,9 +672,9 @@ export default function EmailTemplateDetailPage() {
                       <TableCell>{variable.description || "-"}</TableCell>
                       <TableCell>
                         {variable.required ? (
-                          <Badge variant="default">Required</Badge>
+                          <Badge variant="default">{tCommon("required")}</Badge>
                         ) : (
-                          <Badge variant="secondary">Optional</Badge>
+                          <Badge variant="secondary">{tCommon("optional")}</Badge>
                         )}
                       </TableCell>
                       <TableCell>

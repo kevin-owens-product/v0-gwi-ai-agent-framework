@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import {
   Wrench,
@@ -37,7 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface MaintenanceWindow {
   id: string
@@ -57,36 +58,39 @@ interface MaintenanceWindow {
   updatedAt: string
 }
 
-const typeOptions = [
-  { value: "SCHEDULED", label: "Scheduled" },
-  { value: "EMERGENCY", label: "Emergency" },
-  { value: "UPGRADE", label: "Upgrade" },
-  { value: "MIGRATION", label: "Migration" },
-  { value: "SECURITY_PATCH", label: "Security Patch" },
-]
-
-const statusOptions = [
-  { value: "SCHEDULED", label: "Scheduled" },
-  { value: "IN_PROGRESS", label: "In Progress" },
-  { value: "COMPLETED", label: "Completed" },
-  { value: "CANCELLED", label: "Cancelled" },
-  { value: "EXTENDED", label: "Extended" },
-]
-
-const serviceOptions = [
-  "API Gateway",
-  "Authentication",
-  "Database",
-  "File Storage",
-  "Messaging",
-  "Search",
-  "Analytics",
-  "Payments",
-  "Notifications",
-]
-
 export default function MaintenancePage() {
+  const t = useTranslations("admin.operations.maintenance")
+  const tCommon = useTranslations("common")
+  const tOps = useTranslations("admin.operations")
   const [windows, setWindows] = useState<MaintenanceWindow[]>([])
+
+  const serviceOptions = [
+    tOps("services.apiGateway"),
+    tOps("services.authentication"),
+    tOps("services.database"),
+    tOps("services.fileStorage"),
+    tOps("services.messaging"),
+    tOps("services.search"),
+    tOps("services.analytics"),
+    tOps("services.payments"),
+    tOps("services.notifications"),
+  ]
+  
+  const typeOptions = [
+    { value: "SCHEDULED", label: t("type.scheduled") },
+    { value: "EMERGENCY", label: t("type.emergency") },
+    { value: "UPGRADE", label: t("type.upgrade") },
+    { value: "MIGRATION", label: t("type.migration") },
+    { value: "SECURITY_PATCH", label: t("type.securityPatch") },
+  ]
+
+  const statusOptions = [
+    { value: "SCHEDULED", label: t("status.scheduled") },
+    { value: "IN_PROGRESS", label: t("status.inProgress") },
+    { value: "COMPLETED", label: t("status.completed") },
+    { value: "CANCELLED", label: t("status.cancelled") },
+    { value: "EXTENDED", label: t("status.extended") },
+  ]
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
@@ -127,7 +131,7 @@ export default function MaintenancePage() {
       setTotal(data.total || 0)
     } catch (error) {
       console.error("Failed to fetch maintenance windows:", error)
-      toast.error("Failed to load maintenance windows")
+      showErrorToast(t("errors.createFailed"))
     } finally {
       setLoading(false)
     }
@@ -143,10 +147,10 @@ export default function MaintenancePage() {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to create maintenance window")
+        throw new Error(error.error || t("errors.createFailed"))
       }
 
-      toast.success("Maintenance window scheduled")
+      showSuccessToast(t("messages.windowScheduled"))
       setIsCreateOpen(false)
       setNewWindow({
         title: "",
@@ -159,7 +163,7 @@ export default function MaintenancePage() {
       })
       fetchWindows()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create maintenance window")
+      showErrorToast(error instanceof Error ? error.message : t("errors.createFailed"))
     }
   }
 
@@ -175,10 +179,10 @@ export default function MaintenancePage() {
         throw new Error("Failed to update status")
       }
 
-      toast.success("Maintenance window updated")
+      showSuccessToast(t("messages.windowStarted"))
       fetchWindows()
     } catch (error) {
-      toast.error("Failed to update maintenance window")
+      showErrorToast(t("errors.updateFailed"))
     }
   }
 
@@ -190,28 +194,28 @@ export default function MaintenancePage() {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to delete maintenance window")
+        throw new Error(error.error || t("errors.deleteFailed"))
       }
 
-      toast.success("Maintenance window deleted")
+      showSuccessToast(t("messages.windowCancelled"))
       fetchWindows()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete maintenance window")
+      showErrorToast(error instanceof Error ? error.message : t("errors.deleteFailed"))
     }
   }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "SCHEDULED":
-        return <Badge className="bg-blue-500">Scheduled</Badge>
+        return <Badge className="bg-blue-500">{t("status.scheduled")}</Badge>
       case "IN_PROGRESS":
-        return <Badge className="bg-yellow-500">In Progress</Badge>
+        return <Badge className="bg-yellow-500">{t("status.inProgress")}</Badge>
       case "COMPLETED":
-        return <Badge className="bg-green-500">Completed</Badge>
+        return <Badge className="bg-green-500">{t("status.completed")}</Badge>
       case "CANCELLED":
-        return <Badge variant="secondary">Cancelled</Badge>
+        return <Badge variant="secondary">{t("status.cancelled")}</Badge>
       case "EXTENDED":
-        return <Badge className="bg-orange-500">Extended</Badge>
+        return <Badge className="bg-orange-500">{t("status.extended")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -220,9 +224,15 @@ export default function MaintenancePage() {
   const getTypeBadge = (type: string) => {
     switch (type) {
       case "EMERGENCY":
-        return <Badge className="bg-red-500">Emergency</Badge>
+        return <Badge className="bg-red-500">{t("type.emergency")}</Badge>
       case "SECURITY_PATCH":
-        return <Badge className="bg-purple-500">Security</Badge>
+        return <Badge className="bg-purple-500">{t("type.securityPatch")}</Badge>
+      case "SCHEDULED":
+        return <Badge variant="outline">{t("type.scheduled")}</Badge>
+      case "UPGRADE":
+        return <Badge variant="outline">{t("type.upgrade")}</Badge>
+      case "MIGRATION":
+        return <Badge variant="outline">{t("type.migration")}</Badge>
       default:
         return <Badge variant="outline">{type.replace("_", " ")}</Badge>
     }
@@ -252,7 +262,7 @@ export default function MaintenancePage() {
   const columns: Column<MaintenanceWindow>[] = [
     {
       id: "window",
-      header: "Maintenance Window",
+      header: t("columns.window"),
       cell: (window) => (
         <div>
           <Link
@@ -271,17 +281,17 @@ export default function MaintenancePage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("columns.type"),
       cell: (window) => getTypeBadge(window.type),
     },
     {
       id: "status",
-      header: "Status",
+      header: t("columns.status"),
       cell: (window) => getStatusBadge(window.status),
     },
     {
       id: "scheduled",
-      header: "Scheduled",
+      header: t("columns.scheduledStart"),
       cell: (window) => (
         <div className="text-sm">
           <div className="flex items-center gap-1">
@@ -300,12 +310,12 @@ export default function MaintenancePage() {
     },
     {
       id: "duration",
-      header: "Duration",
+      header: t("columns.duration"),
       cell: (window) => formatDuration(window.scheduledStart, window.scheduledEnd),
     },
     {
       id: "services",
-      header: "Services",
+      header: t("columns.affectedServices"),
       cell: (window) => (
         <div className="flex flex-wrap gap-1 max-w-[150px]">
           {window.affectedServices.slice(0, 2).map((service) => (
@@ -326,19 +336,19 @@ export default function MaintenancePage() {
   // Define row actions
   const rowActions: RowAction<MaintenanceWindow>[] = [
     {
-      label: "Start Maintenance",
+      label: t("actions.start"),
       icon: <Play className="h-4 w-4" />,
       onClick: (window) => handleUpdateStatus(window.id, "IN_PROGRESS"),
       hidden: (window) => window.status !== "SCHEDULED",
     },
     {
-      label: "Complete",
+      label: t("actions.complete"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (window) => handleUpdateStatus(window.id, "COMPLETED"),
       hidden: (window) => window.status !== "IN_PROGRESS",
     },
     {
-      label: "Cancel",
+      label: t("actions.cancel"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: (window) => handleUpdateStatus(window.id, "CANCELLED"),
       hidden: (window) => window.status !== "SCHEDULED",
@@ -349,7 +359,7 @@ export default function MaintenancePage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Cancel Selected",
+      label: t("bulk.cancelSelected"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: async (selectedIds) => {
         try {
@@ -362,15 +372,15 @@ export default function MaintenancePage() {
               })
             )
           )
-          toast.success(`${selectedIds.length} maintenance window(s) cancelled`)
+          showSuccessToast(t("messages.windowCancelled"))
           fetchWindows()
         } catch (error) {
-          toast.error("Failed to cancel maintenance windows")
+          showErrorToast(t("errors.updateFailed"))
         }
       },
       variant: "destructive",
-      confirmTitle: "Cancel Maintenance Windows",
-      confirmDescription: "Are you sure you want to cancel the selected maintenance windows?",
+      confirmTitle: t("bulk.cancelTitle"),
+      confirmDescription: t("bulk.cancelConfirm"),
     },
   ]
 
@@ -381,34 +391,34 @@ export default function MaintenancePage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Wrench className="h-8 w-8 text-primary" />
-            Maintenance Windows
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Schedule and manage platform maintenance windows
+            {t("description", { total })}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={fetchWindows}>
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            {tCommon("refresh")}
           </Button>
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
-                Schedule Maintenance
+                {t("createWindow")}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
-                <DialogTitle>Schedule Maintenance Window</DialogTitle>
+                <DialogTitle>{t("dialog.createTitle")}</DialogTitle>
                 <DialogDescription>
-                  Create a new scheduled maintenance window
+                  {t("dialog.createDescription")}
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="title">Title</Label>
+                  <Label htmlFor="title">{t("fields.title")}</Label>
                   <Input
                     id="title"
                     placeholder="e.g., Database upgrade"
@@ -419,7 +429,7 @@ export default function MaintenancePage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">{t("fields.description")}</Label>
                   <Textarea
                     id="description"
                     placeholder="Describe the maintenance..."
@@ -432,7 +442,7 @@ export default function MaintenancePage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label>Type</Label>
+                    <Label>{t("fields.type")}</Label>
                     <Select
                       value={newWindow.type}
                       onValueChange={(value) =>
@@ -452,7 +462,7 @@ export default function MaintenancePage() {
                     </Select>
                   </div>
                   <div className="grid gap-2">
-                    <Label>Notify Before (hours)</Label>
+                    <Label>{t("fields.notifyBefore")}</Label>
                     <Input
                       type="number"
                       value={newWindow.notifyBefore}
@@ -467,7 +477,7 @@ export default function MaintenancePage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label>Start Time</Label>
+                    <Label>{t("fields.scheduledStart")}</Label>
                     <Input
                       type="datetime-local"
                       value={newWindow.scheduledStart}
@@ -477,7 +487,7 @@ export default function MaintenancePage() {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label>End Time</Label>
+                    <Label>{t("fields.scheduledEnd")}</Label>
                     <Input
                       type="datetime-local"
                       value={newWindow.scheduledEnd}
@@ -488,7 +498,7 @@ export default function MaintenancePage() {
                   </div>
                 </div>
                 <div className="grid gap-2">
-                  <Label>Affected Services</Label>
+                  <Label>{t("fields.affectedServices")}</Label>
                   <div className="flex flex-wrap gap-2">
                     {serviceOptions.map((service) => (
                       <Badge
@@ -514,7 +524,7 @@ export default function MaintenancePage() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                  Cancel
+                  {tCommon("cancel")}
                 </Button>
                 <Button
                   onClick={handleCreateWindow}
@@ -524,7 +534,7 @@ export default function MaintenancePage() {
                     !newWindow.scheduledEnd
                   }
                 >
-                  Schedule Maintenance
+                  {t("dialog.createTitle")}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -540,7 +550,7 @@ export default function MaintenancePage() {
               <AlertTriangle className="h-8 w-8 text-yellow-500" />
               <div>
                 <h3 className="font-semibold">
-                  {inProgressWindows.length} Maintenance In Progress
+                  {inProgressWindows.length} {t("status.inProgress")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   {inProgressWindows.map((w) => w.title).join(", ")}
@@ -556,7 +566,7 @@ export default function MaintenancePage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{total}</div>
-            <p className="text-xs text-muted-foreground">Total Windows</p>
+            <p className="text-xs text-muted-foreground">{tCommon("total")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -564,7 +574,7 @@ export default function MaintenancePage() {
             <div className="text-2xl font-bold text-blue-500">
               {upcomingWindows.length}
             </div>
-            <p className="text-xs text-muted-foreground">Scheduled</p>
+            <p className="text-xs text-muted-foreground">{t("status.scheduled")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -572,7 +582,7 @@ export default function MaintenancePage() {
             <div className="text-2xl font-bold text-yellow-500">
               {inProgressWindows.length}
             </div>
-            <p className="text-xs text-muted-foreground">In Progress</p>
+            <p className="text-xs text-muted-foreground">{t("status.inProgress")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -580,7 +590,7 @@ export default function MaintenancePage() {
             <div className="text-2xl font-bold text-green-500">
               {windows.filter((w) => w.status === "COMPLETED").length}
             </div>
-            <p className="text-xs text-muted-foreground">Completed</p>
+            <p className="text-xs text-muted-foreground">{t("status.completed")}</p>
           </CardContent>
         </Card>
       </div>
@@ -593,7 +603,7 @@ export default function MaintenancePage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search maintenance windows..."
+                  placeholder={tCommon("search")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -602,10 +612,10 @@ export default function MaintenancePage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("filters.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
                 {statusOptions.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -615,10 +625,10 @@ export default function MaintenancePage() {
             </Select>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={t("filters.type")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="all">{t("filters.allTypes")}</SelectItem>
                 {typeOptions.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -636,7 +646,7 @@ export default function MaintenancePage() {
         columns={columns}
         getRowId={(window) => window.id}
         isLoading={loading}
-        emptyMessage="No maintenance windows found"
+        emptyMessage={t("noWindows")}
         viewHref={(window) => `/admin/operations/maintenance/${window.id}`}
         onDelete={handleDelete}
         deleteConfirmTitle="Delete Maintenance Window"

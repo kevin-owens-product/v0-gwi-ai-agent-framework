@@ -68,85 +68,85 @@ interface CrosstabData {
 
 // Available options for selection
 const availableAudiences = [
-  "Gen Z (18-24)",
-  "Millennials (25-40)",
-  "Gen X (41-56)",
-  "Boomers (57-75)",
-  "Eco-Conscious Millennials",
-  "Tech Early Adopters",
-  "Gen Z Content Creators",
-  "Budget-Conscious Shoppers",
-  "Under $50K",
-  "$50K-$100K",
-  "$100K-$150K",
-  "$150K-$250K",
-  "$250K+",
-  "United States",
-  "United Kingdom",
-  "Germany",
-  "France",
-  "Japan",
-  "Brazil",
-  "Australia",
+  { value: "Gen Z (18-24)", labelKey: "availableAudiences.genZ" },
+  { value: "Millennials (25-40)", labelKey: "availableAudiences.millennials" },
+  { value: "Gen X (41-56)", labelKey: "availableAudiences.genX" },
+  { value: "Boomers (57-75)", labelKey: "availableAudiences.boomers" },
+  { value: "Eco-Conscious Millennials", labelKey: "availableAudiences.ecoMillennials" },
+  { value: "Tech Early Adopters", labelKey: "availableAudiences.techAdopters" },
+  { value: "Gen Z Content Creators", labelKey: "availableAudiences.genZCreators" },
+  { value: "Budget-Conscious Shoppers", labelKey: "availableAudiences.budgetShoppers" },
+  { value: "Under $50K", labelKey: "availableAudiences.incomeUnder50k" },
+  { value: "$50K-$100K", labelKey: "availableAudiences.income50kTo100k" },
+  { value: "$100K-$150K", labelKey: "availableAudiences.income100kTo150k" },
+  { value: "$150K-$250K", labelKey: "availableAudiences.income150kTo250k" },
+  { value: "$250K+", labelKey: "availableAudiences.income250kPlus" },
+  { value: "United States", labelKey: "availableAudiences.unitedStates" },
+  { value: "United Kingdom", labelKey: "availableAudiences.unitedKingdom" },
+  { value: "Germany", labelKey: "availableAudiences.germany" },
+  { value: "France", labelKey: "availableAudiences.france" },
+  { value: "Japan", labelKey: "availableAudiences.japan" },
+  { value: "Brazil", labelKey: "availableAudiences.brazil" },
+  { value: "Australia", labelKey: "availableAudiences.australia" },
 ]
 
 const availableMetrics = [
-  "TikTok",
-  "Instagram",
-  "Facebook",
-  "YouTube",
-  "LinkedIn",
-  "Twitter/X",
-  "Snapchat",
-  "Pinterest",
-  "Social Media Usage",
-  "Purchase Intent",
-  "Brand Awareness",
-  "Media Consumption",
-  "Values & Attitudes",
-  "Lifestyle & Interests",
-  "E-commerce",
-  "In-Store Retail",
-  "Mobile Apps",
-  "Streaming Video",
-  "Mobile Gaming",
-  "Food Delivery",
-  "Fintech Apps",
-  "Fitness Apps",
+  { value: "TikTok", labelKey: "availableMetrics.tiktok" },
+  { value: "Instagram", labelKey: "availableMetrics.instagram" },
+  { value: "Facebook", labelKey: "availableMetrics.facebook" },
+  { value: "YouTube", labelKey: "availableMetrics.youtube" },
+  { value: "LinkedIn", labelKey: "availableMetrics.linkedin" },
+  { value: "Twitter/X", labelKey: "availableMetrics.twitterX" },
+  { value: "Snapchat", labelKey: "availableMetrics.snapchat" },
+  { value: "Pinterest", labelKey: "availableMetrics.pinterest" },
+  { value: "Social Media Usage", labelKey: "availableMetrics.socialMediaUsage" },
+  { value: "Purchase Intent", labelKey: "availableMetrics.purchaseIntent" },
+  { value: "Brand Awareness", labelKey: "availableMetrics.brandAwareness" },
+  { value: "Media Consumption", labelKey: "availableMetrics.mediaConsumption" },
+  { value: "Values & Attitudes", labelKey: "availableMetrics.valuesAttitudes" },
+  { value: "Lifestyle & Interests", labelKey: "availableMetrics.lifestyleInterests" },
+  { value: "E-commerce", labelKey: "availableMetrics.ecommerce" },
+  { value: "In-Store Retail", labelKey: "availableMetrics.inStoreRetail" },
+  { value: "Mobile Apps", labelKey: "availableMetrics.mobileApps" },
+  { value: "Streaming Video", labelKey: "availableMetrics.streamingVideo" },
+  { value: "Mobile Gaming", labelKey: "availableMetrics.mobileGaming" },
+  { value: "Food Delivery", labelKey: "availableMetrics.foodDelivery" },
+  { value: "Fintech Apps", labelKey: "availableMetrics.fintechApps" },
+  { value: "Fitness Apps", labelKey: "availableMetrics.fitnessApps" },
 ]
 
 const availableDataSources = [
-  "GWI Core Q4 2024",
-  "GWI Core Q3 2024",
-  "GWI Commerce Q4 2024",
-  "GWI Global Q4 2024",
-  "GWI Zeitgeist Nov 2024",
-  "GWI Brand Tracker Q4 2024",
-  "GWI Media Q4 2024",
-  "GWI Finance Q4 2024",
-  "GWI Health Q4 2024",
-  "GWI Luxury Q4 2024",
-  "GWI Social Q4 2024",
+  { value: "GWI Core Q4 2024", labelKey: "availableDataSources.gwiCoreQ4" },
+  { value: "GWI Core Q3 2024", labelKey: "availableDataSources.gwiCoreQ3" },
+  { value: "GWI Commerce Q4 2024", labelKey: "availableDataSources.gwiCommerceQ4" },
+  { value: "GWI Global Q4 2024", labelKey: "availableDataSources.gwiGlobalQ4" },
+  { value: "GWI Zeitgeist Nov 2024", labelKey: "availableDataSources.gwiZeitgeistNov" },
+  { value: "GWI Brand Tracker Q4 2024", labelKey: "availableDataSources.gwiBrandTrackerQ4" },
+  { value: "GWI Media Q4 2024", labelKey: "availableDataSources.gwiMediaQ4" },
+  { value: "GWI Finance Q4 2024", labelKey: "availableDataSources.gwiFinanceQ4" },
+  { value: "GWI Health Q4 2024", labelKey: "availableDataSources.gwiHealthQ4" },
+  { value: "GWI Luxury Q4 2024", labelKey: "availableDataSources.gwiLuxuryQ4" },
+  { value: "GWI Social Q4 2024", labelKey: "availableDataSources.gwiSocialQ4" },
 ]
 
 const availableCategories = [
-  "Social Media",
-  "Commerce",
-  "Global Markets",
-  "Sustainability",
-  "Brand Health",
-  "Media Planning",
-  "Financial Services",
-  "Health & Wellness",
-  "Luxury",
-  "Content Strategy",
+  { value: "Social Media", labelKey: "availableCategories.socialMedia" },
+  { value: "Commerce", labelKey: "availableCategories.commerce" },
+  { value: "Global Markets", labelKey: "availableCategories.globalMarkets" },
+  { value: "Sustainability", labelKey: "availableCategories.sustainability" },
+  { value: "Brand Health", labelKey: "availableCategories.brandHealth" },
+  { value: "Media Planning", labelKey: "availableCategories.mediaPlanning" },
+  { value: "Financial Services", labelKey: "availableCategories.financialServices" },
+  { value: "Health & Wellness", labelKey: "availableCategories.healthWellness" },
+  { value: "Luxury", labelKey: "availableCategories.luxury" },
+  { value: "Content Strategy", labelKey: "availableCategories.contentStrategy" },
 ]
 
 const weightingOptions = [
-  { value: "none", label: "No Weighting" },
-  { value: "population", label: "Population Weighted" },
-  { value: "internet", label: "Internet Population" },
-  { value: "custom", label: "Custom Weighting" },
+  { value: "none", labelKey: "weightingOptions.none" },
+  { value: "population", labelKey: "weightingOptions.population" },
+  { value: "internet", labelKey: "weightingOptions.internet" },
+  { value: "custom", labelKey: "weightingOptions.custom" },
 ]
 
 export default function EditCrosstabPage({ params }: { params: Promise<{ id: string }> }) {
@@ -193,13 +193,13 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
 
         if (!response.ok) {
           if (response.status === 404) {
-            setError("Crosstab not found")
+            setError(t("errors.notFound"))
           } else if (response.status === 401) {
-            setError("You must be logged in to edit this crosstab")
+            setError(t("errors.unauthorized"))
           } else if (response.status === 403) {
-            setError("You do not have permission to edit this crosstab")
+            setError(t("errors.forbidden"))
           } else {
-            setError("Failed to load crosstab")
+            setError(t("errors.loadFailed"))
           }
           return
         }
@@ -223,7 +223,7 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
         setFilters(crosstabData.filters || {})
       } catch (err) {
         console.error("Error fetching crosstab:", err)
-        setError("Failed to load crosstab. Please try again.")
+        setError(t("errors.loadFailedRetry"))
       } finally {
         setIsLoading(false)
       }
@@ -232,7 +232,7 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
     if (status !== "loading") {
       fetchCrosstab()
     }
-  }, [id, status])
+  }, [id, status, t])
 
   // Track changes
   useEffect(() => {
@@ -270,17 +270,17 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
     const errors: Record<string, string> = {}
 
     if (!name.trim()) {
-      errors.name = "Name is required"
+      errors.name = t("validation.nameRequired")
     } else if (name.length > 200) {
-      errors.name = "Name must be less than 200 characters"
+      errors.name = t("validation.nameTooLong")
     }
 
     if (selectedAudiences.length === 0) {
-      errors.audiences = "At least one audience is required"
+      errors.audiences = t("validation.audienceRequired")
     }
 
     if (selectedMetrics.length === 0) {
-      errors.metrics = "At least one metric is required"
+      errors.metrics = t("validation.metricRequired")
     }
 
     setValidationErrors(errors)
@@ -330,7 +330,7 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
       router.push(`/dashboard/crosstabs/${id}`)
     } catch (err) {
       console.error("Error saving crosstab:", err)
-      setError(err instanceof Error ? err.message : "Failed to save changes. Please try again.")
+      setError(err instanceof Error ? err.message : t("errors.saveFailedRetry"))
     } finally {
       setIsSaving(false)
     }
@@ -544,7 +544,7 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => setSelectedAudiences(availableAudiences.slice(0, 10))}
+                    onClick={() => setSelectedAudiences(availableAudiences.slice(0, 10).map(a => a.value))}
                   >
                     {t("rowVariables.selectSuggested")}
                   </Button>
@@ -566,20 +566,20 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                 <div className="space-y-2">
                   {availableAudiences.map((audience) => (
                     <label
-                      key={audience}
+                      key={audience.value}
                       className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted cursor-pointer"
                     >
                       <Checkbox
-                        checked={selectedAudiences.includes(audience)}
+                        checked={selectedAudiences.includes(audience.value)}
                         onCheckedChange={(checked) => {
                           if (checked) {
-                            setSelectedAudiences([...selectedAudiences, audience])
+                            setSelectedAudiences([...selectedAudiences, audience.value])
                           } else {
-                            setSelectedAudiences(selectedAudiences.filter((a) => a !== audience))
+                            setSelectedAudiences(selectedAudiences.filter((a) => a !== audience.value))
                           }
                         }}
                       />
-                      <span className="text-sm">{audience}</span>
+                      <span className="text-sm">{t(audience.labelKey)}</span>
                     </label>
                   ))}
                 </div>
@@ -630,7 +630,7 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => setSelectedMetrics(availableMetrics.slice(0, 8))}
+                    onClick={() => setSelectedMetrics(availableMetrics.slice(0, 8).map(m => m.value))}
                   >
                     {t("columnVariables.selectSuggested")}
                   </Button>
@@ -652,20 +652,20 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                 <div className="grid grid-cols-2 gap-2">
                   {availableMetrics.map((metric) => (
                     <label
-                      key={metric}
+                      key={metric.value}
                       className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted cursor-pointer"
                     >
                       <Checkbox
-                        checked={selectedMetrics.includes(metric)}
+                        checked={selectedMetrics.includes(metric.value)}
                         onCheckedChange={(checked) => {
                           if (checked) {
-                            setSelectedMetrics([...selectedMetrics, metric])
+                            setSelectedMetrics([...selectedMetrics, metric.value])
                           } else {
-                            setSelectedMetrics(selectedMetrics.filter((m) => m !== metric))
+                            setSelectedMetrics(selectedMetrics.filter((m) => m !== metric.value))
                           }
                         }}
                       />
-                      <span className="text-sm">{metric}</span>
+                      <span className="text-sm">{t(metric.labelKey)}</span>
                     </label>
                   ))}
                 </div>
@@ -715,8 +715,8 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                     </SelectTrigger>
                     <SelectContent>
                       {availableDataSources.map((source) => (
-                        <SelectItem key={source} value={source}>
-                          {source}
+                        <SelectItem key={source.value} value={source.value}>
+                          {t(source.labelKey)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -730,8 +730,8 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                     </SelectTrigger>
                     <SelectContent>
                       {availableCategories.map((cat) => (
-                        <SelectItem key={cat} value={cat}>
-                          {cat}
+                        <SelectItem key={cat.value} value={cat.value}>
+                          {t(cat.labelKey)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -760,7 +760,7 @@ export default function EditCrosstabPage({ params }: { params: Promise<{ id: str
                   <SelectContent>
                     {weightingOptions.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
-                        {option.label}
+                        {t(option.labelKey)}
                       </SelectItem>
                     ))}
                   </SelectContent>

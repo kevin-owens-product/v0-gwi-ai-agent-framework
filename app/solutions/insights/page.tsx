@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -6,8 +8,11 @@ import { ArrowRight, ArrowLeft, Brain, Users, Globe, Globe2, UserCircle, BookOpe
 import { LandingHeader } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 import { insightsAgents } from "@/lib/solution-agents"
+import { useTranslations } from "next-intl"
 
 export default function InsightsPage() {
+  const t = useTranslations("solutions.insights")
+
   return (
     <div className="min-h-screen bg-background">
       <LandingHeader />
@@ -20,31 +25,30 @@ export default function InsightsPage() {
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Home
+              {t("backToHome")}
             </Link>
           </div>
 
           <div className="mb-16 text-center">
             <Badge className="mb-4" variant="outline">
-              For Insights Teams
+              {t("badge")}
             </Badge>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-balance mb-6">
-              Uncover <span className="text-accent">Deep Human Truths</span>
+              {t("hero.titleStart")} <span className="text-accent">{t("hero.titleHighlight")}</span>
             </h1>
             <p className="text-xl text-muted-foreground text-balance max-w-3xl mx-auto mb-8">
-              Transform raw data into compelling narratives. Discover what motivates people, predict emerging trends,
-              and deliver insights that drive strategy.
+              {t("hero.description")}
             </p>
             <div className="flex gap-4 justify-center">
               <Link href="/dashboard">
                 <Button size="lg">
-                  Start Free Trial
+                  {t("cta.startTrial")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/contact">
                 <Button size="lg" variant="outline">
-                  Book a Demo
+                  {t("cta.bookDemo")}
                 </Button>
               </Link>
             </div>
@@ -57,27 +61,27 @@ export default function InsightsPage() {
                   <Eye className="h-6 w-6 text-accent" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">Key Challenges We Solve</h2>
-                  <p className="text-muted-foreground">Common pain points for insights professionals</p>
+                  <h2 className="text-2xl font-bold mb-2">{t("challengesTitle")}</h2>
+                  <p className="text-muted-foreground">{t("challengesSubtitle")}</p>
                 </div>
               </div>
               <div className="grid md:grid-cols-3 gap-6">
                 <div>
-                  <h3 className="font-semibold mb-2">Data Overload</h3>
+                  <h3 className="font-semibold mb-2">{t("challenges.dataOverload.title")}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Too much data, not enough time to synthesize meaningful insights
+                    {t("challenges.dataOverload.description")}
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-2">Surface-Level Analysis</h3>
+                  <h3 className="font-semibold mb-2">{t("challenges.surfaceLevel.title")}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Reports show what happened, but not why people behave the way they do
+                    {t("challenges.surfaceLevel.description")}
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-2">Storytelling Gap</h3>
+                  <h3 className="font-semibold mb-2">{t("challenges.storytelling.title")}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Struggle to turn data into compelling narratives that drive action
+                    {t("challenges.storytelling.description")}
                   </p>
                 </div>
               </div>
@@ -86,8 +90,8 @@ export default function InsightsPage() {
 
           <div className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Insights AI Agents</h2>
-              <p className="text-muted-foreground">AI agents designed to accelerate insights discovery</p>
+              <h2 className="text-3xl font-bold mb-4">{t("agentsTitle")}</h2>
+              <p className="text-muted-foreground">{t("agentsDescription")}</p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {insightsAgents.map((agent) => {
@@ -129,7 +133,7 @@ export default function InsightsPage() {
                       </ul>
                       <div className="mt-4 pt-4 border-t">
                         <span className="text-sm text-accent flex items-center gap-1">
-                          Open Agent <ArrowRight className="h-3 w-3" />
+                          {t("openAgent")} <ArrowRight className="h-3 w-3" />
                         </span>
                       </div>
                     </Card>
@@ -141,72 +145,71 @@ export default function InsightsPage() {
 
           <div className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Pre-Built Workflows</h2>
-              <p className="text-muted-foreground">Ready-to-use automation for common insights tasks</p>
+              <h2 className="text-3xl font-bold mb-4">{t("workflowsTitle")}</h2>
+              <p className="text-muted-foreground">{t("workflowsDescription")}</p>
             </div>
             <div className="grid md:grid-cols-2 gap-6">
               <Card className="p-6">
-                <h3 className="font-semibold mb-3">Audience Deep Dive Workflow</h3>
+                <h3 className="font-semibold mb-3">{t("workflows.audienceDeepDive.title")}</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Comprehensive analysis of target audience including behaviors, attitudes, media consumption, and
-                  purchase drivers
+                  {t("workflows.audienceDeepDive.description")}
                 </p>
                 <div className="flex gap-2">
-                  <Badge variant="secondary">Audience Explorer</Badge>
-                  <Badge variant="secondary">Motivation Decoder</Badge>
+                  <Badge variant="secondary">{t("workflows.audienceDeepDive.badge1")}</Badge>
+                  <Badge variant="secondary">{t("workflows.audienceDeepDive.badge2")}</Badge>
                 </div>
               </Card>
 
               <Card className="p-6">
-                <h3 className="font-semibold mb-3">Trend Analysis Workflow</h3>
+                <h3 className="font-semibold mb-3">{t("workflows.trendAnalysis.title")}</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Identifies emerging trends, maps cultural shifts, and predicts future behaviors
+                  {t("workflows.trendAnalysis.description")}
                 </p>
                 <div className="flex gap-2">
-                  <Badge variant="secondary">Culture Tracker</Badge>
-                  <Badge variant="secondary">Global Perspective</Badge>
+                  <Badge variant="secondary">{t("workflows.trendAnalysis.badge1")}</Badge>
+                  <Badge variant="secondary">{t("workflows.trendAnalysis.badge2")}</Badge>
                 </div>
               </Card>
 
               <Card className="p-6">
-                <h3 className="font-semibold mb-3">Persona Development Workflow</h3>
+                <h3 className="font-semibold mb-3">{t("workflows.personaDevelopment.title")}</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Creates rich personas with demographic, psychographic, and behavioral data
+                  {t("workflows.personaDevelopment.description")}
                 </p>
                 <div className="flex gap-2">
-                  <Badge variant="secondary">Persona Architect</Badge>
-                  <Badge variant="secondary">Audience Explorer</Badge>
+                  <Badge variant="secondary">{t("workflows.personaDevelopment.badge1")}</Badge>
+                  <Badge variant="secondary">{t("workflows.personaDevelopment.badge2")}</Badge>
                 </div>
               </Card>
 
               <Card className="p-6">
-                <h3 className="font-semibold mb-3">Executive Report Workflow</h3>
+                <h3 className="font-semibold mb-3">{t("workflows.executiveReport.title")}</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Generates presentation-ready reports with key insights and recommendations
+                  {t("workflows.executiveReport.description")}
                 </p>
                 <div className="flex gap-2">
-                  <Badge variant="secondary">Storytelling Agent</Badge>
-                  <Badge variant="secondary">Global Perspective</Badge>
+                  <Badge variant="secondary">{t("workflows.executiveReport.badge1")}</Badge>
+                  <Badge variant="secondary">{t("workflows.executiveReport.badge2")}</Badge>
                 </div>
               </Card>
             </div>
           </div>
 
           <div className="bg-accent/5 rounded-2xl p-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to Deliver Deeper Insights?</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("finalCta.title")}</h2>
             <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join leading insights teams using GWI Insights to uncover human truths that drive business strategy
+              {t("finalCta.description")}
             </p>
             <div className="flex gap-4 justify-center">
               <Link href="/dashboard">
                 <Button size="lg">
-                  Start Free Trial
+                  {t("finalCta.startTrial")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/contact">
                 <Button size="lg" variant="outline">
-                  Talk to Our Team
+                  {t("finalCta.talkToTeam")}
                 </Button>
               </Link>
             </div>

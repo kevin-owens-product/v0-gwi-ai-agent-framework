@@ -7,6 +7,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -45,6 +46,7 @@ export function TemplatePreview({
   onPreviewDataChange,
   variables,
 }: TemplatePreviewProps) {
+  const t = useTranslations("admin.emailTemplates")
   const [device, setDevice] = useState<DeviceType>("desktop")
   const [showDataPanel, setShowDataPanel] = useState(true)
 
@@ -60,7 +62,7 @@ export function TemplatePreview({
         <Card>
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
-              <CardTitle>Email Preview</CardTitle>
+              <CardTitle>{t("preview.title")}</CardTitle>
               <div className="flex items-center gap-2">
                 {/* Device Toggle */}
                 <div className="flex items-center bg-muted rounded-lg p-1">
@@ -94,7 +96,7 @@ export function TemplatePreview({
                   size="sm"
                   onClick={() => setShowDataPanel(!showDataPanel)}
                 >
-                  {showDataPanel ? "Hide" : "Show"} Data
+                  {showDataPanel ? t("preview.hideData") : t("preview.showData")}
                 </Button>
               </div>
             </div>
@@ -105,15 +107,15 @@ export function TemplatePreview({
               {/* Email Header */}
               <div className="border-b bg-muted/50 p-4 space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-muted-foreground w-16">From:</span>
+                  <span className="text-sm font-medium text-muted-foreground w-16">{t("preview.from")}:</span>
                   <span className="text-sm">GWI AI Platform &lt;noreply@gwi-platform.com&gt;</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-muted-foreground w-16">To:</span>
+                  <span className="text-sm font-medium text-muted-foreground w-16">{t("preview.to")}:</span>
                   <span className="text-sm">recipient@example.com</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-muted-foreground w-16">Subject:</span>
+                  <span className="text-sm font-medium text-muted-foreground w-16">{t("preview.subject")}:</span>
                   <span className="text-sm font-medium">{renderedSubject}</span>
                 </div>
               </div>
@@ -138,7 +140,7 @@ export function TemplatePreview({
                   <div className="flex items-center justify-center h-[400px] text-muted-foreground">
                     <div className="text-center">
                       <Mail className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                      <p>No content to preview</p>
+                      <p>{t("preview.noContent")}</p>
                     </div>
                   </div>
                 )}
@@ -154,7 +156,7 @@ export function TemplatePreview({
           <Card>
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base">Preview Data</CardTitle>
+                <CardTitle className="text-base">{t("preview.previewData")}</CardTitle>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -169,13 +171,13 @@ export function TemplatePreview({
                   }}
                 >
                   <RefreshCw className="h-4 w-4 mr-1" />
-                  Reset
+                  {t("preview.reset")}
                 </Button>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-xs text-muted-foreground">
-                Edit values below to see how the email renders with different data.
+                {t("preview.editValuesHint")}
               </p>
               {variables.map((variable) => (
                 <div key={variable.name} className="space-y-1.5">

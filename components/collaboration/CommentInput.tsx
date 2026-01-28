@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect, KeyboardEvent } from 'react'
+import { useTranslations } from "next-intl"
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -38,10 +39,11 @@ export function CommentInput({
   onSubmit,
   onCancel,
   isSubmitting = false,
-  placeholder = 'Write a comment...',
+  placeholder,
   autoFocus = false,
   className,
 }: CommentInputProps) {
+  const t = useTranslations("collaboration")
   const [content, setContent] = useState('')
   const [mentions, setMentions] = useState<string[]>([])
   const [showMentionPopover, setShowMentionPopover] = useState(false)
@@ -157,7 +159,7 @@ export function CommentInput({
             value={content}
             onChange={(e) => handleChange(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={placeholder}
+            placeholder={placeholder || t("writeCommentPlaceholder")}
             disabled={isSubmitting}
             autoFocus={autoFocus}
             rows={3}
@@ -194,10 +196,10 @@ export function CommentInput({
             </PopoverTrigger>
             <PopoverContent align="start" className="w-64 p-0">
               <div className="p-2">
-                <p className="text-xs text-muted-foreground mb-2">Mention a team member</p>
+                <p className="text-xs text-muted-foreground mb-2">{t("mentionTeamMember")}</p>
                 {filteredMembers.length === 0 ? (
                   <p className="text-sm text-muted-foreground py-2 px-1">
-                    {mentionSearch ? 'No members found' : 'Start typing to search...'}
+                    {mentionSearch ? t("noMembersFound") : t("startTypingToSearch")}
                   </p>
                 ) : (
                   <div className="space-y-1">
@@ -237,7 +239,7 @@ export function CommentInput({
       {/* Actions */}
       <div className="flex items-center justify-between mt-2">
         <p className="text-xs text-muted-foreground">
-          Press <kbd className="px-1 py-0.5 bg-muted rounded text-[10px]">Cmd</kbd> + <kbd className="px-1 py-0.5 bg-muted rounded text-[10px]">Enter</kbd> to submit
+          {t("pressToSubmit")}
         </p>
 
         <div className="flex gap-2">
@@ -250,7 +252,7 @@ export function CommentInput({
               disabled={isSubmitting}
             >
               <X className="h-4 w-4 mr-1" />
-              Cancel
+              {t("cancel")}
             </Button>
           )}
           <Button
@@ -260,7 +262,7 @@ export function CommentInput({
             disabled={isEmpty || isSubmitting}
           >
             <Send className="h-4 w-4 mr-1" />
-            {isSubmitting ? 'Sending...' : 'Send'}
+            {isSubmitting ? t("sending") : t("send")}
           </Button>
         </div>
       </div>

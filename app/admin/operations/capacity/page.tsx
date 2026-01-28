@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Server,
   HardDrive,
@@ -45,7 +46,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface CapacityMetric {
   id: string
@@ -97,20 +98,22 @@ const getTrendIcon = (trend: string | null) => {
   }
 }
 
-const getStatusBadge = (status: string) => {
-  switch (status) {
-    case "CRITICAL":
-    case "OVER_CAPACITY":
-      return <Badge variant="destructive">{status.replace("_", " ")}</Badge>
-    case "WARNING":
-      return <Badge className="bg-yellow-500">{status}</Badge>
-    default:
-      return <Badge className="bg-green-500">{status}</Badge>
-  }
-}
-
 export default function CapacityPage() {
+  const t = useTranslations("admin.operations.capacity")
+  const tCommon = useTranslations("common")
   const [metrics, setMetrics] = useState<CapacityMetric[]>([])
+  
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "CRITICAL":
+      case "OVER_CAPACITY":
+        return <Badge variant="destructive">{t(`status.${status.toLowerCase().replace("_", "")}`) || status}</Badge>
+      case "WARNING":
+        return <Badge className="bg-yellow-500">{t("status.warning")}</Badge>
+      default:
+        return <Badge className="bg-green-500">{t("status.normal")}</Badge>
+    }
+  }
   const [summary, setSummary] = useState<Summary | null>(null)
   const [filters, setFilters] = useState<Filters | null>(null)
   const [loading, setLoading] = useState(true)
@@ -149,7 +152,7 @@ export default function CapacityPage() {
       setFilters(data.filters || null)
     } catch (error) {
       console.error("Failed to fetch capacity metrics:", error)
-      toast.error("Failed to fetch capacity metrics")
+      showErrorToast(t("errors.createFailed"))
     } finally {
       setLoading(false)
     }
@@ -171,7 +174,7 @@ export default function CapacityPage() {
         throw new Error("Failed to create metric")
       }
 
-      toast.success("Capacity metric recorded")
+      showSuccessToast(tCommon("success"))
       setIsCreateOpen(false)
       setNewMetric({
         metricType: "CPU",
@@ -184,7 +187,7 @@ export default function CapacityPage() {
       })
       fetchMetrics()
     } catch (error) {
-      toast.error("Failed to create metric")
+      showErrorToast(t("errors.createFailed"))
     }
   }
 
@@ -220,35 +223,35 @@ export default function CapacityPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Server className="h-8 w-8 text-primary" />
-            Capacity Monitoring
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Monitor system capacity and resource utilization across the platform
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button onClick={fetchMetrics} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            {tCommon("refresh")}
           </Button>
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
-                Record Metric
+                {t("createMetric")}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Record Capacity Metric</DialogTitle>
+                <DialogTitle>{t("dialog.createTitle")}</DialogTitle>
                 <DialogDescription>
-                  Manually record a capacity metric for monitoring
+                  {t("dialog.createDescription")}
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Metric Type</Label>
+                    <Label>{t("fields.metricType")}</Label>
                     <Select
                       value={newMetric.metricType}
                       onValueChange={(v) => setNewMetric({ ...newMetric, metricType: v })}
@@ -257,17 +260,17 @@ export default function CapacityPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="CPU">CPU</SelectItem>
-                        <SelectItem value="MEMORY">Memory</SelectItem>
-                        <SelectItem value="STORAGE">Storage</SelectItem>
-                        <SelectItem value="CONNECTIONS">Connections</SelectItem>
-                        <SelectItem value="QUEUE_DEPTH">Queue Depth</SelectItem>
+                        <SelectItem value="CPU">{t("metricTypes.cpu")}</SelectItem>
+                        <SelectItem value="MEMORY">{t("metricTypes.memory")}</SelectItem>
+                        <SelectItem value="STORAGE">{t("metricTypes.storage")}</SelectItem>
+                        <SelectItem value="CONNECTIONS">{t("metricTypes.connections")}</SelectItem>
+                        <SelectItem value="QUEUE_DEPTH">{t("metricTypes.queueDepth")}</SelectItem>
                         <SelectItem value="BANDWIDTH">Bandwidth</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label>Unit</Label>
+                    <Label>{tCommon("unit")}</Label>
                     <Select
                       value={newMetric.unit}
                       onValueChange={(v) => setNewMetric({ ...newMetric, unit: v })}
@@ -279,7 +282,7 @@ export default function CapacityPage() {
                         <SelectItem value="percent">Percent (%)</SelectItem>
                         <SelectItem value="GB">Gigabytes (GB)</SelectItem>
                         <SelectItem value="TB">Terabytes (TB)</SelectItem>
-                        <SelectItem value="connections">Connections</SelectItem>
+                        <SelectItem value="connections">{t("metricTypes.connections")}</SelectItem>
                         <SelectItem value="messages">Messages</SelectItem>
                       </SelectContent>
                     </Select>
@@ -287,7 +290,7 @@ export default function CapacityPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Service</Label>
+                    <Label>{t("fields.service")}</Label>
                     <Input
                       placeholder="e.g., API Gateway"
                       value={newMetric.service}
@@ -295,7 +298,7 @@ export default function CapacityPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Region</Label>
+                    <Label>{t("fields.region")}</Label>
                     <Input
                       placeholder="e.g., us-east-1"
                       value={newMetric.region}
@@ -305,7 +308,7 @@ export default function CapacityPage() {
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label>Current Value</Label>
+                    <Label>{t("fields.currentValue")}</Label>
                     <Input
                       type="number"
                       value={newMetric.currentValue}
@@ -313,7 +316,7 @@ export default function CapacityPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Max Value</Label>
+                    <Label>{t("fields.maxValue")}</Label>
                     <Input
                       type="number"
                       value={newMetric.maxValue}
@@ -321,7 +324,7 @@ export default function CapacityPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Threshold (%)</Label>
+                    <Label>{t("fields.threshold")} (%)</Label>
                     <Input
                       type="number"
                       value={newMetric.threshold}
@@ -332,9 +335,9 @@ export default function CapacityPage() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                  Cancel
+                  {tCommon("cancel")}
                 </Button>
-                <Button onClick={handleCreateMetric}>Record Metric</Button>
+                <Button onClick={handleCreateMetric}>{t("createMetric")}</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -349,7 +352,7 @@ export default function CapacityPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-2xl font-bold">{summary.healthScore}%</div>
-                  <p className="text-xs text-muted-foreground">System Health</p>
+                  <p className="text-xs text-muted-foreground">{t("healthScore")}</p>
                 </div>
                 {summary.healthScore >= 80 ? (
                   <CheckCircle className="h-8 w-8 text-green-500" />
@@ -364,19 +367,19 @@ export default function CapacityPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-green-500">{summary.statusCounts.normal}</div>
-              <p className="text-xs text-muted-foreground">Normal</p>
+              <p className="text-xs text-muted-foreground">{t("statusCounts.normal")}</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-yellow-500">{summary.statusCounts.warning}</div>
-              <p className="text-xs text-muted-foreground">Warning</p>
+              <p className="text-xs text-muted-foreground">{t("statusCounts.warning")}</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-red-500">{summary.statusCounts.critical}</div>
-              <p className="text-xs text-muted-foreground">Critical</p>
+              <p className="text-xs text-muted-foreground">{t("statusCounts.critical")}</p>
             </CardContent>
           </Card>
         </div>
@@ -388,10 +391,10 @@ export default function CapacityPage() {
           <div className="flex gap-4 flex-wrap">
             <Select value={metricTypeFilter} onValueChange={setMetricTypeFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Metric Type" />
+                <SelectValue placeholder={t("filters.metricType")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="all">{t("filters.all")}</SelectItem>
                 {filters?.metricTypes.map((type) => (
                   <SelectItem key={type} value={type}>
                     {type}
@@ -401,10 +404,10 @@ export default function CapacityPage() {
             </Select>
             <Select value={regionFilter} onValueChange={setRegionFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Region" />
+                <SelectValue placeholder={t("filters.region")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Regions</SelectItem>
+                <SelectItem value="all">{t("filters.all")}</SelectItem>
                 {filters?.regions.map((region) => (
                   <SelectItem key={region} value={region}>
                     {region}
@@ -414,10 +417,10 @@ export default function CapacityPage() {
             </Select>
             <Select value={serviceFilter} onValueChange={setServiceFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Service" />
+                <SelectValue placeholder={t("filters.service")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Services</SelectItem>
+                <SelectItem value="all">{t("filters.all")}</SelectItem>
                 {filters?.services.map((service) => (
                   <SelectItem key={service} value={service}>
                     {service}
@@ -427,14 +430,14 @@ export default function CapacityPage() {
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("filters.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="NORMAL">Normal</SelectItem>
-                <SelectItem value="WARNING">Warning</SelectItem>
-                <SelectItem value="CRITICAL">Critical</SelectItem>
-                <SelectItem value="OVER_CAPACITY">Over Capacity</SelectItem>
+                <SelectItem value="all">{t("filters.all")}</SelectItem>
+                <SelectItem value="NORMAL">{t("status.normal")}</SelectItem>
+                <SelectItem value="WARNING">{t("status.warning")}</SelectItem>
+                <SelectItem value="CRITICAL">{t("status.critical")}</SelectItem>
+                <SelectItem value="OVER_CAPACITY">{t("status.overCapacity")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -453,11 +456,11 @@ export default function CapacityPage() {
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg">{service}</CardTitle>
                   {criticalCount > 0 ? (
-                    <Badge variant="destructive">{criticalCount} Critical</Badge>
+                    <Badge variant="destructive">{criticalCount} {t("statusCounts.critical")}</Badge>
                   ) : warningCount > 0 ? (
-                    <Badge className="bg-yellow-500">{warningCount} Warning</Badge>
+                    <Badge className="bg-yellow-500">{warningCount} {t("statusCounts.warning")}</Badge>
                   ) : (
-                    <Badge className="bg-green-500">Healthy</Badge>
+                    <Badge className="bg-green-500">{t("statusCounts.normal")}</Badge>
                   )}
                 </div>
               </CardHeader>
@@ -469,7 +472,7 @@ export default function CapacityPage() {
                       <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-2">
                           {metricTypeIcons[metric.metricType] || <Activity className="h-4 w-4" />}
-                          <span>{metric.metricType}</span>
+                          <span>{t(`metricTypes.${metric.metricType.toLowerCase()}`)}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           {getTrendIcon(metric.trend)}
@@ -494,21 +497,21 @@ export default function CapacityPage() {
       {/* Detailed Metrics Table */}
       <Card>
         <CardHeader>
-          <CardTitle>All Metrics</CardTitle>
-          <CardDescription>Detailed view of all capacity metrics</CardDescription>
+          <CardTitle>{tCommon("all")} {t("title")}</CardTitle>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Type</TableHead>
-                <TableHead>Service</TableHead>
-                <TableHead>Region</TableHead>
-                <TableHead>Usage</TableHead>
-                <TableHead>Threshold</TableHead>
-                <TableHead>Trend</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Recorded</TableHead>
+                <TableHead>{t("columns.metric")}</TableHead>
+                <TableHead>{t("columns.service")}</TableHead>
+                <TableHead>{t("columns.region")}</TableHead>
+                <TableHead>{t("columns.current")}</TableHead>
+                <TableHead>{t("columns.threshold")}</TableHead>
+                <TableHead>{t("columns.trend")}</TableHead>
+                <TableHead>{t("columns.status")}</TableHead>
+                <TableHead>{tCommon("recorded")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -524,7 +527,7 @@ export default function CapacityPage() {
                 <TableRow>
                   <TableCell colSpan={8} className="text-center py-12">
                     <Server className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No capacity metrics found</p>
+                    <p className="text-muted-foreground">{t("noMetrics")}</p>
                   </TableCell>
                 </TableRow>
               ) : (
@@ -535,7 +538,7 @@ export default function CapacityPage() {
                       <TableCell>
                         <div className="flex items-center gap-2">
                           {metricTypeIcons[metric.metricType] || <Activity className="h-4 w-4" />}
-                          <span>{metric.metricType}</span>
+                          <span>{t(`metricTypes.${metric.metricType.toLowerCase()}`)}</span>
                         </div>
                       </TableCell>
                       <TableCell>{metric.service || "-"}</TableCell>
@@ -555,7 +558,7 @@ export default function CapacityPage() {
                         <div className="flex items-center gap-1">
                           {getTrendIcon(metric.trend)}
                           <span className="text-xs text-muted-foreground">
-                            {metric.trend || "STABLE"}
+                            {metric.trend ? t(`trend.${metric.trend.toLowerCase()}`) : t("trend.stable")}
                           </span>
                         </div>
                       </TableCell>

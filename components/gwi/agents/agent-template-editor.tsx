@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -44,17 +45,12 @@ interface AgentTemplateEditorProps {
   template?: AgentTemplate
 }
 
-const CATEGORIES = [
-  { value: "analysis", label: "Analysis" },
-  { value: "classification", label: "Classification" },
-  { value: "data_quality", label: "Data Quality" },
-  { value: "reporting", label: "Reporting" },
-  { value: "automation", label: "Automation" },
-  { value: "integration", label: "Integration" },
-]
+const CATEGORY_VALUES = ["analysis", "classification", "data_quality", "reporting", "automation", "integration"] as const
 
 export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
   const router = useRouter()
+  const t = useTranslations("gwi.editors.agentTemplate")
+  const tCommon = useTranslations("gwi.editors.common")
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -93,32 +89,32 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
     const newErrors: Record<string, string> = {}
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required"
+      newErrors.name = t("validation.nameRequired")
     }
 
     if (!formData.category) {
-      newErrors.category = "Category is required"
+      newErrors.category = t("validation.categoryRequired")
     }
 
     try {
       JSON.parse(formData.configuration)
     } catch {
-      newErrors.configuration = "Invalid JSON format"
+      newErrors.configuration = t("validation.invalidJsonFormat")
     }
 
     try {
       const tools = JSON.parse(formData.defaultTools)
       if (!Array.isArray(tools)) {
-        newErrors.defaultTools = "Must be a JSON array"
+        newErrors.defaultTools = t("validation.mustBeJsonArray")
       }
     } catch {
-      newErrors.defaultTools = "Invalid JSON format"
+      newErrors.defaultTools = t("validation.invalidJsonFormat")
     }
 
     try {
       JSON.parse(formData.defaultPrompts)
     } catch {
-      newErrors.defaultPrompts = "Invalid JSON format"
+      newErrors.defaultPrompts = t("validation.invalidJsonFormat")
     }
 
     setErrors(newErrors)
@@ -165,11 +161,11 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
         }
       } else {
         const errorData = await response.json()
-        setErrors({ submit: errorData.error || "Failed to save template" })
+        setErrors({ submit: errorData.error || t("errors.failedToSave") })
       }
     } catch (error) {
       console.error("Failed to save agent template:", error)
-      setErrors({ submit: "Failed to save template" })
+      setErrors({ submit: t("errors.failedToSave") })
     } finally {
       setIsLoading(false)
     }
@@ -189,11 +185,11 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
         router.push("/gwi/agents")
       } else {
         const errorData = await response.json()
-        setErrors({ submit: errorData.error || "Failed to delete template" })
+        setErrors({ submit: errorData.error || t("errors.failedToDelete") })
       }
     } catch (error) {
       console.error("Failed to delete agent template:", error)
-      setErrors({ submit: "Failed to delete template" })
+      setErrors({ submit: t("errors.failedToDelete") })
     } finally {
       setIsDeleting(false)
     }
@@ -205,21 +201,21 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
         {/* Basic Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Template Settings</CardTitle>
+            <CardTitle>{t("templateSettings")}</CardTitle>
             <CardDescription>
-              Configure the basic settings for this agent template
+              {t("templateSettingsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Template Name *</Label>
+              <Label htmlFor="name">{t("templateName")} *</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                placeholder="Enter template name"
+                placeholder={t("placeholders.templateName")}
                 className={errors.name ? "border-red-500" : ""}
               />
               {errors.name && (
@@ -228,20 +224,20 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{tCommon("description")}</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                placeholder="Describe what this agent template does"
+                placeholder={t("placeholders.description")}
                 rows={3}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="category">Category *</Label>
+              <Label htmlFor="category">{t("category")} *</Label>
               <Select
                 value={formData.category}
                 onValueChange={(value) =>
@@ -249,12 +245,12 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
                 }
               >
                 <SelectTrigger className={errors.category ? "border-red-500" : ""}>
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder={t("placeholders.selectCategory")} />
                 </SelectTrigger>
                 <SelectContent>
-                  {CATEGORIES.map((cat) => (
-                    <SelectItem key={cat.value} value={cat.value}>
-                      {cat.label}
+                  {CATEGORY_VALUES.map((catValue) => (
+                    <SelectItem key={catValue} value={catValue}>
+                      {t(`categories.${catValue}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -266,9 +262,9 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="published">Published</Label>
+                <Label htmlFor="published">{t("published")}</Label>
                 <p className="text-sm text-muted-foreground">
-                  Make this template available for use
+                  {t("publishedDescription")}
                 </p>
               </div>
               <Switch
@@ -285,14 +281,14 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
         {/* Configuration */}
         <Card>
           <CardHeader>
-            <CardTitle>Configuration</CardTitle>
+            <CardTitle>{t("configuration")}</CardTitle>
             <CardDescription>
-              Define the agent&apos;s model settings and capabilities (JSON format)
+              {t("configurationDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <Label htmlFor="configuration">Configuration JSON *</Label>
+              <Label htmlFor="configuration">{t("configurationJson")} *</Label>
               <Textarea
                 id="configuration"
                 value={formData.configuration}
@@ -307,7 +303,7 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
                 <p className="text-sm text-red-500">{errors.configuration}</p>
               )}
               <p className="text-xs text-muted-foreground">
-                Example: {`{ "model": "gpt-4-turbo", "temperature": 0.3, "maxIterations": 10, "capabilities": ["data_analysis"] }`}
+                {t("configurationExample")}
               </p>
             </div>
           </CardContent>
@@ -316,14 +312,14 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
         {/* Default Tools */}
         <Card>
           <CardHeader>
-            <CardTitle>Default Tools</CardTitle>
+            <CardTitle>{t("defaultTools")}</CardTitle>
             <CardDescription>
-              List of tool names this agent can use by default (JSON array)
+              {t("defaultToolsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <Label htmlFor="defaultTools">Tools JSON</Label>
+              <Label htmlFor="defaultTools">{t("toolsJson")}</Label>
               <Textarea
                 id="defaultTools"
                 value={formData.defaultTools}
@@ -338,7 +334,7 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
                 <p className="text-sm text-red-500">{errors.defaultTools}</p>
               )}
               <p className="text-xs text-muted-foreground">
-                Example: {`["survey_query", "llm_invoke", "report_generator"]`}
+                {t("toolsExample")}
               </p>
             </div>
           </CardContent>
@@ -347,14 +343,14 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
         {/* Default Prompts */}
         <Card>
           <CardHeader>
-            <CardTitle>Default Prompts</CardTitle>
+            <CardTitle>{t("defaultPrompts")}</CardTitle>
             <CardDescription>
-              Define the default prompts for this agent (JSON object)
+              {t("defaultPromptsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <Label htmlFor="defaultPrompts">Prompts JSON</Label>
+              <Label htmlFor="defaultPrompts">{t("promptsJson")}</Label>
               <Textarea
                 id="defaultPrompts"
                 value={formData.defaultPrompts}
@@ -369,7 +365,7 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
                 <p className="text-sm text-red-500">{errors.defaultPrompts}</p>
               )}
               <p className="text-xs text-muted-foreground">
-                Example: {`{ "system": "You are an expert analyst...", "template": "Analysis Template" }`}
+                {t("promptsExample")}
               </p>
             </div>
           </CardContent>
@@ -380,12 +376,12 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Template Information
+                {t("templateInformation")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Current Version: {template.version}
+                {t("currentVersion", { version: template.version })}
               </p>
             </CardContent>
           </Card>
@@ -412,31 +408,30 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
                     {isDeleting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Deleting...
+                        {tCommon("deleting")}
                       </>
                     ) : (
                       <>
                         <Trash2 className="mr-2 h-4 w-4" />
-                        Delete Template
+                        {t("deleteTemplate")}
                       </>
                     )}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Agent Template</AlertDialogTitle>
+                    <AlertDialogTitle>{t("deleteDialogTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Are you sure you want to delete &quot;{template.name}&quot;? This
-                      action cannot be undone.
+                      {t("deleteDialogDescription", { name: template.name })}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDelete}
                       className="bg-red-600 hover:bg-red-700"
                     >
-                      Delete
+                      {tCommon("delete")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -445,18 +440,18 @@ export function AgentTemplateEditor({ template }: AgentTemplateEditorProps) {
           </div>
           <div className="flex gap-2">
             <Button type="button" variant="outline" onClick={() => router.back()}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {tCommon("saving")}
                 </>
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  {template ? "Save Changes" : "Create Template"}
+                  {template ? tCommon("saveChanges") : t("createTemplate")}
                 </>
               )}
             </Button>

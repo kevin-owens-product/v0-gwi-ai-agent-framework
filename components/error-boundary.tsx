@@ -1,12 +1,14 @@
 "use client"
 
 import React, { Component, ErrorInfo, ReactNode } from 'react'
+import { useTranslations } from 'next-intl'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import * as Sentry from '@sentry/nextjs'
 
-// Fallback text for when translations are not available
+// Fallback text for when translations are not available (class component cannot use hooks)
+// These are loaded from ui.errors namespace when available
 const FALLBACK_TEXT = {
   somethingWentWrong: 'Something went wrong',
   unexpectedErrorDescription: 'An unexpected error occurred. Please try again or contact support if the problem persists.',
@@ -172,11 +174,13 @@ export function ErrorFallback({
   error?: Error
   resetError?: () => void
 }): ReactNode {
+  const t = useTranslations('errors')
+
   return (
     <div className="flex flex-col items-center justify-center gap-4 p-8 text-center">
       <AlertTriangle className="h-12 w-12 text-destructive" />
       <div>
-        <h2 className="text-lg font-semibold">{FALLBACK_TEXT.somethingWentWrong}</h2>
+        <h2 className="text-lg font-semibold">{t('somethingWentWrong')}</h2>
         {error && process.env.NODE_ENV === 'development' && (
           <p className="mt-1 text-sm text-muted-foreground">{error.message}</p>
         )}
@@ -184,7 +188,7 @@ export function ErrorFallback({
       {resetError && (
         <Button onClick={resetError} size="sm">
           <RefreshCw className="mr-2 h-4 w-4" />
-          {FALLBACK_TEXT.tryAgain}
+          {t('tryAgain')}
         </Button>
       )}
     </div>

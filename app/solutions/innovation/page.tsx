@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Lightbulb, Rocket, Zap, Users, Brain, ArrowRight, CheckCircle2, Layers, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,29 +8,41 @@ import { Badge } from "@/components/ui/badge"
 import { LandingHeader } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 import { innovationAgents } from "@/lib/solution-agents"
+import { useTranslations } from "next-intl"
 
 export default function InnovationPage() {
+  const t = useTranslations("solutions.innovation")
+
   const workflows = [
     {
-      name: "Innovation Sprint",
-      time: "6 hours",
-      description: "Identify opportunities, generate concepts, validate ideas, plan MVP",
+      nameKey: "workflows.sprint.name",
+      timeKey: "workflows.sprint.time",
+      descriptionKey: "workflows.sprint.description",
     },
     {
-      name: "Trend-to-Innovation",
-      time: "4 hours",
-      description: "Analyze trends, find intersections, generate concepts, assess viability",
+      nameKey: "workflows.trendToInnovation.name",
+      timeKey: "workflows.trendToInnovation.time",
+      descriptionKey: "workflows.trendToInnovation.description",
     },
     {
-      name: "Consumer Problem Solving",
-      time: "3 hours",
-      description: "Research pain points, ideate solutions, validate with users",
+      nameKey: "workflows.problemSolving.name",
+      timeKey: "workflows.problemSolving.time",
+      descriptionKey: "workflows.problemSolving.description",
     },
     {
-      name: "Future Scenario Planning",
-      time: "5 hours",
-      description: "Build scenarios, identify implications, recommend strategies",
+      nameKey: "workflows.scenarioPlanning.name",
+      timeKey: "workflows.scenarioPlanning.time",
+      descriptionKey: "workflows.scenarioPlanning.description",
     },
+  ]
+
+  const challenges = [
+    "challenges.disconnected",
+    "challenges.breakthrough",
+    "challenges.limitedResources",
+    "challenges.highFailure",
+    "challenges.slowTimeToMarket",
+    "challenges.prediction",
   ]
 
   return (
@@ -39,37 +53,36 @@ export default function InnovationPage() {
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
             <Badge variant="secondary" className="mb-4">
-              Innovation & Strategy
+              {t("badge")}
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
-              Turn Consumer Insights Into <span className="text-primary">Breakthrough Innovation</span>
+              {t("hero.titleStart")} <span className="text-primary">{t("hero.titleHighlight")}</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-3xl text-pretty">
-              Discover opportunities, generate breakthrough ideas, and validate innovations grounded in real human
-              needs. Move from insight to impact faster than ever.
+              {t("hero.description")}
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-12">
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">10x More</h3>
-                <p className="text-sm text-muted-foreground">Innovation concepts explored per quarter</p>
+                <h3 className="font-semibold mb-2">{t("stats.more.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.more.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">65% Faster</h3>
-                <p className="text-sm text-muted-foreground">Time from idea to validated concept</p>
+                <h3 className="font-semibold mb-2">{t("stats.faster.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.faster.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">2x Higher</h3>
-                <p className="text-sm text-muted-foreground">Success rate for launched innovations</p>
+                <h3 className="font-semibold mb-2">{t("stats.higher.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.higher.description")}</p>
               </Card>
             </div>
 
             <div className="flex flex-wrap gap-4">
               <Button size="lg" asChild>
-                <Link href="/dashboard">Start Innovating</Link>
+                <Link href="/dashboard">{t("cta.startInnovating")}</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Request Demo</Link>
+                <Link href="/contact">{t("cta.requestDemo")}</Link>
               </Button>
             </div>
           </div>
@@ -77,19 +90,12 @@ export default function InnovationPage() {
 
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-8">Key Challenges We Solve</h2>
+            <h2 className="text-3xl font-bold mb-8">{t("challengesTitle")}</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {[
-                "Innovation efforts disconnected from real consumer needs",
-                "Difficulty generating truly breakthrough ideas consistently",
-                "Limited resources for extensive trend analysis and synthesis",
-                "High failure rate of innovations due to poor market fit",
-                "Slow time-to-market for innovative concepts",
-                "Inability to predict which innovations will succeed",
-              ].map((challenge, i) => (
+              {challenges.map((challengeKey, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-muted-foreground">{challenge}</p>
+                  <p className="text-muted-foreground">{t(challengeKey)}</p>
                 </div>
               ))}
             </div>
@@ -98,9 +104,9 @@ export default function InnovationPage() {
 
         <section className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Innovation AI Agents</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("agentsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Intelligent agents that help you discover opportunities and create breakthrough solutions.
+              {t("agentsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -132,7 +138,7 @@ export default function InnovationPage() {
                           </div>
                           <div className="mt-4">
                             <span className="text-sm text-primary flex items-center gap-1">
-                              Open Agent <ArrowRight className="h-3 w-3" />
+                              {t("openAgent")} <ArrowRight className="h-3 w-3" />
                             </span>
                           </div>
                         </div>
@@ -147,19 +153,19 @@ export default function InnovationPage() {
 
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Pre-built Workflows</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("workflowsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Accelerate innovation with structured workflows that guide you from insight to launch.
+              {t("workflowsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
               {workflows.map((workflow, i) => (
                 <Card key={i} className="p-6 border-border/40">
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-semibold">{workflow.name}</h3>
-                    <Badge variant="outline">{workflow.time}</Badge>
+                    <h3 className="font-semibold">{t(workflow.nameKey)}</h3>
+                    <Badge variant="outline">{t(workflow.timeKey)}</Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">{workflow.description}</p>
+                  <p className="text-sm text-muted-foreground">{t(workflow.descriptionKey)}</p>
                 </Card>
               ))}
             </div>
@@ -168,18 +174,18 @@ export default function InnovationPage() {
 
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Unlock Breakthrough Innovation?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("finalCta.title")}</h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Join forward-thinking organizations using human insights to drive innovation.
+              {t("finalCta.description")}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Button size="lg" asChild>
                 <Link href="/dashboard">
-                  Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("finalCta.getStarted")} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Talk to Sales</Link>
+                <Link href="/contact">{t("finalCta.talkToSales")}</Link>
               </Button>
             </div>
           </div>

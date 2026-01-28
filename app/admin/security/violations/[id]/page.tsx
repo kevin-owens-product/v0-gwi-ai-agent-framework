@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import {
   AlertTriangle,
   ArrowLeft,
@@ -30,7 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface SecurityViolation {
   id: string
@@ -59,15 +60,10 @@ interface SecurityViolation {
   }
 }
 
-const statuses = [
-  { value: "OPEN", label: "Open" },
-  { value: "INVESTIGATING", label: "Investigating" },
-  { value: "RESOLVED", label: "Resolved" },
-  { value: "FALSE_POSITIVE", label: "False Positive" },
-  { value: "ESCALATED", label: "Escalated" },
-]
+const statusKeys = ["OPEN", "INVESTIGATING", "RESOLVED", "FALSE_POSITIVE", "ESCALATED"] as const
 
 export default function ViolationDetailPage() {
+  const t = useTranslations("admin.security.violations")
   const router = useRouter()
   const params = useParams()
   const [violation, setViolation] = useState<SecurityViolation | null>(null)
@@ -94,7 +90,7 @@ export default function ViolationDetailPage() {
       setResolution(data.violation.resolution || "")
     } catch (error) {
       console.error("Failed to fetch violation:", error)
-      toast.error("Failed to fetch violation details")
+      showErrorToast(t("toast.fetchDetailsFailed"))
       router.push("/admin/security/violations")
     } finally {
       setLoading(false)
@@ -119,10 +115,10 @@ export default function ViolationDetailPage() {
         throw new Error("Failed to update violation")
       }
 
-      toast.success("Violation updated successfully")
+      showSuccessToast(t("toast.updateSuccess"))
       fetchViolation()
     } catch (error) {
-      toast.error("Failed to update violation")
+      showErrorToast(t("toast.updateFailed"))
     } finally {
       setSaving(false)
     }
@@ -131,30 +127,30 @@ export default function ViolationDetailPage() {
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "CRITICAL":
-        return <Badge variant="destructive" className="text-lg px-3 py-1">{severity}</Badge>
+        return <Badge variant="destructive" className="text-lg px-3 py-1">{t(`severities.${severity}`)}</Badge>
       case "WARNING":
-        return <Badge variant="default" className="bg-yellow-500 text-lg px-3 py-1">{severity}</Badge>
+        return <Badge variant="default" className="bg-yellow-500 text-lg px-3 py-1">{t(`severities.${severity}`)}</Badge>
       case "INFO":
-        return <Badge variant="secondary" className="text-lg px-3 py-1">{severity}</Badge>
+        return <Badge variant="secondary" className="text-lg px-3 py-1">{t(`severities.${severity}`)}</Badge>
       default:
-        return <Badge variant="outline" className="text-lg px-3 py-1">{severity}</Badge>
+        return <Badge variant="outline" className="text-lg px-3 py-1">{t(`severities.${severity}`, { defaultValue: severity })}</Badge>
     }
   }
 
   const getStatusBadge = (s: string) => {
     switch (s) {
       case "OPEN":
-        return <Badge variant="destructive">{s}</Badge>
+        return <Badge variant="destructive">{t(`statuses.${s}`)}</Badge>
       case "INVESTIGATING":
-        return <Badge variant="default" className="bg-blue-500">{s}</Badge>
+        return <Badge variant="default" className="bg-blue-500">{t(`statuses.${s}`)}</Badge>
       case "RESOLVED":
-        return <Badge variant="default" className="bg-green-500">{s}</Badge>
+        return <Badge variant="default" className="bg-green-500">{t(`statuses.${s}`)}</Badge>
       case "FALSE_POSITIVE":
-        return <Badge variant="secondary">{s.replace("_", " ")}</Badge>
+        return <Badge variant="secondary">{t(`statuses.${s}`)}</Badge>
       case "ESCALATED":
-        return <Badge variant="destructive" className="bg-purple-500">{s}</Badge>
+        return <Badge variant="destructive" className="bg-purple-500">{t(`statuses.${s}`)}</Badge>
       default:
-        return <Badge variant="outline">{s}</Badge>
+        return <Badge variant="outline">{t(`statuses.${s}`, { defaultValue: s })}</Badge>
     }
   }
 
@@ -171,14 +167,14 @@ export default function ViolationDetailPage() {
     return (
       <div className="text-center py-12">
         <AlertTriangle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <p className="text-muted-foreground">Violation not found</p>
+        <p className="text-muted-foreground">{t("notFound")}</p>
         <Button
           variant="outline"
           className="mt-4"
           onClick={() => router.push("/admin/security/violations")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Violations
+          {t("backToViolations")}
         </Button>
       </div>
     )
@@ -191,14 +187,14 @@ export default function ViolationDetailPage() {
         <div className="flex items-center gap-4">
           <Button variant="ghost" onClick={() => router.push("/admin/security/violations")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+            {t("actions.back")}
           </Button>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-3">
               <AlertTriangle className="h-6 w-6 text-destructive" />
-              Security Violation
+              {t("detail.title")}
             </h1>
-            <p className="text-sm text-muted-foreground">ID: {violation.id}</p>
+            <p className="text-sm text-muted-foreground">{t("detail.id")}: {violation.id}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -212,14 +208,14 @@ export default function ViolationDetailPage() {
         <div className="md:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Violation Details</CardTitle>
+              <CardTitle>{t("detail.violationDetails")}</CardTitle>
               <CardDescription>
-                {violation.violationType.replace(/_/g, " ")}
+                {t(`violationTypes.${violation.violationType}`)}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-muted-foreground">Description</Label>
+                <Label className="text-muted-foreground">{t("detail.description")}</Label>
                 <p className="mt-1">{violation.description}</p>
               </div>
 
@@ -229,30 +225,30 @@ export default function ViolationDetailPage() {
                 <div>
                   <Label className="text-muted-foreground flex items-center gap-2">
                     <Globe className="h-4 w-4" />
-                    IP Address
+                    {t("detail.ipAddress")}
                   </Label>
-                  <p className="mt-1 font-mono">{violation.ipAddress || "N/A"}</p>
+                  <p className="mt-1 font-mono">{violation.ipAddress || t("common.na")}</p>
                 </div>
                 <div>
                   <Label className="text-muted-foreground flex items-center gap-2">
                     <Monitor className="h-4 w-4" />
-                    User Agent
+                    {t("detail.userAgent")}
                   </Label>
-                  <p className="mt-1 text-sm truncate">{violation.userAgent || "N/A"}</p>
+                  <p className="mt-1 text-sm truncate">{violation.userAgent || t("common.na")}</p>
                 </div>
                 <div>
                   <Label className="text-muted-foreground flex items-center gap-2">
                     <User className="h-4 w-4" />
-                    User ID
+                    {t("detail.userId")}
                   </Label>
-                  <p className="mt-1 font-mono text-sm">{violation.userId || "N/A"}</p>
+                  <p className="mt-1 font-mono text-sm">{violation.userId || t("common.na")}</p>
                 </div>
                 <div>
                   <Label className="text-muted-foreground flex items-center gap-2">
                     <Building className="h-4 w-4" />
-                    Organization ID
+                    {t("detail.organizationId")}
                   </Label>
-                  <p className="mt-1 font-mono text-sm">{violation.orgId || "Platform-wide"}</p>
+                  <p className="mt-1 font-mono text-sm">{violation.orgId || t("detail.platformWide")}</p>
                 </div>
               </div>
 
@@ -263,13 +259,13 @@ export default function ViolationDetailPage() {
                     <div>
                       <Label className="text-muted-foreground flex items-center gap-2">
                         <FileText className="h-4 w-4" />
-                        Resource Type
+                        {t("detail.resourceType")}
                       </Label>
                       <p className="mt-1">{violation.resourceType}</p>
                     </div>
                     <div>
-                      <Label className="text-muted-foreground">Resource ID</Label>
-                      <p className="mt-1 font-mono text-sm">{violation.resourceId || "N/A"}</p>
+                      <Label className="text-muted-foreground">{t("detail.resourceId")}</Label>
+                      <p className="mt-1 font-mono text-sm">{violation.resourceId || t("common.na")}</p>
                     </div>
                   </div>
                 </>
@@ -279,7 +275,7 @@ export default function ViolationDetailPage() {
                 <>
                   <Separator />
                   <div>
-                    <Label className="text-muted-foreground">Additional Details</Label>
+                    <Label className="text-muted-foreground">{t("detail.additionalDetails")}</Label>
                     <pre className="mt-2 p-4 bg-muted rounded-lg text-sm overflow-auto">
                       {JSON.stringify(violation.details, null, 2)}
                     </pre>
@@ -291,7 +287,7 @@ export default function ViolationDetailPage() {
 
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
-                Occurred at: {new Date(violation.createdAt).toLocaleString()}
+                {t("detail.occurredAt")}: {new Date(violation.createdAt).toLocaleString()}
               </div>
             </CardContent>
           </Card>
@@ -301,29 +297,29 @@ export default function ViolationDetailPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
-                Related Policy
+                {t("detail.relatedPolicy")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-muted-foreground">Policy Name</Label>
-                  <p className="mt-1 font-medium">{violation.policy?.name || "N/A"}</p>
+                  <Label className="text-muted-foreground">{t("detail.policyName")}</Label>
+                  <p className="mt-1 font-medium">{violation.policy?.name || t("common.na")}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Policy Type</Label>
+                  <Label className="text-muted-foreground">{t("detail.policyType")}</Label>
                   <Badge variant="outline" className="mt-1">
-                    {violation.policy?.type?.replace(/_/g, " ") || "N/A"}
+                    {violation.policy?.type ? t(`policyTypes.${violation.policy.type}`, { defaultValue: violation.policy.type.replace(/_/g, " ") }) : t("common.na")}
                   </Badge>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Scope</Label>
+                  <Label className="text-muted-foreground">{t("detail.scope")}</Label>
                   <Badge variant="secondary" className="mt-1">
-                    {violation.policy?.scope?.replace(/_/g, " ") || "N/A"}
+                    {violation.policy?.scope ? t(`policyScopes.${violation.policy.scope}`, { defaultValue: violation.policy.scope.replace(/_/g, " ") }) : t("common.na")}
                   </Badge>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Enforcement Mode</Label>
+                  <Label className="text-muted-foreground">{t("detail.enforcementMode")}</Label>
                   <Badge
                     variant={
                       violation.policy?.enforcementMode === "STRICT"
@@ -334,7 +330,7 @@ export default function ViolationDetailPage() {
                     }
                     className="mt-1"
                   >
-                    {violation.policy?.enforcementMode || "N/A"}
+                    {violation.policy?.enforcementMode ? t(`enforcementModes.${violation.policy.enforcementMode}`, { defaultValue: violation.policy.enforcementMode }) : t("common.na")}
                   </Badge>
                 </div>
               </div>
@@ -343,7 +339,7 @@ export default function ViolationDetailPage() {
                 className="mt-4"
                 onClick={() => router.push(`/admin/security/policies`)}
               >
-                View Policy
+                {t("actions.viewPolicy")}
               </Button>
             </CardContent>
           </Card>
@@ -353,20 +349,20 @@ export default function ViolationDetailPage() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Resolution</CardTitle>
-              <CardDescription>Update the violation status and add resolution notes</CardDescription>
+              <CardTitle>{t("resolution.title")}</CardTitle>
+              <CardDescription>{t("resolution.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>Status</Label>
+                <Label>{t("resolution.status")}</Label>
                 <Select value={status} onValueChange={setStatus}>
                   <SelectTrigger className="mt-2">
-                    <SelectValue placeholder="Select status" />
+                    <SelectValue placeholder={t("resolution.selectStatus")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {statuses.map((s) => (
-                      <SelectItem key={s.value} value={s.value}>
-                        {s.label}
+                    {statusKeys.map((s) => (
+                      <SelectItem key={s} value={s}>
+                        {t(`statuses.${s}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -374,10 +370,10 @@ export default function ViolationDetailPage() {
               </div>
 
               <div>
-                <Label>Resolution Notes</Label>
+                <Label>{t("resolution.notes")}</Label>
                 <Textarea
                   className="mt-2"
-                  placeholder="Describe how this violation was resolved..."
+                  placeholder={t("resolution.notesPlaceholder")}
                   value={resolution}
                   onChange={(e) => setResolution(e.target.value)}
                   rows={4}
@@ -390,7 +386,7 @@ export default function ViolationDetailPage() {
                 disabled={saving}
               >
                 <Save className="h-4 w-4 mr-2" />
-                {saving ? "Saving..." : "Save Changes"}
+                {saving ? t("actions.saving") : t("actions.saveChanges")}
               </Button>
             </CardContent>
           </Card>
@@ -400,23 +396,23 @@ export default function ViolationDetailPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-green-500">
                   <CheckCircle className="h-5 w-5" />
-                  Resolution Info
+                  {t("resolution.info")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 <div>
-                  <Label className="text-muted-foreground">Resolved By</Label>
-                  <p className="text-sm">{violation.resolvedBy || "System"}</p>
+                  <Label className="text-muted-foreground">{t("resolution.resolvedBy")}</Label>
+                  <p className="text-sm">{violation.resolvedBy || t("resolution.system")}</p>
                 </div>
                 <div>
-                  <Label className="text-muted-foreground">Resolved At</Label>
+                  <Label className="text-muted-foreground">{t("resolution.resolvedAt")}</Label>
                   <p className="text-sm">
                     {new Date(violation.resolvedAt).toLocaleString()}
                   </p>
                 </div>
                 {violation.resolution && (
                   <div>
-                    <Label className="text-muted-foreground">Notes</Label>
+                    <Label className="text-muted-foreground">{t("resolution.notes")}</Label>
                     <p className="text-sm mt-1">{violation.resolution}</p>
                   </div>
                 )}
@@ -427,7 +423,7 @@ export default function ViolationDetailPage() {
           {/* Quick Actions */}
           <Card>
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
+              <CardTitle>{t("quickActions.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <Button
@@ -440,7 +436,7 @@ export default function ViolationDetailPage() {
                 disabled={status === "INVESTIGATING"}
               >
                 <Clock className="h-4 w-4 mr-2" />
-                Start Investigation
+                {t("quickActions.startInvestigation")}
               </Button>
               <Button
                 variant="outline"
@@ -452,7 +448,7 @@ export default function ViolationDetailPage() {
                 disabled={status === "RESOLVED"}
               >
                 <CheckCircle className="h-4 w-4 mr-2" />
-                Mark as Resolved
+                {t("quickActions.markResolved")}
               </Button>
               <Button
                 variant="outline"
@@ -464,7 +460,7 @@ export default function ViolationDetailPage() {
                 disabled={status === "FALSE_POSITIVE"}
               >
                 <XCircle className="h-4 w-4 mr-2" />
-                Mark as False Positive
+                {t("quickActions.markFalsePositive")}
               </Button>
               <Button
                 variant="outline"
@@ -476,7 +472,7 @@ export default function ViolationDetailPage() {
                 disabled={status === "ESCALATED"}
               >
                 <AlertCircle className="h-4 w-4 mr-2" />
-                Escalate
+                {t("quickActions.escalate")}
               </Button>
             </CardContent>
           </Card>

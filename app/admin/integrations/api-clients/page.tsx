@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Key,
   Plus,
@@ -57,13 +58,16 @@ interface APIClient {
   createdAt: string
 }
 
-const clientTypes = [
-  { value: "CONFIDENTIAL", label: "Confidential (Server-side)" },
-  { value: "PUBLIC", label: "Public (SPA/Mobile)" },
-  { value: "SERVICE", label: "Service (Machine-to-Machine)" },
-]
-
 export default function APIClientsPage() {
+  const t = useTranslations("admin.integrations.apiClients")
+  const tCommon = useTranslations("common")
+
+  const clientTypes = [
+    { value: "CONFIDENTIAL", label: t("clientTypes.confidential") },
+    { value: "PUBLIC", label: t("clientTypes.public") },
+    { value: "SERVICE", label: t("clientTypes.service") },
+  ]
+
   const [clients, setClients] = useState<APIClient[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -120,7 +124,7 @@ export default function APIClientsPage() {
 
       const data = await response.json()
 
-      toast.success("API Client Created - Make sure to copy the client secret!")
+      toast.success(t("toast.clientCreated"))
 
       // Show the secret
       if (data.clientSecret) {
@@ -139,7 +143,7 @@ export default function APIClientsPage() {
       })
       fetchClients()
     } catch (error) {
-      toast.error("Failed to create API client")
+      toast.error(t("toast.createFailed"))
     }
   }
 
@@ -156,10 +160,10 @@ export default function APIClientsPage() {
         throw new Error("Failed to update client")
       }
 
-      toast.success(`Client ${newStatus === "ACTIVE" ? "activated" : "suspended"}`)
+      toast.success(newStatus === "ACTIVE" ? t("toast.activated") : t("toast.suspended"))
       fetchClients()
     } catch (error) {
-      toast.error("Failed to update client status")
+      toast.error(t("toast.updateStatusFailed"))
     }
   }
 
@@ -175,10 +179,10 @@ export default function APIClientsPage() {
         throw new Error("Failed to revoke client")
       }
 
-      toast.success("Client revoked successfully")
+      toast.success(t("toast.revoked"))
       fetchClients()
     } catch (error) {
-      toast.error("Failed to revoke client")
+      toast.error(t("toast.revokeFailed"))
     }
   }
 
@@ -193,27 +197,27 @@ export default function APIClientsPage() {
           })
         )
       )
-      toast.success(`${ids.length} client(s) revoked successfully`)
+      toast.success(t("toast.bulkRevoked", { count: ids.length }))
       fetchClients()
       setSelectedIds(new Set())
     } catch (error) {
-      toast.error("Failed to revoke clients")
+      toast.error(t("toast.bulkRevokeFailed"))
     }
   }
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
-    toast.success("Value copied to clipboard")
+    toast.success(t("toast.copied"))
   }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "ACTIVE":
-        return <Badge className="bg-green-500">Active</Badge>
+        return <Badge className="bg-green-500">{t("status.active")}</Badge>
       case "SUSPENDED":
-        return <Badge className="bg-yellow-500">Suspended</Badge>
+        return <Badge className="bg-yellow-500">{t("status.suspended")}</Badge>
       case "REVOKED":
-        return <Badge variant="destructive">Revoked</Badge>
+        return <Badge variant="destructive">{t("status.revoked")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -236,7 +240,7 @@ export default function APIClientsPage() {
   const columns: Column<APIClient>[] = [
     {
       id: "client",
-      header: "Client",
+      header: t("table.client"),
       cell: (client) => (
         <div>
           <p className="font-medium">{client.name}</p>
@@ -250,7 +254,7 @@ export default function APIClientsPage() {
     },
     {
       id: "clientId",
-      header: "Client ID",
+      header: t("table.clientId"),
       cell: (client) => (
         <div className="flex items-center gap-2">
           <code className="text-xs bg-muted px-2 py-1 rounded">
@@ -269,7 +273,7 @@ export default function APIClientsPage() {
     },
     {
       id: "organization",
-      header: "Organization",
+      header: t("table.organization"),
       cell: (client) => (
         <div className="flex items-center gap-2">
           <Building2 className="h-4 w-4 text-muted-foreground" />
@@ -279,17 +283,17 @@ export default function APIClientsPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("table.type"),
       cell: (client) => <Badge variant="outline">{client.type}</Badge>,
     },
     {
       id: "status",
-      header: "Status",
+      header: t("table.status"),
       cell: (client) => getStatusBadge(client.status),
     },
     {
       id: "usage",
-      header: "Usage",
+      header: t("table.usage"),
       cell: (client) => (
         <div className="flex items-center gap-1">
           <Activity className="h-4 w-4 text-muted-foreground" />
@@ -299,7 +303,7 @@ export default function APIClientsPage() {
     },
     {
       id: "lastUsed",
-      header: "Last Used",
+      header: t("table.lastUsed"),
       cell: (client) =>
         client.lastUsedAt ? (
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -307,7 +311,7 @@ export default function APIClientsPage() {
             {new Date(client.lastUsedAt).toLocaleDateString()}
           </div>
         ) : (
-          <span className="text-xs text-muted-foreground">Never</span>
+          <span className="text-xs text-muted-foreground">{t("table.never")}</span>
         ),
     },
   ]
@@ -315,35 +319,33 @@ export default function APIClientsPage() {
   // Define row actions
   const rowActions: RowAction<APIClient>[] = [
     {
-      label: "Edit",
+      label: tCommon("edit"),
       icon: <Edit className="h-4 w-4" />,
       onClick: () => {
-        // TODO: Implement edit functionality
-        toast.info("Edit functionality coming soon")
+        toast.info(t("toast.editComingSoon"))
       },
     },
     {
-      label: "Rotate Secret",
+      label: t("actions.rotateSecret"),
       icon: <RefreshCw className="h-4 w-4" />,
       onClick: () => {
-        // TODO: Implement rotate secret functionality
-        toast.info("Rotate secret functionality coming soon")
+        toast.info(t("toast.rotateSecretComingSoon"))
       },
     },
     {
-      label: "Suspend",
+      label: t("actions.suspend"),
       icon: <PowerOff className="h-4 w-4" />,
       onClick: handleToggleStatus,
       hidden: (client) => client.status !== "ACTIVE",
     },
     {
-      label: "Activate",
+      label: t("actions.activate"),
       icon: <Power className="h-4 w-4" />,
       onClick: handleToggleStatus,
       hidden: (client) => client.status === "ACTIVE",
     },
     {
-      label: "Revoke",
+      label: t("actions.revoke"),
       icon: <Trash className="h-4 w-4" />,
       onClick: handleRevokeClient,
       variant: "destructive",
@@ -355,12 +357,12 @@ export default function APIClientsPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Revoke Selected",
+      label: t("bulkActions.revokeSelected"),
       icon: <Trash className="h-4 w-4" />,
       onClick: handleBulkRevoke,
       variant: "destructive",
-      confirmTitle: "Revoke API Clients",
-      confirmDescription: "Are you sure you want to revoke the selected API clients? This action cannot be undone.",
+      confirmTitle: t("bulkActions.revokeConfirmTitle"),
+      confirmDescription: t("bulkActions.revokeConfirmDescription"),
     },
   ]
 
@@ -370,9 +372,9 @@ export default function APIClientsPage() {
       <Dialog open={!!showSecret} onOpenChange={() => setShowSecret(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Client Secret Generated</DialogTitle>
+            <DialogTitle>{t("secretDialog.title")}</DialogTitle>
             <DialogDescription>
-              Copy this secret now - it will not be shown again!
+              {t("secretDialog.description")}
             </DialogDescription>
           </DialogHeader>
           <div className="p-4 bg-muted rounded-lg font-mono text-sm break-all">
@@ -381,7 +383,7 @@ export default function APIClientsPage() {
           <DialogFooter>
             <Button onClick={() => copyToClipboard(showSecret!)}>
               <Copy className="h-4 w-4 mr-2" />
-              Copy Secret
+              {t("secretDialog.copySecret")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -392,32 +394,32 @@ export default function APIClientsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Key className="h-8 w-8 text-primary" />
-            API Clients
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Manage OAuth clients and API access credentials
+            {t("description")}
           </p>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              Create Client
+              {t("createButton")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Create API Client</DialogTitle>
+              <DialogTitle>{t("createDialog.title")}</DialogTitle>
               <DialogDescription>
-                Create a new OAuth client for API access
+                {t("createDialog.description")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="name">Client Name</Label>
+                <Label htmlFor="name">{t("form.clientName")}</Label>
                 <Input
                   id="name"
-                  placeholder="My API Client"
+                  placeholder={t("form.clientNamePlaceholder")}
                   value={newClient.name}
                   onChange={(e) =>
                     setNewClient({ ...newClient, name: e.target.value })
@@ -425,10 +427,10 @@ export default function APIClientsPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{tCommon("description")}</Label>
                 <Textarea
                   id="description"
-                  placeholder="What is this client used for?"
+                  placeholder={t("form.descriptionPlaceholder")}
                   value={newClient.description}
                   onChange={(e) =>
                     setNewClient({ ...newClient, description: e.target.value })
@@ -437,7 +439,7 @@ export default function APIClientsPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label>Client Type</Label>
+                  <Label>{t("form.clientType")}</Label>
                   <Select
                     value={newClient.type}
                     onValueChange={(value) =>
@@ -457,10 +459,10 @@ export default function APIClientsPage() {
                   </Select>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="orgId">Organization ID</Label>
+                  <Label htmlFor="orgId">{t("form.organizationId")}</Label>
                   <Input
                     id="orgId"
-                    placeholder="Organization ID"
+                    placeholder={t("form.organizationIdPlaceholder")}
                     value={newClient.orgId}
                     onChange={(e) =>
                       setNewClient({ ...newClient, orgId: e.target.value })
@@ -469,7 +471,7 @@ export default function APIClientsPage() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="rateLimit">Rate Limit (requests/minute)</Label>
+                <Label htmlFor="rateLimit">{t("form.rateLimit")}</Label>
                 <Input
                   id="rateLimit"
                   type="number"
@@ -480,10 +482,10 @@ export default function APIClientsPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="redirectUris">Redirect URIs (one per line)</Label>
+                <Label htmlFor="redirectUris">{t("form.redirectUris")}</Label>
                 <Textarea
                   id="redirectUris"
-                  placeholder="https://example.com/callback"
+                  placeholder={t("form.redirectUrisPlaceholder")}
                   value={newClient.redirectUris}
                   onChange={(e) =>
                     setNewClient({ ...newClient, redirectUris: e.target.value })
@@ -491,10 +493,10 @@ export default function APIClientsPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="allowedScopes">Allowed Scopes (comma-separated)</Label>
+                <Label htmlFor="allowedScopes">{t("form.allowedScopes")}</Label>
                 <Input
                   id="allowedScopes"
-                  placeholder="read, write, admin"
+                  placeholder={t("form.allowedScopesPlaceholder")}
                   value={newClient.allowedScopes}
                   onChange={(e) =>
                     setNewClient({ ...newClient, allowedScopes: e.target.value })
@@ -504,13 +506,13 @@ export default function APIClientsPage() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button
                 onClick={handleCreateClient}
                 disabled={!newClient.name || !newClient.orgId}
               >
-                Create Client
+                {t("createButton")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -522,7 +524,7 @@ export default function APIClientsPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{clients.length}</div>
-            <p className="text-xs text-muted-foreground">Total Clients</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalClients")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -530,7 +532,7 @@ export default function APIClientsPage() {
             <div className="text-2xl font-bold text-green-500">
               {clients.filter((c) => c.status === "ACTIVE").length}
             </div>
-            <p className="text-xs text-muted-foreground">Active</p>
+            <p className="text-xs text-muted-foreground">{t("stats.active")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -538,7 +540,7 @@ export default function APIClientsPage() {
             <div className="text-2xl font-bold text-blue-500">
               {formatNumber(clients.reduce((acc, c) => acc + c.totalRequests, 0))}
             </div>
-            <p className="text-xs text-muted-foreground">Total Requests</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalRequests")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -546,7 +548,7 @@ export default function APIClientsPage() {
             <div className="text-2xl font-bold text-yellow-500">
               {clients.filter((c) => c.status === "SUSPENDED").length}
             </div>
-            <p className="text-xs text-muted-foreground">Suspended</p>
+            <p className="text-xs text-muted-foreground">{t("stats.suspended")}</p>
           </CardContent>
         </Card>
       </div>
@@ -559,7 +561,7 @@ export default function APIClientsPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search clients..."
+                  placeholder={t("filters.searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -568,13 +570,13 @@ export default function APIClientsPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="ACTIVE">Active</SelectItem>
-                <SelectItem value="SUSPENDED">Suspended</SelectItem>
-                <SelectItem value="REVOKED">Revoked</SelectItem>
+                <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
+                <SelectItem value="ACTIVE">{t("status.active")}</SelectItem>
+                <SelectItem value="SUSPENDED">{t("status.suspended")}</SelectItem>
+                <SelectItem value="REVOKED">{t("status.revoked")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -589,7 +591,7 @@ export default function APIClientsPage() {
             columns={columns}
             getRowId={(client) => client.id}
             isLoading={loading}
-            emptyMessage="No API clients found"
+            emptyMessage={t("table.noClientsFound")}
             rowActions={rowActions}
             bulkActions={bulkActions}
             enableSelection={true}

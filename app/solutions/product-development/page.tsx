@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Search, ListOrdered, UserCircle, CheckCircle, DollarSign, Rocket, ArrowRight, CheckCircle2, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,29 +8,41 @@ import { Badge } from "@/components/ui/badge"
 import { LandingHeader } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 import { productAgents } from "@/lib/solution-agents"
+import { useTranslations } from "next-intl"
 
 export default function ProductDevelopmentPage() {
+  const t = useTranslations("solutions.productDevelopment")
+
   const workflows = [
     {
-      name: "Product Discovery Sprint",
-      time: "4 hours",
-      description: "Identify opportunities, validate concepts, prioritize features",
+      nameKey: "workflows.discoverySprint.name",
+      timeKey: "workflows.discoverySprint.time",
+      descriptionKey: "workflows.discoverySprint.description",
     },
     {
-      name: "User Research Synthesis",
-      time: "3 hours",
-      description: "Build personas, map journeys, identify pain points",
+      nameKey: "workflows.userResearch.name",
+      timeKey: "workflows.userResearch.time",
+      descriptionKey: "workflows.userResearch.description",
     },
     {
-      name: "Pricing Strategy Analysis",
-      time: "2 hours",
-      description: "Analyze willingness to pay, competitive pricing, positioning",
+      nameKey: "workflows.pricingStrategy.name",
+      timeKey: "workflows.pricingStrategy.time",
+      descriptionKey: "workflows.pricingStrategy.description",
     },
     {
-      name: "Launch Planning Workflow",
-      time: "5 hours",
-      description: "Define launch strategy, audience targeting, go-to-market plan",
+      nameKey: "workflows.launchPlanning.name",
+      timeKey: "workflows.launchPlanning.time",
+      descriptionKey: "workflows.launchPlanning.description",
     },
+  ]
+
+  const challenges = [
+    "challenges.unwantedFeatures",
+    "challenges.painPoints",
+    "challenges.slowValidation",
+    "challenges.pricingWithoutData",
+    "challenges.launchFailures",
+    "challenges.opinionBasedPriority",
   ]
 
   return (
@@ -39,37 +53,36 @@ export default function ProductDevelopmentPage() {
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
             <Badge variant="secondary" className="mb-4">
-              Product Development
+              {t("badge")}
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
-              Build Products That <span className="text-primary">Customers Actually Want</span>
+              {t("hero.titleStart")} <span className="text-primary">{t("hero.titleHighlight")}</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-3xl text-pretty">
-              Validate product ideas with real consumer data. Understand user needs, prioritize features,
-              and launch products with confidence using AI-powered insights.
+              {t("hero.description")}
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-12">
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">80% Faster</h3>
-                <p className="text-sm text-muted-foreground">Product validation with AI-powered research</p>
+                <h3 className="font-semibold mb-2">{t("stats.faster.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.faster.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">3x Higher</h3>
-                <p className="text-sm text-muted-foreground">Feature adoption rates with data-driven decisions</p>
+                <h3 className="font-semibold mb-2">{t("stats.higher.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.higher.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">60% Lower</h3>
-                <p className="text-sm text-muted-foreground">Product failure rates with validated concepts</p>
+                <h3 className="font-semibold mb-2">{t("stats.lower.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.lower.description")}</p>
               </Card>
             </div>
 
             <div className="flex flex-wrap gap-4">
               <Button size="lg" asChild>
-                <Link href="/dashboard">Start Building Products</Link>
+                <Link href="/dashboard">{t("cta.startBuilding")}</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Request Demo</Link>
+                <Link href="/contact">{t("cta.requestDemo")}</Link>
               </Button>
             </div>
           </div>
@@ -77,19 +90,12 @@ export default function ProductDevelopmentPage() {
 
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-8">Key Challenges We Solve</h2>
+            <h2 className="text-3xl font-bold mb-8">{t("challengesTitle")}</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {[
-                "Building features users don't actually want or need",
-                "Difficulty understanding true user pain points and motivations",
-                "Slow validation cycles delaying time to market",
-                "Pricing products without understanding willingness to pay",
-                "Launch failures due to poor market-product fit",
-                "Feature prioritization based on opinions, not data",
-              ].map((challenge, i) => (
+              {challenges.map((challengeKey, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-muted-foreground">{challenge}</p>
+                  <p className="text-muted-foreground">{t(challengeKey)}</p>
                 </div>
               ))}
             </div>
@@ -98,9 +104,9 @@ export default function ProductDevelopmentPage() {
 
         <section className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Product Development AI Agents</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("agentsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Intelligent agents that help you understand users and build products they love.
+              {t("agentsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -132,7 +138,7 @@ export default function ProductDevelopmentPage() {
                           </div>
                           <div className="mt-4">
                             <span className="text-sm text-primary flex items-center gap-1">
-                              Open Agent <ArrowRight className="h-3 w-3" />
+                              {t("openAgent")} <ArrowRight className="h-3 w-3" />
                             </span>
                           </div>
                         </div>
@@ -147,19 +153,19 @@ export default function ProductDevelopmentPage() {
 
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Pre-built Workflows</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("workflowsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Accelerate product development with structured workflows for common tasks.
+              {t("workflowsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
               {workflows.map((workflow, i) => (
                 <Card key={i} className="p-6 border-border/40">
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-semibold">{workflow.name}</h3>
-                    <Badge variant="outline">{workflow.time}</Badge>
+                    <h3 className="font-semibold">{t(workflow.nameKey)}</h3>
+                    <Badge variant="outline">{t(workflow.timeKey)}</Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">{workflow.description}</p>
+                  <p className="text-sm text-muted-foreground">{t(workflow.descriptionKey)}</p>
                 </Card>
               ))}
             </div>
@@ -168,18 +174,18 @@ export default function ProductDevelopmentPage() {
 
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Build Products Users Love?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("finalCta.title")}</h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Join product teams using consumer insights to build successful products.
+              {t("finalCta.description")}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Button size="lg" asChild>
                 <Link href="/dashboard">
-                  Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("finalCta.getStarted")} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Talk to Sales</Link>
+                <Link href="/contact">{t("finalCta.talkToSales")}</Link>
               </Button>
             </div>
           </div>

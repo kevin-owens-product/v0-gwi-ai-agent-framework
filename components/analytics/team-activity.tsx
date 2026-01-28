@@ -1,51 +1,55 @@
+"use client"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Bot, FileText, Play, MessageSquare } from "lucide-react"
 
-const activities = [
-  {
-    user: { name: "Sarah Chen", avatar: "/placeholder.svg?key=yxbk2" },
-    action: "Generated report",
-    target: "Q4 Consumer Insights",
-    time: "2 hours ago",
-    icon: FileText,
-  },
-  {
-    user: { name: "Michael Park", avatar: "/placeholder.svg?key=b4qmf" },
-    action: "Ran workflow",
-    target: "Weekly Competitor Analysis",
-    time: "3 hours ago",
-    icon: Play,
-  },
-  {
-    user: { name: "Emily Johnson", avatar: "/placeholder.svg?key=xjh3d" },
-    action: "Created agent",
-    target: "Custom Segment Analyzer",
-    time: "5 hours ago",
-    icon: Bot,
-  },
-  {
-    user: { name: "James Wilson", avatar: "/placeholder.svg?key=80i11" },
-    action: "Queried agent",
-    target: "Audience Strategy Agent",
-    time: "6 hours ago",
-    icon: MessageSquare,
-  },
-  {
-    user: { name: "Lisa Wang", avatar: "/placeholder.svg?key=z2bqt" },
-    action: "Shared report",
-    target: "Beauty Industry Trends",
-    time: "8 hours ago",
-    icon: FileText,
-  },
-]
-
 export function TeamActivity() {
+  const t = useTranslations("dashboard.analytics.teamActivity")
+  
+  const activities = [
+    {
+      user: { name: "Sarah Chen", avatar: "/placeholder.svg?key=yxbk2" },
+      action: t("actions.generatedReport"),
+      target: "Q4 Consumer Insights",
+      time: "2 hours ago",
+      icon: FileText,
+    },
+    {
+      user: { name: "Michael Park", avatar: "/placeholder.svg?key=b4qmf" },
+      action: t("actions.ranWorkflow"),
+      target: "Weekly Competitor Analysis",
+      time: "3 hours ago",
+      icon: Play,
+    },
+    {
+      user: { name: "Emily Johnson", avatar: "/placeholder.svg?key=xjh3d" },
+      action: t("actions.createdAgent"),
+      target: "Custom Segment Analyzer",
+      time: "5 hours ago",
+      icon: Bot,
+    },
+    {
+      user: { name: "James Wilson", avatar: "/placeholder.svg?key=80i11" },
+      action: t("actions.queriedAgent"),
+      target: "Audience Strategy Agent",
+      time: "6 hours ago",
+      icon: MessageSquare,
+    },
+    {
+      user: { name: "Lisa Wang", avatar: "/placeholder.svg?key=z2bqt" },
+      action: t("actions.sharedReport"),
+      target: "Beauty Industry Trends",
+      time: "8 hours ago",
+      icon: FileText,
+    },
+  ]
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Team Activity</CardTitle>
-        <CardDescription>Recent actions by team members</CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {activities.map((activity, index) => (

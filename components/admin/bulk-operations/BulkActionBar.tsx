@@ -7,6 +7,7 @@
  */
 
 import { ReactNode, useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -121,6 +122,7 @@ export function BulkActionBar({
   className,
   itemLabel = "item",
 }: BulkActionBarProps) {
+  const t = useTranslations("admin.bulk")
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false)
   const [pendingAction, setPendingAction] = useState<BulkAction | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
@@ -208,7 +210,7 @@ export function BulkActionBar({
       return pendingAction.confirmDescription(selectedCount)
     }
     return pendingAction.confirmDescription ||
-      `This action will affect ${selectedCount} ${itemLabel}${selectedCount !== 1 ? "s" : ""}. Are you sure you want to continue?`
+      t("defaultConfirmDescription", { count: selectedCount, itemLabel: itemsLabel })
   }
 
   const itemsLabel = `${itemLabel}${selectedCount !== 1 ? "s" : ""}`
@@ -227,7 +229,7 @@ export function BulkActionBar({
           <div className="flex items-center gap-2">
             <CheckCircle className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium">
-              {selectedCount} {itemsLabel} selected
+              {t("selected", { count: selectedCount, itemLabel: itemsLabel })}
             </span>
           </div>
 
@@ -239,7 +241,7 @@ export function BulkActionBar({
               className="h-auto p-0 text-xs"
               onClick={onSelectAll}
             >
-              Select all {totalItems}
+              {t("selectAll", { count: totalItems })}
             </Button>
           )}
         </div>
@@ -252,11 +254,11 @@ export function BulkActionBar({
                 {isProcessing ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Processing...
+                    {t("processing")}
                   </>
                 ) : (
                   <>
-                    Actions
+                    {t("actions")}
                     <ChevronDown className="h-4 w-4 ml-2" />
                   </>
                 )}
@@ -293,7 +295,7 @@ export function BulkActionBar({
             disabled={isProcessing}
           >
             <X className="h-4 w-4 mr-1" />
-            Clear
+            {t("clear")}
           </Button>
         </div>
       </div>
@@ -303,14 +305,14 @@ export function BulkActionBar({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {pendingAction?.confirmTitle || "Confirm Action"}
+              {pendingAction?.confirmTitle || t("confirmAction")}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {getConfirmDescription()}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isProcessing}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isProcessing}>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleConfirm}
               disabled={isProcessing}
@@ -322,10 +324,10 @@ export function BulkActionBar({
               {isProcessing ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Processing...
+                  {t("processing")}
                 </>
               ) : (
-                "Confirm"
+                t("confirm")
               )}
             </AlertDialogAction>
           </AlertDialogFooter>

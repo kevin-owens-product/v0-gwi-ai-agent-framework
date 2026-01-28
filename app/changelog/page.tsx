@@ -1,3 +1,6 @@
+"use client"
+
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,67 +9,69 @@ import { Header } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 
 export default function ChangelogPage() {
+  const t = useTranslations("landing.changelog")
+
   const updates = [
     {
       version: "3.0.0",
       date: "January 10, 2026",
-      type: "Major Release",
+      typeKey: "types.majorRelease",
       items: [
-        "🚀 Real LLM Execution - Multi-provider support with Anthropic Claude, OpenAI GPT, and GWI Spark (no more mock data)",
-        "📊 Multi-Format Reports - Export to PDF, PowerPoint, Excel, CSV, and HTML with AI-powered content generation",
-        "⏰ Scheduled Workflows - Automated cron-based execution with email notifications on completion/failure",
-        "🔐 SSO/SAML 2.0 - Enterprise authentication with Azure AD, Google Workspace, and custom SAML providers",
-        "🔌 Integrations Hub - Connect with Slack, Zapier, webhooks, and 5000+ apps via API",
-        "⚡ Enterprise Reliability - Circuit breakers, retry logic, and request timeouts ensure 99.9% uptime",
-        "📈 Advanced Analytics - Comprehensive dashboards with token tracking, cost estimation, and performance metrics",
-        "🧠 Context-Aware Agents - Memory context automatically integrated with all agent executions",
-        "✉️ Email Notifications - Team invitations, workflow updates, and password resets fully operational",
-        "🛡️ Enhanced Security - 40+ database indexes for performance, audit logs, and RBAC improvements",
-        "🏗️ Code Quality - TypeScript type safety improvements, shared utilities, and standardized error handling",
-        "📦 Background Jobs - Automated cleanup for expired sessions, tokens, and memory items",
+        t("releases.v300.item1"),
+        t("releases.v300.item2"),
+        t("releases.v300.item3"),
+        t("releases.v300.item4"),
+        t("releases.v300.item5"),
+        t("releases.v300.item6"),
+        t("releases.v300.item7"),
+        t("releases.v300.item8"),
+        t("releases.v300.item9"),
+        t("releases.v300.item10"),
+        t("releases.v300.item11"),
+        t("releases.v300.item12"),
       ],
     },
     {
       version: "2.4.0",
       date: "January 8, 2025",
-      type: "Feature",
+      typeKey: "types.feature",
       items: [
-        "Added Inbox Agents for automated request handling",
-        "Introduced Command Palette (⌘K) for quick navigation",
-        "New Canvas mode in Playground for visual outputs",
-        "Enhanced Report Builder with presentation editor",
+        t("releases.v240.item1"),
+        t("releases.v240.item2"),
+        t("releases.v240.item3"),
+        t("releases.v240.item4"),
       ],
     },
     {
       version: "2.3.0",
       date: "December 15, 2024",
-      type: "Feature",
+      typeKey: "types.feature",
       items: [
-        "Multi-agent orchestration with sub-agent spawning",
-        "Advanced memory management with confidence scoring",
-        "Template library for reusable workflows",
-        "Real-time collaboration on reports",
+        t("releases.v230.item1"),
+        t("releases.v230.item2"),
+        t("releases.v230.item3"),
+        t("releases.v230.item4"),
       ],
     },
     {
       version: "2.2.1",
       date: "November 28, 2024",
-      type: "Fix",
+      typeKey: "types.fix",
       items: [
-        "Fixed citation preview rendering issues",
-        "Improved playground performance with large datasets",
-        "Resolved workflow export formatting bugs",
+        t("releases.v221.item1"),
+        t("releases.v221.item2"),
+        t("releases.v221.item3"),
       ],
     },
     {
       version: "2.2.0",
       date: "November 10, 2024",
-      type: "Feature",
+      typeKey: "types.feature",
       items: [
-        "Launched Agent Store marketplace",
-        "Added 12 pre-built human insights agents",
-        "Introduced workflow scheduling",
-        "Enhanced analytics dashboard with real-time metrics",
+        t("releases.v220.item1"),
+        t("releases.v220.item2"),
+        t("releases.v220.item3"),
+        t("releases.v220.item4"),
       ],
     },
   ]
@@ -80,13 +85,13 @@ export default function ChangelogPage() {
           <Link href="/">
             <Button variant="ghost" size="sm" className="mb-8">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
+              {t("backToHome")}
             </Button>
           </Link>
 
           <div className="mb-12">
-            <h1 className="text-4xl font-bold text-foreground mb-4">Changelog</h1>
-            <p className="text-lg text-muted-foreground">Track our latest updates, features, and improvements.</p>
+            <h1 className="text-4xl font-bold text-foreground mb-4">{t("title")}</h1>
+            <p className="text-lg text-muted-foreground">{t("subtitle")}</p>
           </div>
 
           <div className="space-y-12">
@@ -94,7 +99,7 @@ export default function ChangelogPage() {
               <div key={update.version} className="border-l-2 border-accent pl-6">
                 <div className="flex items-center gap-4 mb-4">
                   <h2 className="text-2xl font-semibold text-foreground">v{update.version}</h2>
-                  <Badge variant={update.type === "Feature" ? "default" : "secondary"}>{update.type}</Badge>
+                  <Badge variant={update.typeKey === "types.feature" ? "default" : "secondary"}>{t(update.typeKey)}</Badge>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">{update.date}</p>
                 <ul className="space-y-2">

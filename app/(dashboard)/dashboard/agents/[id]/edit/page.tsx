@@ -127,14 +127,14 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
         setExamplePrompts(prompts.length > 0 ? prompts : ["", "", ""])
       } catch (err) {
         console.error("Failed to fetch agent:", err)
-        setError(err instanceof Error ? err.message : "Failed to fetch agent")
+        setError(err instanceof Error ? err.message : tCommon('errors.agentFetchFailed'))
       } finally {
         setIsLoading(false)
       }
     }
 
     fetchAgent()
-  }, [id, router, sessionStatus])
+  }, [id, router, sessionStatus, tCommon])
 
   const addTag = () => {
     if (newTag.trim() && !tags.includes(newTag.trim())) {
@@ -191,9 +191,9 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
     const newErrors: Record<string, string> = {}
 
     if (!name.trim()) {
-      newErrors.name = "Agent name is required"
+      newErrors.name = t("validation.nameRequired")
     } else if (name.length > 100) {
-      newErrors.name = "Agent name must be 100 characters or less"
+      newErrors.name = t("validation.nameTooLong")
     }
 
     setErrors(newErrors)
@@ -235,11 +235,11 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
         throw new Error(data.error || "Failed to update agent")
       }
 
-      toast.success("Agent updated successfully")
+      toast.success(t("toast.updateSuccess"))
       router.push(`/dashboard/agents/${id}`)
     } catch (err) {
       console.error("Failed to update agent:", err)
-      toast.error(err instanceof Error ? err.message : "Failed to update agent")
+      toast.error(err instanceof Error ? err.message : tCommon('errors.agentUpdateFailed'))
     } finally {
       setIsSaving(false)
     }
@@ -454,12 +454,12 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="gpt-4">GPT-4</SelectItem>
-                    <SelectItem value="gpt-4-turbo">GPT-4 Turbo</SelectItem>
-                    <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo</SelectItem>
-                    <SelectItem value="claude-3-opus">Claude 3 Opus</SelectItem>
-                    <SelectItem value="claude-3-sonnet">Claude 3 Sonnet</SelectItem>
-                    <SelectItem value="claude-3-haiku">Claude 3 Haiku</SelectItem>
+                    <SelectItem value="gpt-4">{t("models.gpt4")}</SelectItem>
+                    <SelectItem value="gpt-4-turbo">{t("models.gpt4Turbo")}</SelectItem>
+                    <SelectItem value="gpt-3.5-turbo">{t("models.gpt35Turbo")}</SelectItem>
+                    <SelectItem value="claude-3-opus">{t("models.claude3Opus")}</SelectItem>
+                    <SelectItem value="claude-3-sonnet">{t("models.claude3Sonnet")}</SelectItem>
+                    <SelectItem value="claude-3-haiku">{t("models.claude3Haiku")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -556,16 +556,25 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              {["GWI Core", "GWI USA", "GWI Zeitgeist", "Custom Uploads"].map(
+              {[
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "GWI Core", label: t("dataSourceOptions.gwiCore") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "GWI USA", label: t("dataSourceOptions.gwiUsa") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "GWI Zeitgeist", label: t("dataSourceOptions.gwiZeitgeist") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "Custom Uploads", label: t("dataSourceOptions.customUploads") },
+              ].map(
                 (source) => (
                   <div
-                    key={source}
+                    key={source.key}
                     className="flex items-center justify-between p-3 rounded-lg border border-border"
                   >
-                    <span className="text-sm text-foreground">{source}</span>
+                    <span className="text-sm text-foreground">{source.label}</span>
                     <Switch
-                      checked={dataSources.includes(source)}
-                      onCheckedChange={() => toggleDataSource(source)}
+                      checked={dataSources.includes(source.key)}
+                      onCheckedChange={() => toggleDataSource(source.key)}
                     />
                   </div>
                 )
@@ -582,16 +591,29 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              {["Markdown", "JSON", "Slides", "PDF Report", "CSV", "HTML"].map(
+              {[
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "Markdown", label: t("outputFormatOptions.markdown") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "JSON", label: t("outputFormatOptions.json") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "Slides", label: t("outputFormatOptions.slides") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "PDF Report", label: t("outputFormatOptions.pdfReport") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "CSV", label: t("outputFormatOptions.csv") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "HTML", label: t("outputFormatOptions.html") },
+              ].map(
                 (format) => (
                   <div
-                    key={format}
+                    key={format.key}
                     className="flex items-center justify-between p-3 rounded-lg border border-border"
                   >
-                    <span className="text-sm text-foreground">{format}</span>
+                    <span className="text-sm text-foreground">{format.label}</span>
                     <Switch
-                      checked={outputFormats.includes(format)}
-                      onCheckedChange={() => toggleOutputFormat(format)}
+                      checked={outputFormats.includes(format.key)}
+                      onCheckedChange={() => toggleOutputFormat(format.key)}
                     />
                   </div>
                 )
@@ -609,21 +631,27 @@ export default function EditAgentPage({ params }: { params: Promise<{ id: string
             </CardHeader>
             <CardContent className="space-y-3">
               {[
-                "Web Search",
-                "Data Analysis",
-                "Chart Generation",
-                "Report Builder",
-                "API Calls",
-                "File Processing",
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "Web Search", label: t("toolOptions.webSearch") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "Data Analysis", label: t("toolOptions.dataAnalysis") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "Chart Generation", label: t("toolOptions.chartGeneration") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "Report Builder", label: t("toolOptions.reportBuilder") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "API Calls", label: t("toolOptions.apiCalls") },
+                // eslint-disable-next-line local/no-hardcoded-strings
+                { key: "File Processing", label: t("toolOptions.fileProcessing") },
               ].map((tool) => (
                 <div
-                  key={tool}
+                  key={tool.key}
                   className="flex items-center justify-between p-3 rounded-lg border border-border"
                 >
-                  <span className="text-sm text-foreground">{tool}</span>
+                  <span className="text-sm text-foreground">{tool.label}</span>
                   <Switch
-                    checked={tools.includes(tool)}
-                    onCheckedChange={() => toggleTool(tool)}
+                    checked={tools.includes(tool.key)}
+                    onCheckedChange={() => toggleTool(tool.key)}
                   />
                 </div>
               ))}

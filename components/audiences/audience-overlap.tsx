@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -195,6 +196,7 @@ export function AudienceOverlap({
   availableAudiences,
   className,
 }: AudienceOverlapProps) {
+  const t = useTranslations("audiences")
   const [selectedAudiences, setSelectedAudiences] = useState<string[]>([])
 
   const overlaps = useMemo(
@@ -239,16 +241,16 @@ export function AudienceOverlap({
       {/* Header */}
       <div className="flex items-center gap-2">
         <CircleDot className="h-5 w-5 text-primary" />
-        <h3 className="font-semibold">Audience Overlap Analysis</h3>
+        <h3 className="font-semibold">{t("overlap.title")}</h3>
         <Badge variant="secondary">
-          {selectedAudiences.length}/4 selected
+          {t("overlap.selected", { count: selectedAudiences.length, max: 4 })}
         </Badge>
       </div>
 
       {/* Audience Selector */}
       <Card className="p-4">
         <Label className="text-sm font-medium mb-3 block">
-          Select Audiences to Analyze (max 4)
+          {t("overlap.selectAudiences")}
         </Label>
         <div className="grid grid-cols-2 gap-2">
           {availableAudiences.map((audience) => (
@@ -296,11 +298,11 @@ export function AudienceOverlap({
       {/* Overlap Stats */}
       {selectedAudiences.length >= 2 && (
         <Card className="p-4 space-y-4">
-          <h4 className="font-medium">Overlap Analysis</h4>
+          <h4 className="font-medium">{t("overlap.overlapAnalysis")}</h4>
 
           {/* Unique to each audience */}
           <div className="space-y-2">
-            <Label className="text-sm text-muted-foreground">Unique to Each</Label>
+            <Label className="text-sm text-muted-foreground">{t("overlap.uniqueToEach")}</Label>
             {availableAudiences
               .filter(a => selectedAudiences.includes(a.id))
               .map((aud) => (
@@ -325,7 +327,7 @@ export function AudienceOverlap({
           {/* Pairwise overlaps */}
           {overlaps.filter(o => o.audiences.length === 2).length > 0 && (
             <div className="space-y-2">
-              <Label className="text-sm text-muted-foreground">Pairwise Overlap</Label>
+              <Label className="text-sm text-muted-foreground">{t("overlap.pairwiseOverlap")}</Label>
               {overlaps
                 .filter(o => o.audiences.length === 2)
                 .map((overlap, i) => {
@@ -368,7 +370,7 @@ export function AudienceOverlap({
           {overlaps.find(o => o.audiences.length > 2) && (
             <div className="pt-2 border-t">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">All Selected</span>
+                <span className="text-sm font-medium">{t("overlap.allSelected")}</span>
                 <div className="text-right">
                   <span className="text-sm font-mono font-medium">
                     {formatSize(overlaps.find(o => o.audiences.length > 2)?.overlapSize || 0)}
@@ -388,17 +390,17 @@ export function AudienceOverlap({
         <Card className="p-4 bg-primary/5">
           <h4 className="font-medium mb-2 flex items-center gap-2">
             <Users className="h-4 w-4" />
-            Recommendations
+            {t("overlap.recommendations")}
           </h4>
           <ul className="space-y-1 text-sm text-muted-foreground">
             {overlaps.some(o => o.percentage > 30) && (
-              <li>• High overlap detected - consider consolidating audiences</li>
+              <li>{t("overlap.highOverlapTip")}</li>
             )}
             {overlaps.every(o => o.percentage < 20) && (
-              <li>• Low overlap - audiences are distinct, good for A/B testing</li>
+              <li>{t("overlap.lowOverlapTip")}</li>
             )}
-            <li>• Create a combined audience to reach shared consumers once</li>
-            <li>• Use exclusions to target unique-only segments</li>
+            <li>{t("overlap.combinedAudienceTip")}</li>
+            <li>{t("overlap.exclusionsTip")}</li>
           </ul>
         </Card>
       )}

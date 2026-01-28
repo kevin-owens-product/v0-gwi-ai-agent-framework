@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { BarChart3, PieChart, TrendingUp, Users, Target, Lightbulb, FileText, CheckCircle2, AlertTriangle, Building2 } from "lucide-react"
 
 interface Slide {
@@ -150,6 +151,7 @@ function getSlideStyle(slideIndex: number, totalSlides: number, title: string): 
 }
 
 export function SlideContent({ slide, slideIndex = 0, totalSlides = 1 }: { slide: Slide, slideIndex?: number, totalSlides?: number }) {
+  const t = useTranslations("reports")
   const Icon = getSlideIcon(slide.title, slide.type)
   const { bullets, metrics } = parseContent(slide.content)
   const { bgGradient, accentColor } = getSlideStyle(slideIndex, totalSlides, slide.title)
@@ -162,7 +164,7 @@ export function SlideContent({ slide, slideIndex = 0, totalSlides = 1 }: { slide
           <Icon className="h-8 w-8" />
         </div>
         <div>
-          <p className={`text-sm font-medium ${accentColor} uppercase tracking-wider`}>Slide {slideIndex + 1}</p>
+          <p className={`text-sm font-medium ${accentColor} uppercase tracking-wider`}>{t("slide.slideNumber", { number: slideIndex + 1 })}</p>
           <h2 className="text-3xl font-bold">{slide.title}</h2>
         </div>
       </div>
@@ -214,7 +216,7 @@ export function SlideContent({ slide, slideIndex = 0, totalSlides = 1 }: { slide
           <div className="h-8 w-8 rounded bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
             <span className="text-xs font-bold text-white">GWI</span>
           </div>
-          <span className="text-sm text-white/50">Powered by GWI AI Research Platform</span>
+          <span className="text-sm text-white/50">{t("slide.poweredBy")}</span>
         </div>
         <span className="text-sm text-white/50">{slideIndex + 1} / {totalSlides}</span>
       </div>

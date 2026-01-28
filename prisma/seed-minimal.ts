@@ -100,7 +100,7 @@ async function main() {
     'Feature lookup'
   )
 
-  let features: { advancedAnalytics?: any; customBranding?: any; sso?: any; apiAccess?: any; auditLog?: any } = {}
+  const features: { advancedAnalytics?: any; customBranding?: any; sso?: any; apiAccess?: any; auditLog?: any } = {}
 
   if (!existingFeature) {
     features.advancedAnalytics = await safeCreate(

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -72,23 +73,9 @@ interface Audit {
   organization: Organization | null
 }
 
-const STATUS_OPTIONS = [
-  { value: "all", label: "All Status" },
-  { value: "SCHEDULED", label: "Scheduled" },
-  { value: "IN_PROGRESS", label: "In Progress" },
-  { value: "COMPLETED", label: "Completed" },
-  { value: "CANCELLED", label: "Cancelled" },
-]
-
-const TYPE_OPTIONS = [
-  { value: "all", label: "All Types" },
-  { value: "INTERNAL", label: "Internal" },
-  { value: "EXTERNAL", label: "External" },
-  { value: "SELF_ASSESSMENT", label: "Self Assessment" },
-  { value: "CERTIFICATION", label: "Certification" },
-]
-
 export default function AuditsPage() {
+  const t = useTranslations("admin.compliance")
+  const tCommon = useTranslations("common")
   const [audits, setAudits] = useState<Audit[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState("all")
@@ -107,6 +94,22 @@ export default function AuditsPage() {
     scheduledDate: "",
     auditor: "",
   })
+
+  const STATUS_OPTIONS = [
+    { value: "all", label: t("audits.filters.allStatus") },
+    { value: "SCHEDULED", label: t("audits.status.scheduled") },
+    { value: "IN_PROGRESS", label: t("audits.status.inProgress") },
+    { value: "COMPLETED", label: t("audits.status.completed") },
+    { value: "CANCELLED", label: t("audits.status.cancelled") },
+  ]
+
+  const TYPE_OPTIONS = [
+    { value: "all", label: t("audits.filters.allTypes") },
+    { value: "INTERNAL", label: t("audits.types.internal") },
+    { value: "EXTERNAL", label: t("audits.types.external") },
+    { value: "SELF_ASSESSMENT", label: t("audits.types.selfAssessment") },
+    { value: "CERTIFICATION", label: t("audits.types.certification") },
+  ]
 
   const fetchAudits = useCallback(async () => {
     setIsLoading(true)
@@ -176,7 +179,7 @@ export default function AuditsPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to schedule audit")
+        throw new Error(data.error || t("audits.errors.scheduleFailed"))
       }
 
       setCreateDialogOpen(false)
@@ -189,7 +192,7 @@ export default function AuditsPage() {
       fetchAudits()
     } catch (error) {
       console.error("Failed to schedule audit:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to schedule audit")
+      toast.error(error instanceof Error ? error.message : t("audits.errors.scheduleFailed"))
     } finally {
       setIsSubmitting(false)
     }
@@ -198,13 +201,13 @@ export default function AuditsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "COMPLETED":
-        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Completed</Badge>
+        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />{t("audits.status.completed")}</Badge>
       case "IN_PROGRESS":
-        return <Badge className="bg-blue-500"><PlayCircle className="h-3 w-3 mr-1" />In Progress</Badge>
+        return <Badge className="bg-blue-500"><PlayCircle className="h-3 w-3 mr-1" />{t("audits.status.inProgress")}</Badge>
       case "SCHEDULED":
-        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />Scheduled</Badge>
+        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />{t("audits.status.scheduled")}</Badge>
       case "CANCELLED":
-        return <Badge variant="outline" className="text-muted-foreground">Cancelled</Badge>
+        return <Badge variant="outline" className="text-muted-foreground">{t("audits.status.cancelled")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -213,13 +216,13 @@ export default function AuditsPage() {
   const getTypeBadge = (type: string) => {
     switch (type) {
       case "INTERNAL":
-        return <Badge variant="outline">Internal</Badge>
+        return <Badge variant="outline">{t("audits.types.internal")}</Badge>
       case "EXTERNAL":
-        return <Badge variant="outline" className="border-blue-500 text-blue-500">External</Badge>
+        return <Badge variant="outline" className="border-blue-500 text-blue-500">{t("audits.types.external")}</Badge>
       case "SELF_ASSESSMENT":
-        return <Badge variant="outline" className="border-purple-500 text-purple-500">Self Assessment</Badge>
+        return <Badge variant="outline" className="border-purple-500 text-purple-500">{t("audits.types.selfAssessment")}</Badge>
       case "CERTIFICATION":
-        return <Badge variant="outline" className="border-green-500 text-green-500">Certification</Badge>
+        return <Badge variant="outline" className="border-green-500 text-green-500">{t("audits.types.certification")}</Badge>
       default:
         return <Badge variant="outline">{type}</Badge>
     }
@@ -229,7 +232,7 @@ export default function AuditsPage() {
   const columns: Column<Audit>[] = [
     {
       id: "framework",
-      header: "Framework",
+      header: t("audits.columns.framework"),
       cell: (audit) => (
         <div className="flex items-center gap-2">
           <Shield className="h-4 w-4 text-muted-foreground" />
@@ -244,7 +247,7 @@ export default function AuditsPage() {
     },
     {
       id: "organization",
-      header: "Organization",
+      header: t("audits.columns.organization"),
       cell: (audit) =>
         audit.organization ? (
           <div className="flex items-center gap-2">
@@ -252,22 +255,22 @@ export default function AuditsPage() {
             <span>{audit.organization.name}</span>
           </div>
         ) : (
-          <span className="text-muted-foreground">Platform-wide</span>
+          <span className="text-muted-foreground">{t("audits.platformWide")}</span>
         ),
     },
     {
       id: "type",
-      header: "Type",
+      header: t("audits.columns.type"),
       cell: (audit) => getTypeBadge(audit.type),
     },
     {
       id: "status",
-      header: "Status",
+      header: t("audits.columns.status"),
       cell: (audit) => getStatusBadge(audit.status),
     },
     {
       id: "scheduledDate",
-      header: "Scheduled",
+      header: t("audits.columns.scheduled"),
       cell: (audit) => (
         <div className="flex items-center gap-1 text-muted-foreground">
           <Calendar className="h-3 w-3" />
@@ -277,14 +280,14 @@ export default function AuditsPage() {
     },
     {
       id: "auditor",
-      header: "Auditor",
+      header: t("audits.columns.auditor"),
       cell: (audit) => (
         <span className="text-muted-foreground">{audit.auditor || "-"}</span>
       ),
     },
     {
       id: "score",
-      header: "Score",
+      header: t("audits.columns.score"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (audit) =>
@@ -315,7 +318,7 @@ export default function AuditsPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to delete audit")
+        throw new Error(data.error || t("audits.errors.deleteFailed"))
       }
       fetchAudits()
     } catch (error) {
@@ -335,12 +338,12 @@ export default function AuditsPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to start audit")
+        throw new Error(data.error || t("audits.errors.startFailed"))
       }
       fetchAudits()
     } catch (error) {
       console.error("Failed to start audit:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to start audit")
+      toast.error(error instanceof Error ? error.message : t("audits.errors.startFailed"))
     }
   }
 
@@ -355,37 +358,37 @@ export default function AuditsPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to cancel audit")
+        throw new Error(data.error || t("audits.errors.cancelFailed"))
       }
       fetchAudits()
     } catch (error) {
       console.error("Failed to cancel audit:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to cancel audit")
+      toast.error(error instanceof Error ? error.message : t("audits.errors.cancelFailed"))
     }
   }
 
   // Define row actions
   const rowActions: RowAction<Audit>[] = [
     {
-      label: "Start Audit",
+      label: t("audits.actions.startAudit"),
       icon: <Play className="h-4 w-4" />,
       onClick: handleStartAudit,
       hidden: (audit) => audit.status !== "SCHEDULED",
     },
     {
-      label: "Cancel Audit",
+      label: t("audits.actions.cancelAudit"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: handleCancelAudit,
       hidden: (audit) => audit.status !== "SCHEDULED" && audit.status !== "IN_PROGRESS",
     },
     {
-      label: "View Framework",
+      label: t("audits.actions.viewFramework"),
       icon: <Shield className="h-4 w-4" />,
       href: (audit) => `/admin/compliance/frameworks/${audit.frameworkId}`,
       separator: true,
     },
     {
-      label: "View Organization",
+      label: t("audits.actions.viewOrganization"),
       icon: <Building2 className="h-4 w-4" />,
       href: (audit) => `/admin/tenants/${audit.orgId}`,
       hidden: (audit) => !audit.organization,
@@ -395,12 +398,12 @@ export default function AuditsPage() {
   // Bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Start Selected",
+      label: t("audits.bulk.startSelected"),
       icon: <Play className="h-4 w-4" />,
       onClick: async (ids) => {
         const scheduledAudits = audits.filter((a) => ids.includes(a.id) && a.status === "SCHEDULED")
         if (scheduledAudits.length === 0) {
-          toast.info("No scheduled audits selected")
+          toast.info(t("audits.bulk.noScheduledSelected"))
           return
         }
         try {
@@ -420,18 +423,18 @@ export default function AuditsPage() {
           console.error("Failed to start audits:", error)
         }
       },
-      confirmTitle: "Start Audits",
-      confirmDescription: "Are you sure you want to start the selected scheduled audits?",
+      confirmTitle: t("audits.bulk.startAuditsTitle"),
+      confirmDescription: t("audits.bulk.startAuditsConfirm"),
     },
     {
-      label: "Cancel Selected",
+      label: t("audits.bulk.cancelSelected"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: async (ids) => {
         const cancelableAudits = audits.filter(
           (a) => ids.includes(a.id) && (a.status === "SCHEDULED" || a.status === "IN_PROGRESS")
         )
         if (cancelableAudits.length === 0) {
-          toast.info("No cancelable audits selected")
+          toast.info(t("audits.bulk.noCancelableSelected"))
           return
         }
         try {
@@ -451,12 +454,12 @@ export default function AuditsPage() {
           console.error("Failed to cancel audits:", error)
         }
       },
-      confirmTitle: "Cancel Audits",
-      confirmDescription: "Are you sure you want to cancel the selected audits?",
+      confirmTitle: t("audits.bulk.cancelAuditsTitle"),
+      confirmDescription: t("audits.bulk.cancelAuditsConfirm"),
     },
     {
       separator: true,
-      label: "Delete Selected",
+      label: t("audits.bulk.deleteSelected"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: async (ids) => {
         try {
@@ -475,8 +478,8 @@ export default function AuditsPage() {
         }
       },
       variant: "destructive",
-      confirmTitle: "Delete Audits",
-      confirmDescription: "Are you sure you want to delete the selected audits? This action cannot be undone.",
+      confirmTitle: t("audits.bulk.deleteAuditsTitle"),
+      confirmDescription: t("audits.bulk.deleteAuditsConfirm"),
     },
   ]
 
@@ -489,27 +492,27 @@ export default function AuditsPage() {
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/admin/compliance">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
+                  {tCommon("back")}
                 </Link>
               </Button>
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <FileSearch className="h-5 w-5 text-primary" />
-                  Compliance Audits
+                  {t("audits.title")}
                 </CardTitle>
                 <CardDescription>
-                  Schedule and track compliance audits - {total} total
+                  {t("audits.description", { total })}
                 </CardDescription>
               </div>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchAudits} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {tCommon("refresh")}
               </Button>
               <Button onClick={() => setCreateDialogOpen(true)} size="sm">
                 <Plus className="h-4 w-4 mr-2" />
-                Schedule Audit
+                {t("audits.scheduleAudit")}
               </Button>
             </div>
           </div>
@@ -519,7 +522,7 @@ export default function AuditsPage() {
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("audits.filters.status")} />
               </SelectTrigger>
               <SelectContent>
                 {STATUS_OPTIONS.map((option) => (
@@ -531,7 +534,7 @@ export default function AuditsPage() {
             </Select>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={t("audits.filters.type")} />
               </SelectTrigger>
               <SelectContent>
                 {TYPE_OPTIONS.map((option) => (
@@ -549,14 +552,14 @@ export default function AuditsPage() {
             columns={columns}
             getRowId={(audit) => audit.id}
             isLoading={isLoading}
-            emptyMessage="No audits found"
+            emptyMessage={t("audits.noAudits")}
             viewHref={(audit) => `/admin/compliance/audits/${audit.id}`}
             rowActions={rowActions}
             bulkActions={bulkActions}
             onDelete={handleDeleteAudit}
-            deleteConfirmTitle="Delete Audit"
+            deleteConfirmTitle={t("audits.deleteTitle")}
             deleteConfirmDescription={(audit) =>
-              `Are you sure you want to delete the ${audit.framework.name} audit? This action cannot be undone.`
+              t("audits.deleteConfirm", { framework: audit.framework.name })
             }
             page={page}
             totalPages={totalPages}
@@ -572,20 +575,20 @@ export default function AuditsPage() {
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Schedule Compliance Audit</DialogTitle>
+            <DialogTitle>{t("audits.dialog.scheduleTitle")}</DialogTitle>
             <DialogDescription>
-              Schedule a new compliance audit for a framework.
+              {t("audits.dialog.scheduleDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Framework *</Label>
+              <Label>{t("audits.fields.framework")} *</Label>
               <Select
                 value={newAudit.frameworkId}
                 onValueChange={(value) => setNewAudit({ ...newAudit, frameworkId: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a framework" />
+                  <SelectValue placeholder={t("audits.dialog.selectFramework")} />
                 </SelectTrigger>
                 <SelectContent>
                   {frameworks.map((framework) => (
@@ -598,7 +601,7 @@ export default function AuditsPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Type</Label>
+                <Label>{t("audits.fields.type")}</Label>
                 <Select
                   value={newAudit.type}
                   onValueChange={(value) => setNewAudit({ ...newAudit, type: value })}
@@ -607,15 +610,15 @@ export default function AuditsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="INTERNAL">Internal</SelectItem>
-                    <SelectItem value="EXTERNAL">External</SelectItem>
-                    <SelectItem value="SELF_ASSESSMENT">Self Assessment</SelectItem>
-                    <SelectItem value="CERTIFICATION">Certification</SelectItem>
+                    <SelectItem value="INTERNAL">{t("audits.types.internal")}</SelectItem>
+                    <SelectItem value="EXTERNAL">{t("audits.types.external")}</SelectItem>
+                    <SelectItem value="SELF_ASSESSMENT">{t("audits.types.selfAssessment")}</SelectItem>
+                    <SelectItem value="CERTIFICATION">{t("audits.types.certification")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Scheduled Date *</Label>
+                <Label>{t("audits.fields.scheduledDate")} *</Label>
                 <Input
                   type="date"
                   value={newAudit.scheduledDate}
@@ -624,9 +627,9 @@ export default function AuditsPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label>Auditor</Label>
+              <Label>{t("audits.fields.auditor")}</Label>
               <Input
-                placeholder="Auditor name or company"
+                placeholder={t("audits.dialog.auditorPlaceholder")}
                 value={newAudit.auditor}
                 onChange={(e) => setNewAudit({ ...newAudit, auditor: e.target.value })}
               />
@@ -634,7 +637,7 @@ export default function AuditsPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               onClick={handleCreateAudit}
@@ -643,10 +646,10 @@ export default function AuditsPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Scheduling...
+                  {t("audits.dialog.scheduling")}
                 </>
               ) : (
-                "Schedule Audit"
+                t("audits.scheduleAudit")
               )}
             </Button>
           </DialogFooter>

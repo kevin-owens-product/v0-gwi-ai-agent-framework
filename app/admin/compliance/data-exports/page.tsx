@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -81,25 +82,9 @@ interface DataExport {
   legalHold: LegalHold | null
 }
 
-const STATUS_OPTIONS = [
-  { value: "all", label: "All Status" },
-  { value: "PENDING", label: "Pending" },
-  { value: "PROCESSING", label: "Processing" },
-  { value: "COMPLETED", label: "Completed" },
-  { value: "FAILED", label: "Failed" },
-  { value: "EXPIRED", label: "Expired" },
-]
-
-const TYPE_OPTIONS = [
-  { value: "all", label: "All Types" },
-  { value: "GDPR_EXPORT", label: "GDPR Export" },
-  { value: "USER_DATA", label: "User Data" },
-  { value: "ORG_DATA", label: "Org Data" },
-  { value: "LEGAL_HOLD", label: "Legal Hold" },
-  { value: "BACKUP", label: "Backup" },
-]
-
 export default function DataExportsPage() {
+  const t = useTranslations("admin.compliance")
+  const tCommon = useTranslations("common")
   const [exports, setExports] = useState<DataExport[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState("all")
@@ -115,6 +100,24 @@ export default function DataExportsPage() {
     type: "USER_DATA",
     format: "json",
   })
+
+  const STATUS_OPTIONS = [
+    { value: "all", label: t("dataExports.filters.allStatus") },
+    { value: "PENDING", label: t("dataExports.status.pending") },
+    { value: "PROCESSING", label: t("dataExports.status.processing") },
+    { value: "COMPLETED", label: t("dataExports.status.completed") },
+    { value: "FAILED", label: t("dataExports.status.failed") },
+    { value: "EXPIRED", label: t("dataExports.status.expired") },
+  ]
+
+  const TYPE_OPTIONS = [
+    { value: "all", label: t("dataExports.filters.allTypes") },
+    { value: "GDPR_EXPORT", label: t("dataExports.types.gdprExport") },
+    { value: "USER_DATA", label: t("dataExports.types.userData") },
+    { value: "ORG_DATA", label: t("dataExports.types.orgData") },
+    { value: "LEGAL_HOLD", label: t("dataExports.types.legalHold") },
+    { value: "BACKUP", label: t("dataExports.types.backup") },
+  ]
 
   const fetchExports = useCallback(async () => {
     setIsLoading(true)
@@ -165,7 +168,7 @@ export default function DataExportsPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to create data export")
+        throw new Error(data.error || t("dataExports.errors.createFailed"))
       }
 
       setCreateDialogOpen(false)
@@ -176,7 +179,7 @@ export default function DataExportsPage() {
       fetchExports()
     } catch (error) {
       console.error("Failed to create data export:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to create data export")
+      toast.error(error instanceof Error ? error.message : t("dataExports.errors.createFailed"))
     } finally {
       setIsSubmitting(false)
     }
@@ -185,15 +188,15 @@ export default function DataExportsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "COMPLETED":
-        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Completed</Badge>
+        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />{t("dataExports.status.completed")}</Badge>
       case "PROCESSING":
-        return <Badge className="bg-blue-500"><Clock className="h-3 w-3 mr-1" />Processing</Badge>
+        return <Badge className="bg-blue-500"><Clock className="h-3 w-3 mr-1" />{t("dataExports.status.processing")}</Badge>
       case "PENDING":
-        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />Pending</Badge>
+        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />{t("dataExports.status.pending")}</Badge>
       case "FAILED":
-        return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Failed</Badge>
+        return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />{t("dataExports.status.failed")}</Badge>
       case "EXPIRED":
-        return <Badge variant="outline" className="text-muted-foreground">Expired</Badge>
+        return <Badge variant="outline" className="text-muted-foreground">{t("dataExports.status.expired")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -202,15 +205,15 @@ export default function DataExportsPage() {
   const getTypeBadge = (type: string) => {
     switch (type) {
       case "GDPR_EXPORT":
-        return <Badge variant="outline" className="border-blue-500 text-blue-500">GDPR</Badge>
+        return <Badge variant="outline" className="border-blue-500 text-blue-500">{t("dataExports.types.gdpr")}</Badge>
       case "USER_DATA":
-        return <Badge variant="outline">User Data</Badge>
+        return <Badge variant="outline">{t("dataExports.types.userData")}</Badge>
       case "ORG_DATA":
-        return <Badge variant="outline">Org Data</Badge>
+        return <Badge variant="outline">{t("dataExports.types.orgData")}</Badge>
       case "LEGAL_HOLD":
-        return <Badge variant="outline" className="border-red-500 text-red-500">Legal Hold</Badge>
+        return <Badge variant="outline" className="border-red-500 text-red-500">{t("dataExports.types.legalHold")}</Badge>
       case "BACKUP":
-        return <Badge variant="outline" className="border-purple-500 text-purple-500">Backup</Badge>
+        return <Badge variant="outline" className="border-purple-500 text-purple-500">{t("dataExports.types.backup")}</Badge>
       default:
         return <Badge variant="outline">{type}</Badge>
     }
@@ -228,7 +231,7 @@ export default function DataExportsPage() {
   const columns: Column<DataExport>[] = [
     {
       id: "export",
-      header: "Export",
+      header: t("dataExports.columns.export"),
       cell: (exp) => (
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-green-500/10 flex items-center justify-center">
@@ -237,7 +240,7 @@ export default function DataExportsPage() {
           <div>
             <p className="font-mono text-xs">{exp.id.slice(0, 8)}...</p>
             <p className="text-xs text-muted-foreground">
-              by {exp.requestedByUser?.name || exp.requestedByUser?.email || "Unknown"}
+              {t("dataExports.by")} {exp.requestedByUser?.name || exp.requestedByUser?.email || t("dataExports.unknown")}
             </p>
           </div>
         </div>
@@ -245,12 +248,12 @@ export default function DataExportsPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("dataExports.columns.type"),
       cell: (exp) => getTypeBadge(exp.type),
     },
     {
       id: "subject",
-      header: "Subject",
+      header: t("dataExports.columns.subject"),
       cell: (exp) => {
         if (exp.user) {
           return (
@@ -281,12 +284,12 @@ export default function DataExportsPage() {
     },
     {
       id: "status",
-      header: "Status",
+      header: t("dataExports.columns.status"),
       cell: (exp) => getStatusBadge(exp.status),
     },
     {
       id: "format",
-      header: "Format",
+      header: t("dataExports.columns.format"),
       cell: (exp) => (
         <Badge variant="outline" className="uppercase">
           {exp.format}
@@ -295,14 +298,14 @@ export default function DataExportsPage() {
     },
     {
       id: "size",
-      header: "Size",
+      header: t("dataExports.columns.size"),
       cell: (exp) => (
         <span className="text-muted-foreground">{formatFileSize(exp.fileSize)}</span>
       ),
     },
     {
       id: "requested",
-      header: "Requested",
+      header: t("dataExports.columns.requested"),
       cell: (exp) => (
         <span className="text-muted-foreground">
           {new Date(exp.createdAt).toLocaleDateString()}
@@ -320,7 +323,7 @@ export default function DataExportsPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to delete export")
+        throw new Error(data.error || t("dataExports.errors.deleteFailed"))
       }
       fetchExports()
     } catch (error) {
@@ -338,43 +341,43 @@ export default function DataExportsPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to retry export")
+        throw new Error(data.error || t("dataExports.errors.retryFailed"))
       }
       fetchExports()
     } catch (error) {
       console.error("Failed to retry export:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to retry export")
+      toast.error(error instanceof Error ? error.message : t("dataExports.errors.retryFailed"))
     }
   }
 
   // Define row actions
   const rowActions: RowAction<DataExport>[] = [
     {
-      label: "Download File",
+      label: t("dataExports.actions.downloadFile"),
       icon: <ExternalLink className="h-4 w-4" />,
       href: (exp) => exp.fileUrl || "#",
       hidden: (exp) => !exp.fileUrl || exp.status !== "COMPLETED",
     },
     {
-      label: "Retry Export",
+      label: t("dataExports.actions.retryExport"),
       icon: <RotateCcw className="h-4 w-4" />,
       onClick: handleRetryExport,
       hidden: (exp) => exp.status !== "FAILED",
     },
     {
-      label: "View Legal Hold",
+      label: t("dataExports.actions.viewLegalHold"),
       icon: <Gavel className="h-4 w-4" />,
       href: (exp) => `/admin/compliance/legal-holds/${exp.legalHoldId}`,
       hidden: (exp) => !exp.legalHold,
     },
     {
-      label: "View User",
+      label: t("dataExports.actions.viewUser"),
       icon: <User className="h-4 w-4" />,
       href: (exp) => `/admin/users/${exp.userId}`,
       hidden: (exp) => !exp.user,
     },
     {
-      label: "View Organization",
+      label: t("dataExports.actions.viewOrganization"),
       icon: <Building2 className="h-4 w-4" />,
       href: (exp) => `/admin/tenants/${exp.orgId}`,
       hidden: (exp) => !exp.organization,
@@ -384,12 +387,12 @@ export default function DataExportsPage() {
   // Bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Retry Failed",
+      label: t("dataExports.bulk.retryFailed"),
       icon: <RotateCcw className="h-4 w-4" />,
       onClick: async (ids) => {
         const failedExports = exports.filter((e) => ids.includes(e.id) && e.status === "FAILED")
         if (failedExports.length === 0) {
-          toast.info("No failed exports selected")
+          toast.info(t("dataExports.bulk.noFailedSelected"))
           return
         }
         try {
@@ -407,12 +410,12 @@ export default function DataExportsPage() {
           console.error("Failed to retry exports:", error)
         }
       },
-      confirmTitle: "Retry Failed Exports",
-      confirmDescription: "Are you sure you want to retry the selected failed exports?",
+      confirmTitle: t("dataExports.bulk.retryFailedTitle"),
+      confirmDescription: t("dataExports.bulk.retryFailedConfirm"),
     },
     {
       separator: true,
-      label: "Delete Selected",
+      label: t("dataExports.bulk.deleteSelected"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: async (ids) => {
         try {
@@ -431,8 +434,8 @@ export default function DataExportsPage() {
         }
       },
       variant: "destructive",
-      confirmTitle: "Delete Data Exports",
-      confirmDescription: "Are you sure you want to delete the selected data exports? This action cannot be undone.",
+      confirmTitle: t("dataExports.bulk.deleteExportsTitle"),
+      confirmDescription: t("dataExports.bulk.deleteExportsConfirm"),
     },
   ]
 
@@ -445,27 +448,27 @@ export default function DataExportsPage() {
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/admin/compliance">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
+                  {tCommon("back")}
                 </Link>
               </Button>
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Download className="h-5 w-5 text-primary" />
-                  Data Exports
+                  {t("dataExports.title")}
                 </CardTitle>
                 <CardDescription>
-                  GDPR requests, user data exports, and legal hold exports - {total} total
+                  {t("dataExports.description", { total })}
                 </CardDescription>
               </div>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchExports} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {tCommon("refresh")}
               </Button>
               <Button onClick={() => setCreateDialogOpen(true)} size="sm">
                 <Plus className="h-4 w-4 mr-2" />
-                New Export
+                {t("dataExports.newExport")}
               </Button>
             </div>
           </div>
@@ -475,7 +478,7 @@ export default function DataExportsPage() {
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("dataExports.filters.status")} />
               </SelectTrigger>
               <SelectContent>
                 {STATUS_OPTIONS.map((option) => (
@@ -487,7 +490,7 @@ export default function DataExportsPage() {
             </Select>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={t("dataExports.filters.type")} />
               </SelectTrigger>
               <SelectContent>
                 {TYPE_OPTIONS.map((option) => (
@@ -505,14 +508,14 @@ export default function DataExportsPage() {
             columns={columns}
             getRowId={(exp) => exp.id}
             isLoading={isLoading}
-            emptyMessage="No data exports found"
+            emptyMessage={t("dataExports.noExports")}
             viewHref={(exp) => `/admin/compliance/data-exports/${exp.id}`}
             rowActions={rowActions}
             bulkActions={bulkActions}
             onDelete={handleDeleteExport}
-            deleteConfirmTitle="Delete Data Export"
+            deleteConfirmTitle={t("dataExports.deleteTitle")}
             deleteConfirmDescription={(exp) =>
-              `Are you sure you want to delete this ${exp.type.replace("_", " ")} export? This action cannot be undone.`
+              t("dataExports.deleteConfirm", { type: exp.type.replace("_", " ") })
             }
             page={page}
             totalPages={totalPages}
@@ -528,14 +531,14 @@ export default function DataExportsPage() {
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Create Data Export</DialogTitle>
+            <DialogTitle>{t("dataExports.dialog.createTitle")}</DialogTitle>
             <DialogDescription>
-              Request a new data export. The export will be processed asynchronously.
+              {t("dataExports.dialog.createDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Export Type</Label>
+              <Label>{t("dataExports.fields.exportType")}</Label>
               <Select
                 value={newExport.type}
                 onValueChange={(value) => setNewExport({ ...newExport, type: value })}
@@ -544,15 +547,15 @@ export default function DataExportsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="USER_DATA">User Data</SelectItem>
-                  <SelectItem value="ORG_DATA">Organization Data</SelectItem>
-                  <SelectItem value="GDPR_EXPORT">GDPR Export</SelectItem>
-                  <SelectItem value="BACKUP">Backup</SelectItem>
+                  <SelectItem value="USER_DATA">{t("dataExports.types.userData")}</SelectItem>
+                  <SelectItem value="ORG_DATA">{t("dataExports.types.orgData")}</SelectItem>
+                  <SelectItem value="GDPR_EXPORT">{t("dataExports.types.gdprExport")}</SelectItem>
+                  <SelectItem value="BACKUP">{t("dataExports.types.backup")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Format</Label>
+              <Label>{t("dataExports.fields.format")}</Label>
               <Select
                 value={newExport.format}
                 onValueChange={(value) => setNewExport({ ...newExport, format: value })}
@@ -561,25 +564,25 @@ export default function DataExportsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="json">JSON</SelectItem>
-                  <SelectItem value="csv">CSV</SelectItem>
-                  <SelectItem value="zip">ZIP Archive</SelectItem>
+                  <SelectItem value="json">{t("dataExports.formats.json")}</SelectItem>
+                  <SelectItem value="csv">{t("dataExports.formats.csv")}</SelectItem>
+                  <SelectItem value="zip">{t("dataExports.formats.zip")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button onClick={handleCreateExport} disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Creating...
+                  {tCommon("creating")}
                 </>
               ) : (
-                "Create Export"
+                t("dataExports.createExport")
               )}
             </Button>
           </DialogFooter>

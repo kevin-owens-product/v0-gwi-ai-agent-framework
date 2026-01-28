@@ -7,6 +7,7 @@
 "use client"
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -56,43 +57,43 @@ interface ConnectorCardProps {
 
 const STATUS_CONFIG: Record<DataSyncStatus | 'NEVER', {
   icon: React.ComponentType<{ className?: string }>
-  label: string
+  labelKey: string
   variant: 'default' | 'secondary' | 'destructive' | 'outline'
   className: string
 }> = {
   COMPLETED: {
     icon: CheckCircle2,
-    label: 'Synced',
+    labelKey: 'synced',
     variant: 'outline',
     className: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
   },
   RUNNING: {
     icon: Loader2,
-    label: 'Syncing',
+    labelKey: 'syncing',
     variant: 'outline',
     className: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
   },
   PENDING: {
     icon: Clock,
-    label: 'Pending',
+    labelKey: 'pending',
     variant: 'outline',
     className: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20',
   },
   FAILED: {
     icon: XCircle,
-    label: 'Failed',
+    labelKey: 'failed',
     variant: 'destructive',
     className: 'bg-red-500/10 text-red-600 border-red-500/20',
   },
   CANCELLED: {
     icon: AlertTriangle,
-    label: 'Cancelled',
+    labelKey: 'cancelled',
     variant: 'outline',
     className: 'bg-gray-500/10 text-gray-600 border-gray-500/20',
   },
   NEVER: {
     icon: Clock,
-    label: 'Never synced',
+    labelKey: 'neverSynced',
     variant: 'secondary',
     className: '',
   },
@@ -105,6 +106,8 @@ export function ConnectorCard({
   onDelete,
   onTest,
 }: ConnectorCardProps) {
+  const t = useTranslations('connectors')
+  const tCommon = useTranslations('common')
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
@@ -200,7 +203,7 @@ export function ConnectorCard({
                 <DropdownMenuItem asChild>
                   <Link href={`/dashboard/integrations/connectors/${connector.id}`}>
                     <Settings className="mr-2 h-4 w-4" />
-                    Configure
+                    {t('card.configure')}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleTest} disabled={isTesting}>
@@ -209,7 +212,7 @@ export function ConnectorCard({
                   ) : (
                     <Plug className="mr-2 h-4 w-4" />
                   )}
-                  Test Connection
+                  {t('card.testConnection')}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={handleSync}
@@ -220,7 +223,7 @@ export function ConnectorCard({
                   ) : (
                     <RefreshCw className="mr-2 h-4 w-4" />
                   )}
-                  Sync Now
+                  {t('card.syncNow')}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleToggle} disabled={isToggling}>
@@ -231,7 +234,7 @@ export function ConnectorCard({
                   ) : (
                     <Play className="mr-2 h-4 w-4" />
                   )}
-                  {connector.isActive ? 'Disable' : 'Enable'}
+                  {connector.isActive ? t('card.disable') : t('card.enable')}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -239,7 +242,7 @@ export function ConnectorCard({
                   className="text-destructive focus:text-destructive"
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
-                  Delete
+                  {tCommon('delete')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -255,7 +258,7 @@ export function ConnectorCard({
           <div className="flex items-center justify-between">
             <Badge className={statusConfig.className} variant={statusConfig.variant}>
               <StatusIcon className={`mr-1 h-3 w-3 ${status === 'RUNNING' ? 'animate-spin' : ''}`} />
-              {statusConfig.label}
+              {t(`card.status.${statusConfig.labelKey}`)}
             </Badge>
 
             {connector.lastSyncAt && (
@@ -268,14 +271,14 @@ export function ConnectorCard({
           {connector.errorCount > 0 && (
             <div className="mt-3 flex items-center gap-1 text-xs text-destructive">
               <AlertTriangle className="h-3 w-3" />
-              {connector.errorCount} error{connector.errorCount > 1 ? 's' : ''}
+              {t('card.errorCount', { count: connector.errorCount })}
             </div>
           )}
 
           {connector.syncSchedule && connector.isActive && (
             <div className="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
               <Clock className="h-3 w-3" />
-              Auto-sync enabled
+              {t('card.autoSyncEnabled')}
             </div>
           )}
         </CardContent>
@@ -284,14 +287,13 @@ export function ConnectorCard({
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Connector</AlertDialogTitle>
+            <AlertDialogTitle>{t('card.deleteDialog.title')}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{connector.name}"? This action cannot be undone.
-              All sync history will be permanently deleted.
+              {t('card.deleteDialog.description', { name: connector.name })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{tCommon('cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={isDeleting}
@@ -300,10 +302,10 @@ export function ConnectorCard({
               {isDeleting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
+                  {t('card.deleting')}
                 </>
               ) : (
-                'Delete'
+                tCommon('delete')
               )}
             </AlertDialogAction>
           </AlertDialogFooter>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -102,17 +103,17 @@ interface InteractiveChartEditorProps {
   className?: string
 }
 
-const CHART_TYPES: { type: ChartType; label: string; icon: React.ReactNode; description: string }[] = [
-  { type: "BAR", label: "Bar", icon: <BarChart3 className="h-4 w-4" />, description: "Compare categorical data" },
-  { type: "LINE", label: "Line", icon: <LineChart className="h-4 w-4" />, description: "Show trends over time" },
-  { type: "AREA", label: "Area", icon: <AreaChartIcon className="h-4 w-4" />, description: "Emphasize volume trends" },
-  { type: "PIE", label: "Pie", icon: <PieChart className="h-4 w-4" />, description: "Show proportions" },
-  { type: "DONUT", label: "Donut", icon: <PieChart className="h-4 w-4" />, description: "Proportions with center space" },
-  { type: "RADAR", label: "Radar", icon: <Radar className="h-4 w-4" />, description: "Multi-dimensional comparison" },
-  { type: "SCATTER", label: "Scatter", icon: <Binary className="h-4 w-4" />, description: "Show correlation" },
-  { type: "FUNNEL", label: "Funnel", icon: <GitBranch className="h-4 w-4 rotate-180" />, description: "Conversion stages" },
-  { type: "TREEMAP", label: "Treemap", icon: <Grid className="h-4 w-4" />, description: "Hierarchical proportions" },
-  { type: "HEATMAP", label: "Heatmap", icon: <Layers className="h-4 w-4" />, description: "Value intensity" },
+const CHART_TYPES: { type: ChartType; labelKey: string; icon: React.ReactNode; descriptionKey: string }[] = [
+  { type: "BAR", labelKey: "bar", icon: <BarChart3 className="h-4 w-4" />, descriptionKey: "barDescription" },
+  { type: "LINE", labelKey: "line", icon: <LineChart className="h-4 w-4" />, descriptionKey: "lineDescription" },
+  { type: "AREA", labelKey: "area", icon: <AreaChartIcon className="h-4 w-4" />, descriptionKey: "areaDescription" },
+  { type: "PIE", labelKey: "pie", icon: <PieChart className="h-4 w-4" />, descriptionKey: "pieDescription" },
+  { type: "DONUT", labelKey: "donut", icon: <PieChart className="h-4 w-4" />, descriptionKey: "donutDescription" },
+  { type: "RADAR", labelKey: "radar", icon: <Radar className="h-4 w-4" />, descriptionKey: "radarDescription" },
+  { type: "SCATTER", labelKey: "scatter", icon: <Binary className="h-4 w-4" />, descriptionKey: "scatterDescription" },
+  { type: "FUNNEL", labelKey: "funnel", icon: <GitBranch className="h-4 w-4 rotate-180" />, descriptionKey: "funnelDescription" },
+  { type: "TREEMAP", labelKey: "treemap", icon: <Grid className="h-4 w-4" />, descriptionKey: "treemapDescription" },
+  { type: "HEATMAP", labelKey: "heatmap", icon: <Layers className="h-4 w-4" />, descriptionKey: "heatmapDescription" },
 ]
 
 const PRESET_COLORS = [
@@ -157,6 +158,7 @@ export function InteractiveChartEditor({
   onExport,
   className,
 }: InteractiveChartEditorProps) {
+  const t = useTranslations("charts.editor")
   const [config, setConfig] = useState<ChartConfig>({
     ...DEFAULT_CONFIG,
     ...initialConfig,
@@ -260,15 +262,15 @@ export function InteractiveChartEditor({
       {/* Sidebar */}
       <div className="w-80 border-r bg-background flex flex-col">
         <div className="p-4 border-b">
-          <h3 className="font-semibold">Chart Editor</h3>
-          <p className="text-xs text-muted-foreground mt-1">Configure your visualization</p>
+          <h3 className="font-semibold">{t("title")}</h3>
+          <p className="text-xs text-muted-foreground mt-1">{t("subtitle")}</p>
         </div>
 
         <ScrollArea className="flex-1">
           <div className="p-4 space-y-4">
             {/* Chart Type Section */}
             <div>
-              <SectionHeader title="Chart Type" section="type" />
+              <SectionHeader title={t("sections.chartType")} section="type" />
               {expandedSection === "type" && (
                 <div className="grid grid-cols-5 gap-2 mt-3">
                   {CHART_TYPES.map((chart) => (
@@ -294,8 +296,8 @@ export function InteractiveChartEditor({
                           </button>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">
-                          <p className="font-medium">{chart.label}</p>
-                          <p className="text-xs text-muted-foreground">{chart.description}</p>
+                          <p className="font-medium">{t(`chartTypes.${chart.labelKey}`)}</p>
+                          <p className="text-xs text-muted-foreground">{t(`chartTypes.${chart.descriptionKey}`)}</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -308,40 +310,40 @@ export function InteractiveChartEditor({
 
             {/* Title & Labels Section */}
             <div>
-              <SectionHeader title="Title & Labels" section="labels" />
+              <SectionHeader title={t("sections.titleAndLabels")} section="labels" />
               {expandedSection === "labels" && (
                 <div className="space-y-3 mt-3">
                   <div className="space-y-1.5">
-                    <Label className="text-xs">Chart Title</Label>
+                    <Label className="text-xs">{t("labels.chartTitle")}</Label>
                     <Input
                       value={config.title}
                       onChange={(e) => updateConfig({ title: e.target.value })}
-                      placeholder="Enter chart title"
+                      placeholder={t("labels.chartTitlePlaceholder")}
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label className="text-xs">Subtitle</Label>
+                    <Label className="text-xs">{t("labels.subtitle")}</Label>
                     <Input
                       value={config.subtitle || ""}
                       onChange={(e) => updateConfig({ subtitle: e.target.value })}
-                      placeholder="Optional subtitle"
+                      placeholder={t("labels.subtitlePlaceholder")}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div className="space-y-1.5">
-                      <Label className="text-xs">X-Axis Label</Label>
+                      <Label className="text-xs">{t("labels.xAxisLabel")}</Label>
                       <Input
                         value={config.xAxisLabel || ""}
                         onChange={(e) => updateConfig({ xAxisLabel: e.target.value })}
-                        placeholder="X-Axis"
+                        placeholder={t("labels.xAxis")}
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-xs">Y-Axis Label</Label>
+                      <Label className="text-xs">{t("labels.yAxisLabel")}</Label>
                       <Input
                         value={config.yAxisLabel || ""}
                         onChange={(e) => updateConfig({ yAxisLabel: e.target.value })}
-                        placeholder="Y-Axis"
+                        placeholder={t("labels.yAxis")}
                       />
                     </div>
                   </div>
@@ -353,11 +355,11 @@ export function InteractiveChartEditor({
 
             {/* Colors Section */}
             <div>
-              <SectionHeader title="Colors" section="colors" />
+              <SectionHeader title={t("sections.colors")} section="colors" />
               {expandedSection === "colors" && (
                 <div className="space-y-3 mt-3">
                   <div className="space-y-1.5">
-                    <Label className="text-xs">Color Presets</Label>
+                    <Label className="text-xs">{t("colors.presets")}</Label>
                     <div className="grid grid-cols-4 gap-2">
                       {PRESET_COLORS.map((preset) => (
                         <TooltipProvider key={preset.name}>
@@ -391,7 +393,7 @@ export function InteractiveChartEditor({
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label className="text-xs">Current Colors</Label>
+                    <Label className="text-xs">{t("colors.current")}</Label>
                     <div className="flex flex-wrap gap-2">
                       {config.colors.map((color, i) => (
                         <div key={i} className="relative group">
@@ -415,7 +417,7 @@ export function InteractiveChartEditor({
                         </PopoverTrigger>
                         <PopoverContent className="w-48">
                           <div className="space-y-2">
-                            <Label className="text-xs">Custom Color</Label>
+                            <Label className="text-xs">{t("colors.custom")}</Label>
                             <div className="flex gap-2">
                               <Input
                                 type="color"
@@ -430,7 +432,7 @@ export function InteractiveChartEditor({
                               />
                             </div>
                             <Button size="sm" className="w-full" onClick={addCustomColor}>
-                              Add Color
+                              {t("colors.addColor")}
                             </Button>
                           </div>
                         </PopoverContent>
@@ -445,11 +447,11 @@ export function InteractiveChartEditor({
 
             {/* Display Options Section */}
             <div>
-              <SectionHeader title="Display Options" section="display" />
+              <SectionHeader title={t("sections.displayOptions")} section="display" />
               {expandedSection === "display" && (
                 <div className="space-y-3 mt-3">
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs">Show Legend</Label>
+                    <Label className="text-xs">{t("display.showLegend")}</Label>
                     <Switch
                       checked={config.showLegend}
                       onCheckedChange={(v) => updateConfig({ showLegend: v })}
@@ -457,7 +459,7 @@ export function InteractiveChartEditor({
                   </div>
                   {config.showLegend && (
                     <div className="space-y-1.5 pl-4">
-                      <Label className="text-xs text-muted-foreground">Legend Position</Label>
+                      <Label className="text-xs text-muted-foreground">{t("display.legendPosition")}</Label>
                       <Select
                         value={config.legendPosition}
                         onValueChange={(v) => updateConfig({ legendPosition: v as any })}
@@ -466,44 +468,44 @@ export function InteractiveChartEditor({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="top">Top</SelectItem>
-                          <SelectItem value="bottom">Bottom</SelectItem>
-                          <SelectItem value="left">Left</SelectItem>
-                          <SelectItem value="right">Right</SelectItem>
+                          <SelectItem value="top">{t("display.positions.top")}</SelectItem>
+                          <SelectItem value="bottom">{t("display.positions.bottom")}</SelectItem>
+                          <SelectItem value="left">{t("display.positions.left")}</SelectItem>
+                          <SelectItem value="right">{t("display.positions.right")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   )}
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs">Show Grid</Label>
+                    <Label className="text-xs">{t("display.showGrid")}</Label>
                     <Switch
                       checked={config.showGrid}
                       onCheckedChange={(v) => updateConfig({ showGrid: v })}
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs">Show Tooltip</Label>
+                    <Label className="text-xs">{t("display.showTooltip")}</Label>
                     <Switch
                       checked={config.showTooltip}
                       onCheckedChange={(v) => updateConfig({ showTooltip: v })}
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs">Show Labels</Label>
+                    <Label className="text-xs">{t("display.showLabels")}</Label>
                     <Switch
                       checked={config.showLabels}
                       onCheckedChange={(v) => updateConfig({ showLabels: v })}
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs">Show Data Values</Label>
+                    <Label className="text-xs">{t("display.showDataValues")}</Label>
                     <Switch
                       checked={config.showDataValues}
                       onCheckedChange={(v) => updateConfig({ showDataValues: v })}
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <Label className="text-xs">Animation</Label>
+                    <Label className="text-xs">{t("display.animation")}</Label>
                     <Switch
                       checked={config.animated}
                       onCheckedChange={(v) => updateConfig({ animated: v })}
@@ -517,12 +519,12 @@ export function InteractiveChartEditor({
 
             {/* Style Options Section */}
             <div>
-              <SectionHeader title="Style Options" section="style" />
+              <SectionHeader title={t("sections.styleOptions")} section="style" />
               {expandedSection === "style" && (
                 <div className="space-y-3 mt-3">
                   <div className="space-y-1.5">
                     <div className="flex justify-between">
-                      <Label className="text-xs">Chart Height</Label>
+                      <Label className="text-xs">{t("style.chartHeight")}</Label>
                       <span className="text-xs text-muted-foreground">{config.height}px</span>
                     </div>
                     <Slider
@@ -537,7 +539,7 @@ export function InteractiveChartEditor({
                     <>
                       <div className="space-y-1.5">
                         <div className="flex justify-between">
-                          <Label className="text-xs">Fill Opacity</Label>
+                          <Label className="text-xs">{t("style.fillOpacity")}</Label>
                           <span className="text-xs text-muted-foreground">{Math.round(config.fillOpacity * 100)}%</span>
                         </div>
                         <Slider
@@ -550,7 +552,7 @@ export function InteractiveChartEditor({
                       </div>
                       <div className="space-y-1.5">
                         <div className="flex justify-between">
-                          <Label className="text-xs">Border Radius</Label>
+                          <Label className="text-xs">{t("style.borderRadius")}</Label>
                           <span className="text-xs text-muted-foreground">{config.borderRadius}px</span>
                         </div>
                         <Slider
@@ -567,7 +569,7 @@ export function InteractiveChartEditor({
                     <>
                       <div className="space-y-1.5">
                         <div className="flex justify-between">
-                          <Label className="text-xs">Stroke Width</Label>
+                          <Label className="text-xs">{t("style.strokeWidth")}</Label>
                           <span className="text-xs text-muted-foreground">{config.strokeWidth}px</span>
                         </div>
                         <Slider
@@ -579,7 +581,7 @@ export function InteractiveChartEditor({
                         />
                       </div>
                       <div className="flex items-center justify-between">
-                        <Label className="text-xs">Curved Lines</Label>
+                        <Label className="text-xs">{t("style.curvedLines")}</Label>
                         <Switch
                           checked={config.curved}
                           onCheckedChange={(v) => updateConfig({ curved: v })}
@@ -589,7 +591,7 @@ export function InteractiveChartEditor({
                   )}
                   {config.type === "BAR" && (
                     <div className="flex items-center justify-between">
-                      <Label className="text-xs">Stacked</Label>
+                      <Label className="text-xs">{t("style.stacked")}</Label>
                       <Switch
                         checked={config.stacked}
                         onCheckedChange={(v) => updateConfig({ stacked: v })}
@@ -604,11 +606,11 @@ export function InteractiveChartEditor({
 
             {/* Data & Sorting Section */}
             <div>
-              <SectionHeader title="Data & Sorting" section="data" />
+              <SectionHeader title={t("sections.dataAndSorting")} section="data" />
               {expandedSection === "data" && (
                 <div className="space-y-3 mt-3">
                   <div className="space-y-1.5">
-                    <Label className="text-xs">Sort Order</Label>
+                    <Label className="text-xs">{t("data.sortOrder")}</Label>
                     <Select
                       value={config.sortOrder}
                       onValueChange={(v) => updateConfig({ sortOrder: v as any })}
@@ -617,21 +619,21 @@ export function InteractiveChartEditor({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">Original Order</SelectItem>
-                        <SelectItem value="asc">Ascending</SelectItem>
-                        <SelectItem value="desc">Descending</SelectItem>
+                        <SelectItem value="none">{t("data.sortOrders.original")}</SelectItem>
+                        <SelectItem value="asc">{t("data.sortOrders.ascending")}</SelectItem>
+                        <SelectItem value="desc">{t("data.sortOrders.descending")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5">
-                    <Label className="text-xs">Filter Threshold (min value)</Label>
+                    <Label className="text-xs">{t("data.filterThreshold")}</Label>
                     <Input
                       type="number"
                       value={config.filterThreshold ?? ""}
                       onChange={(e) => updateConfig({
                         filterThreshold: e.target.value ? parseFloat(e.target.value) : undefined
                       })}
-                      placeholder="No filter"
+                      placeholder={t("data.noFilter")}
                     />
                   </div>
                   <Button
@@ -641,7 +643,7 @@ export function InteractiveChartEditor({
                     onClick={() => setShowDataEditor(true)}
                   >
                     <Database className="h-4 w-4 mr-2" />
-                    Edit Data ({config.data.length} points)
+                    {t("data.editData", { count: config.data.length })}
                   </Button>
                 </div>
               )}
@@ -653,7 +655,7 @@ export function InteractiveChartEditor({
         <div className="p-4 border-t space-y-2">
           <Button className="w-full" onClick={() => onSave?.(config, processedData)}>
             <Save className="h-4 w-4 mr-2" />
-            Save Chart
+            {t("actions.saveChart")}
           </Button>
           <div className="flex gap-2">
             <Button
@@ -663,7 +665,7 @@ export function InteractiveChartEditor({
               onClick={() => onExport?.("png", config, processedData)}
             >
               <Download className="h-4 w-4 mr-2" />
-              PNG
+              {t("actions.png")}
             </Button>
             <Button
               variant="outline"
@@ -672,7 +674,7 @@ export function InteractiveChartEditor({
               onClick={() => onExport?.("svg", config, processedData)}
             >
               <Download className="h-4 w-4 mr-2" />
-              SVG
+              {t("actions.svg")}
             </Button>
             <Button
               variant="outline"
@@ -681,7 +683,7 @@ export function InteractiveChartEditor({
               onClick={() => onExport?.("csv", config, processedData)}
             >
               <Download className="h-4 w-4 mr-2" />
-              CSV
+              {t("actions.csv")}
             </Button>
           </div>
         </div>
@@ -693,10 +695,10 @@ export function InteractiveChartEditor({
         <div className="p-2 border-b bg-background flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-xs">
-              {CHART_TYPES.find(c => c.type === config.type)?.label} Chart
+              {t(`chartTypes.${CHART_TYPES.find(c => c.type === config.type)?.labelKey}`)} {t("preview.chart")}
             </Badge>
             <Badge variant="secondary" className="text-xs">
-              {processedData.length} data points
+              {t("preview.dataPoints", { count: processedData.length })}
             </Badge>
           </div>
           <div className="flex items-center gap-2">
@@ -722,7 +724,7 @@ export function InteractiveChartEditor({
               onClick={() => setPreviewMode(!previewMode)}
             >
               <Eye className="h-4 w-4 mr-2" />
-              Preview
+              {t("preview.preview")}
             </Button>
             <Button
               variant="ghost"
@@ -730,7 +732,7 @@ export function InteractiveChartEditor({
               onClick={() => updateConfig({ data: generateSampleData(config.type, 6) })}
             >
               <RefreshCw className="h-4 w-4 mr-2" />
-              Regenerate
+              {t("preview.regenerate")}
             </Button>
           </div>
         </div>
@@ -742,7 +744,7 @@ export function InteractiveChartEditor({
             style={{ transform: `scale(${zoomLevel / 100})` }}
           >
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">{config.title || "Untitled Chart"}</CardTitle>
+              <CardTitle className="text-lg">{config.title || t("preview.untitledChart")}</CardTitle>
               {config.subtitle && (
                 <p className="text-sm text-muted-foreground">{config.subtitle}</p>
               )}
@@ -768,13 +770,13 @@ export function InteractiveChartEditor({
       <Sheet open={showDataEditor} onOpenChange={setShowDataEditor}>
         <SheetContent side="right" className="w-96">
           <SheetHeader>
-            <SheetTitle>Edit Data Points</SheetTitle>
+            <SheetTitle>{t("dataEditor.title")}</SheetTitle>
           </SheetHeader>
 
           <div className="py-4 space-y-4">
             <Button variant="outline" size="sm" onClick={addDataPoint}>
               <Plus className="h-4 w-4 mr-2" />
-              Add Data Point
+              {t("dataEditor.addDataPoint")}
             </Button>
 
             <ScrollArea className="h-[calc(100vh-200px)]">
@@ -786,14 +788,14 @@ export function InteractiveChartEditor({
                         <Input
                           value={point.name}
                           onChange={(e) => updateDataPoint(index, { name: e.target.value })}
-                          placeholder="Label"
+                          placeholder={t("dataEditor.labelPlaceholder")}
                           className="h-8"
                         />
                         <Input
                           type="number"
                           value={point.value}
                           onChange={(e) => updateDataPoint(index, { value: parseFloat(e.target.value) || 0 })}
-                          placeholder="Value"
+                          placeholder={t("dataEditor.valuePlaceholder")}
                           className="h-8"
                         />
                       </div>

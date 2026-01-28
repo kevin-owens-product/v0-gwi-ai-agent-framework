@@ -85,23 +85,23 @@ export function CategoryEditor({
     const newErrors: Record<string, string> = {}
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required"
+      newErrors.name = t("validation.nameRequired")
     } else if (formData.name.length < 2) {
-      newErrors.name = "Name must be at least 2 characters"
+      newErrors.name = t("validation.nameMinLength")
     } else if (formData.name.length > 100) {
-      newErrors.name = "Name must be less than 100 characters"
+      newErrors.name = t("validation.nameMaxLength")
     }
 
     if (!formData.code.trim()) {
-      newErrors.code = "Code is required"
+      newErrors.code = t("validation.codeRequired")
     } else if (!/^[A-Z0-9_]+$/.test(formData.code)) {
-      newErrors.code = "Code must contain only uppercase letters, numbers, and underscores"
+      newErrors.code = t("validation.codeFormat")
     } else if (formData.code.length > 32) {
-      newErrors.code = "Code must be less than 32 characters"
+      newErrors.code = t("validation.codeMaxLength")
     }
 
     if (formData.description && formData.description.length > 500) {
-      newErrors.description = "Description must be less than 500 characters"
+      newErrors.description = t("validation.descriptionMaxLength")
     }
 
     setErrors(newErrors)
@@ -157,7 +157,7 @@ export function CategoryEditor({
       }
     } catch (error) {
       console.error("Failed to save category:", error)
-      setErrors({ form: "Failed to save category. Please try again." })
+      setErrors({ form: t("errors.failedToSave") })
     } finally {
       setIsLoading(false)
     }
@@ -177,11 +177,11 @@ export function CategoryEditor({
         router.push("/gwi/taxonomy")
       } else {
         const errorData = await response.json()
-        setErrors({ form: errorData.error || "Failed to delete category" })
+        setErrors({ form: errorData.error || t("errors.failedToDelete") })
       }
     } catch (error) {
       console.error("Failed to delete category:", error)
-      setErrors({ form: "Failed to delete category. Please try again." })
+      setErrors({ form: t("errors.failedToDelete") })
     } finally {
       setIsDeleting(false)
     }
@@ -194,11 +194,11 @@ export function CategoryEditor({
     <form onSubmit={handleSubmit}>
       <Card>
         <CardHeader>
-          <CardTitle>{category ? "Edit Category" : "Create Category"}</CardTitle>
+          <CardTitle>{category ? t("editCategory") : t("createCategory")}</CardTitle>
           <CardDescription>
             {category
-              ? "Update the category settings and configuration"
-              : "Set up a new taxonomy category"}
+              ? t("editCategoryDescription")
+              : t("createCategoryDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -210,7 +210,7 @@ export function CategoryEditor({
 
           <div className="space-y-2">
             <Label htmlFor="name">
-              Category Name <span className="text-red-500">*</span>
+              {t("categoryName")} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="name"
@@ -218,7 +218,7 @@ export function CategoryEditor({
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              placeholder="e.g., Demographics, Media Consumption"
+              placeholder={t("placeholders.categoryName")}
               className={errors.name ? "border-red-500" : ""}
             />
             {errors.name && (
@@ -228,7 +228,7 @@ export function CategoryEditor({
 
           <div className="space-y-2">
             <Label htmlFor="code">
-              Category Code <span className="text-red-500">*</span>
+              {t("categoryCode")} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="code"
@@ -236,7 +236,7 @@ export function CategoryEditor({
               onChange={(e) =>
                 setFormData({ ...formData, code: e.target.value.toUpperCase() })
               }
-              placeholder="e.g., DEMOGRAPHICS, MEDIA_CONSUMPTION"
+              placeholder={t("placeholders.categoryCode")}
               className={`font-mono ${errors.code ? "border-red-500" : ""}`}
               disabled={!!category}
             />
@@ -244,20 +244,20 @@ export function CategoryEditor({
               <p className="text-sm text-red-500">{errors.code}</p>
             )}
             <p className="text-sm text-muted-foreground">
-              Unique identifier. Uppercase letters, numbers, and underscores only.
-              {category && " Cannot be changed after creation."}
+              {t("codeHint")}
+              {category && ` ${t("codeCannotBeChanged")}`}
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{tCommon("description")}</Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
-              placeholder="Describe what this category represents..."
+              placeholder={t("placeholders.description")}
               rows={3}
               className={errors.description ? "border-red-500" : ""}
             />
@@ -267,7 +267,7 @@ export function CategoryEditor({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="parentId">Parent Category</Label>
+            <Label htmlFor="parentId">{t("parentCategory")}</Label>
             <Select
               value={formData.parentId}
               onValueChange={(value) =>
@@ -275,10 +275,10 @@ export function CategoryEditor({
               }
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select parent category (optional)" />
+                <SelectValue placeholder={t("placeholders.parentCategory")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">No parent (top-level category)</SelectItem>
+                <SelectItem value="none">{t("noParent")}</SelectItem>
                 {availableParents.map((parent) => (
                   <SelectItem key={parent.id} value={parent.id}>
                     {parent.name} ({parent.code})
@@ -287,15 +287,15 @@ export function CategoryEditor({
               </SelectContent>
             </Select>
             <p className="text-sm text-muted-foreground">
-              Organize categories in a hierarchical structure
+              {t("parentCategoryHint")}
             </p>
           </div>
 
           <div className="flex items-center justify-between rounded-lg border p-4">
             <div className="space-y-0.5">
-              <Label htmlFor="isActive">Active Status</Label>
+              <Label htmlFor="isActive">{t("activeStatus")}</Label>
               <p className="text-sm text-muted-foreground">
-                Inactive categories are hidden from selection menus
+                {t("activeStatusDescription")}
               </p>
             </div>
             <Switch
@@ -309,9 +309,9 @@ export function CategoryEditor({
 
           <div className="flex items-center justify-between rounded-lg border p-4">
             <div className="space-y-0.5">
-              <Label htmlFor="isGlobal">Global Category</Label>
+              <Label htmlFor="isGlobal">{t("globalCategory")}</Label>
               <p className="text-sm text-muted-foreground">
-                Global categories are available across all organizations
+                {t("globalCategoryDescription")}
               </p>
             </div>
             <Switch
@@ -326,7 +326,7 @@ export function CategoryEditor({
           {category && (
             <div className="pt-4 border-t">
               <p className="text-sm text-muted-foreground">
-                Current Version: {category.version}
+                {t("currentVersion", { version: category.version })}
               </p>
             </div>
           )}
@@ -344,32 +344,30 @@ export function CategoryEditor({
                       {isDeleting ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Deleting...
+                          {tCommon("deleting")}
                         </>
                       ) : (
                         <>
                           <Trash2 className="mr-2 h-4 w-4" />
-                          Delete Category
+                          {t("deleteCategory")}
                         </>
                       )}
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Delete Category</AlertDialogTitle>
+                      <AlertDialogTitle>{t("deleteDialogTitle")}</AlertDialogTitle>
                       <AlertDialogDescription>
-                        Are you sure you want to delete &quot;{category.name}&quot;? This
-                        action cannot be undone. All associated attributes and
-                        child categories will also be deleted.
+                        {t("deleteDialogDescription", { name: category.name })}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleDelete}
                         className="bg-red-600 hover:bg-red-700"
                       >
-                        Delete
+                        {tCommon("delete")}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -378,18 +376,18 @@ export function CategoryEditor({
             </div>
             <div className="flex gap-2">
               <Button type="button" variant="outline" onClick={() => router.back()}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button type="submit" disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
+                    {tCommon("saving")}
                   </>
                 ) : (
                   <>
                     <Save className="mr-2 h-4 w-4" />
-                    {category ? "Save Changes" : "Create Category"}
+                    {category ? tCommon("saveChanges") : t("createCategory")}
                   </>
                 )}
               </Button>

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,33 +28,35 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 
-const REPORT_TYPES = [
-  { value: "USAGE", label: "Usage", description: "Track platform usage metrics like agent runs, tokens, API calls" },
-  { value: "REVENUE", label: "Revenue", description: "Financial metrics including MRR, ARR, and revenue by plan" },
-  { value: "SECURITY", label: "Security", description: "Security violations, threats, and blocked IPs" },
-  { value: "COMPLIANCE", label: "Compliance", description: "Compliance frameworks, attestations, and audits" },
-  { value: "USER_ACTIVITY", label: "User Activity", description: "User engagement, sessions, and activity trends" },
-  { value: "CUSTOM_SQL", label: "Custom SQL", description: "Advanced reports with custom SQL queries" },
-]
-
-const SCHEDULES = [
-  { value: "", label: "On-demand (no schedule)" },
-  { value: "daily", label: "Daily" },
-  { value: "weekly", label: "Weekly" },
-  { value: "monthly", label: "Monthly" },
-]
-
-const FORMATS = [
-  { value: "csv", label: "CSV" },
-  { value: "json", label: "JSON" },
-  { value: "pdf", label: "PDF" },
-  { value: "xlsx", label: "Excel (XLSX)" },
-]
-
 export default function NewReportPage() {
   const router = useRouter()
+  const t = useTranslations("admin.analytics.reports.new")
+  const tCommon = useTranslations("admin.analytics.reports")
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const REPORT_TYPES = [
+    { value: "USAGE", label: tCommon("types.usage"), description: t("typeDescriptions.usage") },
+    { value: "REVENUE", label: tCommon("types.revenue"), description: t("typeDescriptions.revenue") },
+    { value: "SECURITY", label: tCommon("types.security"), description: t("typeDescriptions.security") },
+    { value: "COMPLIANCE", label: tCommon("types.compliance"), description: t("typeDescriptions.compliance") },
+    { value: "USER_ACTIVITY", label: tCommon("types.userActivity"), description: t("typeDescriptions.userActivity") },
+    { value: "CUSTOM_SQL", label: tCommon("types.customSql"), description: t("typeDescriptions.customSql") },
+  ]
+
+  const SCHEDULES = [
+    { value: "", label: t("scheduleOptions.onDemand") },
+    { value: "daily", label: tCommon("schedules.daily") },
+    { value: "weekly", label: tCommon("schedules.weekly") },
+    { value: "monthly", label: tCommon("schedules.monthly") },
+  ]
+
+  const FORMATS = [
+    { value: "csv", label: t("formatOptions.csv") },
+    { value: "json", label: t("formatOptions.json") },
+    { value: "pdf", label: t("formatOptions.pdf") },
+    { value: "xlsx", label: t("formatOptions.xlsx") },
+  ]
 
   // Form state
   const [formData, setFormData] = useState({
@@ -73,7 +76,7 @@ export default function NewReportPage() {
 
   const handleSubmit = async () => {
     if (!formData.name.trim()) {
-      setError("Report name is required")
+      setError(t("errors.nameRequired"))
       return
     }
 
@@ -92,13 +95,13 @@ export default function NewReportPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to create report")
+        throw new Error(data.error || t("errors.createFailed"))
       }
 
       const data = await response.json()
       router.push(`/admin/analytics/reports/${data.report.id}`)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create report")
+      setError(err instanceof Error ? err.message : t("errors.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -131,16 +134,16 @@ export default function NewReportPage() {
           <Button variant="ghost" size="sm" asChild>
             <Link href="/admin/analytics/reports">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Reports
+              {t("backToReports")}
             </Link>
           </Button>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <FileText className="h-6 w-6 text-primary" />
-              Create New Report
+              {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Configure a new custom analytics report
+              {t("description")}
             </p>
           </div>
         </div>
@@ -148,12 +151,12 @@ export default function NewReportPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Report
+              {t("createReport")}
             </>
           )}
         </Button>
@@ -170,35 +173,35 @@ export default function NewReportPage() {
         {/* Basic Information */}
         <Card>
           <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
-            <CardDescription>Configure the report name and description</CardDescription>
+            <CardTitle>{t("basicInfo.title")}</CardTitle>
+            <CardDescription>{t("basicInfo.description")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Report Name *</Label>
+              <Label htmlFor="name">{t("basicInfo.reportName")} *</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="e.g., Monthly Usage Summary"
+                placeholder={t("basicInfo.reportNamePlaceholder")}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("basicInfo.descriptionLabel")}</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Describe what this report contains..."
+                placeholder={t("basicInfo.descriptionPlaceholder")}
                 rows={3}
               />
             </div>
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label>Active</Label>
-                <p className="text-xs text-muted-foreground">Enable this report for execution</p>
+                <Label>{t("basicInfo.active")}</Label>
+                <p className="text-xs text-muted-foreground">{t("basicInfo.activeDescription")}</p>
               </div>
               <Switch
                 checked={formData.isActive}
@@ -211,12 +214,12 @@ export default function NewReportPage() {
         {/* Report Type */}
         <Card>
           <CardHeader>
-            <CardTitle>Report Type</CardTitle>
-            <CardDescription>Select the type of data to include</CardDescription>
+            <CardTitle>{t("reportType.title")}</CardTitle>
+            <CardDescription>{t("reportType.description")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label>Type</Label>
+              <Label>{t("reportType.typeLabel")}</Label>
               <Select
                 value={formData.type}
                 onValueChange={(v) => setFormData(prev => ({ ...prev, type: v }))}
@@ -239,7 +242,7 @@ export default function NewReportPage() {
 
             {formData.type !== "CUSTOM_SQL" && (
               <div className="space-y-2">
-                <Label>Report Period (days)</Label>
+                <Label>{t("reportType.reportPeriod")}</Label>
                 <Input
                   type="number"
                   value={formData.query.days}
@@ -251,7 +254,7 @@ export default function NewReportPage() {
                   max={365}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Number of days of data to include in the report
+                  {t("reportType.reportPeriodDescription")}
                 </p>
               </div>
             )}
@@ -259,8 +262,7 @@ export default function NewReportPage() {
             {formData.type === "CUSTOM_SQL" && (
               <div className="p-4 bg-muted rounded-lg">
                 <p className="text-sm text-muted-foreground">
-                  Custom SQL reports require manual configuration. After creating the report,
-                  you can edit the query in the report detail page.
+                  {t("reportType.customSqlNote")}
                 </p>
               </div>
             )}
@@ -270,18 +272,18 @@ export default function NewReportPage() {
         {/* Schedule & Delivery */}
         <Card>
           <CardHeader>
-            <CardTitle>Schedule & Delivery</CardTitle>
-            <CardDescription>Configure when and how the report runs</CardDescription>
+            <CardTitle>{t("scheduleDelivery.title")}</CardTitle>
+            <CardDescription>{t("scheduleDelivery.description")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label>Schedule</Label>
+              <Label>{t("scheduleDelivery.scheduleLabel")}</Label>
               <Select
                 value={formData.schedule}
                 onValueChange={(v) => setFormData(prev => ({ ...prev, schedule: v }))}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select schedule" />
+                  <SelectValue placeholder={t("scheduleDelivery.selectSchedule")} />
                 </SelectTrigger>
                 <SelectContent>
                   {SCHEDULES.map((schedule) => (
@@ -294,7 +296,7 @@ export default function NewReportPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Output Format</Label>
+              <Label>{t("scheduleDelivery.outputFormat")}</Label>
               <Select
                 value={formData.format}
                 onValueChange={(v) => setFormData(prev => ({ ...prev, format: v }))}
@@ -317,8 +319,8 @@ export default function NewReportPage() {
         {/* Recipients */}
         <Card>
           <CardHeader>
-            <CardTitle>Recipients</CardTitle>
-            <CardDescription>Email addresses to send the report to</CardDescription>
+            <CardTitle>{t("recipients.title")}</CardTitle>
+            <CardDescription>{t("recipients.description")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex gap-2">
@@ -326,7 +328,7 @@ export default function NewReportPage() {
                 type="email"
                 value={newRecipient}
                 onChange={(e) => setNewRecipient(e.target.value)}
-                placeholder="email@example.com"
+                placeholder={t("recipients.emailPlaceholder")}
                 onKeyDown={(e) => e.key === "Enter" && addRecipient()}
               />
               <Button variant="outline" onClick={addRecipient}>
@@ -350,7 +352,7 @@ export default function NewReportPage() {
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
-                No recipients added. Reports will only be accessible from the dashboard.
+                {t("recipients.noRecipients")}
               </p>
             )}
           </CardContent>
@@ -360,27 +362,27 @@ export default function NewReportPage() {
       {/* Summary */}
       <Card>
         <CardHeader>
-          <CardTitle>Report Summary</CardTitle>
+          <CardTitle>{t("summary.title")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-4">
             <div>
-              <p className="text-sm text-muted-foreground">Name</p>
-              <p className="font-medium">{formData.name || "Untitled Report"}</p>
+              <p className="text-sm text-muted-foreground">{t("summary.name")}</p>
+              <p className="font-medium">{formData.name || t("summary.untitledReport")}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Type</p>
+              <p className="text-sm text-muted-foreground">{t("summary.type")}</p>
               <p className="font-medium">{selectedType?.label || formData.type}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Schedule</p>
+              <p className="text-sm text-muted-foreground">{t("summary.schedule")}</p>
               <p className="font-medium">
-                {SCHEDULES.find(s => s.value === formData.schedule)?.label || "On-demand"}
+                {SCHEDULES.find(s => s.value === formData.schedule)?.label || t("scheduleOptions.onDemand")}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Recipients</p>
-              <p className="font-medium">{formData.recipients.length || "None"}</p>
+              <p className="text-sm text-muted-foreground">{t("summary.recipients")}</p>
+              <p className="font-medium">{formData.recipients.length || t("summary.none")}</p>
             </div>
           </div>
         </CardContent>

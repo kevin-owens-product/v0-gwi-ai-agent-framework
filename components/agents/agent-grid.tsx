@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -177,6 +178,7 @@ const demoAgents: Agent[] = [
 ]
 
 export function AgentGrid({ filter, search }: { filter: string; search?: string }) {
+  const t = useTranslations("agents.grid")
   const [agents, setAgents] = useState<Agent[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -264,7 +266,7 @@ export function AgentGrid({ filter, search }: { filter: string; search?: string 
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-        <p className="text-sm text-red-400 mb-2">Error loading agents</p>
+        <p className="text-sm text-red-400 mb-2">{t("errorLoading")}</p>
         <p className="text-xs">{error}</p>
       </div>
     )
@@ -274,10 +276,10 @@ export function AgentGrid({ filter, search }: { filter: string; search?: string 
     return (
       <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
         <Bot className="h-12 w-12 mb-4 opacity-50" />
-        <p className="text-lg font-medium mb-1">No agents found</p>
-        <p className="text-sm mb-4">Create your first agent to get started</p>
+        <p className="text-lg font-medium mb-1">{t("noAgentsFound")}</p>
+        <p className="text-sm mb-4">{t("createFirstAgent")}</p>
         <Link href="/dashboard/agents/new">
-          <Button>Create Agent</Button>
+          <Button>{t("createAgent")}</Button>
         </Link>
       </div>
     )
@@ -309,7 +311,7 @@ export function AgentGrid({ filter, search }: { filter: string; search?: string 
                   </Link>
                 </div>
                 <p className="text-sm text-muted-foreground line-clamp-2">
-                  {agent.description || "No description provided"}
+                  {agent.description || t("noDescription")}
                 </p>
               </div>
 
@@ -321,8 +323,8 @@ export function AgentGrid({ filter, search }: { filter: string; search?: string 
 
               <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
                 <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <span>{runCount} runs</span>
-                  <span>by {agent.creator?.name || 'Unknown'}</span>
+                  <span>{t("runsCount", { count: runCount })}</span>
+                  <span>{t("byCreator", { name: agent.creator?.name || t("unknown") })}</span>
                 </div>
               </div>
             </CardContent>
@@ -334,7 +336,7 @@ export function AgentGrid({ filter, search }: { filter: string; search?: string 
                   disabled={agent.status !== 'ACTIVE'}
                 >
                   <Play className="h-4 w-4" />
-                  Run Agent
+                  {t("runAgent")}
                 </Button>
               </Link>
               <Link href={`/dashboard/agents/${agent.id}`}>

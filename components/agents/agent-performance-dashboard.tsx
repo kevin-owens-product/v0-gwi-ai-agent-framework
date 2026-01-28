@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -106,6 +107,8 @@ const overallStats = {
 }
 
 export function AgentPerformanceDashboard() {
+  const t = useTranslations("agents.performance")
+
   return (
     <div className="space-y-6">
       {/* Overall Stats */}
@@ -113,20 +116,20 @@ export function AgentPerformanceDashboard() {
         <Card className="p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-muted-foreground">Total Runs</p>
+              <p className="text-sm text-muted-foreground">{t("stats.totalRuns")}</p>
               <p className="text-2xl font-bold">{overallStats.totalRuns.toLocaleString()}</p>
             </div>
             <div className="h-10 w-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
               <Activity className="h-5 w-5 text-blue-600" />
             </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">Across all agents</p>
+          <p className="text-xs text-muted-foreground mt-2">{t("stats.acrossAllAgents")}</p>
         </Card>
 
         <Card className="p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-muted-foreground">Success Rate</p>
+              <p className="text-sm text-muted-foreground">{t("stats.successRate")}</p>
               <p className="text-2xl font-bold">{overallStats.avgSuccessRate}%</p>
             </div>
             <div className="h-10 w-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
@@ -135,27 +138,27 @@ export function AgentPerformanceDashboard() {
           </div>
           <p className="text-xs text-emerald-600 mt-2">
             <TrendingUp className="inline h-3 w-3 mr-1" />
-            +2.3% from last week
+            {t("stats.fromLastWeekUp", { change: "2.3%" })}
           </p>
         </Card>
 
         <Card className="p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-muted-foreground">Total Cost</p>
+              <p className="text-sm text-muted-foreground">{t("stats.totalCost")}</p>
               <p className="text-2xl font-bold">${overallStats.totalCost}</p>
             </div>
             <div className="h-10 w-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
               <DollarSign className="h-5 w-5 text-purple-600" />
             </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">This month</p>
+          <p className="text-xs text-muted-foreground mt-2">{t("stats.thisMonth")}</p>
         </Card>
 
         <Card className="p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-muted-foreground">Avg Response</p>
+              <p className="text-sm text-muted-foreground">{t("stats.avgResponse")}</p>
               <p className="text-2xl font-bold">{overallStats.avgResponseTime}s</p>
             </div>
             <div className="h-10 w-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
@@ -164,7 +167,7 @@ export function AgentPerformanceDashboard() {
           </div>
           <p className="text-xs text-orange-600 mt-2">
             <TrendingDown className="inline h-3 w-3 mr-1" />
-            -0.4s from last week
+            {t("stats.fromLastWeekDown", { change: "0.4s" })}
           </p>
         </Card>
       </div>
@@ -173,11 +176,11 @@ export function AgentPerformanceDashboard() {
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-lg font-semibold">Agent Performance</h3>
-            <p className="text-sm text-muted-foreground">Detailed metrics for each agent</p>
+            <h3 className="text-lg font-semibold">{t("title")}</h3>
+            <p className="text-sm text-muted-foreground">{t("description")}</p>
           </div>
           <Button variant="outline" size="sm">
-            Export Report
+            {t("exportReport")}
           </Button>
         </div>
 

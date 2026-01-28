@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import {
   ArrowLeft,
   Megaphone,
@@ -49,42 +50,6 @@ import {
 } from "@/components/ui/dialog"
 import { toast } from "sonner"
 
-const messageTypes = [
-  { value: "ANNOUNCEMENT", label: "Announcement", description: "General platform announcements" },
-  { value: "PRODUCT_UPDATE", label: "Product Update", description: "New features and improvements" },
-  { value: "MAINTENANCE", label: "Maintenance", description: "Scheduled maintenance notices" },
-  { value: "SECURITY_ALERT", label: "Security Alert", description: "Security-related notifications" },
-  { value: "MARKETING", label: "Marketing", description: "Promotional content" },
-  { value: "SURVEY", label: "Survey", description: "User feedback requests" },
-]
-
-const priorityOptions = [
-  { value: "LOW", label: "Low", description: "Non-urgent, informational" },
-  { value: "NORMAL", label: "Normal", description: "Standard priority" },
-  { value: "HIGH", label: "High", description: "Important, time-sensitive" },
-  { value: "URGENT", label: "Urgent", description: "Critical, immediate attention required" },
-]
-
-const targetOptions = [
-  { value: "ALL", label: "All Users", icon: Users, description: "Send to all active users" },
-  { value: "SPECIFIC_ORGS", label: "Specific Organizations", icon: Building2, description: "Target specific organizations" },
-  { value: "SPECIFIC_PLANS", label: "Specific Plans", icon: Crown, description: "Target users on specific plans" },
-]
-
-const channelOptions = [
-  { value: "IN_APP", label: "In-App", icon: Bell, description: "Show in the application" },
-  { value: "EMAIL", label: "Email", icon: Mail, description: "Send via email" },
-  { value: "PUSH", label: "Push", icon: Smartphone, description: "Send push notification" },
-  { value: "SMS", label: "SMS", icon: MessageSquare, description: "Send SMS message" },
-  { value: "SLACK", label: "Slack", icon: MessageSquare, description: "Post to Slack" },
-]
-
-const planOptions = [
-  { value: "STARTER", label: "Starter" },
-  { value: "PROFESSIONAL", label: "Professional" },
-  { value: "ENTERPRISE", label: "Enterprise" },
-]
-
 interface BroadcastMessage {
   id: string
   title: string
@@ -102,6 +67,9 @@ interface BroadcastMessage {
 }
 
 export default function EditBroadcastMessagePage() {
+  const t = useTranslations("admin.broadcast")
+  const tCommon = useTranslations("common")
+
   const params = useParams()
   const router = useRouter()
   const messageId = params.id as string
@@ -126,6 +94,42 @@ export default function EditBroadcastMessagePage() {
     expiresAt: "",
   })
 
+  const messageTypes = [
+    { value: "ANNOUNCEMENT", label: t("types.announcement"), description: t("typeDescriptions.announcement") },
+    { value: "PRODUCT_UPDATE", label: t("types.productUpdate"), description: t("typeDescriptions.productUpdate") },
+    { value: "MAINTENANCE", label: t("types.maintenance"), description: t("typeDescriptions.maintenance") },
+    { value: "SECURITY_ALERT", label: t("types.securityAlert"), description: t("typeDescriptions.securityAlert") },
+    { value: "MARKETING", label: t("types.marketing"), description: t("typeDescriptions.marketing") },
+    { value: "SURVEY", label: t("types.survey"), description: t("typeDescriptions.survey") },
+  ]
+
+  const priorityOptions = [
+    { value: "LOW", label: t("priority.low"), description: t("priorityDescriptions.low") },
+    { value: "NORMAL", label: t("priority.normal"), description: t("priorityDescriptions.normal") },
+    { value: "HIGH", label: t("priority.high"), description: t("priorityDescriptions.high") },
+    { value: "URGENT", label: t("priority.urgent"), description: t("priorityDescriptions.urgent") },
+  ]
+
+  const targetOptions = [
+    { value: "ALL", label: t("target.allUsers"), icon: Users, description: t("targetDescriptions.allUsers") },
+    { value: "SPECIFIC_ORGS", label: t("target.specificOrgs"), icon: Building2, description: t("targetDescriptions.specificOrgs") },
+    { value: "SPECIFIC_PLANS", label: t("target.specificPlans"), icon: Crown, description: t("targetDescriptions.specificPlans") },
+  ]
+
+  const channelOptions = [
+    { value: "IN_APP", label: t("channels.inApp"), icon: Bell, description: t("channelDescriptions.inApp") },
+    { value: "EMAIL", label: t("channels.email"), icon: Mail, description: t("channelDescriptions.email") },
+    { value: "PUSH", label: t("channels.push"), icon: Smartphone, description: t("channelDescriptions.push") },
+    { value: "SMS", label: t("channels.sms"), icon: MessageSquare, description: t("channelDescriptions.sms") },
+    { value: "SLACK", label: t("channels.slack"), icon: MessageSquare, description: t("channelDescriptions.slack") },
+  ]
+
+  const planOptions = [
+    { value: "STARTER", label: t("plans.starter") },
+    { value: "PROFESSIONAL", label: t("plans.professional") },
+    { value: "ENTERPRISE", label: t("plans.enterprise") },
+  ]
+
   const fetchMessage = useCallback(async () => {
     setIsLoading(true)
     try {
@@ -138,7 +142,7 @@ export default function EditBroadcastMessagePage() {
 
       // Only allow editing drafts
       if (msg.status !== "DRAFT") {
-        toast.error("Only draft messages can be edited")
+        toast.error(t("validation.onlyDraftsEditable"))
         router.push(`/admin/broadcast/messages/${messageId}`)
         return
       }
@@ -157,12 +161,12 @@ export default function EditBroadcastMessagePage() {
       })
     } catch (error) {
       console.error("Failed to fetch message:", error)
-      toast.error("Failed to load broadcast message")
+      toast.error(t("toast.loadFailed"))
       router.push("/admin/broadcast/messages")
     } finally {
       setIsLoading(false)
     }
-  }, [messageId, router])
+  }, [messageId, router, t])
 
   useEffect(() => {
     fetchMessage()
@@ -199,19 +203,19 @@ export default function EditBroadcastMessagePage() {
 
   const validateForm = () => {
     if (!formData.title.trim()) {
-      setError("Title is required")
+      setError(t("validation.titleRequired"))
       return false
     }
     if (!formData.content.trim()) {
-      setError("Content is required")
+      setError(t("validation.contentRequired"))
       return false
     }
     if (formData.channels.length === 0) {
-      setError("At least one channel is required")
+      setError(t("validation.channelRequired"))
       return false
     }
     if (formData.targetType === "SPECIFIC_PLANS" && formData.targetPlans.length === 0) {
-      setError("Please select at least one plan tier")
+      setError(t("validation.planRequired"))
       return false
     }
     return true
@@ -238,10 +242,10 @@ export default function EditBroadcastMessagePage() {
         throw new Error(data.error || "Failed to save changes")
       }
 
-      toast.success("Broadcast message updated")
+      toast.success(t("toast.messageUpdated"))
       router.push(`/admin/broadcast/messages/${messageId}`)
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to save changes")
+      setError(error instanceof Error ? error.message : t("toast.saveFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -281,10 +285,10 @@ export default function EditBroadcastMessagePage() {
         throw new Error(data.error || "Failed to send message")
       }
 
-      toast.success("Broadcast message sent successfully")
+      toast.success(t("toast.messageSent"))
       router.push("/admin/broadcast/messages")
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to send message")
+      setError(error instanceof Error ? error.message : t("toast.sendFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -293,13 +297,13 @@ export default function EditBroadcastMessagePage() {
   const handleSchedule = async () => {
     if (!validateForm()) return
     if (!scheduledDate || !scheduledTime) {
-      setError("Please select a date and time")
+      setError(t("validation.selectDateTime"))
       return
     }
 
     const scheduledFor = new Date(`${scheduledDate}T${scheduledTime}`)
     if (scheduledFor <= new Date()) {
-      setError("Scheduled time must be in the future")
+      setError(t("validation.futureTime"))
       return
     }
 
@@ -334,11 +338,11 @@ export default function EditBroadcastMessagePage() {
         throw new Error(data.error || "Failed to schedule message")
       }
 
-      toast.success("Broadcast message scheduled")
+      toast.success(t("toast.messageScheduled"))
       setScheduleDialogOpen(false)
       router.push("/admin/broadcast/messages")
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to schedule message")
+      setError(error instanceof Error ? error.message : t("toast.scheduleFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -360,16 +364,16 @@ export default function EditBroadcastMessagePage() {
           <Button variant="ghost" size="sm" asChild>
             <Link href={`/admin/broadcast/messages/${messageId}`}>
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Link>
           </Button>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Megaphone className="h-6 w-6" />
-              Edit Broadcast Message
+              {t("editTitle")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Make changes to your draft message
+              {t("editDescription")}
             </p>
           </div>
         </div>
@@ -380,11 +384,11 @@ export default function EditBroadcastMessagePage() {
             ) : (
               <Save className="h-4 w-4 mr-2" />
             )}
-            Save Changes
+            {t("actions.saveChanges")}
           </Button>
           <Button variant="outline" onClick={() => setScheduleDialogOpen(true)} disabled={isSaving}>
             <Calendar className="h-4 w-4 mr-2" />
-            Schedule
+            {t("actions.schedule")}
           </Button>
           <Button onClick={handleSendNow} disabled={isSaving}>
             {isSaving ? (
@@ -392,7 +396,7 @@ export default function EditBroadcastMessagePage() {
             ) : (
               <Send className="h-4 w-4 mr-2" />
             )}
-            Send Now
+            {t("actions.sendNow")}
           </Button>
         </div>
       </div>
@@ -406,23 +410,23 @@ export default function EditBroadcastMessagePage() {
 
       <Tabs defaultValue="content" className="space-y-6">
         <TabsList>
-          <TabsTrigger value="content">Content</TabsTrigger>
-          <TabsTrigger value="targeting">Targeting</TabsTrigger>
-          <TabsTrigger value="delivery">Delivery</TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
+          <TabsTrigger value="content">{t("tabs.content")}</TabsTrigger>
+          <TabsTrigger value="targeting">{t("tabs.targeting")}</TabsTrigger>
+          <TabsTrigger value="delivery">{t("tabs.delivery")}</TabsTrigger>
+          <TabsTrigger value="preview">{t("tabs.preview")}</TabsTrigger>
         </TabsList>
 
         {/* Content Tab */}
         <TabsContent value="content" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Message Content</CardTitle>
-              <CardDescription>Edit your broadcast message</CardDescription>
+              <CardTitle>{t("content.title")}</CardTitle>
+              <CardDescription>{t("content.editDescription")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label>Message Type</Label>
+                  <Label>{t("form.messageType")}</Label>
                   <Select
                     value={formData.type}
                     onValueChange={(v) => setFormData((p) => ({ ...p, type: v }))}
@@ -443,7 +447,7 @@ export default function EditBroadcastMessagePage() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Priority</Label>
+                  <Label>{t("form.priority")}</Label>
                   <Select
                     value={formData.priority}
                     onValueChange={(v) => setFormData((p) => ({ ...p, priority: v }))}
@@ -466,11 +470,11 @@ export default function EditBroadcastMessagePage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Title</Label>
+                <Label>{t("form.title")}</Label>
                 <Input
                   value={formData.title}
                   onChange={(e) => setFormData((p) => ({ ...p, title: e.target.value }))}
-                  placeholder="Enter a clear, concise title..."
+                  placeholder={t("form.titlePlaceholder")}
                   maxLength={200}
                 />
                 <p className="text-xs text-muted-foreground text-right">
@@ -479,7 +483,7 @@ export default function EditBroadcastMessagePage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Content</Label>
+                <Label>{t("form.content")}</Label>
                 <div className="border rounded-lg">
                   <div className="flex items-center gap-1 p-2 border-b bg-muted/50">
                     <Button variant="ghost" size="sm" type="button">
@@ -501,25 +505,25 @@ export default function EditBroadcastMessagePage() {
                   <Textarea
                     value={formData.content}
                     onChange={(e) => handleContentChange(e.target.value)}
-                    placeholder="Write your message content..."
+                    placeholder={t("form.contentPlaceholder")}
                     rows={10}
                     className="border-0 rounded-none focus-visible:ring-0"
                   />
                 </div>
                 <p className="text-xs text-muted-foreground text-right">
-                  {formData.content.length} characters
+                  {t("form.characters", { count: formData.content.length })}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label>Expiration (Optional)</Label>
+                <Label>{t("form.expiration")}</Label>
                 <Input
                   type="datetime-local"
                   value={formData.expiresAt}
                   onChange={(e) => setFormData((p) => ({ ...p, expiresAt: e.target.value }))}
                 />
                 <p className="text-xs text-muted-foreground">
-                  The message will no longer be displayed after this date
+                  {t("form.expirationHint")}
                 </p>
               </div>
             </CardContent>
@@ -530,8 +534,8 @@ export default function EditBroadcastMessagePage() {
         <TabsContent value="targeting" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Target Audience</CardTitle>
-              <CardDescription>Choose who will receive this broadcast</CardDescription>
+              <CardTitle>{t("targeting.title")}</CardTitle>
+              <CardDescription>{t("targeting.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -575,7 +579,7 @@ export default function EditBroadcastMessagePage() {
 
               {formData.targetType === "SPECIFIC_PLANS" && (
                 <div className="space-y-4 pt-4 border-t">
-                  <Label>Select Plan Tiers</Label>
+                  <Label>{t("targeting.selectPlanTiers")}</Label>
                   <div className="flex flex-wrap gap-4">
                     {planOptions.map((plan) => (
                       <div key={plan.value} className="flex items-center gap-2">
@@ -595,9 +599,9 @@ export default function EditBroadcastMessagePage() {
 
               {formData.targetType === "SPECIFIC_ORGS" && (
                 <div className="space-y-4 pt-4 border-t">
-                  <Label>Organization IDs</Label>
+                  <Label>{t("targeting.organizationIds")}</Label>
                   <Textarea
-                    placeholder="Enter organization IDs, one per line..."
+                    placeholder={t("targeting.organizationIdsPlaceholder")}
                     value={formData.targetOrgs.join("\n")}
                     onChange={(e) =>
                       setFormData((p) => ({
@@ -608,7 +612,7 @@ export default function EditBroadcastMessagePage() {
                     rows={4}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Enter one organization ID per line
+                    {t("targeting.organizationIdsHint")}
                   </p>
                 </div>
               )}
@@ -620,8 +624,8 @@ export default function EditBroadcastMessagePage() {
         <TabsContent value="delivery" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Delivery Channels</CardTitle>
-              <CardDescription>Select how this message will be delivered</CardDescription>
+              <CardTitle>{t("delivery.title")}</CardTitle>
+              <CardDescription>{t("delivery.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {channelOptions.map((channel) => {
@@ -658,8 +662,8 @@ export default function EditBroadcastMessagePage() {
         <TabsContent value="preview" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Message Preview</CardTitle>
-              <CardDescription>Preview how your message will appear</CardDescription>
+              <CardTitle>{t("preview.title")}</CardTitle>
+              <CardDescription>{t("preview.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="bg-muted/50 rounded-lg p-6">
@@ -674,18 +678,18 @@ export default function EditBroadcastMessagePage() {
                           {formData.type.replace("_", " ")}
                         </Badge>
                         <h3 className="font-semibold">
-                          {formData.title || "Message Title"}
+                          {formData.title || t("preview.messageTitlePlaceholder")}
                         </h3>
                       </div>
                     </div>
                   </div>
                   <div className="p-4">
                     <p className="text-sm whitespace-pre-wrap">
-                      {formData.content || "Your message content will appear here..."}
+                      {formData.content || t("preview.contentPlaceholder")}
                     </p>
                   </div>
                   <div className="px-4 pb-4 flex items-center justify-between text-xs text-muted-foreground">
-                    <span>Just now</span>
+                    <span>{t("preview.justNow")}</span>
                     <div className="flex gap-2">
                       {formData.channels.map((channel) => {
                         const Icon = channelOptions.find((c) => c.value === channel)?.icon || Bell
@@ -703,15 +707,15 @@ export default function EditBroadcastMessagePage() {
 
               <div className="grid grid-cols-3 gap-4 text-sm">
                 <div className="p-4 rounded-lg bg-muted/50">
-                  <p className="text-muted-foreground">Type</p>
+                  <p className="text-muted-foreground">{t("table.type")}</p>
                   <p className="font-medium">{formData.type.replace("_", " ")}</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50">
-                  <p className="text-muted-foreground">Priority</p>
+                  <p className="text-muted-foreground">{t("table.priority")}</p>
                   <p className="font-medium">{formData.priority}</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50">
-                  <p className="text-muted-foreground">Target</p>
+                  <p className="text-muted-foreground">{t("table.target")}</p>
                   <p className="font-medium">{formData.targetType.replace(/_/g, " ")}</p>
                 </div>
               </div>
@@ -724,14 +728,14 @@ export default function EditBroadcastMessagePage() {
       <Dialog open={scheduleDialogOpen} onOpenChange={setScheduleDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Schedule Broadcast</DialogTitle>
+            <DialogTitle>{t("scheduleDialog.title")}</DialogTitle>
             <DialogDescription>
-              Choose when this message should be sent
+              {t("scheduleDialog.description")}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label>Date</Label>
+              <Label>{t("scheduleDialog.date")}</Label>
               <Input
                 type="date"
                 value={scheduledDate}
@@ -740,7 +744,7 @@ export default function EditBroadcastMessagePage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Time</Label>
+              <Label>{t("scheduleDialog.time")}</Label>
               <Input
                 type="time"
                 value={scheduledTime}
@@ -750,18 +754,18 @@ export default function EditBroadcastMessagePage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setScheduleDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button onClick={handleSchedule} disabled={isSaving}>
               {isSaving ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Scheduling...
+                  {t("scheduleDialog.scheduling")}
                 </>
               ) : (
                 <>
                   <Calendar className="h-4 w-4 mr-2" />
-                  Schedule
+                  {t("actions.schedule")}
                 </>
               )}
             </Button>

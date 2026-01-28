@@ -1,5 +1,5 @@
 "use client"
-
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
@@ -44,13 +44,14 @@ const agents = [
 ]
 
 export function AgentPerformance() {
+  const t = useTranslations("dashboard.analytics.agentPerformance")
   const maxQueries = Math.max(...agents.map((a) => a.queries))
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Agent Performance</CardTitle>
-        <CardDescription>Usage and success metrics by agent</CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {agents.map((agent) => (
@@ -67,7 +68,7 @@ export function AgentPerformance() {
             </div>
             <Progress value={(agent.queries / maxQueries) * 100} className="h-2" />
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>{agent.queries.toLocaleString()} queries</span>
+              <span>{agent.queries.toLocaleString()} {t("queries")}</span>
               <div className="flex items-center gap-3">
                 <span className="flex items-center gap-1">
                   <CheckCircle2 className="h-3 w-3 text-emerald-500" />

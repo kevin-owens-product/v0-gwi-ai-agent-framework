@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -28,38 +29,6 @@ import {
 import Link from "next/link"
 import { useAdmin } from "@/components/providers/admin-provider"
 
-const ORG_TYPE_OPTIONS = [
-  { value: "STANDARD", label: "Standard" },
-  { value: "AGENCY", label: "Agency" },
-  { value: "HOLDING_COMPANY", label: "Holding Company" },
-  { value: "SUBSIDIARY", label: "Subsidiary" },
-  { value: "BRAND", label: "Brand" },
-  { value: "SUB_BRAND", label: "Sub-Brand" },
-  { value: "DIVISION", label: "Division" },
-  { value: "DEPARTMENT", label: "Department" },
-  { value: "FRANCHISE", label: "Franchise" },
-  { value: "FRANCHISEE", label: "Franchisee" },
-  { value: "RESELLER", label: "Reseller" },
-  { value: "CLIENT", label: "Client" },
-  { value: "REGIONAL", label: "Regional" },
-  { value: "PORTFOLIO_COMPANY", label: "Portfolio Company" },
-]
-
-const PLAN_TIERS = [
-  { value: "STARTER", label: "Starter" },
-  { value: "PROFESSIONAL", label: "Professional" },
-  { value: "ENTERPRISE", label: "Enterprise" },
-]
-
-const COMPANY_SIZES = [
-  { value: "SOLO", label: "Solo (1)" },
-  { value: "SMALL", label: "Small (2-10)" },
-  { value: "MEDIUM", label: "Medium (11-50)" },
-  { value: "LARGE", label: "Large (51-200)" },
-  { value: "ENTERPRISE", label: "Enterprise (201-1000)" },
-  { value: "GLOBAL", label: "Global (1000+)" },
-]
-
 interface ParentOrg {
   id: string
   name: string
@@ -67,8 +36,43 @@ interface ParentOrg {
 
 export default function NewTenantPage() {
   const router = useRouter()
+  const t = useTranslations("admin.tenants.new")
+  const tMain = useTranslations("admin.tenants")
+  const tCommon = useTranslations("common")
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
+
+  const ORG_TYPE_OPTIONS = [
+    { value: "STANDARD", label: tMain("orgTypes.STANDARD") },
+    { value: "AGENCY", label: tMain("orgTypes.AGENCY") },
+    { value: "HOLDING_COMPANY", label: tMain("orgTypes.HOLDING_COMPANY") },
+    { value: "SUBSIDIARY", label: tMain("orgTypes.SUBSIDIARY") },
+    { value: "BRAND", label: tMain("orgTypes.BRAND") },
+    { value: "SUB_BRAND", label: tMain("orgTypes.SUB_BRAND") },
+    { value: "DIVISION", label: tMain("orgTypes.DIVISION") },
+    { value: "DEPARTMENT", label: tMain("orgTypes.DEPARTMENT") },
+    { value: "FRANCHISE", label: tMain("orgTypes.FRANCHISE") },
+    { value: "FRANCHISEE", label: tMain("orgTypes.FRANCHISEE") },
+    { value: "RESELLER", label: tMain("orgTypes.RESELLER") },
+    { value: "CLIENT", label: tMain("orgTypes.CLIENT") },
+    { value: "REGIONAL", label: tMain("orgTypes.REGIONAL") },
+    { value: "PORTFOLIO_COMPANY", label: tMain("orgTypes.PORTFOLIO_COMPANY") },
+  ]
+
+  const PLAN_TIERS = [
+    { value: "STARTER", label: tMain("plans.starter") },
+    { value: "PROFESSIONAL", label: tMain("plans.professional") },
+    { value: "ENTERPRISE", label: tMain("plans.enterprise") },
+  ]
+
+  const COMPANY_SIZES = [
+    { value: "SOLO", label: t("companySizes.solo") },
+    { value: "SMALL", label: t("companySizes.small") },
+    { value: "MEDIUM", label: t("companySizes.medium") },
+    { value: "LARGE", label: t("companySizes.large") },
+    { value: "ENTERPRISE", label: t("companySizes.enterprise") },
+    { value: "GLOBAL", label: t("companySizes.global") },
+  ]
   const [parentOrgs, setParentOrgs] = useState<ParentOrg[]>([])
   const [isLoadingParents, setIsLoadingParents] = useState(true)
 
@@ -132,7 +136,7 @@ export default function NewTenantPage() {
 
   const handleCreate = async () => {
     if (!formData.name) {
-      toast.error("Organization name is required")
+      showErrorToast(t("validation.nameRequired"))
       return
     }
 
@@ -166,11 +170,11 @@ export default function NewTenantPage() {
         router.push(`/admin/tenants/${data.organization.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to create organization")
+        showErrorToast(data.error || t("toast.createFailed"))
       }
     } catch (error) {
       console.error("Failed to create organization:", error)
-      toast.error("Failed to create organization")
+      showErrorToast(t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -179,11 +183,11 @@ export default function NewTenantPage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to create organizations</p>
+        <p className="text-muted-foreground">{t("noPermission")}</p>
         <Link href="/admin/tenants">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Tenants
+            {t("backToTenants")}
           </Button>
         </Link>
       </div>
@@ -198,13 +202,13 @@ export default function NewTenantPage() {
           <Link href="/admin/tenants">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold">Create New Organization</h1>
+            <h1 className="text-2xl font-bold">{t("title")}</h1>
             <p className="text-sm text-muted-foreground">
-              Add a new tenant organization to the platform
+              {t("description")}
             </p>
           </div>
         </div>
@@ -212,12 +216,12 @@ export default function NewTenantPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Organization
+              {t("createOrganization")}
             </>
           )}
         </Button>
@@ -229,40 +233,40 @@ export default function NewTenantPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Building2 className="h-5 w-5" />
-              Organization Details
+              {t("sections.organizationDetails")}
             </CardTitle>
             <CardDescription>
-              Basic information about the organization
+              {t("sections.organizationDetailsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="name">Organization Name *</Label>
+                <Label htmlFor="name">{t("fields.organizationName")} *</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  placeholder="Acme Corporation"
+                  placeholder={t("placeholders.organizationName")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="slug">Slug (auto-generated if empty)</Label>
+                <Label htmlFor="slug">{t("fields.slug")}</Label>
                 <Input
                   id="slug"
                   value={formData.slug}
                   onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-                  placeholder="acme-corporation"
+                  placeholder={t("placeholders.slug")}
                 />
                 <p className="text-xs text-muted-foreground">
-                  URL-friendly identifier, lowercase with hyphens
+                  {t("hints.slug")}
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Organization Type</Label>
+                <Label>{t("fields.organizationType")}</Label>
                 <Select
                   value={formData.orgType}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, orgType: value }))}
@@ -280,24 +284,24 @@ export default function NewTenantPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Industry</Label>
+                <Label>{t("fields.industry")}</Label>
                 <Input
                   value={formData.industry}
                   onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
-                  placeholder="Technology, Healthcare, etc."
+                  placeholder={t("placeholders.industry")}
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label>Company Size</Label>
+                <Label>{t("fields.companySize")}</Label>
                 <Select
                   value={formData.companySize}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, companySize: value }))}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select size" />
+                    <SelectValue placeholder={t("placeholders.selectSize")} />
                   </SelectTrigger>
                   <SelectContent>
                     {COMPANY_SIZES.map((size) => (
@@ -309,11 +313,11 @@ export default function NewTenantPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Domain</Label>
+                <Label>{t("fields.domain")}</Label>
                 <Input
                   value={formData.domain}
                   onChange={(e) => setFormData(prev => ({ ...prev, domain: e.target.value }))}
-                  placeholder="acme.com"
+                  placeholder={t("placeholders.domain")}
                 />
               </div>
             </div>
@@ -324,30 +328,30 @@ export default function NewTenantPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Globe className="h-5 w-5" />
-              Location & Timezone
+              {t("sections.locationTimezone")}
             </CardTitle>
             <CardDescription>
-              Regional settings for the organization
+              {t("sections.locationTimezoneDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="country">Country</Label>
+                <Label htmlFor="country">{t("fields.country")}</Label>
                 <Input
                   id="country"
                   value={formData.country}
                   onChange={(e) => setFormData(prev => ({ ...prev, country: e.target.value }))}
-                  placeholder="United States"
+                  placeholder={t("placeholders.country")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="timezone">Timezone</Label>
+                <Label htmlFor="timezone">{t("fields.timezone")}</Label>
                 <Input
                   id="timezone"
                   value={formData.timezone}
                   onChange={(e) => setFormData(prev => ({ ...prev, timezone: e.target.value }))}
-                  placeholder="UTC"
+                  placeholder={t("placeholders.timezone")}
                 />
               </div>
             </div>
@@ -358,15 +362,15 @@ export default function NewTenantPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CreditCard className="h-5 w-5" />
-              Plan & Subscription
+              {t("sections.planSubscription")}
             </CardTitle>
             <CardDescription>
-              Subscription tier and billing settings
+              {t("sections.planSubscriptionDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label>Plan Tier</Label>
+              <Label>{t("fields.planTier")}</Label>
               <Select
                 value={formData.planTier}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, planTier: value }))}
@@ -390,25 +394,25 @@ export default function NewTenantPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <GitBranch className="h-5 w-5" />
-              Hierarchy Settings
+              {t("sections.hierarchySettings")}
             </CardTitle>
             <CardDescription>
-              Configure organization hierarchy and parent relationships
+              {t("sections.hierarchySettingsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label>Parent Organization</Label>
+              <Label>{t("fields.parentOrganization")}</Label>
               <Select
                 value={formData.parentOrgId}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, parentOrgId: value }))}
                 disabled={isLoadingParents}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={isLoadingParents ? "Loading..." : "None (root organization)"} />
+                  <SelectValue placeholder={isLoadingParents ? tCommon("loading") : t("placeholders.noneRootOrganization")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">None (root organization)</SelectItem>
+                  <SelectItem value="none">{t("placeholders.noneRootOrganization")}</SelectItem>
                   {parentOrgs.map((org) => (
                     <SelectItem key={org.id} value={org.id}>
                       {org.name}
@@ -417,15 +421,15 @@ export default function NewTenantPage() {
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
-                Select a parent to create this organization as a child in the hierarchy
+                {t("hints.parentOrganization")}
               </p>
             </div>
 
             <div className="flex items-center justify-between pt-2">
               <div className="space-y-0.5">
-                <Label>Allow Child Organizations</Label>
+                <Label>{t("fields.allowChildOrgs")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Enable hierarchy features and allow creating sub-organizations
+                  {t("hints.allowChildOrgs")}
                 </p>
               </div>
               <Switch
@@ -440,65 +444,65 @@ export default function NewTenantPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5" />
-              Owner Information (Optional)
+              {t("sections.ownerInformation")}
             </CardTitle>
             <CardDescription>
-              Automatically create an owner user for this organization
+              {t("sections.ownerInformationDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="ownerEmail">Owner Email</Label>
+                <Label htmlFor="ownerEmail">{t("fields.ownerEmail")}</Label>
                 <Input
                   id="ownerEmail"
                   type="email"
                   value={formData.ownerEmail}
                   onChange={(e) => setFormData(prev => ({ ...prev, ownerEmail: e.target.value }))}
-                  placeholder="owner@example.com"
+                  placeholder={t("placeholders.ownerEmail")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="ownerName">Owner Name</Label>
+                <Label htmlFor="ownerName">{t("fields.ownerName")}</Label>
                 <Input
                   id="ownerName"
                   value={formData.ownerName}
                   onChange={(e) => setFormData(prev => ({ ...prev, ownerName: e.target.value }))}
-                  placeholder="John Doe"
+                  placeholder={t("placeholders.ownerName")}
                 />
               </div>
             </div>
             <p className="text-xs text-muted-foreground">
-              If provided, a user will be created (or existing user added) as the organization owner
+              {t("hints.ownerInformation")}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Branding (Optional)</CardTitle>
+            <CardTitle>{t("sections.branding")}</CardTitle>
             <CardDescription>
-              Custom branding settings for the organization
+              {t("sections.brandingDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="logoUrl">Logo URL</Label>
+                <Label htmlFor="logoUrl">{t("fields.logoUrl")}</Label>
                 <Input
                   id="logoUrl"
                   value={formData.logoUrl}
                   onChange={(e) => setFormData(prev => ({ ...prev, logoUrl: e.target.value }))}
-                  placeholder="https://example.com/logo.png"
+                  placeholder={t("placeholders.logoUrl")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="brandColor">Brand Color</Label>
+                <Label htmlFor="brandColor">{t("fields.brandColor")}</Label>
                 <Input
                   id="brandColor"
                   value={formData.brandColor}
                   onChange={(e) => setFormData(prev => ({ ...prev, brandColor: e.target.value }))}
-                  placeholder="#3B82F6"
+                  placeholder={t("placeholders.brandColor")}
                 />
               </div>
             </div>

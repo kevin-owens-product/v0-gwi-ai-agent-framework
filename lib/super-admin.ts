@@ -266,8 +266,11 @@ export async function authenticateSuperAdmin(
   userAgent?: string
 ) {
   try {
-    // Check if account is locked
-    const lockStatus = isAccountLocked(email)
+    // Normalize email to lowercase for consistent lookup
+    const normalizedEmail = email.toLowerCase().trim()
+
+    // Check if account is locked (use normalized email for lockout tracking)
+    const lockStatus = isAccountLocked(normalizedEmail)
     if (lockStatus.locked) {
       const remainingMinutes = Math.ceil((lockStatus.remainingMs || 0) / 60000)
       return {
@@ -278,20 +281,20 @@ export async function authenticateSuperAdmin(
 
     // Use retry wrapper for database lookup to handle transient connection failures
     const admin = await withRetry(
-      () => prisma.superAdmin.findUnique({ where: { email } }),
+      () => prisma.superAdmin.findUnique({ where: { email: normalizedEmail } }),
       'admin lookup'
     )
 
     if (!admin || !admin.isActive) {
       // Record failed attempt even for non-existent users (prevent user enumeration)
-      recordFailedAttempt(email)
+      recordFailedAttempt(normalizedEmail)
       return { success: false, error: 'Invalid credentials' }
     }
 
     // Verify password using bcrypt (with legacy SHA256 support)
     const isValidPassword = await verifyPassword(password, admin.passwordHash)
     if (!isValidPassword) {
-      const attemptResult = recordFailedAttempt(email)
+      const attemptResult = recordFailedAttempt(normalizedEmail)
 
       // Log failed attempt (non-blocking)
       logPlatformAudit({
@@ -299,7 +302,7 @@ export async function authenticateSuperAdmin(
         resourceType: 'super_admin',
         resourceId: admin.id,
         details: {
-          email,
+          email: normalizedEmail,
           reason: 'invalid_password',
           attemptsRemaining: attemptResult.attemptsRemaining,
           accountLocked: attemptResult.locked
@@ -319,7 +322,7 @@ export async function authenticateSuperAdmin(
     }
 
     // Clear failed attempts on successful login
-    clearLoginAttempts(email)
+    clearLoginAttempts(normalizedEmail)
 
     const { session, token } = await createSuperAdminSession(admin.id, ipAddress, userAgent)
 

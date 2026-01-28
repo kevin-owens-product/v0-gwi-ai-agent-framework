@@ -1,5 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -76,6 +77,7 @@ function formatDate(dateString: string): string {
 }
 
 export function WorkflowDetail({ id }: { id: string }) {
+  const t = useTranslations("dashboard.pages.workflows.detail")
   const router = useRouter()
   const [isRunning, setIsRunning] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -122,10 +124,10 @@ export function WorkflowDetail({ id }: { id: string }) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <AlertCircle className="h-12 w-12 text-muted-foreground mb-4" />
-        <h2 className="text-xl font-semibold mb-2">Workflow Not Found</h2>
-        <p className="text-muted-foreground mb-4">{error || "The workflow does not exist."}</p>
+        <h2 className="text-xl font-semibold mb-2">{t("notFound.title")}</h2>
+        <p className="text-muted-foreground mb-4">{error || t("notFound.description")}</p>
         <Link href="/dashboard/workflows">
-          <Button>Back to Workflows</Button>
+          <Button>{t("notFound.backButton")}</Button>
         </Link>
       </div>
     )
@@ -143,10 +145,10 @@ export function WorkflowDetail({ id }: { id: string }) {
       if (!response.ok) {
         throw new Error('Failed to run workflow')
       }
-      toast.success('Workflow started')
+      toast.success(t("toasts.workflowStarted"))
       setWorkflowData(prev => prev ? { ...prev, status: 'ACTIVE' } : prev)
-    } catch (err) {
-      toast.error('Failed to run workflow')
+    } catch (_err) {
+      toast.error(t("toasts.failedToRun"))
     } finally {
       setIsRunning(false)
     }
@@ -163,10 +165,10 @@ export function WorkflowDetail({ id }: { id: string }) {
       if (!response.ok) {
         throw new Error('Failed to pause workflow')
       }
-      toast.success('Workflow paused')
+      toast.success(t("toasts.workflowPaused"))
       setWorkflowData(prev => prev ? { ...prev, status: 'PAUSED' } : prev)
-    } catch (err) {
-      toast.error('Failed to pause workflow')
+    } catch (_err) {
+      toast.error(t("toasts.failedToPause"))
     }
   }
 
@@ -181,10 +183,10 @@ export function WorkflowDetail({ id }: { id: string }) {
       if (!response.ok) {
         throw new Error('Failed to resume workflow')
       }
-      toast.success('Workflow resumed')
+      toast.success(t("toasts.workflowResumed"))
       setWorkflowData(prev => prev ? { ...prev, status: 'ACTIVE' } : prev)
-    } catch (err) {
-      toast.error('Failed to resume workflow')
+    } catch (_err) {
+      toast.error(t("toasts.failedToResume"))
     }
   }
 
@@ -210,10 +212,10 @@ export function WorkflowDetail({ id }: { id: string }) {
         throw new Error('Failed to duplicate workflow')
       }
       const data = await response.json()
-      toast.success('Workflow duplicated')
+      toast.success(t("toasts.workflowDuplicated"))
       router.push(`/dashboard/workflows/${data.id}`)
-    } catch (err) {
-      toast.error('Failed to duplicate workflow')
+    } catch (_err) {
+      toast.error(t("toasts.failedToDuplicate"))
     }
   }
 
@@ -229,11 +231,11 @@ export function WorkflowDetail({ id }: { id: string }) {
       if (!response.ok) {
         throw new Error('Failed to delete workflow')
       }
-      toast.success('Workflow deleted')
+      toast.success(t("toasts.workflowDeleted"))
       setDeleteDialogOpen(false)
       router.push("/dashboard/workflows")
-    } catch (err) {
-      toast.error('Failed to delete workflow')
+    } catch (_err) {
+      toast.error(t("toasts.failedToDelete"))
       setDeleteDialogOpen(false)
     }
   }
@@ -259,14 +261,14 @@ export function WorkflowDetail({ id }: { id: string }) {
                 {displayStatus}
               </Badge>
             </div>
-            <p className="text-muted-foreground mt-1">{workflowData.description || 'No description'}</p>
+            <p className="text-muted-foreground mt-1">{workflowData.description || t("noDescription")}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 ml-12 sm:ml-0">
           {workflowData.status === "PAUSED" ? (
             <Button variant="outline" size="sm" className="gap-2 bg-transparent" onClick={handleResumeWorkflow}>
               <Play className="h-4 w-4" />
-              Resume
+              {t("actions.resume")}
             </Button>
           ) : (
             <Button
@@ -277,12 +279,12 @@ export function WorkflowDetail({ id }: { id: string }) {
               disabled={isRunning}
             >
               <Pause className="h-4 w-4" />
-              Pause
+              {t("actions.pause")}
             </Button>
           )}
           <Button size="sm" className="gap-2" onClick={handleRunWorkflow} disabled={isRunning}>
             {isRunning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
-            {isRunning ? "Running..." : "Run Now"}
+            {isRunning ? t("actions.running") : t("actions.runNow")}
           </Button>
         </div>
       </div>
@@ -290,10 +292,10 @@ export function WorkflowDetail({ id }: { id: string }) {
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { label: "Total Runs", value: workflowData.runsCount || 0 },
-          { label: "Schedule", value: workflowData.schedule || 'On-demand' },
-          { label: "Last Run", value: lastRun },
-          { label: "Created", value: formatDate(workflowData.createdAt) },
+          { label: t("stats.totalRuns"), value: workflowData.runsCount || 0 },
+          { label: t("stats.schedule"), value: workflowData.schedule || t("stats.onDemand") },
+          { label: t("stats.lastRun"), value: lastRun },
+          { label: t("stats.created"), value: formatDate(workflowData.createdAt) },
         ].map((stat) => (
           <Card key={stat.label} className="bg-card border-border">
             <CardContent className="p-4">
@@ -307,21 +309,21 @@ export function WorkflowDetail({ id }: { id: string }) {
       {/* Tabs */}
       <Tabs defaultValue="pipeline" className="space-y-4">
         <TabsList className="bg-secondary">
-          <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="pipeline">{t("tabs.pipeline")}</TabsTrigger>
+          <TabsTrigger value="settings">{t("tabs.settings")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="pipeline" className="space-y-4">
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Agent Pipeline</CardTitle>
+              <CardTitle>{t("pipeline.title")}</CardTitle>
             </CardHeader>
             <CardContent>
               {agentsList.length === 0 ? (
-                <p className="text-muted-foreground">No agents configured for this workflow.</p>
+                <p className="text-muted-foreground">{t("pipeline.noAgents")}</p>
               ) : (
                 <div className="flex items-center gap-4 flex-wrap">
-                  <div className="px-4 py-2 rounded-lg bg-accent/20 text-accent font-medium">Input: GWI Core</div>
+                  <div className="px-4 py-2 rounded-lg bg-accent/20 text-accent font-medium">{t("pipeline.inputGwiCore")}</div>
                   {agentsList.map((agent, index) => (
                     <div key={`${agent}-${index}`} className="flex items-center gap-4">
                       <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -331,7 +333,7 @@ export function WorkflowDetail({ id }: { id: string }) {
                     </div>
                   ))}
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                  <div className="px-4 py-2 rounded-lg bg-chart-5/20 text-chart-5 font-medium">Output: Report</div>
+                  <div className="px-4 py-2 rounded-lg bg-chart-5/20 text-chart-5 font-medium">{t("pipeline.outputReport")}</div>
                 </div>
               )}
             </CardContent>
@@ -341,35 +343,35 @@ export function WorkflowDetail({ id }: { id: string }) {
         <TabsContent value="settings" className="space-y-4">
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Workflow Settings</CardTitle>
+              <CardTitle>{t("settings.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">Schedule</p>
-                  <p className="text-foreground font-medium">{workflowData.schedule || 'On-demand'}</p>
+                  <p className="text-sm text-muted-foreground">{t("settings.schedule")}</p>
+                  <p className="text-foreground font-medium">{workflowData.schedule || t("stats.onDemand")}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Status</p>
+                  <p className="text-sm text-muted-foreground">{t("settings.status")}</p>
                   <p className="text-foreground font-medium capitalize">{displayStatus}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Created</p>
+                  <p className="text-sm text-muted-foreground">{t("settings.created")}</p>
                   <p className="text-foreground font-medium">{formatDate(workflowData.createdAt)}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Last Updated</p>
+                  <p className="text-sm text-muted-foreground">{t("settings.lastUpdated")}</p>
                   <p className="text-foreground font-medium">{formatDate(workflowData.updatedAt)}</p>
                 </div>
               </div>
               <div className="flex gap-2 pt-4 border-t border-border">
                 <Button variant="outline" size="sm" className="gap-2 bg-transparent" onClick={handleEditWorkflow}>
                   <Edit className="h-4 w-4" />
-                  Edit Workflow
+                  {t("settings.editWorkflow")}
                 </Button>
                 <Button variant="outline" size="sm" className="gap-2 bg-transparent" onClick={handleDuplicateWorkflow}>
                   <Copy className="h-4 w-4" />
-                  Duplicate
+                  {t("settings.duplicate")}
                 </Button>
                 <Button
                   variant="outline"
@@ -378,7 +380,7 @@ export function WorkflowDetail({ id }: { id: string }) {
                   onClick={handleDeleteWorkflow}
                 >
                   <Trash2 className="h-4 w-4" />
-                  Delete
+                  {t("settings.delete")}
                 </Button>
               </div>
             </CardContent>
@@ -390,15 +392,15 @@ export function WorkflowDetail({ id }: { id: string }) {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Workflow</AlertDialogTitle>
+            <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{workflowData.name}"? This will also delete all run history and associated data. This action cannot be undone.
+              {t("deleteDialog.description", { name: workflowData.name })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("deleteDialog.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Delete
+              {t("deleteDialog.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

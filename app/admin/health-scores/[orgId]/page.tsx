@@ -7,6 +7,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -108,6 +109,8 @@ interface SupportTicket {
 }
 
 export default function OrgHealthScorePage() {
+  const t = useTranslations("admin.healthScores")
+  const tCommon = useTranslations("common")
   const params = useParams()
   const router = useRouter()
   const orgId = params.orgId as string
@@ -161,17 +164,17 @@ export default function OrgHealthScorePage() {
   }
 
   const getStatusBadge = (status: string) => {
-    const statusConfig: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; className?: string }> = {
-      OPEN: { variant: "default", className: "bg-blue-500" },
-      IN_PROGRESS: { variant: "default", className: "bg-amber-500" },
-      WAITING_ON_CUSTOMER: { variant: "secondary" },
-      RESOLVED: { variant: "default", className: "bg-green-500" },
-      CLOSED: { variant: "outline" },
+    const statusConfig: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; className?: string; key: string }> = {
+      OPEN: { variant: "default", className: "bg-blue-500", key: "open" },
+      IN_PROGRESS: { variant: "default", className: "bg-amber-500", key: "inProgress" },
+      WAITING_ON_CUSTOMER: { variant: "secondary", key: "waitingOnCustomer" },
+      RESOLVED: { variant: "default", className: "bg-green-500", key: "resolved" },
+      CLOSED: { variant: "outline", key: "closed" },
     }
-    const config = statusConfig[status] || { variant: "secondary" }
+    const config = statusConfig[status] || { variant: "secondary" as const, key: status.toLowerCase() }
     return (
       <Badge variant={config.variant} className={config.className}>
-        {status.replace(/_/g, " ")}
+        {t(`status.${config.key}`, { defaultValue: status.replace(/_/g, " ") })}
       </Badge>
     )
   }
@@ -184,7 +187,7 @@ export default function OrgHealthScorePage() {
       URGENT: { variant: "destructive" },
     }
     const config = priorityConfig[priority] || { variant: "secondary" }
-    return <Badge variant={config.variant}>{priority}</Badge>
+    return <Badge variant={config.variant}>{t(`priority.${priority.toLowerCase()}`, { defaultValue: priority })}</Badge>
   }
 
   if (isLoading) {
@@ -200,11 +203,11 @@ export default function OrgHealthScorePage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {tCommon("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Organization not found</p>
+            <p className="text-muted-foreground">{t("detail.organizationNotFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -219,7 +222,7 @@ export default function OrgHealthScorePage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/health-scores">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Link>
           </Button>
           <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -229,7 +232,7 @@ export default function OrgHealthScorePage() {
             <h1 className="text-2xl font-bold">{organization.name}</h1>
             <div className="flex items-center gap-2">
               <p className="text-muted-foreground">{organization.slug}</p>
-              <Badge variant="outline">{organization.planTier}</Badge>
+              <Badge variant="outline">{t(`plans.${organization.planTier.toLowerCase()}`)}</Badge>
             </div>
           </div>
         </div>
@@ -237,7 +240,7 @@ export default function OrgHealthScorePage() {
           <Button variant="outline" asChild>
             <Link href={`/admin/tenants/${orgId}`}>
               <ExternalLink className="h-4 w-4 mr-2" />
-              View Tenant
+              {t("detail.viewTenant")}
             </Link>
           </Button>
           <Button onClick={handleRecalculate} disabled={isRecalculating}>
@@ -246,7 +249,7 @@ export default function OrgHealthScorePage() {
             ) : (
               <Calculator className="h-4 w-4 mr-2" />
             )}
-            Recalculate
+            {t("detail.recalculate")}
           </Button>
         </div>
       </div>
@@ -255,14 +258,14 @@ export default function OrgHealthScorePage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertTriangle className="h-12 w-12 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground mb-4">No health score data available for this organization.</p>
+            <p className="text-muted-foreground mb-4">{t("detail.noHealthScoreData")}</p>
             <Button onClick={handleRecalculate} disabled={isRecalculating}>
               {isRecalculating ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
               ) : (
                 <Calculator className="h-4 w-4 mr-2" />
               )}
-              Calculate Health Score
+              {t("detail.calculateHealthScore")}
             </Button>
           </CardContent>
         </Card>
@@ -271,46 +274,46 @@ export default function OrgHealthScorePage() {
           {/* Overview Cards */}
           <div className="grid gap-4 md:grid-cols-4">
             <HealthScoreCard
-              title="Overall Health"
+              title={t("detail.overallHealth")}
               score={healthScore.overallScore}
               size="large"
             />
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Churn Risk</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("detail.churnRisk")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <ChurnRiskBadge risk={healthScore.churnRisk} size="lg" />
                 <p className="text-xs text-muted-foreground mt-2">
-                  Based on overall health indicators
+                  {t("detail.basedOnIndicators")}
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("detail.activeUsers")}</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{healthScore.monthlyActiveUsers}</div>
                 <p className="text-xs text-muted-foreground">
-                  {healthScore.weeklyActiveUsers} active this week
+                  {t("detail.activeThisWeek", { count: healthScore.weeklyActiveUsers })}
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Last Activity</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("detail.lastActivity")}</CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-lg font-semibold">
                   {metrics?.lastActivityAt
                     ? new Date(metrics.lastActivityAt).toLocaleDateString()
-                    : "No activity"}
+                    : t("detail.noActivity")}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {metrics?.agentRunsLast30Days || 0} runs in last 30 days
+                  {t("detail.runsLast30Days", { count: metrics?.agentRunsLast30Days || 0 })}
                 </p>
               </CardContent>
             </Card>
@@ -323,7 +326,7 @@ export default function OrgHealthScorePage() {
                 <Users className="h-8 w-8 text-muted-foreground" />
                 <div>
                   <div className="text-2xl font-bold">{organization._count.members}</div>
-                  <p className="text-sm text-muted-foreground">Team Members</p>
+                  <p className="text-sm text-muted-foreground">{t("detail.teamMembers")}</p>
                 </div>
               </CardContent>
             </Card>
@@ -332,7 +335,7 @@ export default function OrgHealthScorePage() {
                 <Bot className="h-8 w-8 text-muted-foreground" />
                 <div>
                   <div className="text-2xl font-bold">{organization._count.agents}</div>
-                  <p className="text-sm text-muted-foreground">Agents</p>
+                  <p className="text-sm text-muted-foreground">{t("detail.agents")}</p>
                 </div>
               </CardContent>
             </Card>
@@ -341,7 +344,7 @@ export default function OrgHealthScorePage() {
                 <Workflow className="h-8 w-8 text-muted-foreground" />
                 <div>
                   <div className="text-2xl font-bold">{organization._count.workflows}</div>
-                  <p className="text-sm text-muted-foreground">Workflows</p>
+                  <p className="text-sm text-muted-foreground">{t("detail.workflows")}</p>
                 </div>
               </CardContent>
             </Card>
@@ -352,7 +355,7 @@ export default function OrgHealthScorePage() {
                   <div className="text-sm font-bold">
                     {new Date(organization.createdAt).toLocaleDateString()}
                   </div>
-                  <p className="text-sm text-muted-foreground">Customer Since</p>
+                  <p className="text-sm text-muted-foreground">{t("detail.customerSince")}</p>
                 </div>
               </CardContent>
             </Card>
@@ -375,9 +378,9 @@ export default function OrgHealthScorePage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Lightbulb className="h-5 w-5" />
-                  Recommended Actions
+                  {t("detail.recommendedActions")}
                 </CardTitle>
-                <CardDescription>Suggested steps to improve health score</CardDescription>
+                <CardDescription>{t("detail.recommendedActionsDescription")}</CardDescription>
               </CardHeader>
               <CardContent>
                 {healthScore.metadata?.recommendations && healthScore.metadata.recommendations.length > 0 ? (
@@ -397,8 +400,7 @@ export default function OrgHealthScorePage() {
                   <div className="flex flex-col items-center justify-center py-8">
                     <CheckCircle className="h-12 w-12 text-green-500 mb-3" />
                     <p className="text-muted-foreground text-center">
-                      Great job! No immediate actions recommended.<br />
-                      This customer is in good health.
+                      {t("detail.noRecommendations")}
                     </p>
                   </div>
                 )}
@@ -417,27 +419,27 @@ export default function OrgHealthScorePage() {
               paymentScore: h.paymentScore,
               growthScore: h.growthScore,
             }))}
-            title="Health Score History"
-            description="Historical trend of health score components"
+            title={t("detail.healthScoreHistory")}
+            description={t("detail.healthScoreHistoryDescription")}
             showBreakdown
           />
 
           {/* Recent Support Tickets */}
           <Card>
             <CardHeader>
-              <CardTitle>Recent Support Tickets</CardTitle>
-              <CardDescription>Latest support interactions</CardDescription>
+              <CardTitle>{t("detail.recentSupportTickets")}</CardTitle>
+              <CardDescription>{t("detail.latestSupportInteractions")}</CardDescription>
             </CardHeader>
             <CardContent>
               {recentTickets.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Ticket</TableHead>
-                      <TableHead>Subject</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Priority</TableHead>
-                      <TableHead>Created</TableHead>
+                      <TableHead>{t("detail.ticket")}</TableHead>
+                      <TableHead>{t("detail.subject")}</TableHead>
+                      <TableHead>{tCommon("status")}</TableHead>
+                      <TableHead>{t("detail.priority")}</TableHead>
+                      <TableHead>{t("detail.created")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -460,7 +462,7 @@ export default function OrgHealthScorePage() {
                 </Table>
               ) : (
                 <p className="text-center text-muted-foreground py-8">
-                  No recent support tickets
+                  {t("detail.noRecentTickets")}
                 </p>
               )}
             </CardContent>
@@ -470,15 +472,15 @@ export default function OrgHealthScorePage() {
           {Object.keys(healthScore.featureAdoption).length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Feature Adoption</CardTitle>
-                <CardDescription>Usage of different features/agents</CardDescription>
+                <CardTitle>{t("detail.featureAdoption")}</CardTitle>
+                <CardDescription>{t("detail.featureAdoptionDescription")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4 md:grid-cols-3">
                   {Object.entries(healthScore.featureAdoption).map(([feature, count]) => (
                     <div key={feature} className="flex items-center justify-between p-3 rounded-lg border">
                       <span className="font-medium">{feature}</span>
-                      <Badge variant="secondary">{count} uses</Badge>
+                      <Badge variant="secondary">{t("detail.uses", { count })}</Badge>
                     </div>
                   ))}
                 </div>
@@ -488,8 +490,8 @@ export default function OrgHealthScorePage() {
 
           {/* Metadata Footer */}
           <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>Last calculated: {new Date(healthScore.calculatedAt).toLocaleString()}</span>
-            <span>Score ID: {healthScore.id}</span>
+            <span>{t("detail.lastCalculated", { date: new Date(healthScore.calculatedAt).toLocaleString() })}</span>
+            <span>{t("detail.scoreId", { id: healthScore.id })}</span>
           </div>
         </>
       )}

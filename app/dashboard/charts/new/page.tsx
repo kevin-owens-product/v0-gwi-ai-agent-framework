@@ -26,7 +26,7 @@ export default function NewChartPage() {
 
   const handleCreate = async () => {
     if (!chartName.trim()) {
-      setError("Please enter a chart name")
+      setError(t("errors.nameRequired"))
       return
     }
     setIsSaving(true)
@@ -48,11 +48,11 @@ export default function NewChartPage() {
       if (response.ok) {
         router.push("/dashboard/charts")
       } else {
-        setError("Failed to create chart")
+        setError(t("errors.createFailed"))
       }
     } catch (err) {
       console.error("Failed to create chart:", err)
-      setError("Failed to create chart. Please try again.")
+      setError(t("errors.createFailedRetry"))
     } finally {
       setIsSaving(false)
     }
@@ -85,7 +85,7 @@ export default function NewChartPage() {
                   }`}
                 >
                   <BarChart3 className="h-5 w-5" />
-                  <span className="text-xs">Bar</span>
+                  <span className="text-xs">{t("chartTypes.bar")}</span>
                 </button>
                 <button
                   onClick={() => setChartType("LINE")}
@@ -94,7 +94,7 @@ export default function NewChartPage() {
                   }`}
                 >
                   <LineChart className="h-5 w-5" />
-                  <span className="text-xs">Line</span>
+                  <span className="text-xs">{t("chartTypes.line")}</span>
                 </button>
                 <button
                   onClick={() => setChartType("AREA")}
@@ -103,7 +103,7 @@ export default function NewChartPage() {
                   }`}
                 >
                   <Activity className="h-5 w-5" />
-                  <span className="text-xs">Area</span>
+                  <span className="text-xs">{t("chartTypes.area")}</span>
                 </button>
                 <button
                   onClick={() => setChartType("PIE")}
@@ -112,7 +112,7 @@ export default function NewChartPage() {
                   }`}
                 >
                   <PieChart className="h-5 w-5" />
-                  <span className="text-xs">Pie</span>
+                  <span className="text-xs">{t("chartTypes.pie")}</span>
                 </button>
                 <button
                   onClick={() => setChartType("DONUT")}
@@ -121,7 +121,7 @@ export default function NewChartPage() {
                   }`}
                 >
                   <Circle className="h-5 w-5" />
-                  <span className="text-xs">Donut</span>
+                  <span className="text-xs">{t("chartTypes.donut")}</span>
                 </button>
                 <button
                   onClick={() => setChartType("RADAR")}
@@ -130,7 +130,7 @@ export default function NewChartPage() {
                   }`}
                 >
                   <Target className="h-5 w-5" />
-                  <span className="text-xs">Radar</span>
+                  <span className="text-xs">{t("chartTypes.radar")}</span>
                 </button>
                 <button
                   onClick={() => setChartType("SCATTER")}
@@ -139,7 +139,7 @@ export default function NewChartPage() {
                   }`}
                 >
                   <Grid3X3 className="h-5 w-5" />
-                  <span className="text-xs">Scatter</span>
+                  <span className="text-xs">{t("chartTypes.scatter")}</span>
                 </button>
                 <button
                   onClick={() => setChartType("FUNNEL")}
@@ -148,7 +148,7 @@ export default function NewChartPage() {
                   }`}
                 >
                   <Triangle className="h-5 w-5" />
-                  <span className="text-xs">Funnel</span>
+                  <span className="text-xs">{t("chartTypes.funnel")}</span>
                 </button>
                 <button
                   onClick={() => setChartType("TREEMAP")}
@@ -157,7 +157,7 @@ export default function NewChartPage() {
                   }`}
                 >
                   <GitBranch className="h-5 w-5" />
-                  <span className="text-xs">Treemap</span>
+                  <span className="text-xs">{t("chartTypes.treemap")}</span>
                 </button>
                 <button
                   onClick={() => setChartType("HEATMAP")}
@@ -166,7 +166,7 @@ export default function NewChartPage() {
                   }`}
                 >
                   <Grid3X3 className="h-5 w-5" />
-                  <span className="text-xs">Heatmap</span>
+                  <span className="text-xs">{t("chartTypes.heatmap")}</span>
                 </button>
               </div>
             </div>
@@ -183,9 +183,9 @@ export default function NewChartPage() {
                   <SelectValue placeholder={t("dataConfig.selectAudience")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="eco-millennials">Eco-Conscious Millennials</SelectItem>
-                  <SelectItem value="tech-adopters">Tech Early Adopters</SelectItem>
-                  <SelectItem value="genz-creators">Gen Z Content Creators</SelectItem>
+                  <SelectItem value="eco-millennials">{t("audiences.ecoMillennials")}</SelectItem>
+                  <SelectItem value="tech-adopters">{t("audiences.techAdopters")}</SelectItem>
+                  <SelectItem value="genz-creators">{t("audiences.genZCreators")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -197,9 +197,9 @@ export default function NewChartPage() {
                   <SelectValue placeholder={t("dataConfig.selectDataSource")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="social-usage">Social Media Usage</SelectItem>
-                  <SelectItem value="purchase-intent">Purchase Intent</SelectItem>
-                  <SelectItem value="brand-awareness">Brand Awareness</SelectItem>
+                  <SelectItem value="social-usage">{t("dataSources.socialUsage")}</SelectItem>
+                  <SelectItem value="purchase-intent">{t("dataSources.purchaseIntent")}</SelectItem>
+                  <SelectItem value="brand-awareness">{t("dataSources.brandAwareness")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -232,9 +232,9 @@ export default function NewChartPage() {
                   <SelectValue placeholder={t("dataConfig.timePeriodPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="12m">Last 12 months</SelectItem>
-                  <SelectItem value="6m">Last 6 months</SelectItem>
-                  <SelectItem value="3m">Last 3 months</SelectItem>
+                  <SelectItem value="12m">{t("timePeriods.last12Months")}</SelectItem>
+                  <SelectItem value="6m">{t("timePeriods.last6Months")}</SelectItem>
+                  <SelectItem value="3m">{t("timePeriods.last3Months")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

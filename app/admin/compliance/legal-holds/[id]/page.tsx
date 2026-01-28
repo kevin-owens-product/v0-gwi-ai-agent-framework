@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -88,16 +89,18 @@ interface LegalHold {
   exports: DataExport[]
 }
 
-const STATUS_OPTIONS = [
-  { value: "ACTIVE", label: "Active" },
-  { value: "RELEASED", label: "Released" },
-  { value: "EXPIRED", label: "Expired" },
-]
-
 export default function LegalHoldDetailPage() {
   const params = useParams()
   const router = useRouter()
   const holdId = params.id as string
+  const t = useTranslations("admin.compliance.legalHolds.detail")
+  const tCommon = useTranslations("common")
+  
+  const STATUS_OPTIONS = [
+    { value: "ACTIVE", label: t("statuses.active") },
+    { value: "RELEASED", label: t("statuses.released") },
+    { value: "EXPIRED", label: t("statuses.expired") },
+  ]
 
   const [legalHold, setLegalHold] = useState<LegalHold | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -122,7 +125,7 @@ export default function LegalHoldDetailPage() {
           window.location.href = "/login?type=admin"
           return
         }
-        throw new Error("Failed to fetch legal hold")
+        throw new Error(t("errors.fetchFailed"))
       }
       const data = await response.json()
       setLegalHold(data.legalHold)
@@ -138,7 +141,7 @@ export default function LegalHoldDetailPage() {
     } finally {
       setIsLoading(false)
     }
-  }, [holdId])
+  }, [holdId, t])
 
   useEffect(() => {
     fetchLegalHold()
@@ -160,11 +163,12 @@ export default function LegalHoldDetailPage() {
         }),
       })
       if (response.ok) {
+        toast.success(t("messages.legalHoldUpdated"))
         setIsEditing(false)
         fetchLegalHold()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to update legal hold")
+        toast.error(data.error || t("errors.updateFailed"))
       }
     } catch (error) {
       console.error("Failed to update legal hold:", error)
@@ -176,11 +180,11 @@ export default function LegalHoldDetailPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "ACTIVE":
-        return <Badge variant="destructive"><AlertTriangle className="h-3 w-3 mr-1" />Active</Badge>
+        return <Badge variant="destructive"><AlertTriangle className="h-3 w-3 mr-1" />{t("statuses.active")}</Badge>
       case "RELEASED":
-        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Released</Badge>
+        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />{t("statuses.released")}</Badge>
       case "EXPIRED":
-        return <Badge variant="secondary">Expired</Badge>
+        return <Badge variant="secondary">{t("statuses.expired")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -189,13 +193,13 @@ export default function LegalHoldDetailPage() {
   const getExportStatusBadge = (status: string) => {
     switch (status) {
       case "COMPLETED":
-        return <Badge className="bg-green-500">Completed</Badge>
+        return <Badge className="bg-green-500">{t("statuses.completed")}</Badge>
       case "PROCESSING":
-        return <Badge className="bg-blue-500">Processing</Badge>
+        return <Badge className="bg-blue-500">{t("statuses.processing")}</Badge>
       case "PENDING":
-        return <Badge variant="secondary">Pending</Badge>
+        return <Badge variant="secondary">{t("statuses.pending")}</Badge>
       case "FAILED":
-        return <Badge variant="destructive">Failed</Badge>
+        return <Badge variant="destructive">{t("statuses.failed")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -222,11 +226,11 @@ export default function LegalHoldDetailPage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {t("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Legal hold not found</p>
+            <p className="text-muted-foreground">{t("notFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -241,7 +245,7 @@ export default function LegalHoldDetailPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/compliance/legal-holds">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Link>
           </Button>
           <div className="h-12 w-12 rounded-lg bg-red-500/10 flex items-center justify-center">
@@ -257,7 +261,7 @@ export default function LegalHoldDetailPage() {
               )}
             </h1>
             <p className="text-muted-foreground">
-              Legal Hold - Started {new Date(legalHold.startDate).toLocaleDateString()}
+              {t("legalHold")} - {t("started")} {new Date(legalHold.startDate).toLocaleDateString()}
             </p>
           </div>
         </div>
@@ -273,9 +277,9 @@ export default function LegalHoldDetailPage() {
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-red-500" />
               <div>
-                <p className="font-medium text-red-500">Active Legal Hold</p>
+                <p className="font-medium text-red-500">{t("activeBanner.title")}</p>
                 <p className="text-sm text-muted-foreground">
-                  Data preservation is in effect. All relevant data must be retained.
+                  {t("activeBanner.description")}
                 </p>
               </div>
             </div>
@@ -285,18 +289,18 @@ export default function LegalHoldDetailPage() {
 
       <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
           <TabsTrigger value="custodians">
             <Users className="h-4 w-4 mr-1" />
-            Custodians ({legalHold.custodianDetails.length})
+            {t("tabs.custodians")} ({legalHold.custodianDetails.length})
           </TabsTrigger>
           <TabsTrigger value="exports">
             <Download className="h-4 w-4 mr-1" />
-            Exports ({legalHold.exports.length})
+            {t("tabs.exports")} ({legalHold.exports.length})
           </TabsTrigger>
           <TabsTrigger value="scope">
             <FileText className="h-4 w-4 mr-1" />
-            Scope
+            {t("tabs.scope")}
           </TabsTrigger>
         </TabsList>
 
@@ -305,7 +309,7 @@ export default function LegalHoldDetailPage() {
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Status</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.status")}</CardTitle>
                 <Gavel className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -314,7 +318,7 @@ export default function LegalHoldDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Custodians</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.custodians")}</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -323,7 +327,7 @@ export default function LegalHoldDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Data Exports</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.dataExports")}</CardTitle>
                 <Download className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -332,12 +336,12 @@ export default function LegalHoldDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Duration</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.duration")}</CardTitle>
                 <Calendar className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {Math.ceil((Date.now() - new Date(legalHold.startDate).getTime()) / (1000 * 60 * 60 * 24))} days
+                  {Math.ceil((Date.now() - new Date(legalHold.startDate).getTime()) / (1000 * 60 * 60 * 24))} {t("stats.days")}
                 </div>
               </CardContent>
             </Card>
@@ -348,7 +352,7 @@ export default function LegalHoldDetailPage() {
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>Legal Hold Details</CardTitle>
+                  <CardTitle>{t("sections.legalHoldDetails")}</CardTitle>
                   {isEditing ? (
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" onClick={() => setIsEditing(false)}>
@@ -369,7 +373,7 @@ export default function LegalHoldDetailPage() {
                 {isEditing ? (
                   <>
                     <div className="space-y-2">
-                      <Label>Name</Label>
+                      <Label>{t("fields.name")}</Label>
                       <Input
                         value={editForm.name}
                         onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
@@ -377,14 +381,14 @@ export default function LegalHoldDetailPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Case Number</Label>
+                        <Label>{t("fields.caseNumber")}</Label>
                         <Input
                           value={editForm.caseNumber}
                           onChange={(e) => setEditForm({ ...editForm, caseNumber: e.target.value })}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Status</Label>
+                        <Label>{t("fields.status")}</Label>
                         <Select
                           value={editForm.status}
                           onValueChange={(value) => setEditForm({ ...editForm, status: value })}
@@ -403,7 +407,7 @@ export default function LegalHoldDetailPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Description</Label>
+                      <Label>{t("fields.description")}</Label>
                       <Textarea
                         value={editForm.description}
                         onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
@@ -411,7 +415,7 @@ export default function LegalHoldDetailPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Notes</Label>
+                      <Label>{t("fields.notes")}</Label>
                       <Textarea
                         value={editForm.notes}
                         onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
@@ -422,11 +426,11 @@ export default function LegalHoldDetailPage() {
                 ) : (
                   <>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Name</span>
+                      <span className="text-muted-foreground">{t("fields.name")}</span>
                       <span className="font-medium">{legalHold.name}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Case Number</span>
+                      <span className="text-muted-foreground">{t("fields.caseNumber")}</span>
                       {legalHold.caseNumber ? (
                         <Badge variant="outline" className="font-mono">
                           {legalHold.caseNumber}
@@ -436,11 +440,11 @@ export default function LegalHoldDetailPage() {
                       )}
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Status</span>
+                      <span className="text-muted-foreground">{t("fields.status")}</span>
                       {getStatusBadge(legalHold.status)}
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Start Date</span>
+                      <span className="text-muted-foreground">{t("fields.startDate")}</span>
                       <span className="font-medium flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {new Date(legalHold.startDate).toLocaleDateString()}
@@ -448,7 +452,7 @@ export default function LegalHoldDetailPage() {
                     </div>
                     {legalHold.endDate && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">End Date</span>
+                        <span className="text-muted-foreground">{t("fields.endDate")}</span>
                         <span className="font-medium">
                           {new Date(legalHold.endDate).toLocaleDateString()}
                         </span>
@@ -456,7 +460,7 @@ export default function LegalHoldDetailPage() {
                     )}
                     {legalHold.releasedAt && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Released</span>
+                        <span className="text-muted-foreground">{t("fields.released")}</span>
                         <span className="font-medium">
                           {new Date(legalHold.releasedAt).toLocaleDateString()}
                         </span>
@@ -464,13 +468,13 @@ export default function LegalHoldDetailPage() {
                     )}
                     {legalHold.description && (
                       <div className="pt-2 border-t">
-                        <span className="text-muted-foreground text-sm">Description</span>
+                        <span className="text-muted-foreground text-sm">{t("fields.description")}</span>
                         <p className="mt-1">{legalHold.description}</p>
                       </div>
                     )}
                     {legalHold.notes && (
                       <div className="pt-2 border-t">
-                        <span className="text-muted-foreground text-sm">Notes</span>
+                        <span className="text-muted-foreground text-sm">{t("fields.notes")}</span>
                         <p className="mt-1">{legalHold.notes}</p>
                       </div>
                     )}
@@ -484,29 +488,29 @@ export default function LegalHoldDetailPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Building2 className="h-5 w-5" />
-                  Organization
+                  {t("sections.organization")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {legalHold.organization ? (
                   <div className="space-y-4">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Name</span>
+                      <span className="text-muted-foreground">{t("fields.organizationName")}</span>
                       <span className="font-medium">{legalHold.organization.name}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Slug</span>
+                      <span className="text-muted-foreground">{t("fields.slug")}</span>
                       <span className="font-mono text-sm">{legalHold.organization.slug}</span>
                     </div>
                     <Button variant="outline" className="w-full" asChild>
                       <Link href={`/admin/tenants/${legalHold.orgId}`}>
-                        View Organization
+                        {t("actions.viewOrganization")}
                       </Link>
                     </Button>
                   </div>
                 ) : (
                   <p className="text-muted-foreground">
-                    This is a platform-wide legal hold, not specific to any organization.
+                    {t("empty.platformWide")}
                   </p>
                 )}
               </CardContent>
@@ -517,17 +521,17 @@ export default function LegalHoldDetailPage() {
         <TabsContent value="custodians">
           <Card>
             <CardHeader>
-              <CardTitle>Custodians</CardTitle>
-              <CardDescription>Users whose data is subject to this legal hold</CardDescription>
+              <CardTitle>{t("sections.custodians")}</CardTitle>
+              <CardDescription>{t("sections.custodiansDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {legalHold.custodianDetails.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>User</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>{t("table.user")}</TableHead>
+                      <TableHead>{t("table.email")}</TableHead>
+                      <TableHead className="text-right">{t("table.actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -536,7 +540,7 @@ export default function LegalHoldDetailPage() {
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <User className="h-4 w-4 text-muted-foreground" />
-                            <span className="font-medium">{custodian.name || "Unknown"}</span>
+                            <span className="font-medium">{custodian.name || tCommon("unknown")}</span>
                           </div>
                         </TableCell>
                         <TableCell>
@@ -548,7 +552,7 @@ export default function LegalHoldDetailPage() {
                         <TableCell className="text-right">
                           <Button variant="ghost" size="sm" asChild>
                             <Link href={`/admin/users/${custodian.id}`}>
-                              View User
+                              {t("table.viewUser")}
                             </Link>
                           </Button>
                         </TableCell>
@@ -558,7 +562,7 @@ export default function LegalHoldDetailPage() {
                 </Table>
               ) : (
                 <p className="text-muted-foreground text-center py-8">
-                  No custodians assigned to this legal hold
+                  {t("empty.noCustodians")}
                 </p>
               )}
             </CardContent>
@@ -568,20 +572,20 @@ export default function LegalHoldDetailPage() {
         <TabsContent value="exports">
           <Card>
             <CardHeader>
-              <CardTitle>Data Exports</CardTitle>
-              <CardDescription>Exported data associated with this legal hold</CardDescription>
+              <CardTitle>{t("sections.dataExports")}</CardTitle>
+              <CardDescription>{t("sections.exportsDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {legalHold.exports.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Format</TableHead>
-                      <TableHead>Size</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>{t("table.type")}</TableHead>
+                      <TableHead>{t("table.status")}</TableHead>
+                      <TableHead>{t("table.format")}</TableHead>
+                      <TableHead>{t("table.size")}</TableHead>
+                      <TableHead>{t("table.created")}</TableHead>
+                      <TableHead className="text-right">{t("table.actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -603,7 +607,7 @@ export default function LegalHoldDetailPage() {
                         <TableCell className="text-right">
                           <Button variant="ghost" size="sm" asChild>
                             <Link href={`/admin/compliance/data-exports/${exp.id}`}>
-                              View
+                              {t("table.view")}
                             </Link>
                           </Button>
                         </TableCell>
@@ -613,7 +617,7 @@ export default function LegalHoldDetailPage() {
                 </Table>
               ) : (
                 <p className="text-muted-foreground text-center py-8">
-                  No data exports for this legal hold
+                  {t("empty.noExports")}
                 </p>
               )}
             </CardContent>
@@ -623,8 +627,8 @@ export default function LegalHoldDetailPage() {
         <TabsContent value="scope">
           <Card>
             <CardHeader>
-              <CardTitle>Scope Configuration</CardTitle>
-              <CardDescription>Data types and parameters covered by this legal hold</CardDescription>
+              <CardTitle>{t("sections.scopeConfiguration")}</CardTitle>
+              <CardDescription>{t("sections.scopeDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {Object.keys(legalHold.scope).length > 0 ? (
@@ -633,7 +637,7 @@ export default function LegalHoldDetailPage() {
                 </pre>
               ) : (
                 <p className="text-muted-foreground text-center py-8">
-                  No specific scope configuration defined
+                  {t("empty.noScope")}
                 </p>
               )}
             </CardContent>

@@ -7,6 +7,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -82,6 +83,8 @@ interface Summary {
 }
 
 export default function HealthScoresPage() {
+  const t = useTranslations("admin.healthScores")
+  const tCommon = useTranslations("common")
   const [scores, setScores] = useState<HealthScore[]>([])
   const [summary, setSummary] = useState<Summary | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -146,15 +149,15 @@ export default function HealthScoresPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Customer Health Scores</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground">
-            Monitor customer health and identify at-risk accounts
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button onClick={fetchScores} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            {tCommon("refresh")}
           </Button>
           <Button
             onClick={calculateAllScores}
@@ -166,7 +169,7 @@ export default function HealthScoresPage() {
             ) : (
               <Calculator className="h-4 w-4 mr-2" />
             )}
-            Recalculate All
+            {t("recalculateAll")}
           </Button>
         </div>
       </div>
@@ -176,7 +179,7 @@ export default function HealthScoresPage() {
         <div className="grid gap-4 md:grid-cols-5">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Average Score</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("summary.averageScore")}</CardTitle>
               <HeartPulse className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -189,45 +192,45 @@ export default function HealthScoresPage() {
 
           <Card className={summary.byRisk.CRITICAL > 0 ? "border-red-500/50" : ""}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Critical</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("riskLevels.critical")}</CardTitle>
               <AlertOctagon className="h-4 w-4 text-red-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-red-500">{summary.byRisk.CRITICAL}</div>
-              <p className="text-xs text-muted-foreground">Immediate action needed</p>
+              <p className="text-xs text-muted-foreground">{t("riskDescriptions.critical")}</p>
             </CardContent>
           </Card>
 
           <Card className={summary.byRisk.HIGH > 0 ? "border-orange-500/50" : ""}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">High Risk</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("riskLevels.high")}</CardTitle>
               <AlertTriangle className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-orange-500">{summary.byRisk.HIGH}</div>
-              <p className="text-xs text-muted-foreground">Require attention</p>
+              <p className="text-xs text-muted-foreground">{t("riskDescriptions.high")}</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Medium Risk</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("riskLevels.medium")}</CardTitle>
               <AlertCircle className="h-4 w-4 text-amber-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-amber-500">{summary.byRisk.MEDIUM}</div>
-              <p className="text-xs text-muted-foreground">Monitor closely</p>
+              <p className="text-xs text-muted-foreground">{t("riskDescriptions.medium")}</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Low Risk</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("riskLevels.low")}</CardTitle>
               <CheckCircle className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-500">{summary.byRisk.LOW}</div>
-              <p className="text-xs text-muted-foreground">Healthy accounts</p>
+              <p className="text-xs text-muted-foreground">{t("riskDescriptions.low")}</p>
             </CardContent>
           </Card>
         </div>
@@ -236,9 +239,9 @@ export default function HealthScoresPage() {
       {/* Main Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Health Scores Overview</CardTitle>
+          <CardTitle>{t("table.title")}</CardTitle>
           <CardDescription>
-            Showing {scores.length} of {total} organizations
+            {t("table.showing", { count: scores.length, total })}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -247,26 +250,26 @@ export default function HealthScoresPage() {
             <Select value={riskFilter} onValueChange={(v) => { setRiskFilter(v); setPage(1) }}>
               <SelectTrigger className="w-[180px]">
                 <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Risk Level" />
+                <SelectValue placeholder={t("filters.riskLevel")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Risk Levels</SelectItem>
-                <SelectItem value="CRITICAL">Critical</SelectItem>
-                <SelectItem value="HIGH">High Risk</SelectItem>
-                <SelectItem value="MEDIUM">Medium Risk</SelectItem>
-                <SelectItem value="LOW">Low Risk</SelectItem>
+                <SelectItem value="all">{t("filters.allRiskLevels")}</SelectItem>
+                <SelectItem value="CRITICAL">{t("riskLevels.critical")}</SelectItem>
+                <SelectItem value="HIGH">{t("riskLevels.high")}</SelectItem>
+                <SelectItem value="MEDIUM">{t("riskLevels.medium")}</SelectItem>
+                <SelectItem value="LOW">{t("riskLevels.low")}</SelectItem>
               </SelectContent>
             </Select>
 
             <Select value={planFilter} onValueChange={(v) => { setPlanFilter(v); setPage(1) }}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Plan Tier" />
+                <SelectValue placeholder={t("filters.planTier")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Plans</SelectItem>
-                <SelectItem value="STARTER">Starter</SelectItem>
-                <SelectItem value="PROFESSIONAL">Professional</SelectItem>
-                <SelectItem value="ENTERPRISE">Enterprise</SelectItem>
+                <SelectItem value="all">{t("filters.allPlans")}</SelectItem>
+                <SelectItem value="STARTER">{t("plans.starter")}</SelectItem>
+                <SelectItem value="PROFESSIONAL">{t("plans.professional")}</SelectItem>
+                <SelectItem value="ENTERPRISE">{t("plans.enterprise")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -276,16 +279,16 @@ export default function HealthScoresPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Organization</TableHead>
-                  <TableHead className="text-center">Overall</TableHead>
-                  <TableHead className="text-center">Usage</TableHead>
-                  <TableHead className="text-center">Engagement</TableHead>
-                  <TableHead className="text-center">Support</TableHead>
-                  <TableHead className="text-center">Payment</TableHead>
-                  <TableHead className="text-center">Growth</TableHead>
-                  <TableHead>Risk Level</TableHead>
-                  <TableHead>Last Active</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t("table.organization")}</TableHead>
+                  <TableHead className="text-center">{t("table.overall")}</TableHead>
+                  <TableHead className="text-center">{t("table.usage")}</TableHead>
+                  <TableHead className="text-center">{t("table.engagement")}</TableHead>
+                  <TableHead className="text-center">{t("table.support")}</TableHead>
+                  <TableHead className="text-center">{t("table.payment")}</TableHead>
+                  <TableHead className="text-center">{t("table.growth")}</TableHead>
+                  <TableHead>{t("table.riskLevel")}</TableHead>
+                  <TableHead>{t("table.lastActive")}</TableHead>
+                  <TableHead className="text-right">{tCommon("actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -298,7 +301,7 @@ export default function HealthScoresPage() {
                 ) : scores.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={10} className="text-center py-8 text-muted-foreground">
-                      No health scores available. Click &quot;Recalculate All&quot; to generate scores.
+                      {t("table.noScores")}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -313,7 +316,7 @@ export default function HealthScoresPage() {
                             <p className="font-medium">{score.organization?.name || score.orgId}</p>
                             {score.organization && (
                               <Badge variant="outline" className="text-xs">
-                                {score.organization.planTier}
+                                {t(`plans.${score.organization.planTier.toLowerCase()}`)}
                               </Badge>
                             )}
                           </div>
@@ -351,7 +354,7 @@ export default function HealthScoresPage() {
                       <TableCell className="text-muted-foreground text-sm">
                         {score.lastActivityAt
                           ? new Date(score.lastActivityAt).toLocaleDateString()
-                          : "Never"}
+                          : t("table.never")}
                       </TableCell>
                       <TableCell className="text-right">
                         <Button variant="ghost" size="sm" asChild>
@@ -371,7 +374,7 @@ export default function HealthScoresPage() {
           {totalPages > 1 && (
             <div className="flex items-center justify-between mt-4">
               <p className="text-sm text-muted-foreground">
-                Page {page} of {totalPages}
+                {t("pagination.page", { page, totalPages })}
               </p>
               <div className="flex gap-2">
                 <Button
@@ -381,7 +384,7 @@ export default function HealthScoresPage() {
                   disabled={page === 1}
                 >
                   <ChevronLeft className="h-4 w-4" />
-                  Previous
+                  {tCommon("previous")}
                 </Button>
                 <Button
                   variant="outline"
@@ -389,7 +392,7 @@ export default function HealthScoresPage() {
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
                 >
-                  Next
+                  {tCommon("next")}
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>

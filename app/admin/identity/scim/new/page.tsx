@@ -40,7 +40,8 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useAdmin } from "@/components/providers/admin-provider"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface Organization {
   id: string
@@ -48,16 +49,19 @@ interface Organization {
   slug: string
 }
 
-const defaultRoles = [
-  { value: "VIEWER", label: "Viewer" },
-  { value: "MEMBER", label: "Member" },
-  { value: "ADMIN", label: "Admin" },
-]
-
 export default function NewSCIMPage() {
   const router = useRouter()
+  const t = useTranslations("admin.identity.scim.new")
+  const tMain = useTranslations("admin.identity.scim")
+  const tCommon = useTranslations("common")
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
+
+  const defaultRoles = [
+    { value: "VIEWER", label: t("roles.viewer") },
+    { value: "MEMBER", label: t("roles.member") },
+    { value: "ADMIN", label: t("roles.admin") },
+  ]
   const [organizations, setOrganizations] = useState<Organization[]>([])
   const [orgSearch, setOrgSearch] = useState("")
   const [loadingOrgs, setLoadingOrgs] = useState(false)
@@ -96,12 +100,12 @@ export default function NewSCIMPage() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
-    toast.success("Copied to clipboard")
+    showSuccessToast(tMain("toast.copied"))
   }
 
   const handleCreate = async () => {
     if (!formData.orgId) {
-      toast.error("Organization is required")
+      showErrorToast(t("validation.organizationRequired"))
       return
     }
 
@@ -119,14 +123,14 @@ export default function NewSCIMPage() {
         setNewToken(data.scimIntegration.bearerToken)
         setNewEndpoint(data.scimIntegration.endpoint)
         setTokenDialog(true)
-        toast.success("SCIM integration created successfully")
+        showSuccessToast(t("toast.createSuccess"))
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to create SCIM integration")
+        showErrorToast(data.error || t("toast.createFailed"))
       }
     } catch (error) {
       console.error("Failed to create SCIM integration:", error)
-      toast.error("Failed to create SCIM integration")
+      showErrorToast(t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -140,11 +144,11 @@ export default function NewSCIMPage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to create SCIM integrations</p>
+        <p className="text-muted-foreground">{t("noPermission")}</p>
         <Link href="/admin/identity/scim">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to SCIM Integrations
+            {t("backToSCIM")}
           </Button>
         </Link>
       </div>
@@ -160,16 +164,16 @@ export default function NewSCIMPage() {
             <Link href="/admin/identity/scim">
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back
+                {t("back")}
               </Button>
             </Link>
             <div>
               <h1 className="text-2xl font-bold flex items-center gap-2">
                 <Database className="h-6 w-6 text-primary" />
-                Create SCIM Integration
+                {t("title")}
               </h1>
               <p className="text-sm text-muted-foreground">
-                Configure SCIM 2.0 user provisioning for an organization
+                {t("description")}
               </p>
             </div>
           </div>
@@ -177,12 +181,12 @@ export default function NewSCIMPage() {
             {isSaving ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Creating...
+                {t("creating")}
               </>
             ) : (
               <>
                 <Save className="h-4 w-4 mr-2" />
-                Create Integration
+                {t("createIntegration")}
               </>
             )}
           </Button>
@@ -192,27 +196,27 @@ export default function NewSCIMPage() {
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>Organization</CardTitle>
+              <CardTitle>{t("sections.organization")}</CardTitle>
               <CardDescription>
-                Select the organization to configure SCIM provisioning for
+                {t("sections.organizationDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label>Organization *</Label>
+                <Label>{t("fields.organization")} *</Label>
                 <Select
                   value={formData.orgId}
                   onValueChange={(v) => setFormData((prev) => ({ ...prev, orgId: v }))}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select an organization" />
+                    <SelectValue placeholder={t("placeholders.selectOrganization")} />
                   </SelectTrigger>
                   <SelectContent>
                     <div className="p-2">
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                          placeholder="Search organizations..."
+                          placeholder={t("placeholders.searchOrganizations")}
                           value={orgSearch}
                           onChange={(e) => {
                             setOrgSearch(e.target.value)
@@ -223,9 +227,9 @@ export default function NewSCIMPage() {
                       </div>
                     </div>
                     {loadingOrgs ? (
-                      <div className="p-4 text-center text-muted-foreground">Loading...</div>
+                      <div className="p-4 text-center text-muted-foreground">{t("placeholders.loading")}</div>
                     ) : organizations.length === 0 ? (
-                      <div className="p-4 text-center text-muted-foreground">No organizations found</div>
+                      <div className="p-4 text-center text-muted-foreground">{t("placeholders.noOrganizationsFound")}</div>
                     ) : (
                       organizations.map((org) => (
                         <SelectItem key={org.id} value={org.id}>
@@ -242,7 +246,7 @@ export default function NewSCIMPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Default Role</Label>
+                <Label>{t("fields.defaultRole")}</Label>
                 <Select
                   value={formData.defaultRole}
                   onValueChange={(v) => setFormData((prev) => ({ ...prev, defaultRole: v }))}
@@ -259,7 +263,7 @@ export default function NewSCIMPage() {
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
-                  Role assigned to users provisioned via SCIM
+                  {t("hints.defaultRole")}
                 </p>
               </div>
             </CardContent>
@@ -267,17 +271,17 @@ export default function NewSCIMPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Sync Settings</CardTitle>
+              <CardTitle>{t("sections.syncSettings")}</CardTitle>
               <CardDescription>
-                Configure what data should be synchronized from your Identity Provider
+                {t("sections.syncSettingsDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Sync Users</Label>
+                  <Label>{t("fields.syncUsers")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Provision and deprovision users automatically
+                    {t("hints.syncUsers")}
                   </p>
                 </div>
                 <Switch
@@ -290,9 +294,9 @@ export default function NewSCIMPage() {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Sync Groups</Label>
+                  <Label>{t("fields.syncGroups")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Sync group memberships from Identity Provider
+                    {t("hints.syncGroups")}
                   </p>
                 </div>
                 <Switch
@@ -305,9 +309,9 @@ export default function NewSCIMPage() {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Auto-Deactivate</Label>
+                  <Label>{t("fields.autoDeactivate")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Automatically deactivate users when removed from IdP
+                    {t("hints.autoDeactivate")}
                   </p>
                 </div>
                 <Switch
@@ -320,10 +324,9 @@ export default function NewSCIMPage() {
 
               <Alert>
                 <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Important</AlertTitle>
+                <AlertTitle>{tCommon("important")}</AlertTitle>
                 <AlertDescription>
-                  After creating the integration, you will receive a bearer token and endpoint URL.
-                  The token will only be shown once, so make sure to save it securely.
+                  {t("hints.important")}
                 </AlertDescription>
               </Alert>
             </CardContent>
@@ -335,15 +338,15 @@ export default function NewSCIMPage() {
       <Dialog open={tokenDialog} onOpenChange={setTokenDialog}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>SCIM Integration Created</DialogTitle>
+            <DialogTitle>{t("dialog.title")}</DialogTitle>
             <DialogDescription>
-              Save the bearer token below. It will not be shown again.
+              {t("dialog.description")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <Alert variant="destructive">
               <Key className="h-4 w-4" />
-              <AlertTitle>Bearer Token</AlertTitle>
+              <AlertTitle>{t("dialog.bearerToken")}</AlertTitle>
               <AlertDescription className="mt-2">
                 <div className="bg-muted p-3 rounded-lg font-mono text-sm break-all">
                   {newToken}
@@ -355,13 +358,13 @@ export default function NewSCIMPage() {
                   onClick={() => newToken && copyToClipboard(newToken)}
                 >
                   <Copy className="h-4 w-4 mr-2" />
-                  Copy Token
+                  {t("dialog.copyToken")}
                 </Button>
               </AlertDescription>
             </Alert>
 
             <div className="space-y-2">
-              <Label>SCIM Endpoint URL</Label>
+              <Label>{t("dialog.scimEndpointUrl")}</Label>
               <div className="flex gap-2">
                 <Input
                   readOnly
@@ -380,7 +383,7 @@ export default function NewSCIMPage() {
           </div>
           <DialogFooter>
             <Button onClick={handleTokenDialogClose}>
-              Done
+              {t("dialog.done")}
             </Button>
           </DialogFooter>
         </DialogContent>

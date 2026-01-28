@@ -64,34 +64,34 @@ interface ExportHistoryTableProps {
 
 const STATUS_CONFIG = {
   PENDING: {
+    key: 'pending',
     color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
     icon: Clock,
-    label: 'Pending',
   },
   PROCESSING: {
+    key: 'processing',
     color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
     icon: Loader2,
-    label: 'Processing',
   },
   COMPLETED: {
+    key: 'completed',
     color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
     icon: CheckCircle,
-    label: 'Completed',
   },
   FAILED: {
+    key: 'failed',
     color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
     icon: XCircle,
-    label: 'Failed',
   },
   EXPIRED: {
+    key: 'expired',
     color: 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400',
     icon: AlertTriangle,
-    label: 'Expired',
   },
   CANCELLED: {
+    key: 'cancelled',
     color: 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400',
     icon: XCircle,
-    label: 'Cancelled',
   },
 }
 
@@ -107,6 +107,8 @@ export function ExportHistoryTable({
   exports,
   loading = false,
 }: ExportHistoryTableProps) {
+  const t = useTranslations('dataExport.history')
+  const tStatus = useTranslations('dataExport.status.statuses')
   const tTable = useTranslations('ui.table')
   const tEmpty = useTranslations('ui.empty')
 
@@ -116,10 +118,10 @@ export function ExportHistoryTable({
     setDownloading(exportId)
     try {
       window.location.href = `/api/v1/data-export/download/${exportId}`
-      toast.success('Download started')
-    } catch (error) {
-      toast.error('Download failed', {
-        description: 'Please try again later',
+      toast.success(t('downloadStarted'))
+    } catch (_error) {
+      toast.error(t('downloadFailed'), {
+        description: t('tryAgainLater'),
       })
     } finally {
       setTimeout(() => setDownloading(null), 1000)
@@ -156,11 +158,11 @@ export function ExportHistoryTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Type</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Size</TableHead>
-            <TableHead>Requested</TableHead>
-            <TableHead>Expires</TableHead>
+            <TableHead>{t('columns.type')}</TableHead>
+            <TableHead>{t('columns.status')}</TableHead>
+            <TableHead>{t('columns.size')}</TableHead>
+            <TableHead>{t('columns.requested')}</TableHead>
+            <TableHead>{t('columns.expires')}</TableHead>
             <TableHead className="w-[80px]"></TableHead>
           </TableRow>
         </TableHeader>
@@ -187,7 +189,7 @@ export function ExportHistoryTable({
                     <StatusIcon
                       className={`mr-1 h-3 w-3 ${exp.status === 'PROCESSING' ? 'animate-spin' : ''}`}
                     />
-                    {isExpired ? 'Expired' : status.label}
+                    {isExpired ? tStatus('expired') : tStatus(status.key)}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -215,7 +217,7 @@ export function ExportHistoryTable({
                         }`}
                       >
                         {isExpired
-                          ? 'Expired'
+                          ? tStatus('expired')
                           : formatDistanceToNow(new Date(exp.expiresAt), { addSuffix: true })}
                       </span>
                     </div>
@@ -228,7 +230,7 @@ export function ExportHistoryTable({
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon-sm">
                         <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Actions</span>
+                        <span className="sr-only">{t('actions')}</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -242,12 +244,12 @@ export function ExportHistoryTable({
                           ) : (
                             <Download className="mr-2 h-4 w-4" />
                           )}
-                          Download
+                          {t('download')}
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem onClick={() => handleViewDetails(exp.id)}>
                         <Eye className="mr-2 h-4 w-4" />
-                        View Details
+                        {t('viewDetails')}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

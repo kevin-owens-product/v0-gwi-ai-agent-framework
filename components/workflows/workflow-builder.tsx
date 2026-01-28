@@ -30,6 +30,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -90,6 +91,8 @@ interface WorkflowStep {
 }
 
 export function WorkflowBuilder() {
+  const t = useTranslations("dashboard.pages.workflows.builder")
+
   // Form state
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
@@ -183,8 +186,8 @@ export function WorkflowBuilder() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Create Workflow</h1>
-            <p className="text-muted-foreground">Design your automated research pipeline</p>
+            <h1 className="text-2xl font-bold text-foreground">{t("title")}</h1>
+            <p className="text-muted-foreground">{t("subtitle")}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -194,14 +197,14 @@ export function WorkflowBuilder() {
             onClick={() => handleCreate(true)}
           >
             <Save className="h-4 w-4" />
-            Save Draft
+            {t("saveDraft")}
           </Button>
           <Button
             className="gap-2"
             onClick={() => handleCreate(false)}
           >
             <Play className="h-4 w-4" />
-            Create & Run
+            {t("createAndRun")}
           </Button>
         </div>
       </div>
@@ -212,24 +215,24 @@ export function WorkflowBuilder() {
           {/* Basic Info */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
+              <CardTitle>{t("basicInformation")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>Workflow Name</Label>
+                <Label>{t("workflowName")}</Label>
                 <Input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g., Gen Z Sustainability Analysis"
+                  placeholder={t("workflowNamePlaceholder")}
                   className="mt-1.5 bg-secondary"
                 />
               </div>
               <div>
-                <Label>Description</Label>
+                <Label>{t("description")}</Label>
                 <Textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Describe what this workflow does..."
+                  placeholder={t("descriptionPlaceholder")}
                   className="mt-1.5 bg-secondary min-h-[80px]"
                 />
               </div>
@@ -239,10 +242,10 @@ export function WorkflowBuilder() {
           {/* Pipeline Builder */}
           <Card className="bg-card border-border">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Agent Pipeline</CardTitle>
+              <CardTitle>{t("agentPipeline")}</CardTitle>
               <Button variant="outline" size="sm" onClick={addStep} className="gap-2 bg-transparent">
                 <Plus className="h-4 w-4" />
-                Add Step
+                {t("addStep")}
               </Button>
             </CardHeader>
             <CardContent>
@@ -260,7 +263,7 @@ export function WorkflowBuilder() {
                         <div className="flex-1 space-y-3">
                           <Select value={step.agentId} onValueChange={(value) => updateStep(step.id, value)}>
                             <SelectTrigger className="bg-secondary">
-                              <SelectValue placeholder="Select an agent" />
+                              <SelectValue placeholder={t("selectAgent")} />
                             </SelectTrigger>
                             <SelectContent>
                               {availableAgents.map((agent) => (
@@ -277,28 +280,28 @@ export function WorkflowBuilder() {
                           {step.agentId && (
                             <div className="grid grid-cols-2 gap-3">
                               <div>
-                                <Label className="text-xs text-muted-foreground">Data Source</Label>
+                                <Label className="text-xs text-muted-foreground">{t("dataSource")}</Label>
                                 <Select defaultValue="gwi-core">
                                   <SelectTrigger className="mt-1 bg-secondary h-8 text-xs">
                                     <SelectValue />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="gwi-core">GWI Core</SelectItem>
-                                    <SelectItem value="gwi-usa">GWI USA</SelectItem>
-                                    <SelectItem value="gwi-zeitgeist">GWI Zeitgeist</SelectItem>
+                                    <SelectItem value="gwi-core">{t("dataSources.gwiCore")}</SelectItem>
+                                    <SelectItem value="gwi-usa">{t("dataSources.gwiUsa")}</SelectItem>
+                                    <SelectItem value="gwi-zeitgeist">{t("dataSources.gwiZeitgeist")}</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
                               <div>
-                                <Label className="text-xs text-muted-foreground">Output Format</Label>
+                                <Label className="text-xs text-muted-foreground">{t("outputFormat")}</Label>
                                 <Select defaultValue="markdown">
                                   <SelectTrigger className="mt-1 bg-secondary h-8 text-xs">
                                     <SelectValue />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="markdown">Markdown</SelectItem>
-                                    <SelectItem value="json">JSON</SelectItem>
-                                    <SelectItem value="slides">Slides</SelectItem>
+                                    <SelectItem value="markdown">{t("outputFormats.markdown")}</SelectItem>
+                                    <SelectItem value="json">{t("outputFormats.json")}</SelectItem>
+                                    <SelectItem value="slides">{t("outputFormats.slides")}</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
@@ -329,9 +332,9 @@ export function WorkflowBuilder() {
               {/* Pipeline Preview */}
               {steps.filter((s) => s.agentId).length > 0 && (
                 <div className="mt-6 pt-6 border-t border-border">
-                  <Label className="text-xs text-muted-foreground mb-3 block">Pipeline Preview</Label>
+                  <Label className="text-xs text-muted-foreground mb-3 block">{t("pipelinePreview")}</Label>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <div className="px-3 py-1.5 rounded-lg bg-accent/20 text-accent text-sm font-medium">Input</div>
+                    <div className="px-3 py-1.5 rounded-lg bg-accent/20 text-accent text-sm font-medium">{t("input")}</div>
                     {steps
                       .filter((s) => s.agentId)
                       .map((step, _index) => {
@@ -347,7 +350,7 @@ export function WorkflowBuilder() {
                         )
                       })}
                     <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                    <div className="px-3 py-1.5 rounded-lg bg-chart-5/20 text-chart-5 text-sm font-medium">Output</div>
+                    <div className="px-3 py-1.5 rounded-lg bg-chart-5/20 text-chart-5 text-sm font-medium">{t("output")}</div>
                   </div>
                 </div>
               )}
@@ -360,7 +363,7 @@ export function WorkflowBuilder() {
           {/* Schedule */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Schedule</CardTitle>
+              <CardTitle>{t("schedule")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Select value={schedule} onValueChange={setSchedule}>
@@ -368,18 +371,17 @@ export function WorkflowBuilder() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="manual">Manual (On-demand)</SelectItem>
-                  <SelectItem value="hourly">Hourly</SelectItem>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="manual">{t("schedules.manual")}</SelectItem>
+                  <SelectItem value="hourly">{t("schedules.hourly")}</SelectItem>
+                  <SelectItem value="daily">{t("schedules.daily")}</SelectItem>
+                  <SelectItem value="weekly">{t("schedules.weekly")}</SelectItem>
+                  <SelectItem value="monthly">{t("schedules.monthly")}</SelectItem>
                 </SelectContent>
               </Select>
 
               {schedule !== "manual" && (
                 <div className="p-3 rounded-lg bg-secondary/50 text-sm text-muted-foreground">
-                  This workflow will run automatically based on your schedule. You can also trigger it manually at any
-                  time.
+                  {t("scheduleDescription")}
                 </div>
               )}
             </CardContent>
@@ -388,29 +390,29 @@ export function WorkflowBuilder() {
           {/* Settings */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Settings</CardTitle>
+              <CardTitle>{t("settings")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Notifications</Label>
-                  <p className="text-xs text-muted-foreground">Get notified when complete</p>
+                  <Label>{t("notifications")}</Label>
+                  <p className="text-xs text-muted-foreground">{t("notificationsDescription")}</p>
                 </div>
                 <Switch checked={enableNotifications} onCheckedChange={setEnableNotifications} />
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Auto-retry on failure</Label>
-                  <p className="text-xs text-muted-foreground">Retry failed runs automatically</p>
+                  <Label>{t("autoRetry")}</Label>
+                  <p className="text-xs text-muted-foreground">{t("autoRetryDescription")}</p>
                 </div>
                 <Switch defaultChecked />
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Save to Memory</Label>
-                  <p className="text-xs text-muted-foreground">Store results in agent memory</p>
+                  <Label>{t("saveToMemory")}</Label>
+                  <p className="text-xs text-muted-foreground">{t("saveToMemoryDescription")}</p>
                 </div>
                 <Switch defaultChecked />
               </div>
@@ -420,13 +422,18 @@ export function WorkflowBuilder() {
           {/* Outputs */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle>Output Destinations</CardTitle>
+              <CardTitle>{t("outputDestinations")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {["Dashboard", "Email Report", "Slack Channel", "Google Docs"].map((dest) => (
-                <div key={dest} className="flex items-center justify-between p-3 rounded-lg border border-border">
-                  <span className="text-sm text-foreground">{dest}</span>
-                  <Switch defaultChecked={dest === "Dashboard"} />
+              {[
+                { key: "dashboard", label: t("destinations.dashboard") },
+                { key: "email", label: t("destinations.emailReport") },
+                { key: "slack", label: t("destinations.slackChannel") },
+                { key: "docs", label: t("destinations.googleDocs") },
+              ].map((dest) => (
+                <div key={dest.key} className="flex items-center justify-between p-3 rounded-lg border border-border">
+                  <span className="text-sm text-foreground">{dest.label}</span>
+                  <Switch defaultChecked={dest.key === "dashboard"} />
                 </div>
               ))}
             </CardContent>

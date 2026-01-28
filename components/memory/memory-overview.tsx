@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -62,13 +63,14 @@ const recentMemories = [
 ]
 
 export function MemoryOverview() {
+  const t = useTranslations("memory")
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card className="bg-card border-border">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Project Memory</CardTitle>
+          <CardTitle>{t("overview.projectMemory")}</CardTitle>
           <Button variant="ghost" size="sm">
-            View all
+            {t("overview.viewAll")}
           </Button>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -86,7 +88,7 @@ export function MemoryOverview() {
                   <span className="text-xs text-muted-foreground">{project.size}</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-0.5">
-                  {project.memories.toLocaleString()} memories · {project.lastUpdated}
+                  {t("overview.memoriesCount", { count: project.memories.toLocaleString() })} · {project.lastUpdated}
                 </p>
                 <div className="flex items-center gap-2 mt-2">
                   {project.agents.map((agent) => (
@@ -104,10 +106,10 @@ export function MemoryOverview() {
 
       <Card className="bg-card border-border">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Recent Memories</CardTitle>
+          <CardTitle>{t("overview.recentMemories")}</CardTitle>
           <Button variant="ghost" size="sm" className="gap-2">
             <RefreshCw className="h-3 w-3" />
-            Refresh
+            {t("overview.refresh")}
           </Button>
         </CardHeader>
         <CardContent className="space-y-4">

@@ -7,6 +7,7 @@
 "use client"
 
 import { useState, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { useFavorites, type SavedView } from '@/hooks/use-saved-views'
 import { Button } from '@/components/ui/button'
@@ -110,6 +111,7 @@ export function SavedViewButton({
   onRemove,
   onError,
 }: SavedViewButtonProps) {
+  const t = useTranslations('savedViews')
   const [isProcessing, setIsProcessing] = useState(false)
 
   const {
@@ -173,7 +175,7 @@ export function SavedViewButton({
       )}
       {showLabel && (
         <span className="ml-1.5">
-          {isSaved ? 'Remove from Favorites' : 'Add to Favorites'}
+          {isSaved ? t('removeFromFavorites') : t('addToFavorites')}
         </span>
       )}
     </>
@@ -191,7 +193,7 @@ export function SavedViewButton({
       )}
       onClick={handleClick}
       disabled={isProcessing || isLoading}
-      aria-label={isSaved ? 'Remove from favorites' : 'Add to favorites'}
+      aria-label={isSaved ? t('removeFromFavorites') : t('addToFavorites')}
       aria-pressed={isSaved}
     >
       {buttonContent}
@@ -209,7 +211,7 @@ export function SavedViewButton({
           {button}
         </TooltipTrigger>
         <TooltipContent side="bottom">
-          <p>{isSaved ? 'Remove from favorites' : 'Add to favorites'}</p>
+          <p>{isSaved ? t('removeFromFavorites') : t('addToFavorites')}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
@@ -237,6 +239,7 @@ export function ControlledSavedViewButton({
   className,
   showLabel = false,
 }: ControlledSavedViewButtonProps) {
+  const t = useTranslations('savedViews')
   const buttonContent = (
     <>
       {isLoading ? (
@@ -251,7 +254,7 @@ export function ControlledSavedViewButton({
       )}
       {showLabel && (
         <span className="ml-1.5">
-          {isSaved ? 'Remove from Favorites' : 'Add to Favorites'}
+          {isSaved ? t('removeFromFavorites') : t('addToFavorites')}
         </span>
       )}
     </>
@@ -273,7 +276,7 @@ export function ControlledSavedViewButton({
         onToggle()
       }}
       disabled={isLoading}
-      aria-label={isSaved ? 'Remove from favorites' : 'Add to favorites'}
+      aria-label={isSaved ? t('removeFromFavorites') : t('addToFavorites')}
       aria-pressed={isSaved}
     >
       {buttonContent}
@@ -291,7 +294,7 @@ export function ControlledSavedViewButton({
           {button}
         </TooltipTrigger>
         <TooltipContent side="bottom">
-          <p>{isSaved ? 'Remove from favorites' : 'Add to favorites'}</p>
+          <p>{isSaved ? t('removeFromFavorites') : t('addToFavorites')}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

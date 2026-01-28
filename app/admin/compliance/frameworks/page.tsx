@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast } from "@/lib/toast-utils"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -54,6 +55,8 @@ interface ComplianceFramework {
 }
 
 export default function FrameworksPage() {
+  const t = useTranslations("admin.compliance.frameworks")
+  const tCommon = useTranslations("common")
   const [frameworks, setFrameworks] = useState<ComplianceFramework[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -130,7 +133,7 @@ export default function FrameworksPage() {
           return
         }
         const data = await response.json()
-        throw new Error(data.error || "Failed to create framework")
+        throw new Error(data.error || t("errors.createFailed"))
       }
 
       setCreateDialogOpen(false)
@@ -144,7 +147,7 @@ export default function FrameworksPage() {
       fetchFrameworks()
     } catch (error) {
       console.error("Failed to create framework:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to create framework")
+      showErrorToast(error instanceof Error ? error.message : t("errors.createFailed"))
     } finally {
       setIsSubmitting(false)
     }
@@ -161,13 +164,13 @@ export default function FrameworksPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to update framework")
+        throw new Error(data.error || t("errors.updateFailed"))
       }
 
       fetchFrameworks()
     } catch (error) {
       console.error("Failed to update framework:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to update framework")
+      toast.error(error instanceof Error ? error.message : t("errors.updateFailed"))
     }
   }
 
@@ -180,13 +183,13 @@ export default function FrameworksPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to delete framework")
+        throw new Error(data.error || t("errors.deleteFailed"))
       }
 
       fetchFrameworks()
     } catch (error) {
       console.error("Failed to delete framework:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to delete framework")
+      toast.error(error instanceof Error ? error.message : t("errors.deleteFailed"))
     }
   }
 
@@ -205,13 +208,13 @@ export default function FrameworksPage() {
       const failed = results.filter((r) => !r.ok)
 
       if (failed.length > 0) {
-        throw new Error(`Failed to update ${failed.length} framework(s)`)
+        throw new Error(t("errors.bulkUpdateFailed"))
       }
 
       fetchFrameworks()
     } catch (error) {
       console.error("Failed to update frameworks:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to update frameworks")
+      toast.error(error instanceof Error ? error.message : t("errors.bulkUpdateFailed"))
     }
   }
 
@@ -228,13 +231,13 @@ export default function FrameworksPage() {
       const failed = results.filter((r) => !r.ok)
 
       if (failed.length > 0) {
-        throw new Error(`Failed to delete ${failed.length} framework(s)`)
+        throw new Error(t("errors.bulkDeleteFailed"))
       }
 
       fetchFrameworks()
     } catch (error) {
       console.error("Failed to delete frameworks:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to delete frameworks")
+      toast.error(error instanceof Error ? error.message : t("errors.bulkDeleteFailed"))
     }
   }
 
@@ -242,7 +245,7 @@ export default function FrameworksPage() {
   const columns: Column<ComplianceFramework>[] = [
     {
       id: "framework",
-      header: "Framework",
+      header: t("columns.framework"),
       cell: (framework) => (
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -261,29 +264,29 @@ export default function FrameworksPage() {
     },
     {
       id: "code",
-      header: "Code",
+      header: t("columns.code"),
       cell: (framework) => <Badge variant="outline">{framework.code}</Badge>,
     },
     {
       id: "version",
-      header: "Version",
+      header: t("columns.version"),
       cell: (framework) => (
         <span className="text-muted-foreground">{framework.version || "-"}</span>
       ),
     },
     {
       id: "status",
-      header: "Status",
+      header: t("columns.status"),
       cell: (framework) =>
         framework.isActive ? (
-          <Badge className="bg-green-500">Active</Badge>
+          <Badge className="bg-green-500">{t("status.active")}</Badge>
         ) : (
-          <Badge variant="secondary">Inactive</Badge>
+          <Badge variant="secondary">{t("status.inactive")}</Badge>
         ),
     },
     {
       id: "attestations",
-      header: "Attestations",
+      header: t("columns.attestations"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (framework) => (
@@ -295,7 +298,7 @@ export default function FrameworksPage() {
     },
     {
       id: "audits",
-      header: "Audits",
+      header: t("columns.audits"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (framework) => (
@@ -307,7 +310,7 @@ export default function FrameworksPage() {
     },
     {
       id: "updated",
-      header: "Updated",
+      header: t("columns.updated"),
       cell: (framework) => (
         <span className="text-muted-foreground">
           {new Date(framework.updatedAt).toLocaleDateString()}
@@ -319,13 +322,13 @@ export default function FrameworksPage() {
   // Row actions
   const rowActions: RowAction<ComplianceFramework>[] = [
     {
-      label: "Activate",
+      label: t("actions.activate"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: handleToggleStatus,
       hidden: (framework) => framework.isActive,
     },
     {
-      label: "Deactivate",
+      label: t("actions.deactivate"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: handleToggleStatus,
       hidden: (framework) => !framework.isActive,
@@ -335,23 +338,23 @@ export default function FrameworksPage() {
   // Bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Enable Selected",
+      label: t("actions.enableSelected"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (ids) => handleBulkToggleStatus(ids, true),
     },
     {
-      label: "Disable Selected",
+      label: t("actions.disableSelected"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: (ids) => handleBulkToggleStatus(ids, false),
     },
     {
-      label: "Delete Selected",
+      label: t("actions.deleteSelected"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
       separator: true,
-      confirmTitle: "Delete Frameworks",
-      confirmDescription: "Are you sure you want to delete the selected frameworks? This action cannot be undone.",
+      confirmTitle: t("dialogs.bulkDeleteTitle"),
+      confirmDescription: (ids) => t("dialogs.bulkDeleteDescription", { count: ids.length }),
     },
   ]
 
@@ -364,27 +367,27 @@ export default function FrameworksPage() {
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/admin/compliance">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
+                  {tCommon("back")}
                 </Link>
               </Button>
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5 text-primary" />
-                  Compliance Frameworks
+                  {t("title")}
                 </CardTitle>
                 <CardDescription>
-                  Manage compliance standards (SOC2, HIPAA, GDPR, etc.) - {total} total
+                  {t("description")} - {total} {tCommon("total")}
                 </CardDescription>
               </div>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchFrameworks} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {tCommon("refresh")}
               </Button>
               <Button onClick={() => setCreateDialogOpen(true)} size="sm">
                 <Plus className="h-4 w-4 mr-2" />
-                Add Framework
+                {t("createFramework")}
               </Button>
             </div>
           </div>
@@ -395,7 +398,7 @@ export default function FrameworksPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search by name, code, or description..."
+                placeholder={t("searchPlaceholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-9"
@@ -403,12 +406,12 @@ export default function FrameworksPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("filters.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="true">Active</SelectItem>
-                <SelectItem value="false">Inactive</SelectItem>
+                <SelectItem value="all">{t("filters.all")}</SelectItem>
+                <SelectItem value="true">{t("filters.active")}</SelectItem>
+                <SelectItem value="false">{t("filters.inactive")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -419,12 +422,12 @@ export default function FrameworksPage() {
             columns={columns}
             getRowId={(framework) => framework.id}
             isLoading={isLoading}
-            emptyMessage="No frameworks found"
+            emptyMessage={t("noFrameworks")}
             viewHref={(framework) => `/admin/compliance/frameworks/${framework.id}`}
             onDelete={handleDeleteFramework}
-            deleteConfirmTitle="Delete Framework"
+            deleteConfirmTitle={t("dialogs.deleteTitle")}
             deleteConfirmDescription={(framework) =>
-              `Are you sure you want to delete "${framework.name}"? This action cannot be undone.`
+              t("dialogs.deleteDescription", { name: framework.name })
             }
             rowActions={rowActions}
             bulkActions={bulkActions}
@@ -442,46 +445,46 @@ export default function FrameworksPage() {
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Add Compliance Framework</DialogTitle>
+            <DialogTitle>{t("dialogs.createTitle")}</DialogTitle>
             <DialogDescription>
-              Create a new compliance framework standard.
+              {t("dialogs.createDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Framework Name *</Label>
+              <Label htmlFor="name">{t("form.name")} *</Label>
               <Input
                 id="name"
-                placeholder="SOC 2 Type II"
+                placeholder={t("form.namePlaceholder")}
                 value={newFramework.name}
                 onChange={(e) => setNewFramework({ ...newFramework, name: e.target.value })}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="code">Code *</Label>
+                <Label htmlFor="code">{t("form.code")} *</Label>
                 <Input
                   id="code"
-                  placeholder="SOC2"
+                  placeholder={t("form.codePlaceholder")}
                   value={newFramework.code}
                   onChange={(e) => setNewFramework({ ...newFramework, code: e.target.value.toUpperCase() })}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="version">Version</Label>
+                <Label htmlFor="version">{t("form.version")}</Label>
                 <Input
                   id="version"
-                  placeholder="2023"
+                  placeholder={t("form.versionPlaceholder")}
                   value={newFramework.version}
                   onChange={(e) => setNewFramework({ ...newFramework, version: e.target.value })}
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("form.description")}</Label>
               <Textarea
                 id="description"
-                placeholder="Service Organization Control 2 compliance framework..."
+                placeholder={t("form.descriptionPlaceholder")}
                 value={newFramework.description}
                 onChange={(e) => setNewFramework({ ...newFramework, description: e.target.value })}
                 rows={3}
@@ -490,7 +493,7 @@ export default function FrameworksPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               onClick={handleCreateFramework}
@@ -499,10 +502,10 @@ export default function FrameworksPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Creating...
+                  {tCommon("creating")}
                 </>
               ) : (
-                "Create Framework"
+                t("createFramework")
               )}
             </Button>
           </DialogFooter>

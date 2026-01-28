@@ -7,6 +7,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -53,7 +54,7 @@ import {
   Settings,
 } from "lucide-react"
 import Link from "next/link"
-import { toast } from "sonner"
+import { showErrorToast } from "@/lib/toast-utils"
 
 interface EmailTemplate {
   id: string
@@ -87,25 +88,9 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   SYSTEM: <Settings className="h-4 w-4" />,
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
-  AUTHENTICATION: "Authentication",
-  ONBOARDING: "Onboarding",
-  NOTIFICATION: "Notifications",
-  MARKETING: "Marketing",
-  TRANSACTIONAL: "Transactional",
-  SYSTEM: "System",
-}
-
-const CATEGORY_DESCRIPTIONS: Record<string, string> = {
-  AUTHENTICATION: "Login, password reset, and security emails",
-  ONBOARDING: "Welcome and invitation emails",
-  NOTIFICATION: "Usage alerts and notifications",
-  MARKETING: "Promotional and feature announcement emails",
-  TRANSACTIONAL: "Invoices and billing emails",
-  SYSTEM: "System notifications and admin alerts",
-}
-
 export default function EmailTemplatesPage() {
+  const t = useTranslations("admin.emailTemplates")
+  const tCommon = useTranslations("common")
   const [, setTemplates] = useState<EmailTemplate[]>([])
   const [grouped, setGrouped] = useState<GroupedTemplates[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -113,6 +98,24 @@ export default function EmailTemplatesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [categoryFilter, setCategoryFilter] = useState<string>("all")
+
+  // Helper function to get category name
+  const getCategoryName = (category: string): string => {
+    const categoryLower = category.toLowerCase()
+    const key = `categories.${categoryLower}`
+    const translated = (t as any)(key)
+    // If translation returns the key path (missing translation), return the category
+    return translated === key ? category : translated
+  }
+
+  // Helper function to get category description
+  const getCategoryDescription = (category: string): string => {
+    const categoryLower = category.toLowerCase()
+    const key = `categoryDescriptions.${categoryLower}`
+    const translated = (t as any)(key)
+    // If translation returns the key path (missing translation), return empty string
+    return translated === key ? "" : translated
+  }
 
   // Form state for new template
   const [formData, setFormData] = useState({
@@ -193,11 +196,11 @@ export default function EmailTemplatesPage() {
         fetchTemplates()
       } else {
         const error = await response.json()
-        toast.error(error.error || "Failed to create template")
+        showErrorToast(error.error || t("toast.createFailed"))
       }
     } catch (error) {
       console.error("Failed to create template:", error)
-      toast.error("Failed to create template")
+      showErrorToast(t("toast.createFailed"))
     } finally {
       setIsSubmitting(false)
     }
@@ -232,58 +235,58 @@ export default function EmailTemplatesPage() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <Mail className="h-5 w-5" />
-                Email Templates
+                {t("title")}
               </CardTitle>
               <CardDescription>
-                Manage email templates for automated communications
+                {t("description")}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchTemplates} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {tCommon("refresh")}
               </Button>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
                   <Button size="sm" onClick={() => resetForm()}>
                     <Plus className="h-4 w-4 mr-2" />
-                    New Template
+                    {t("newTemplate")}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>Create Email Template</DialogTitle>
+                    <DialogTitle>{t("createTemplate")}</DialogTitle>
                     <DialogDescription>
-                      Create a new email template for automated communications
+                      {t("createTemplateDescription")}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Template Name</Label>
+                        <Label>{t("form.templateName")}</Label>
                         <Input
-                          placeholder="e.g., Welcome Email"
+                          placeholder={t("form.templateNamePlaceholder")}
                           value={formData.name}
                           onChange={(e) => handleNameChange(e.target.value)}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Slug</Label>
+                        <Label>{t("form.slug")}</Label>
                         <Input
-                          placeholder="e.g., welcome_email"
+                          placeholder={t("form.slugPlaceholder")}
                           value={formData.slug}
                           onChange={(e) =>
                             setFormData((prev) => ({ ...prev, slug: e.target.value }))
                           }
                         />
                         <p className="text-xs text-muted-foreground">
-                          Used to identify the template in code
+                          {t("form.slugDescription")}
                         </p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Category</Label>
+                        <Label>{t("form.category")}</Label>
                         <Select
                           value={formData.category}
                           onValueChange={(v) =>
@@ -294,19 +297,19 @@ export default function EmailTemplatesPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="AUTHENTICATION">Authentication</SelectItem>
-                            <SelectItem value="ONBOARDING">Onboarding</SelectItem>
-                            <SelectItem value="NOTIFICATION">Notification</SelectItem>
-                            <SelectItem value="MARKETING">Marketing</SelectItem>
-                            <SelectItem value="TRANSACTIONAL">Transactional</SelectItem>
-                            <SelectItem value="SYSTEM">System</SelectItem>
+                            <SelectItem value="AUTHENTICATION">{t("categories.authentication")}</SelectItem>
+                            <SelectItem value="ONBOARDING">{t("categories.onboarding")}</SelectItem>
+                            <SelectItem value="NOTIFICATION">{t("categories.notification")}</SelectItem>
+                            <SelectItem value="MARKETING">{t("categories.marketing")}</SelectItem>
+                            <SelectItem value="TRANSACTIONAL">{t("categories.transactional")}</SelectItem>
+                            <SelectItem value="SYSTEM">{t("categories.system")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label>Subject Line</Label>
+                        <Label>{t("form.subjectLine")}</Label>
                         <Input
-                          placeholder="e.g., Welcome to {{platformName}}!"
+                          placeholder={t("form.subjectLinePlaceholder")}
                           value={formData.subject}
                           onChange={(e) =>
                             setFormData((prev) => ({ ...prev, subject: e.target.value }))
@@ -315,9 +318,9 @@ export default function EmailTemplatesPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Description</Label>
+                      <Label>{tCommon("description")}</Label>
                       <Textarea
-                        placeholder="What is this template used for?"
+                        placeholder={t("form.descriptionPlaceholder")}
                         value={formData.description}
                         onChange={(e) =>
                           setFormData((prev) => ({ ...prev, description: e.target.value }))
@@ -326,9 +329,9 @@ export default function EmailTemplatesPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>HTML Content</Label>
+                      <Label>{t("form.htmlContent")}</Label>
                       <Textarea
-                        placeholder="Enter HTML email content..."
+                        placeholder={t("form.htmlContentPlaceholder")}
                         value={formData.htmlContent}
                         onChange={(e) =>
                           setFormData((prev) => ({ ...prev, htmlContent: e.target.value }))
@@ -337,13 +340,13 @@ export default function EmailTemplatesPage() {
                         className="font-mono text-sm"
                       />
                       <p className="text-xs text-muted-foreground">
-                        Use {"{{variableName}}"} for dynamic variables
+                        {t("form.variableHint")}
                       </p>
                     </div>
                     <div className="space-y-2">
-                      <Label>Plain Text Content (Optional)</Label>
+                      <Label>{t("form.plainTextContent")}</Label>
                       <Textarea
-                        placeholder="Enter plain text fallback..."
+                        placeholder={t("form.plainTextPlaceholder")}
                         value={formData.textContent}
                         onChange={(e) =>
                           setFormData((prev) => ({ ...prev, textContent: e.target.value }))
@@ -354,9 +357,9 @@ export default function EmailTemplatesPage() {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
-                        <Label>Active</Label>
+                        <Label>{tCommon("active")}</Label>
                         <p className="text-xs text-muted-foreground">
-                          Template can be used for sending emails
+                          {t("form.activeDescription")}
                         </p>
                       </div>
                       <Switch
@@ -369,7 +372,7 @@ export default function EmailTemplatesPage() {
                   </div>
                   <DialogFooter>
                     <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                      Cancel
+                      {tCommon("cancel")}
                     </Button>
                     <Button
                       onClick={handleSubmit}
@@ -384,10 +387,10 @@ export default function EmailTemplatesPage() {
                       {isSubmitting ? (
                         <>
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Creating...
+                          {tCommon("creating")}
                         </>
                       ) : (
-                        "Create Template"
+                        t("createTemplate")
                       )}
                     </Button>
                   </DialogFooter>
@@ -402,7 +405,7 @@ export default function EmailTemplatesPage() {
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search templates..."
+                placeholder={t("searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -410,16 +413,16 @@ export default function EmailTemplatesPage() {
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="All Categories" />
+                <SelectValue placeholder={t("filters.allCategories")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value="AUTHENTICATION">Authentication</SelectItem>
-                <SelectItem value="ONBOARDING">Onboarding</SelectItem>
-                <SelectItem value="NOTIFICATION">Notification</SelectItem>
-                <SelectItem value="MARKETING">Marketing</SelectItem>
-                <SelectItem value="TRANSACTIONAL">Transactional</SelectItem>
-                <SelectItem value="SYSTEM">System</SelectItem>
+                <SelectItem value="all">{t("filters.allCategories")}</SelectItem>
+                <SelectItem value="AUTHENTICATION">{t("categories.authentication")}</SelectItem>
+                <SelectItem value="ONBOARDING">{t("categories.onboarding")}</SelectItem>
+                <SelectItem value="NOTIFICATION">{t("categories.notification")}</SelectItem>
+                <SelectItem value="MARKETING">{t("categories.marketing")}</SelectItem>
+                <SelectItem value="TRANSACTIONAL">{t("categories.transactional")}</SelectItem>
+                <SelectItem value="SYSTEM">{t("categories.system")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -431,7 +434,7 @@ export default function EmailTemplatesPage() {
             </div>
           ) : displayedGrouped.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
-              No email templates found
+              {t("noTemplatesFound")}
             </div>
           ) : (
             <Accordion type="multiple" defaultValue={displayedGrouped.map((g) => g.category)}>
@@ -444,10 +447,10 @@ export default function EmailTemplatesPage() {
                       </div>
                       <div className="text-left">
                         <p className="font-medium">
-                          {CATEGORY_LABELS[group.category]}
+                          {getCategoryName(group.category)}
                         </p>
                         <p className="text-xs text-muted-foreground font-normal">
-                          {CATEGORY_DESCRIPTIONS[group.category]}
+                          {getCategoryDescription(group.category)}
                         </p>
                       </div>
                       <Badge variant="secondary" className="ml-2">
@@ -477,7 +480,7 @@ export default function EmailTemplatesPage() {
                                 {template.isSystem && (
                                   <Badge variant="outline" className="text-xs">
                                     <Lock className="h-3 w-3 mr-1" />
-                                    System
+                                    {t("system")}
                                   </Badge>
                                 )}
                               </div>
@@ -490,7 +493,7 @@ export default function EmailTemplatesPage() {
                                 {template._count.versions > 1 && (
                                   <>
                                     <span>-</span>
-                                    <span>{template._count.versions} versions</span>
+                                    <span>{t("versions", { count: template._count.versions })}</span>
                                   </>
                                 )}
                               </div>
@@ -501,12 +504,12 @@ export default function EmailTemplatesPage() {
                               {template.isActive ? (
                                 <Badge variant="default" className="bg-green-600">
                                   <CheckCircle className="h-3 w-3 mr-1" />
-                                  Active
+                                  {tCommon("active")}
                                 </Badge>
                               ) : (
                                 <Badge variant="secondary">
                                   <XCircle className="h-3 w-3 mr-1" />
-                                  Inactive
+                                  {tCommon("inactive")}
                                 </Badge>
                               )}
                             </div>
@@ -516,7 +519,7 @@ export default function EmailTemplatesPage() {
                             />
                             <Button variant="outline" size="sm" asChild>
                               <Link href={`/admin/email-templates/${template.id}`}>
-                                Edit
+                                {tCommon("edit")}
                               </Link>
                             </Button>
                           </div>

@@ -325,6 +325,7 @@ export function MediaConsumption({
   audienceCriteria,
   className,
 }: MediaConsumptionProps) {
+  const t = useTranslations("audiences")
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState<ReturnType<typeof generateMediaData> | null>(null)
 

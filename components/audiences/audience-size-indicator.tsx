@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -24,6 +25,7 @@ export function AudienceSizeIndicator({
   markets,
   className,
 }: AudienceSizeIndicatorProps) {
+  const t = useTranslations("audiences")
   const [totalSize, setTotalSize] = useState<number>(0)
   const [marketBreakdown, setMarketBreakdown] = useState<MarketBreakdown[]>([])
   const [confidence, setConfidence] = useState<"high" | "medium" | "low">("medium")
@@ -105,20 +107,20 @@ export function AudienceSizeIndicator({
   const getConfidenceBadge = () => {
     switch (confidence) {
       case "high":
-        return <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30">High Confidence</Badge>
+        return <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30">{t("sizeIndicator.confidence.high")}</Badge>
       case "medium":
-        return <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900/30">Medium Confidence</Badge>
+        return <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900/30">{t("sizeIndicator.confidence.medium")}</Badge>
       case "low":
-        return <Badge className="bg-red-100 text-red-700 dark:bg-red-900/30">Low Confidence</Badge>
+        return <Badge className="bg-red-100 text-red-700 dark:bg-red-900/30">{t("sizeIndicator.confidence.low")}</Badge>
     }
   }
 
   const getSizeCategory = (size: number): { label: string; color: string } => {
-    if (size >= 10000000) return { label: "Very Large", color: "text-green-600" }
-    if (size >= 1000000) return { label: "Large", color: "text-blue-600" }
-    if (size >= 100000) return { label: "Medium", color: "text-amber-600" }
-    if (size >= 10000) return { label: "Small", color: "text-orange-600" }
-    return { label: "Niche", color: "text-red-600" }
+    if (size >= 10000000) return { label: t("sizeIndicator.sizeCategory.veryLarge"), color: "text-green-600" }
+    if (size >= 1000000) return { label: t("sizeIndicator.sizeCategory.large"), color: "text-blue-600" }
+    if (size >= 100000) return { label: t("sizeIndicator.sizeCategory.medium"), color: "text-amber-600" }
+    if (size >= 10000) return { label: t("sizeIndicator.sizeCategory.small"), color: "text-orange-600" }
+    return { label: t("sizeIndicator.sizeCategory.niche"), color: "text-red-600" }
   }
 
   const sizeCategory = getSizeCategory(totalSize)
@@ -128,7 +130,7 @@ export function AudienceSizeIndicator({
       <div className="flex items-center justify-between">
         <h3 className="font-semibold flex items-center gap-2">
           <Users className="h-5 w-5" />
-          Estimated Reach
+          {t("sizeIndicator.title")}
         </h3>
         {isLoading && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
       </div>
@@ -138,11 +140,11 @@ export function AudienceSizeIndicator({
         <div className="text-5xl font-bold tracking-tight">
           {formatSize(animatedSize)}
         </div>
-        <p className="text-muted-foreground mt-1">consumers match your criteria</p>
+        <p className="text-muted-foreground mt-1">{t("sizeIndicator.consumersMatch")}</p>
         <div className="flex items-center justify-center gap-2 mt-3">
           {getConfidenceBadge()}
           <Badge variant="outline" className={sizeCategory.color}>
-            {sizeCategory.label} Audience
+            {t("sizeIndicator.audienceLabel", { label: sizeCategory.label })}
           </Badge>
         </div>
       </div>
@@ -158,7 +160,7 @@ export function AudienceSizeIndicator({
           >
             <span className="flex items-center gap-2">
               <Globe className="h-4 w-4" />
-              Market Breakdown
+              {t("sizeIndicator.marketBreakdown")}
             </span>
             {showBreakdown ? (
               <ChevronUp className="h-4 w-4" />
@@ -204,12 +206,12 @@ export function AudienceSizeIndicator({
           <TrendingUp className="h-3 w-3 mt-0.5" />
           <span>
             {totalSize > 1000000
-              ? "Large audience - great for broad reach campaigns"
+              ? t("sizeIndicator.tips.large")
               : totalSize > 100000
-              ? "Medium audience - good balance of reach and specificity"
+              ? t("sizeIndicator.tips.medium")
               : totalSize > 10000
-              ? "Targeted audience - ideal for niche marketing"
-              : "Very specific audience - consider broadening criteria for scale"}
+              ? t("sizeIndicator.tips.targeted")
+              : t("sizeIndicator.tips.specific")}
           </span>
         </div>
       </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -35,14 +36,9 @@ interface Organization {
   slug: string
 }
 
-const TYPE_OPTIONS = [
-  { value: "INTERNAL", label: "Internal" },
-  { value: "EXTERNAL", label: "External" },
-  { value: "SELF_ASSESSMENT", label: "Self Assessment" },
-  { value: "CERTIFICATION", label: "Certification" },
-]
-
 export default function NewAuditPage() {
+  const t = useTranslations("admin.compliance")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const [isSaving, setIsSaving] = useState(false)
   const [frameworks, setFrameworks] = useState<Framework[]>([])
@@ -55,6 +51,13 @@ export default function NewAuditPage() {
     auditor: "",
     notes: "",
   })
+
+  const TYPE_OPTIONS = [
+    { value: "INTERNAL", label: t("audits.types.internal") },
+    { value: "EXTERNAL", label: t("audits.types.external") },
+    { value: "SELF_ASSESSMENT", label: t("audits.types.selfAssessment") },
+    { value: "CERTIFICATION", label: t("audits.types.certification") },
+  ]
 
   useEffect(() => {
     async function fetchData() {
@@ -85,7 +88,7 @@ export default function NewAuditPage() {
 
   const handleCreate = async () => {
     if (!formData.frameworkId || !formData.scheduledDate) {
-      toast.error("Framework and scheduled date are required")
+      toast.error(t("audits.errors.frameworkAndDateRequired"))
       return
     }
 
@@ -111,14 +114,14 @@ export default function NewAuditPage() {
           return
         }
         const data = await response.json()
-        throw new Error(data.error || "Failed to schedule audit")
+        throw new Error(data.error || t("audits.errors.scheduleFailed"))
       }
 
       const data = await response.json()
       router.push(`/admin/compliance/audits/${data.audit?.id || ""}`)
     } catch (error) {
       console.error("Failed to schedule audit:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to schedule audit")
+      toast.error(error instanceof Error ? error.message : t("audits.errors.scheduleFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -132,16 +135,16 @@ export default function NewAuditPage() {
           <Link href="/admin/compliance/audits">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <FileSearch className="h-6 w-6 text-primary" />
-              Schedule Compliance Audit
+              {t("audits.new.title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Schedule a new compliance audit for a framework
+              {t("audits.new.description")}
             </p>
           </div>
         </div>
@@ -149,12 +152,12 @@ export default function NewAuditPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Scheduling...
+              {t("audits.new.scheduling")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Schedule Audit
+              {t("audits.scheduleAudit")}
             </>
           )}
         </Button>
@@ -163,20 +166,20 @@ export default function NewAuditPage() {
       {/* Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Audit Details</CardTitle>
+          <CardTitle>{t("audits.new.auditDetails")}</CardTitle>
           <CardDescription>
-            Configure the compliance audit parameters
+            {t("audits.new.configureAudit")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label>Framework *</Label>
+            <Label>{t("audits.fields.framework")} *</Label>
             <Select
               value={formData.frameworkId}
               onValueChange={(value) => setFormData({ ...formData, frameworkId: value })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select a framework" />
+                <SelectValue placeholder={t("audits.dialog.selectFramework")} />
               </SelectTrigger>
               <SelectContent>
                 {frameworks.map((framework) => (
@@ -189,16 +192,16 @@ export default function NewAuditPage() {
           </div>
 
           <div className="space-y-2">
-            <Label>Organization (Optional)</Label>
+            <Label>{t("audits.fields.organizationOptional")}</Label>
             <Select
               value={formData.orgId || "none"}
               onValueChange={(value) => setFormData({ ...formData, orgId: value === "none" ? "" : value })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Platform-wide audit" />
+                <SelectValue placeholder={t("audits.new.platformWideAudit")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">Platform-wide audit</SelectItem>
+                <SelectItem value="none">{t("audits.new.platformWideAudit")}</SelectItem>
                 {organizations.map((org) => (
                   <SelectItem key={org.id} value={org.id}>
                     {org.name}
@@ -207,13 +210,13 @@ export default function NewAuditPage() {
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              Leave empty for platform-wide audits
+              {t("audits.new.leaveEmptyForPlatformWide")}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Audit Type</Label>
+              <Label>{t("audits.fields.auditType")}</Label>
               <Select
                 value={formData.type}
                 onValueChange={(value) => setFormData({ ...formData, type: value })}
@@ -231,7 +234,7 @@ export default function NewAuditPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="scheduledDate">Scheduled Date *</Label>
+              <Label htmlFor="scheduledDate">{t("audits.fields.scheduledDate")} *</Label>
               <Input
                 id="scheduledDate"
                 type="date"
@@ -242,22 +245,22 @@ export default function NewAuditPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="auditor">Auditor</Label>
+            <Label htmlFor="auditor">{t("audits.fields.auditor")}</Label>
             <Input
               id="auditor"
               value={formData.auditor}
               onChange={(e) => setFormData({ ...formData, auditor: e.target.value })}
-              placeholder="Auditor name or company"
+              placeholder={t("audits.dialog.auditorPlaceholder")}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes</Label>
+            <Label htmlFor="notes">{t("audits.fields.notes")}</Label>
             <Textarea
               id="notes"
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="Any additional notes or instructions for the audit..."
+              placeholder={t("audits.new.notesPlaceholder")}
               rows={3}
             />
           </div>

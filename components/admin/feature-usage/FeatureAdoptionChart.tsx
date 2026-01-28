@@ -9,6 +9,7 @@
 
 "use client"
 
+import { useTranslations } from "next-intl"
 import {
   BarChart,
   Bar,
@@ -54,11 +55,14 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export function FeatureAdoptionChart({
   data,
-  title = "Feature Adoption Overview",
-  description = "Adoption rates by feature",
+  title,
+  description,
   showLegend = true,
   height = 400,
 }: FeatureAdoptionChartProps) {
+  const t = useTranslations("admin.analytics.featureAdoption")
+  const displayTitle = title || t("title")
+  const displayDescription = description || t("description")
   // Sort by adoption rate descending and take top 15
   const chartData = [...data]
     .sort((a, b) => b.adoptionRate - a.adoptionRate)
@@ -79,8 +83,8 @@ export function FeatureAdoptionChart({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardTitle>{displayTitle}</CardTitle>
+        <CardDescription>{displayDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         {chartData.length === 0 ? (
@@ -88,7 +92,7 @@ export function FeatureAdoptionChart({
             className="flex items-center justify-center text-muted-foreground"
             style={{ height }}
           >
-            No adoption data available
+            {t("noData")}
           </div>
         ) : (
           <div style={{ width: "100%", height }}>

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -46,19 +47,12 @@ interface DataSourceEditorProps {
   dataSource?: DataSource
 }
 
-const DATA_SOURCE_TYPES = [
-  { value: "postgresql", label: "PostgreSQL" },
-  { value: "mysql", label: "MySQL" },
-  { value: "bigquery", label: "BigQuery" },
-  { value: "snowflake", label: "Snowflake" },
-  { value: "api", label: "REST API" },
-  { value: "s3", label: "Amazon S3" },
-  { value: "salesforce", label: "Salesforce" },
-  { value: "mongodb", label: "MongoDB" },
-]
+const DATA_SOURCE_TYPE_VALUES = ["postgresql", "mysql", "bigquery", "snowflake", "api", "s3", "salesforce", "mongodb"] as const
 
 export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
   const router = useRouter()
+  const t = useTranslations("gwi.editors.dataSource")
+  const tCommon = useTranslations("gwi.editors.common")
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -151,11 +145,11 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
         }
       } else {
         const errorData = await response.json()
-        setError(errorData.error || "Failed to save data source")
+        setError(errorData.error || t("errors.failedToSave"))
       }
     } catch (err) {
       console.error("Failed to save data source:", err)
-      setError("An unexpected error occurred")
+      setError(t("errors.unexpectedError"))
     } finally {
       setIsLoading(false)
     }
@@ -176,11 +170,11 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
         router.push("/gwi/data-sources")
       } else {
         const errorData = await response.json()
-        setError(errorData.error || "Failed to delete data source")
+        setError(errorData.error || t("errors.failedToDelete"))
       }
     } catch (err) {
       console.error("Failed to delete data source:", err)
-      setError("An unexpected error occurred")
+      setError(t("errors.unexpectedError"))
     } finally {
       setIsDeleting(false)
     }
@@ -206,27 +200,27 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
+            <CardTitle>{t("basicInformation")}</CardTitle>
             <CardDescription>
-              Configure the basic settings for this data source
+              {t("basicInformationDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">{tCommon("name")}</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                placeholder="Enter data source name"
+                placeholder={t("placeholders.name")}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="type">Type</Label>
+              <Label htmlFor="type">{tCommon("type")}</Label>
               <Select
                 value={formData.type}
                 onValueChange={(value) =>
@@ -236,41 +230,41 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
                 disabled={isEditing}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select data source type" />
+                  <SelectValue placeholder={t("placeholders.selectType")} />
                 </SelectTrigger>
                 <SelectContent>
-                  {DATA_SOURCE_TYPES.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
+                  {DATA_SOURCE_TYPE_VALUES.map((typeValue) => (
+                    <SelectItem key={typeValue} value={typeValue}>
+                      {t(`types.${typeValue}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               {isEditing && (
                 <p className="text-xs text-muted-foreground">
-                  Type cannot be changed after creation
+                  {t("typeCannotBeChanged")}
                 </p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{tCommon("description")}</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                placeholder="Enter a description for this data source (optional)"
+                placeholder={t("placeholders.description")}
                 rows={3}
               />
             </div>
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="isActive">Active</Label>
+                <Label htmlFor="isActive">{tCommon("active")}</Label>
                 <p className="text-sm text-muted-foreground">
-                  Enable or disable this data source connection
+                  {t("activeDescription")}
                 </p>
               </div>
               <Switch
@@ -287,15 +281,15 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
         {formData.type && (
           <Card>
             <CardHeader>
-              <CardTitle>Connection Settings</CardTitle>
+              <CardTitle>{t("connectionSettings")}</CardTitle>
               <CardDescription>
-                Configure connection details for {DATA_SOURCE_TYPES.find(t => t.value === formData.type)?.label}
+                {t("connectionSettingsDescription", { type: t(`types.${formData.type}`) })}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {showConnectionString && (
                 <div className="space-y-2">
-                  <Label htmlFor="connectionString">Connection String (Optional)</Label>
+                  <Label htmlFor="connectionString">{t("connectionStringOptional")}</Label>
                   <Input
                     id="connectionString"
                     type="password"
@@ -303,10 +297,10 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
                     onChange={(e) =>
                       setFormData({ ...formData, connectionString: e.target.value })
                     }
-                    placeholder={isEditing ? "Leave blank to keep existing" : "postgresql://user:password@host:5432/database"}
+                    placeholder={isEditing ? t("placeholders.leaveBlankToKeep") : t("placeholders.connectionString")}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Alternatively, you can provide individual connection details below
+                    {t("connectionStringHint")}
                   </p>
                 </div>
               )}
@@ -314,18 +308,18 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
               {showHostPort && (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="host">Host</Label>
+                    <Label htmlFor="host">{t("host")}</Label>
                     <Input
                       id="host"
                       value={formData.host}
                       onChange={(e) =>
                         setFormData({ ...formData, host: e.target.value })
                       }
-                      placeholder="localhost or hostname"
+                      placeholder={t("placeholders.host")}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="port">Port</Label>
+                    <Label htmlFor="port">{t("port")}</Label>
                     <Input
                       id="port"
                       value={formData.port}
@@ -341,18 +335,18 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
               {showDatabaseFields && (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="database">Database</Label>
+                    <Label htmlFor="database">{t("database")}</Label>
                     <Input
                       id="database"
                       value={formData.database}
                       onChange={(e) =>
                         setFormData({ ...formData, database: e.target.value })
                       }
-                      placeholder="database_name"
+                      placeholder={t("placeholders.database")}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="schema">Schema (Optional)</Label>
+                    <Label htmlFor="schema">{t("schemaOptional")}</Label>
                     <Input
                       id="schema"
                       value={formData.schema}
@@ -367,7 +361,7 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
 
               {showApiFields && (
                 <div className="space-y-2">
-                  <Label htmlFor="host">Base URL</Label>
+                  <Label htmlFor="host">{t("baseUrl")}</Label>
                   <Input
                     id="host"
                     value={formData.host}
@@ -382,7 +376,7 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
               {showS3Fields && (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="database">Bucket Name</Label>
+                    <Label htmlFor="database">{t("bucketName")}</Label>
                     <Input
                       id="database"
                       value={formData.database}
@@ -393,7 +387,7 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="host">Region</Label>
+                    <Label htmlFor="host">{t("region")}</Label>
                     <Input
                       id="host"
                       value={formData.host}
@@ -412,17 +406,17 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
         {formData.type && (
           <Card>
             <CardHeader>
-              <CardTitle>Authentication</CardTitle>
+              <CardTitle>{t("authentication")}</CardTitle>
               <CardDescription>
                 {isEditing
-                  ? "Leave fields blank to keep existing credentials. Enter new values to update."
-                  : "Provide authentication credentials for this data source"}
+                  ? t("authenticationDescriptionEdit")
+                  : t("authenticationDescriptionCreate")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {formData.type === "api" || formData.type === "salesforce" ? (
                 <div className="space-y-2">
-                  <Label htmlFor="apiKey">API Key</Label>
+                  <Label htmlFor="apiKey">{t("apiKey")}</Label>
                   <Input
                     id="apiKey"
                     type="password"
@@ -430,24 +424,24 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
                     onChange={(e) =>
                       setFormData({ ...formData, apiKey: e.target.value })
                     }
-                    placeholder={isEditing ? "Leave blank to keep existing" : "Enter API key"}
+                    placeholder={isEditing ? t("placeholders.leaveBlankToKeep") : t("placeholders.apiKey")}
                   />
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="username">Username</Label>
+                    <Label htmlFor="username">{t("username")}</Label>
                     <Input
                       id="username"
                       value={formData.username}
                       onChange={(e) =>
                         setFormData({ ...formData, username: e.target.value })
                       }
-                      placeholder={isEditing ? "Leave blank to keep existing" : "Enter username"}
+                      placeholder={isEditing ? t("placeholders.leaveBlankToKeep") : t("placeholders.username")}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">{t("password")}</Label>
                     <Input
                       id="password"
                       type="password"
@@ -455,7 +449,7 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
                       onChange={(e) =>
                         setFormData({ ...formData, password: e.target.value })
                       }
-                      placeholder={isEditing ? "Leave blank to keep existing" : "Enter password"}
+                      placeholder={isEditing ? t("placeholders.leaveBlankToKeep") : t("placeholders.password")}
                     />
                   </div>
                 </div>
@@ -463,7 +457,7 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
 
               {isEditing && dataSource?.credentials && (
                 <p className="text-sm text-muted-foreground">
-                  Credentials are currently configured and encrypted
+                  {t("credentialsConfigured")}
                 </p>
               )}
             </CardContent>
@@ -479,32 +473,30 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
                     {isDeleting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Deleting...
+                        {tCommon("deleting")}
                       </>
                     ) : (
                       <>
                         <Trash2 className="mr-2 h-4 w-4" />
-                        Delete Data Source
+                        {t("deleteDataSource")}
                       </>
                     )}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogTitle>{t("deleteDialogTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete the
-                      data source &quot;{dataSource.name}&quot; and remove all its
-                      configuration data.
+                      {t("deleteDialogDescription", { name: dataSource.name })}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDelete}
                       className="bg-red-600 hover:bg-red-700"
                     >
-                      Delete
+                      {tCommon("delete")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -513,18 +505,18 @@ export function DataSourceEditor({ dataSource }: DataSourceEditorProps) {
           </div>
           <div className="flex gap-2">
             <Button type="button" variant="outline" onClick={() => router.back()}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button type="submit" disabled={isLoading || !formData.type}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {tCommon("saving")}
                 </>
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  {isEditing ? "Save Changes" : "Create Data Source"}
+                  {isEditing ? tCommon("saveChanges") : t("createDataSource")}
                 </>
               )}
             </Button>

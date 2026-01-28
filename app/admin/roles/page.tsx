@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -50,6 +51,8 @@ interface Role {
 // scopeColors removed - unused
 
 export default function RolesPage() {
+  const t = useTranslations("admin.roles")
+  const tCommon = useTranslations("common")
   const { admin: currentAdmin } = useAdmin()
   const [roles, setRoles] = useState<Role[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -107,7 +110,7 @@ export default function RolesPage() {
         fetchRoles()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to clone role")
+        toast.error(data.error || t("cloneError"))
       }
     } catch (error) {
       console.error("Failed to clone role:", error)
@@ -134,7 +137,7 @@ export default function RolesPage() {
         fetchRoles()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to delete role")
+        toast.error(data.error || t("deleteError"))
       }
     } catch (error) {
       console.error("Failed to delete role:", error)
@@ -148,7 +151,7 @@ export default function RolesPage() {
   const columns: Column<Role>[] = [
     {
       id: "role",
-      header: "Role",
+      header: t("table.role"),
       cell: (role) => (
         <div className="flex items-center gap-3">
           <div
@@ -175,7 +178,7 @@ export default function RolesPage() {
     },
     {
       id: "description",
-      header: "Description",
+      header: t("table.description"),
       cell: (role) => (
         <span className="text-sm text-muted-foreground line-clamp-2">
           {role.description || "-"}
@@ -184,20 +187,20 @@ export default function RolesPage() {
     },
     {
       id: "permissions",
-      header: "Permissions",
+      header: t("table.permissions"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (role) => (
         <Badge variant="outline">
           {role.permissions.includes("super:*") || role.permissions.includes("admin:*")
-            ? "All"
+            ? t("all")
             : role.permissions.length}
         </Badge>
       ),
     },
     {
       id: "admins",
-      header: "Assigned",
+      header: t("table.assigned"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (role) => (
@@ -209,7 +212,7 @@ export default function RolesPage() {
     },
     {
       id: "priority",
-      header: "Priority",
+      header: t("table.priority"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (role) => (
@@ -218,14 +221,14 @@ export default function RolesPage() {
     },
     {
       id: "status",
-      header: "Status",
+      header: t("table.status"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (role) =>
         role.isActive ? (
-          <Badge variant="default" className="bg-green-500">Active</Badge>
+          <Badge variant="default" className="bg-green-500">{t("status.active")}</Badge>
         ) : (
-          <Badge variant="secondary">Inactive</Badge>
+          <Badge variant="secondary">{t("status.inactive")}</Badge>
         ),
     },
   ]
@@ -233,7 +236,7 @@ export default function RolesPage() {
   const rowActions: RowAction<Role>[] = canManageRoles
     ? [
         {
-          label: "Clone",
+          label: t("clone"),
           icon: <Copy className="h-4 w-4" />,
           onClick: handleCloneOpen,
         },
@@ -248,21 +251,21 @@ export default function RolesPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Roles & Permissions</CardTitle>
+              <CardTitle>{t("title")}</CardTitle>
               <CardDescription>
-                Manage roles and their permissions for admins and organizations
+                {t("description")}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchRoles} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {tCommon("refresh")}
               </Button>
               {canManageRoles && (
                 <Link href="/admin/roles/new">
                   <Button size="sm">
                     <Plus className="h-4 w-4 mr-2" />
-                    New Role
+                    {t("newRole")}
                   </Button>
                 </Link>
               )}
@@ -274,24 +277,24 @@ export default function RolesPage() {
             <TabsList className="mb-4">
               <TabsTrigger value="PLATFORM" className="flex items-center gap-2">
                 <Shield className="h-4 w-4" />
-                Platform Roles
+                {t("tabs.platformRoles")}
               </TabsTrigger>
               <TabsTrigger value="TENANT" className="flex items-center gap-2">
                 <Building2 className="h-4 w-4" />
-                Organization Roles
+                {t("tabs.organizationRoles")}
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="PLATFORM">
               <p className="text-sm text-muted-foreground mb-4">
-                Platform roles control access for super admins managing the entire platform.
+                {t("platformRolesDescription")}
               </p>
               <AdminDataTable
                 data={filteredRoles}
                 columns={columns}
                 getRowId={(role) => role.id}
                 isLoading={isLoading}
-                emptyMessage="No platform roles found"
+                emptyMessage={t("noPlatformRoles")}
                 viewHref={(role) => `/admin/roles/${role.id}`}
                 onDelete={
                   canManageRoles
@@ -302,9 +305,9 @@ export default function RolesPage() {
                       }
                     : undefined
                 }
-                deleteConfirmTitle="Delete Role"
+                deleteConfirmTitle={t("deleteRole")}
                 deleteConfirmDescription={(role) =>
-                  `Are you sure you want to delete "${role.displayName}"? This action cannot be undone.`
+                  t("confirmDelete", { name: role.displayName })
                 }
                 rowActions={rowActions}
               />
@@ -312,14 +315,14 @@ export default function RolesPage() {
 
             <TabsContent value="TENANT">
               <p className="text-sm text-muted-foreground mb-4">
-                Organization roles control access for users within individual organizations.
+                {t("organizationRolesDescription")}
               </p>
               <AdminDataTable
                 data={filteredRoles}
                 columns={columns}
                 getRowId={(role) => role.id}
                 isLoading={isLoading}
-                emptyMessage="No organization roles found"
+                emptyMessage={t("noOrganizationRoles")}
                 viewHref={(role) => `/admin/roles/${role.id}`}
                 onDelete={
                   canManageRoles
@@ -330,9 +333,9 @@ export default function RolesPage() {
                       }
                     : undefined
                 }
-                deleteConfirmTitle="Delete Role"
+                deleteConfirmTitle={t("deleteRole")}
                 deleteConfirmDescription={(role) =>
-                  `Are you sure you want to delete "${role.displayName}"? This action cannot be undone.`
+                  t("confirmDelete", { name: role.displayName })
                 }
                 rowActions={rowActions}
               />
@@ -345,27 +348,27 @@ export default function RolesPage() {
       <Dialog open={cloneDialogOpen} onOpenChange={setCloneDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Clone Role</DialogTitle>
+            <DialogTitle>{t("cloneDialog.title")}</DialogTitle>
             <DialogDescription>
-              Create a copy of &quot;{roleToClone?.displayName}&quot; with a new name.
+              {t("cloneDialog.description", { name: roleToClone?.displayName || "" })}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Name (slug)</Label>
+              <Label>{t("form.nameSlug")}</Label>
               <Input
-                placeholder="custom-role"
+                placeholder={t("form.namePlaceholder")}
                 value={cloneFormData.name}
                 onChange={(e) => setCloneFormData(prev => ({ ...prev, name: e.target.value }))}
               />
               <p className="text-xs text-muted-foreground">
-                Lowercase letters, numbers, and hyphens only
+                {t("form.nameHint")}
               </p>
             </div>
             <div className="space-y-2">
-              <Label>Display Name</Label>
+              <Label>{t("form.displayName")}</Label>
               <Input
-                placeholder="Custom Role"
+                placeholder={t("form.displayNamePlaceholder")}
                 value={cloneFormData.displayName}
                 onChange={(e) => setCloneFormData(prev => ({ ...prev, displayName: e.target.value }))}
               />
@@ -373,7 +376,7 @@ export default function RolesPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCloneDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               onClick={handleClone}
@@ -382,12 +385,12 @@ export default function RolesPage() {
               {isCloning ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Cloning...
+                  {t("cloning")}
                 </>
               ) : (
                 <>
                   <Copy className="h-4 w-4 mr-2" />
-                  Clone Role
+                  {t("cloneRole")}
                 </>
               )}
             </Button>
@@ -399,19 +402,19 @@ export default function RolesPage() {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Role</DialogTitle>
+            <DialogTitle>{t("deleteRole")}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete &quot;{roleToDelete?.displayName}&quot;? This action cannot be undone.
+              {t("confirmDelete", { name: roleToDelete?.displayName || "" })}
             </DialogDescription>
           </DialogHeader>
           {roleToDelete?._count?.superAdmins && roleToDelete._count.superAdmins > 0 && (
             <div className="bg-destructive/10 text-destructive p-3 rounded-md text-sm">
-              This role has {roleToDelete._count.superAdmins} admin(s) assigned. Please reassign them before deleting.
+              {t("roleHasAdmins", { count: roleToDelete._count.superAdmins })}
             </div>
           )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -421,10 +424,10 @@ export default function RolesPage() {
               {isDeleting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Deleting...
+                  {t("deleting")}
                 </>
               ) : (
-                "Delete Role"
+                t("deleteRole")
               )}
             </Button>
           </DialogFooter>

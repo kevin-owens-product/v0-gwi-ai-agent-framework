@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Send, Paperclip, StopCircle, Sparkles, Command, ImageIcon, BarChart3, Table, Users } from "lucide-react"
@@ -462,6 +463,7 @@ function detectTopic(query: string): string {
 }
 
 export function PlaygroundChat() {
+  const t = useTranslations("playground.chatPanel")
   const { config, messages, setMessages, isStreaming, setIsStreaming, mode, customAgent, activeVariables } = usePlayground()
   const [input, setInput] = useState("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -716,20 +718,19 @@ export function PlaygroundChat() {
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent to-accent/50 flex items-center justify-center mb-4">
               <Sparkles className="h-8 w-8 text-accent-foreground" />
             </div>
-            <h2 className="text-xl font-semibold text-foreground mb-2">Start exploring human insights</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-2">{t("startExploring")}</h2>
             <p className="text-muted-foreground max-w-md mb-6">
-              Ask questions about consumers, build personas, track trends, or analyze brand relationships using GWI
-              data.
+              {t("askQuestions")}
             </p>
             <div className="flex flex-wrap justify-center gap-2 max-w-lg">
               {[
-                "Analyze Gen Z sustainability preferences",
-                "Build a persona for eco-conscious millennials",
-                "Compare US vs UK consumer values",
-                "What cultural trends are shaping 2025?",
-              ].map((prompt) => (
+                { key: "genZ", prompt: t("suggestedPrompts.genZ") },
+                { key: "persona", prompt: t("suggestedPrompts.persona") },
+                { key: "compare", prompt: t("suggestedPrompts.compare") },
+                { key: "trends", prompt: t("suggestedPrompts.trends") },
+              ].map(({ key, prompt }) => (
                 <Button
-                  key={prompt}
+                  key={key}
                   variant="outline"
                   size="sm"
                   className="text-xs bg-transparent"
@@ -740,8 +741,7 @@ export function PlaygroundChat() {
               ))}
             </div>
             <p className="text-xs text-muted-foreground mt-6">
-              Press <kbd className="px-1.5 py-0.5 rounded border bg-muted font-mono text-[10px]">⌘K</kbd> to open
-              templates
+              {t("openTemplates", { key: "" })} <kbd className="px-1.5 py-0.5 rounded border bg-muted font-mono text-[10px]">⌘K</kbd>
             </p>
           </div>
         )}
@@ -773,7 +773,7 @@ export function PlaygroundChat() {
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about audiences, personas, trends, or brand relationships..."
+              placeholder={t("inputPlaceholder")}
               className="min-h-[100px] pr-32 resize-none bg-background border-border"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
@@ -794,31 +794,31 @@ export function PlaygroundChat() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8" title="Output type">
+                  <Button variant="ghost" size="icon" className="h-8 w-8" title={t("outputType")}>
                     <BarChart3 className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={() => setInput(input + " [Generate chart]")}>
                     <BarChart3 className="h-4 w-4 mr-2" />
-                    Add Chart
+                    {t("outputTypes.addChart")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setInput(input + " [Generate table]")}>
                     <Table className="h-4 w-4 mr-2" />
-                    Add Table
+                    {t("outputTypes.addTable")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setInput(input + " [Build persona]")}>
                     <Users className="h-4 w-4 mr-2" />
-                    Build Persona
+                    {t("outputTypes.buildPersona")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setInput(input + " [Generate visual]")}>
                     <ImageIcon className="h-4 w-4 mr-2" />
-                    Generate Visual
+                    {t("outputTypes.generateVisual")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleFileAttach} title="Attach file">
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleFileAttach} title={t("attachFile")}>
                 <Paperclip className="h-4 w-4" />
               </Button>
               <Button
@@ -826,7 +826,7 @@ export function PlaygroundChat() {
                 size="icon"
                 className="h-8 w-8"
                 onClick={() => setCommandPaletteOpen(true)}
-                title="Templates (⌘K)"
+                title={t("templatesShortcut", { key: "⌘K" })}
               >
                 <Command className="h-4 w-4" />
               </Button>
@@ -847,8 +847,10 @@ export function PlaygroundChat() {
             </div>
           </div>
           <p className="text-xs text-muted-foreground mt-2 text-center">
-            Press <kbd className="px-1 py-0.5 rounded border bg-muted font-mono text-[10px]">Enter</kbd> to send,{" "}
-            <kbd className="px-1 py-0.5 rounded border bg-muted font-mono text-[10px]">Shift+Enter</kbd> for new line
+            {t("pressEnterToSend", {
+              enterKey: "Enter",
+              shiftEnterKey: "Shift+Enter"
+            })}
           </p>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import {
   ArrowLeft,
   Shield,
@@ -39,7 +40,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 
 interface SecurityViolation {
@@ -80,34 +81,36 @@ const policyTypeIcons: Record<string, React.ReactNode> = {
   DEFAULT: <Shield className="h-4 w-4" />,
 }
 
-const policyTypes = [
-  { value: "PASSWORD", label: "Password Policy" },
-  { value: "SESSION", label: "Session Policy" },
-  { value: "MFA", label: "MFA Requirements" },
-  { value: "IP_ALLOWLIST", label: "IP Allowlist" },
-  { value: "DATA_ACCESS", label: "Data Access" },
-  { value: "FILE_SHARING", label: "File Sharing" },
-  { value: "DLP", label: "Data Loss Prevention" },
-  { value: "ENCRYPTION", label: "Encryption" },
-  { value: "DEVICE_TRUST", label: "Device Trust" },
-  { value: "API_ACCESS", label: "API Access" },
-]
+const policyTypeValues = [
+  "PASSWORD",
+  "SESSION",
+  "MFA",
+  "IP_ALLOWLIST",
+  "DATA_ACCESS",
+  "FILE_SHARING",
+  "DLP",
+  "ENCRYPTION",
+  "DEVICE_TRUST",
+  "API_ACCESS",
+] as const
 
-const scopeOptions = [
-  { value: "PLATFORM", label: "Platform-wide" },
-  { value: "ENTERPRISE_ONLY", label: "Enterprise Only" },
-  { value: "SPECIFIC_ORGS", label: "Specific Organizations" },
-  { value: "SPECIFIC_PLANS", label: "Specific Plans" },
-]
+const scopeValues = [
+  "PLATFORM",
+  "ENTERPRISE_ONLY",
+  "SPECIFIC_ORGS",
+  "SPECIFIC_PLANS",
+] as const
 
-const enforcementModes = [
-  { value: "MONITOR", label: "Monitor Only" },
-  { value: "WARN", label: "Warn" },
-  { value: "ENFORCE", label: "Enforce" },
-  { value: "STRICT", label: "Strict" },
-]
+const enforcementModeValues = [
+  "MONITOR",
+  "WARN",
+  "ENFORCE",
+  "STRICT",
+] as const
 
 export default function SecurityPolicyDetailPage() {
+  const t = useTranslations("admin.security.policies")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const params = useParams()
   const [policy, setPolicy] = useState<SecurityPolicy | null>(null)
@@ -151,7 +154,7 @@ export default function SecurityPolicyDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch policy:", error)
-      toast.error("Failed to fetch security policy")
+      showErrorToast(t("toast.fetchFailed"))
       router.push("/admin/security/policies")
     } finally {
       setLoading(false)
@@ -173,10 +176,10 @@ export default function SecurityPolicyDetailPage() {
         throw new Error("Failed to update policy")
       }
 
-      toast.success("Security policy updated successfully")
+      showSuccessToast(t("toast.policyUpdated"))
       fetchPolicy()
     } catch (error) {
-      toast.error("Failed to update security policy")
+      showErrorToast(t("toast.updateFailed"))
     } finally {
       setSaving(false)
     }
@@ -199,10 +202,10 @@ export default function SecurityPolicyDetailPage() {
         throw new Error("Failed to delete policy")
       }
 
-      toast.success("Security policy deleted")
+      showSuccessToast(t("toast.policyDeleted"))
       router.push("/admin/security/policies")
     } catch (error) {
-      toast.error("Failed to delete security policy")
+      showErrorToast(t("toast.deleteFailed"))
     } finally {
       setDeleting(false)
       setShowDeleteDialog(false)
@@ -223,10 +226,10 @@ export default function SecurityPolicyDetailPage() {
         throw new Error("Failed to update policy status")
       }
 
-      toast.success(`Policy ${policy.isActive ? "disabled" : "enabled"} successfully`)
+      showSuccessToast(policy.isActive ? t("toast.policyDisabled") : t("toast.policyEnabled"))
       fetchPolicy()
     } catch (error) {
-      toast.error("Failed to update policy status")
+      showErrorToast(t("toast.statusUpdateFailed"))
     }
   }
 
@@ -284,14 +287,14 @@ export default function SecurityPolicyDetailPage() {
     return (
       <div className="text-center py-12">
         <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <p className="text-muted-foreground">Security policy not found</p>
+        <p className="text-muted-foreground">{t("detail.policyNotFound")}</p>
         <Button
           variant="outline"
           className="mt-4"
           onClick={() => router.push("/admin/security/policies")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Policies
+          {t("detail.backToPolicies")}
         </Button>
       </div>
     )
@@ -304,22 +307,22 @@ export default function SecurityPolicyDetailPage() {
         <div className="flex items-center gap-4">
           <Button variant="ghost" onClick={() => router.push("/admin/security/policies")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+            {tCommon("back")}
           </Button>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-3">
               {getPolicyIcon(policy.type)}
               {policy.name}
             </h1>
-            <p className="text-sm text-muted-foreground">ID: {policy.id}</p>
+            <p className="text-sm text-muted-foreground">{t("detail.id")}: {policy.id}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {getEnforcementBadge(policy.enforcementMode)}
           {policy.isActive ? (
-            <Badge className="bg-green-500">Active</Badge>
+            <Badge className="bg-green-500">{t("statuses.active")}</Badge>
           ) : (
-            <Badge variant="secondary">Inactive</Badge>
+            <Badge variant="secondary">{t("statuses.inactive")}</Badge>
           )}
         </div>
       </div>
@@ -329,15 +332,15 @@ export default function SecurityPolicyDetailPage() {
         <div className="md:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Policy Configuration</CardTitle>
+              <CardTitle>{t("detail.policyConfiguration")}</CardTitle>
               <CardDescription>
-                Configure the security policy settings
+                {t("detail.configureSettings")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Policy Name</Label>
+                  <Label htmlFor="name">{t("form.policyName")}</Label>
                   <Input
                     id="name"
                     value={formData.name}
@@ -345,7 +348,7 @@ export default function SecurityPolicyDetailPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Policy Type</Label>
+                  <Label>{t("form.policyType")}</Label>
                   <Select
                     value={formData.type}
                     onValueChange={(value) => setFormData({ ...formData, type: value })}
@@ -354,9 +357,9 @@ export default function SecurityPolicyDetailPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {policyTypes.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          {type.label}
+                      {policyTypeValues.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {t(`policyTypes.${type}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -365,7 +368,7 @@ export default function SecurityPolicyDetailPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{t("form.description")}</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
@@ -378,7 +381,7 @@ export default function SecurityPolicyDetailPage() {
 
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label>Scope</Label>
+                  <Label>{t("form.scope")}</Label>
                   <Select
                     value={formData.scope}
                     onValueChange={(value) => setFormData({ ...formData, scope: value })}
@@ -387,16 +390,16 @@ export default function SecurityPolicyDetailPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {scopeOptions.map((scope) => (
-                        <SelectItem key={scope.value} value={scope.value}>
-                          {scope.label}
+                      {scopeValues.map((scope) => (
+                        <SelectItem key={scope} value={scope}>
+                          {t(`scopeOptions.${scope}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Enforcement Mode</Label>
+                  <Label>{t("form.enforcementMode")}</Label>
                   <Select
                     value={formData.enforcementMode}
                     onValueChange={(value) => setFormData({ ...formData, enforcementMode: value })}
@@ -405,16 +408,16 @@ export default function SecurityPolicyDetailPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {enforcementModes.map((mode) => (
-                        <SelectItem key={mode.value} value={mode.value}>
-                          {mode.label}
+                      {enforcementModeValues.map((mode) => (
+                        <SelectItem key={mode} value={mode}>
+                          {t(`enforcementModes.${mode}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="priority">Priority</Label>
+                  <Label htmlFor="priority">{t("form.priority")}</Label>
                   <Input
                     id="priority"
                     type="number"
@@ -433,11 +436,11 @@ export default function SecurityPolicyDetailPage() {
                     checked={formData.isActive}
                     onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
                   />
-                  <Label htmlFor="isActive">Policy Active</Label>
+                  <Label htmlFor="isActive">{t("form.policyActive")}</Label>
                 </div>
                 <Button onClick={handleSave} disabled={saving}>
                   <Save className="h-4 w-4 mr-2" />
-                  {saving ? "Saving..." : "Save Changes"}
+                  {saving ? tCommon("saving") : tCommon("saveChanges")}
                 </Button>
               </div>
             </CardContent>
@@ -449,17 +452,17 @@ export default function SecurityPolicyDetailPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <AlertTriangle className="h-5 w-5 text-destructive" />
-                  Recent Violations ({policy._count?.violations || 0} total)
+                  {t("detail.recentViolations")} ({policy._count?.violations || 0} {t("detail.total")})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Severity</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Date</TableHead>
+                      <TableHead>{t("table.type")}</TableHead>
+                      <TableHead>{t("table.severity")}</TableHead>
+                      <TableHead>{t("table.status")}</TableHead>
+                      <TableHead>{t("table.date")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -482,7 +485,7 @@ export default function SecurityPolicyDetailPage() {
                   className="w-full mt-4"
                   onClick={() => router.push("/admin/security/violations")}
                 >
-                  View All Violations
+                  {t("detail.viewAllViolations")}
                 </Button>
               </CardContent>
             </Card>
@@ -492,7 +495,7 @@ export default function SecurityPolicyDetailPage() {
           {policy.settings && Object.keys(policy.settings).length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Policy Settings</CardTitle>
+                <CardTitle>{t("detail.policySettings")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <pre className="p-4 bg-muted rounded-lg text-sm overflow-auto">
@@ -507,7 +510,7 @@ export default function SecurityPolicyDetailPage() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
+              <CardTitle>{t("detail.quickActions")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <Button
@@ -518,12 +521,12 @@ export default function SecurityPolicyDetailPage() {
                 {policy.isActive ? (
                   <>
                     <XCircle className="h-4 w-4 mr-2" />
-                    Disable Policy
+                    {t("actions.disable")}
                   </>
                 ) : (
                   <>
                     <CheckCircle className="h-4 w-4 mr-2" />
-                    Enable Policy
+                    {t("actions.enable")}
                   </>
                 )}
               </Button>
@@ -534,7 +537,7 @@ export default function SecurityPolicyDetailPage() {
                 disabled={deleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                {deleting ? "Deleting..." : "Delete Policy"}
+                {deleting ? tCommon("deleting") : t("deletePolicy")}
               </Button>
             </CardContent>
           </Card>
@@ -542,26 +545,26 @@ export default function SecurityPolicyDetailPage() {
           <ConfirmationDialog
             open={showDeleteDialog}
             onOpenChange={setShowDeleteDialog}
-            title="Delete Security Policy"
-            description="Are you sure you want to delete this security policy? This action cannot be undone."
-            confirmText={deleting ? "Deleting..." : "Delete"}
+            title={t("confirmations.deleteTitle")}
+            description={t("confirmations.deleteDescription")}
+            confirmText={deleting ? tCommon("deleting") : tCommon("delete")}
             onConfirm={handleDeleteConfirm}
             variant="destructive"
           />
 
           <Card>
             <CardHeader>
-              <CardTitle>Statistics</CardTitle>
+              <CardTitle>{t("detail.statistics")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">Total Violations</span>
+                <span className="text-muted-foreground">{t("detail.totalViolations")}</span>
                 <Badge variant={policy._count?.violations > 0 ? "destructive" : "secondary"}>
                   {policy._count?.violations || 0}
                 </Badge>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-muted-foreground">Priority Level</span>
+                <span className="text-muted-foreground">{t("detail.priorityLevel")}</span>
                 <Badge variant="outline">{policy.priority}</Badge>
               </div>
             </CardContent>
@@ -569,15 +572,15 @@ export default function SecurityPolicyDetailPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Policy Info</CardTitle>
+              <CardTitle>{t("detail.policyInfo")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div>
-                <Label className="text-muted-foreground">Created</Label>
+                <Label className="text-muted-foreground">{t("detail.created")}</Label>
                 <p>{new Date(policy.createdAt).toLocaleString()}</p>
               </div>
               <div>
-                <Label className="text-muted-foreground">Last Updated</Label>
+                <Label className="text-muted-foreground">{t("detail.lastUpdated")}</Label>
                 <p>{new Date(policy.updatedAt).toLocaleString()}</p>
               </div>
             </CardContent>

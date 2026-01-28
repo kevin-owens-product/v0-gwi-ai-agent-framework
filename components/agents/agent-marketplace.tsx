@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -192,6 +193,7 @@ const categoryIcons: Record<string, any> = {
 }
 
 export function AgentMarketplace() {
+  const t = useTranslations("agents.marketplace")
   const [search, setSearch] = useState("")
   const [category, setCategory] = useState<string>("all")
   const [sortBy, setSortBy] = useState<"popular" | "rating" | "recent">("popular")
@@ -231,10 +233,10 @@ export function AgentMarketplace() {
   }
 
   const categories = [
-    { id: "all", label: "All Agents", count: marketplaceAgents.length },
-    { id: "marketing", label: "Marketing", count: marketplaceAgents.filter((a) => a.category === "marketing").length },
-    { id: "research", label: "Research", count: marketplaceAgents.filter((a) => a.category === "research").length },
-    { id: "analytics", label: "Analytics", count: marketplaceAgents.filter((a) => a.category === "analytics").length },
+    { id: "all", label: t("categories.all"), count: marketplaceAgents.length },
+    { id: "marketing", label: t("categories.marketing"), count: marketplaceAgents.filter((a) => a.category === "marketing").length },
+    { id: "research", label: t("categories.research"), count: marketplaceAgents.filter((a) => a.category === "research").length },
+    { id: "analytics", label: t("categories.analytics"), count: marketplaceAgents.filter((a) => a.category === "analytics").length },
   ]
 
   return (
@@ -243,13 +245,13 @@ export function AgentMarketplace() {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold">Agent Marketplace</h2>
+            <h2 className="text-2xl font-bold">{t("title")}</h2>
             <p className="text-muted-foreground">
-              Browse and install pre-built agents to supercharge your insights workflow
+              {t("description")}
             </p>
           </div>
           <Badge variant="secondary" className="text-sm">
-            {marketplaceAgents.length} agents available
+            {t("agentsAvailable", { count: marketplaceAgents.length })}
           </Badge>
         </div>
       </div>
@@ -259,7 +261,7 @@ export function AgentMarketplace() {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search agents..."
+            placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
@@ -270,9 +272,9 @@ export function AgentMarketplace() {
           onChange={(e) => setSortBy(e.target.value as any)}
           className="h-10 rounded-md border border-input bg-background px-3 text-sm"
         >
-          <option value="popular">Most Popular</option>
-          <option value="rating">Highest Rated</option>
-          <option value="recent">Recently Added</option>
+          <option value="popular">{t("sort.popular")}</option>
+          <option value="rating">{t("sort.rating")}</option>
+          <option value="recent">{t("sort.recent")}</option>
         </select>
       </div>
 
@@ -305,11 +307,11 @@ export function AgentMarketplace() {
                           {agent.verified && (
                             <Badge variant="secondary" className="text-xs shrink-0">
                               <Check className="h-3 w-3 mr-1" />
-                              Verified
+                              {t("verified")}
                             </Badge>
                           )}
                         </div>
-                        <p className="text-xs text-muted-foreground mt-1">by {agent.author}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t("byAuthor", { author: agent.author })}</p>
                       </div>
                     </div>
                   </div>
@@ -345,7 +347,7 @@ export function AgentMarketplace() {
                       }}
                       disabled={isInstalling}
                     >
-                      {isInstalling ? "Installing..." : agent.installed ? "Installed" : "Install"}
+                      {isInstalling ? t("installing") : agent.installed ? t("installed") : t("install")}
                     </Button>
                   </div>
                 </Card>
@@ -355,7 +357,7 @@ export function AgentMarketplace() {
 
           {filteredAgents.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No agents found matching your criteria</p>
+              <p className="text-muted-foreground">{t("noAgentsFound")}</p>
             </div>
           )}
         </TabsContent>
@@ -378,13 +380,13 @@ export function AgentMarketplace() {
                   })()}
                   <div>
                     <DialogTitle className="text-xl">{selectedAgent.name}</DialogTitle>
-                    <DialogDescription>by {selectedAgent.author}</DialogDescription>
+                    <DialogDescription>{t("byAuthor", { author: selectedAgent.author })}</DialogDescription>
                   </div>
                 </div>
                 {selectedAgent.verified && (
                   <Badge variant="secondary">
                     <Check className="h-3 w-3 mr-1" />
-                    Verified
+                    {t("verified")}
                   </Badge>
                 )}
               </div>
@@ -400,12 +402,12 @@ export function AgentMarketplace() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Download className="h-4 w-4" />
-                  <span className="text-sm">{selectedAgent.downloads.toLocaleString()} downloads</span>
+                  <span className="text-sm">{t("downloadsCount", { count: selectedAgent.downloads.toLocaleString() })}</span>
                 </div>
               </div>
 
               <div>
-                <h4 className="text-sm font-medium mb-2">Capabilities</h4>
+                <h4 className="text-sm font-medium mb-2">{t("capabilities")}</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {selectedAgent.capabilities.map((capability) => (
                     <div key={capability} className="flex items-center gap-2 text-sm">
@@ -417,7 +419,7 @@ export function AgentMarketplace() {
               </div>
 
               <div>
-                <h4 className="text-sm font-medium mb-2">Tags</h4>
+                <h4 className="text-sm font-medium mb-2">{t("tags")}</h4>
                 <div className="flex gap-2 flex-wrap">
                   {selectedAgent.tags.map((tag) => (
                     <Badge key={tag} variant="outline">
@@ -439,17 +441,17 @@ export function AgentMarketplace() {
                   disabled={installingAgents.has(selectedAgent.id)}
                 >
                   {installingAgents.has(selectedAgent.id)
-                    ? "Installing..."
+                    ? t("installing")
                     : selectedAgent.installed
-                      ? "Installed"
-                      : "Install Agent"}
+                      ? t("installed")
+                      : t("installAgent")}
                 </Button>
                 {selectedAgent.installed && (
                   <Button variant="outline" onClick={() => {
                     setSelectedAgent(null)
                     window.location.href = `/dashboard/playground?agent=${selectedAgent.id}`
                   }}>
-                    Try in Playground
+                    {t("tryInPlayground")}
                   </Button>
                 )}
               </div>

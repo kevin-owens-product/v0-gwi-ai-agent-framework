@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import {
   ArrowLeft,
   Megaphone,
@@ -117,16 +118,10 @@ const channelIcons: Record<string, typeof Bell> = {
   SLACK: MessageSquare,
 }
 
-const typeConfig: Record<string, { color: string; label: string }> = {
-  ANNOUNCEMENT: { color: "bg-blue-500", label: "Announcement" },
-  PRODUCT_UPDATE: { color: "bg-purple-500", label: "Product Update" },
-  MAINTENANCE: { color: "bg-amber-500", label: "Maintenance" },
-  SECURITY_ALERT: { color: "bg-red-500", label: "Security Alert" },
-  MARKETING: { color: "bg-green-500", label: "Marketing" },
-  SURVEY: { color: "bg-indigo-500", label: "Survey" },
-}
-
 export default function BroadcastMessageDetailPage() {
+  const t = useTranslations("admin.broadcast")
+  const tCommon = useTranslations("common")
+
   const params = useParams()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -142,6 +137,15 @@ export default function BroadcastMessageDetailPage() {
   const [isSending, setIsSending] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
+  const typeConfig: Record<string, { color: string; label: string }> = {
+    ANNOUNCEMENT: { color: "bg-blue-500", label: t("types.announcement") },
+    PRODUCT_UPDATE: { color: "bg-purple-500", label: t("types.productUpdate") },
+    MAINTENANCE: { color: "bg-amber-500", label: t("types.maintenance") },
+    SECURITY_ALERT: { color: "bg-red-500", label: t("types.securityAlert") },
+    MARKETING: { color: "bg-green-500", label: t("types.marketing") },
+    SURVEY: { color: "bg-indigo-500", label: t("types.survey") },
+  }
+
   const fetchMessage = useCallback(async () => {
     setIsLoading(true)
     try {
@@ -153,11 +157,11 @@ export default function BroadcastMessageDetailPage() {
       setMessage(data.message)
     } catch (error) {
       console.error("Failed to fetch message:", error)
-      toast.error("Failed to load broadcast message")
+      toast.error(t("toast.loadFailed"))
     } finally {
       setIsLoading(false)
     }
-  }, [messageId])
+  }, [messageId, t])
 
   useEffect(() => {
     fetchMessage()
@@ -177,10 +181,10 @@ export default function BroadcastMessageDetailPage() {
         throw new Error(data.error || "Failed to send message")
       }
 
-      toast.success("Broadcast message sent successfully")
+      toast.success(t("toast.messageSent"))
       fetchMessage()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to send message")
+      toast.error(error instanceof Error ? error.message : t("toast.sendFailed"))
     } finally {
       setIsSending(false)
     }
@@ -188,13 +192,13 @@ export default function BroadcastMessageDetailPage() {
 
   const handleSchedule = async () => {
     if (!scheduledDate || !scheduledTime) {
-      toast.error("Please select a date and time")
+      toast.error(t("validation.selectDateTime"))
       return
     }
 
     const scheduledFor = new Date(`${scheduledDate}T${scheduledTime}`)
     if (scheduledFor <= new Date()) {
-      toast.error("Scheduled time must be in the future")
+      toast.error(t("validation.futureTime"))
       return
     }
 
@@ -211,11 +215,11 @@ export default function BroadcastMessageDetailPage() {
         throw new Error(data.error || "Failed to schedule message")
       }
 
-      toast.success("Broadcast message scheduled")
+      toast.success(t("toast.messageScheduled"))
       setScheduleDialogOpen(false)
       fetchMessage()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to schedule message")
+      toast.error(error instanceof Error ? error.message : t("toast.scheduleFailed"))
     } finally {
       setIsSending(false)
     }
@@ -232,10 +236,10 @@ export default function BroadcastMessageDetailPage() {
         throw new Error(data.error || "Failed to cancel message")
       }
 
-      toast.success("Broadcast message cancelled")
+      toast.success(t("toast.messageCancelled"))
       fetchMessage()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to cancel message")
+      toast.error(error instanceof Error ? error.message : t("toast.cancelFailed"))
     }
   }
 
@@ -251,10 +255,10 @@ export default function BroadcastMessageDetailPage() {
         throw new Error(data.error || "Failed to delete message")
       }
 
-      toast.success("Broadcast message deleted")
+      toast.success(t("toast.messageDeleted"))
       router.push("/admin/broadcast/messages")
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete message")
+      toast.error(error instanceof Error ? error.message : t("toast.deleteFailed"))
     } finally {
       setIsDeleting(false)
     }
@@ -266,30 +270,30 @@ export default function BroadcastMessageDetailPage() {
         return (
           <Badge className="bg-green-500">
             <CheckCircle className="h-3 w-3 mr-1" />
-            Sent
+            {t("status.sent")}
           </Badge>
         )
       case "SCHEDULED":
         return (
           <Badge className="bg-blue-500">
             <Clock className="h-3 w-3 mr-1" />
-            Scheduled
+            {t("status.scheduled")}
           </Badge>
         )
       case "SENDING":
         return (
           <Badge className="bg-yellow-500">
             <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-            Sending
+            {t("status.sending")}
           </Badge>
         )
       case "DRAFT":
-        return <Badge variant="secondary">Draft</Badge>
+        return <Badge variant="secondary">{t("status.draft")}</Badge>
       case "CANCELLED":
         return (
           <Badge variant="outline">
             <XCircle className="h-3 w-3 mr-1" />
-            Cancelled
+            {t("status.cancelled")}
           </Badge>
         )
       default:
@@ -300,13 +304,13 @@ export default function BroadcastMessageDetailPage() {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case "URGENT":
-        return <Badge variant="destructive">Urgent</Badge>
+        return <Badge variant="destructive">{t("priority.urgent")}</Badge>
       case "HIGH":
-        return <Badge className="bg-orange-500">High</Badge>
+        return <Badge className="bg-orange-500">{t("priority.high")}</Badge>
       case "NORMAL":
-        return <Badge variant="secondary">Normal</Badge>
+        return <Badge variant="secondary">{t("priority.normal")}</Badge>
       default:
-        return <Badge variant="outline">Low</Badge>
+        return <Badge variant="outline">{t("priority.low")}</Badge>
     }
   }
 
@@ -323,11 +327,11 @@ export default function BroadcastMessageDetailPage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {tCommon("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Broadcast message not found</p>
+            <p className="text-muted-foreground">{t("empty.messageNotFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -346,7 +350,7 @@ export default function BroadcastMessageDetailPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/broadcast/messages">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Link>
           </Button>
           <div className={`h-12 w-12 rounded-lg ${config.color}/10 flex items-center justify-center`}>
@@ -367,12 +371,12 @@ export default function BroadcastMessageDetailPage() {
               <Button variant="outline" asChild>
                 <Link href={`/admin/broadcast/messages/${message.id}/edit`}>
                   <Edit className="h-4 w-4 mr-2" />
-                  Edit
+                  {tCommon("edit")}
                 </Link>
               </Button>
               <Button variant="outline" onClick={() => setScheduleDialogOpen(true)}>
                 <Calendar className="h-4 w-4 mr-2" />
-                Schedule
+                {t("actions.schedule")}
               </Button>
               <Button onClick={handleSendNow} disabled={isSending}>
                 {isSending ? (
@@ -380,14 +384,14 @@ export default function BroadcastMessageDetailPage() {
                 ) : (
                   <Send className="h-4 w-4 mr-2" />
                 )}
-                Send Now
+                {t("actions.sendNow")}
               </Button>
             </>
           )}
           {message.status === "SCHEDULED" && (
             <Button variant="outline" onClick={handleCancel}>
               <XCircle className="h-4 w-4 mr-2" />
-              Cancel
+              {tCommon("cancel")}
             </Button>
           )}
           <Button
@@ -396,18 +400,18 @@ export default function BroadcastMessageDetailPage() {
             onClick={() => setDeleteDialogOpen(true)}
           >
             <Trash className="h-4 w-4 mr-2" />
-            Delete
+            {tCommon("delete")}
           </Button>
         </div>
       </div>
 
       <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="content">Content</TabsTrigger>
-          <TabsTrigger value="targeting">Targeting</TabsTrigger>
-          <TabsTrigger value="delivery">Delivery Stats</TabsTrigger>
-          <TabsTrigger value="history">History</TabsTrigger>
+          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="content">{t("tabs.content")}</TabsTrigger>
+          <TabsTrigger value="targeting">{t("tabs.targeting")}</TabsTrigger>
+          <TabsTrigger value="delivery">{t("tabs.deliveryStats")}</TabsTrigger>
+          <TabsTrigger value="history">{t("tabs.history")}</TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
@@ -415,7 +419,7 @@ export default function BroadcastMessageDetailPage() {
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Recipients</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.totalRecipients")}</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -424,7 +428,7 @@ export default function BroadcastMessageDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Delivered</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.delivered")}</CardTitle>
                 <CheckCircle className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -433,25 +437,25 @@ export default function BroadcastMessageDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Open Rate</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.openRate")}</CardTitle>
                 <Eye className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{openRate}%</div>
                 <p className="text-xs text-muted-foreground">
-                  {message.opened.toLocaleString()} opened
+                  {t("stats.opened", { count: message.opened.toLocaleString() })}
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Click Rate</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.clickRate")}</CardTitle>
                 <MousePointer className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{clickRate}%</div>
                 <p className="text-xs text-muted-foreground">
-                  {message.clicked.toLocaleString()} clicked
+                  {t("stats.clicked", { count: message.clicked.toLocaleString() })}
                 </p>
               </CardContent>
             </Card>
@@ -459,24 +463,24 @@ export default function BroadcastMessageDetailPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Message Details</CardTitle>
+              <CardTitle>{t("details.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">Type</p>
+                  <p className="text-sm text-muted-foreground">{t("table.type")}</p>
                   <p className="font-medium">{config.label}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Priority</p>
+                  <p className="text-sm text-muted-foreground">{t("table.priority")}</p>
                   <p className="font-medium">{message.priority}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Target Audience</p>
+                  <p className="text-sm text-muted-foreground">{t("form.targetAudience")}</p>
                   <p className="font-medium">{message.targetType.replace(/_/g, " ")}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Channels</p>
+                  <p className="text-sm text-muted-foreground">{t("table.channels")}</p>
                   <div className="flex gap-2 mt-1">
                     {message.channels.map((channel) => {
                       const Icon = channelIcons[channel] || Bell
@@ -493,14 +497,14 @@ export default function BroadcastMessageDetailPage() {
                   </div>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Created</p>
+                  <p className="text-sm text-muted-foreground">{t("details.created")}</p>
                   <p className="font-medium">
                     {new Date(message.createdAt).toLocaleString()}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">
-                    {message.sentAt ? "Sent" : message.scheduledFor ? "Scheduled For" : "Last Updated"}
+                    {message.sentAt ? t("details.sent") : message.scheduledFor ? t("details.scheduledFor") : t("details.lastUpdated")}
                   </p>
                   <p className="font-medium">
                     {message.sentAt
@@ -513,7 +517,7 @@ export default function BroadcastMessageDetailPage() {
               </div>
               {message.creator && (
                 <div>
-                  <p className="text-sm text-muted-foreground">Created By</p>
+                  <p className="text-sm text-muted-foreground">{t("details.createdBy")}</p>
                   <p className="font-medium">
                     {message.creator.name || message.creator.email}
                   </p>
@@ -521,7 +525,7 @@ export default function BroadcastMessageDetailPage() {
               )}
               {message.expiresAt && (
                 <div>
-                  <p className="text-sm text-muted-foreground">Expires</p>
+                  <p className="text-sm text-muted-foreground">{t("details.expires")}</p>
                   <p className="font-medium">
                     {new Date(message.expiresAt).toLocaleString()}
                   </p>
@@ -535,8 +539,8 @@ export default function BroadcastMessageDetailPage() {
         <TabsContent value="content">
           <Card>
             <CardHeader>
-              <CardTitle>Message Content</CardTitle>
-              <CardDescription>The content that will be shown to recipients</CardDescription>
+              <CardTitle>{t("content.title")}</CardTitle>
+              <CardDescription>{t("content.description")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="bg-muted/50 rounded-lg p-6">
@@ -575,7 +579,7 @@ export default function BroadcastMessageDetailPage() {
               </div>
 
               <div>
-                <h4 className="font-medium mb-2">Plain Text Content</h4>
+                <h4 className="font-medium mb-2">{t("content.plainText")}</h4>
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="whitespace-pre-wrap text-sm">{message.content}</p>
                 </div>
@@ -588,15 +592,15 @@ export default function BroadcastMessageDetailPage() {
         <TabsContent value="targeting">
           <Card>
             <CardHeader>
-              <CardTitle>Target Audience</CardTitle>
+              <CardTitle>{t("targeting.title")}</CardTitle>
               <CardDescription>
                 {message.targetType === "ALL"
-                  ? "This message targets all active users"
+                  ? t("targeting.allUsersDescription")
                   : message.targetType === "SPECIFIC_PLANS"
-                    ? `This message targets users on ${message.targetPlans.join(", ")} plans`
+                    ? t("targeting.specificPlansDescription", { plans: message.targetPlans.join(", ") })
                     : message.targetType === "SPECIFIC_ORGS"
-                      ? `This message targets ${message.targetOrgs.length} specific organization(s)`
-                      : `This message targets users with ${message.targetRoles.join(", ")} roles`}
+                      ? t("targeting.specificOrgsDescription", { count: message.targetOrgs.length })
+                      : t("targeting.specificRolesDescription", { roles: message.targetRoles.join(", ") })}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -614,14 +618,14 @@ export default function BroadcastMessageDetailPage() {
                   <div>
                     <p className="font-medium">{message.targetType.replace(/_/g, " ")}</p>
                     <p className="text-sm text-muted-foreground">
-                      {message.totalRecipients.toLocaleString()} estimated recipients
+                      {t("targeting.estimatedRecipients", { count: message.totalRecipients.toLocaleString() })}
                     </p>
                   </div>
                 </div>
 
                 {message.targetPlans.length > 0 && (
                   <div>
-                    <h4 className="font-medium mb-2">Target Plans</h4>
+                    <h4 className="font-medium mb-2">{t("targeting.targetPlans")}</h4>
                     <div className="flex gap-2">
                       {message.targetPlans.map((plan) => (
                         <Badge key={plan} variant="outline">
@@ -634,12 +638,12 @@ export default function BroadcastMessageDetailPage() {
 
                 {message.targetOrgDetails.length > 0 && (
                   <div>
-                    <h4 className="font-medium mb-2">Target Organizations</h4>
+                    <h4 className="font-medium mb-2">{t("targeting.targetOrganizations")}</h4>
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Organization</TableHead>
-                          <TableHead>Plan</TableHead>
+                          <TableHead>{t("targeting.organization")}</TableHead>
+                          <TableHead>{t("targeting.plan")}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -663,7 +667,7 @@ export default function BroadcastMessageDetailPage() {
 
                 {message.targetRoles.length > 0 && (
                   <div>
-                    <h4 className="font-medium mb-2">Target Roles</h4>
+                    <h4 className="font-medium mb-2">{t("targeting.targetRoles")}</h4>
                     <div className="flex gap-2">
                       {message.targetRoles.map((role) => (
                         <Badge key={role} variant="outline">
@@ -683,12 +687,12 @@ export default function BroadcastMessageDetailPage() {
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle>Delivery Funnel</CardTitle>
+                <CardTitle>{t("deliveryStats.funnel")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm">Total Recipients</span>
+                    <span className="text-sm">{t("stats.totalRecipients")}</span>
                     <span className="font-medium">{message.totalRecipients.toLocaleString()}</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -697,7 +701,7 @@ export default function BroadcastMessageDetailPage() {
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm">Delivered</span>
+                    <span className="text-sm">{t("stats.delivered")}</span>
                     <span className="font-medium">{message.delivered.toLocaleString()}</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -711,7 +715,7 @@ export default function BroadcastMessageDetailPage() {
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm">Opened</span>
+                    <span className="text-sm">{t("deliveryStats.opened")}</span>
                     <span className="font-medium">{message.opened.toLocaleString()}</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -725,7 +729,7 @@ export default function BroadcastMessageDetailPage() {
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm">Clicked</span>
+                    <span className="text-sm">{t("deliveryStats.clicked")}</span>
                     <span className="font-medium">{message.clicked.toLocaleString()}</span>
                   </div>
                   <div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -742,7 +746,7 @@ export default function BroadcastMessageDetailPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Channel Breakdown</CardTitle>
+                <CardTitle>{t("deliveryStats.channelBreakdown")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -755,9 +759,9 @@ export default function BroadcastMessageDetailPage() {
                         </div>
                         <div className="flex-1">
                           <p className="font-medium">{channel.replace("_", " ")}</p>
-                          <p className="text-sm text-muted-foreground">Delivery channel</p>
+                          <p className="text-sm text-muted-foreground">{t("deliveryStats.deliveryChannel")}</p>
                         </div>
-                        <Badge variant="outline">Active</Badge>
+                        <Badge variant="outline">{tCommon("active")}</Badge>
                       </div>
                     )
                   })}
@@ -770,7 +774,7 @@ export default function BroadcastMessageDetailPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5" />
-                Performance Metrics
+                {t("deliveryStats.performanceMetrics")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -781,21 +785,21 @@ export default function BroadcastMessageDetailPage() {
                       ? Math.round((message.delivered / message.totalRecipients) * 100)
                       : 0}%
                   </p>
-                  <p className="text-sm text-muted-foreground">Delivery Rate</p>
+                  <p className="text-sm text-muted-foreground">{t("deliveryStats.deliveryRate")}</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                   <p className="text-3xl font-bold">{openRate}%</p>
-                  <p className="text-sm text-muted-foreground">Open Rate</p>
+                  <p className="text-sm text-muted-foreground">{t("stats.openRate")}</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                   <p className="text-3xl font-bold">{clickRate}%</p>
-                  <p className="text-sm text-muted-foreground">Click Rate</p>
+                  <p className="text-sm text-muted-foreground">{t("stats.clickRate")}</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                   <p className="text-3xl font-bold">
                     {message.totalRecipients - message.delivered}
                   </p>
-                  <p className="text-sm text-muted-foreground">Failed</p>
+                  <p className="text-sm text-muted-foreground">{t("deliveryStats.failed")}</p>
                 </div>
               </div>
             </CardContent>
@@ -808,18 +812,18 @@ export default function BroadcastMessageDetailPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <History className="h-5 w-5" />
-                Activity History
+                {t("history.title")}
               </CardTitle>
-              <CardDescription>Recent actions on this broadcast message</CardDescription>
+              <CardDescription>{t("history.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               {message.auditLogs.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Action</TableHead>
-                      <TableHead>Details</TableHead>
-                      <TableHead>Date</TableHead>
+                      <TableHead>{t("history.action")}</TableHead>
+                      <TableHead>{t("history.details")}</TableHead>
+                      <TableHead>{t("table.date")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -844,7 +848,7 @@ export default function BroadcastMessageDetailPage() {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground text-center py-8">No history available</p>
+                <p className="text-muted-foreground text-center py-8">{t("history.noHistory")}</p>
               )}
             </CardContent>
           </Card>
@@ -855,12 +859,12 @@ export default function BroadcastMessageDetailPage() {
       <Dialog open={scheduleDialogOpen} onOpenChange={setScheduleDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Schedule Broadcast</DialogTitle>
-            <DialogDescription>Choose when this message should be sent</DialogDescription>
+            <DialogTitle>{t("scheduleDialog.title")}</DialogTitle>
+            <DialogDescription>{t("scheduleDialog.description")}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label>Date</Label>
+              <Label>{t("scheduleDialog.date")}</Label>
               <Input
                 type="date"
                 value={scheduledDate}
@@ -869,7 +873,7 @@ export default function BroadcastMessageDetailPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Time</Label>
+              <Label>{t("scheduleDialog.time")}</Label>
               <Input
                 type="time"
                 value={scheduledTime}
@@ -879,18 +883,18 @@ export default function BroadcastMessageDetailPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setScheduleDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button onClick={handleSchedule} disabled={isSending}>
               {isSending ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Scheduling...
+                  {t("scheduleDialog.scheduling")}
                 </>
               ) : (
                 <>
                   <Calendar className="h-4 w-4 mr-2" />
-                  Schedule
+                  {t("actions.schedule")}
                 </>
               )}
             </Button>
@@ -904,15 +908,14 @@ export default function BroadcastMessageDetailPage() {
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-destructive" />
-              Delete Broadcast Message
+              {t("deleteDialog.title")}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete &quot;{message.title}&quot;? This action cannot be
-              undone.
+              {t("deleteDialog.description", { title: message.title })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{tCommon("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -921,10 +924,10 @@ export default function BroadcastMessageDetailPage() {
               {isDeleting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Deleting...
+                  {t("deleteDialog.deleting")}
                 </>
               ) : (
-                "Delete"
+                tCommon("delete")
               )}
             </AlertDialogAction>
           </AlertDialogFooter>

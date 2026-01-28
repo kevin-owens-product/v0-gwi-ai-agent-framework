@@ -96,7 +96,7 @@ async function translateBatch(
     if (Array.isArray(results)) {
       return results.map(r => r.text);
     }
-    return [results.text];
+    return [(results as { text: string }).text];
   } catch (error) {
     console.error(`Translation error:`, error);
     throw error;

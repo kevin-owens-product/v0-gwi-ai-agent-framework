@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,19 +31,20 @@ import {
 import Link from "next/link"
 import { useAdmin } from "@/components/providers/admin-provider"
 
-const FLAG_TYPES = [
-  { value: "BOOLEAN", label: "Boolean", description: "Simple on/off toggle" },
-  { value: "STRING", label: "String", description: "Text value" },
-  { value: "NUMBER", label: "Number", description: "Numeric value" },
-  { value: "JSON", label: "JSON", description: "Complex configuration" },
-]
-
 const PLAN_OPTIONS = ["STARTER", "PROFESSIONAL", "ENTERPRISE"]
 
 export default function NewFeatureFlagPage() {
+  const t = useTranslations("admin.features")
   const router = useRouter()
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
+
+  const FLAG_TYPES = [
+    { value: "BOOLEAN", label: t("types.boolean"), description: t("types.booleanDescription") },
+    { value: "STRING", label: t("types.string"), description: t("types.stringDescription") },
+    { value: "NUMBER", label: t("types.number"), description: t("types.numberDescription") },
+    { value: "JSON", label: t("types.json"), description: t("types.jsonDescription") },
+  ]
 
   const [formData, setFormData] = useState({
     key: "",
@@ -82,13 +84,13 @@ export default function NewFeatureFlagPage() {
 
   const handleCreate = async () => {
     if (!formData.key || !formData.name) {
-      toast.error("Key and name are required")
+      toast.error(t("validation.keyRequired"))
       return
     }
 
     // Validate key format
     if (!/^[a-z][a-z0-9_]*$/.test(formData.key)) {
-      toast.error("Key must be lowercase letters, numbers, and underscores only, starting with a letter")
+      toast.error(t("validation.keyFormat"))
       return
     }
 
@@ -127,11 +129,11 @@ export default function NewFeatureFlagPage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to create feature flags</p>
+        <p className="text-muted-foreground">{t("new.noPermission")}</p>
         <Link href="/admin/features">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Feature Flags
+            {t("new.backToFeatures")}
           </Button>
         </Link>
       </div>
@@ -146,13 +148,13 @@ export default function NewFeatureFlagPage() {
           <Link href="/admin/features">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("new.back")}
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold">Create Feature Flag</h1>
+            <h1 className="text-2xl font-bold">{t("new.title")}</h1>
             <p className="text-sm text-muted-foreground">
-              Create a new feature flag for controlled rollout
+              {t("new.subtitle")}
             </p>
           </div>
         </div>
@@ -160,12 +162,12 @@ export default function NewFeatureFlagPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Flag
+              {t("createFlag")}
             </>
           )}
         </Button>
@@ -177,50 +179,50 @@ export default function NewFeatureFlagPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Flag className="h-5 w-5" />
-              Flag Details
+              {t("flagDetails.title")}
             </CardTitle>
             <CardDescription>
-              Basic information about the feature flag
+              {t("flagDetails.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="name">Display Name *</Label>
+                <Label htmlFor="name">{t("form.displayName")} *</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  placeholder="New Dashboard"
+                  placeholder={t("form.namePlaceholder")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="key">Flag Key *</Label>
+                <Label htmlFor="key">{t("form.key")} *</Label>
                 <Input
                   id="key"
                   value={formData.key}
                   onChange={(e) => setFormData(prev => ({ ...prev, key: e.target.value }))}
-                  placeholder="new_dashboard"
+                  placeholder={t("form.keyPlaceholder")}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Lowercase letters, numbers, and underscores only
+                  {t("flagDetails.keyHint")}
                 </p>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("form.description")}</Label>
               <Textarea
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Describe what this feature flag controls..."
+                placeholder={t("form.descriptionPlaceholder")}
                 rows={3}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Flag Type</Label>
+              <Label>{t("form.type")}</Label>
               <Select
                 value={formData.type}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, type: value }))}
@@ -247,18 +249,18 @@ export default function NewFeatureFlagPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Settings className="h-5 w-5" />
-              Rollout Configuration
+              {t("rolloutConfig.title")}
             </CardTitle>
             <CardDescription>
-              Configure how this feature is rolled out
+              {t("rolloutConfig.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label>Enabled</Label>
+                <Label>{t("rolloutConfig.enabled")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Turn this feature on or off globally
+                  {t("rolloutConfig.enabledDescription")}
                 </p>
               </div>
               <Switch
@@ -271,7 +273,7 @@ export default function NewFeatureFlagPage() {
               <div className="flex items-center justify-between">
                 <Label className="flex items-center gap-2">
                   <Percent className="h-4 w-4" />
-                  Rollout Percentage
+                  {t("rolloutConfig.rolloutPercentage")}
                 </Label>
                 <span className="text-sm font-medium">{formData.rolloutPercentage}%</span>
               </div>
@@ -282,7 +284,7 @@ export default function NewFeatureFlagPage() {
                 step={1}
               />
               <p className="text-xs text-muted-foreground">
-                Percentage of users who will see this feature when enabled
+                {t("rolloutConfig.rolloutDescription")}
               </p>
             </div>
           </CardContent>
@@ -292,15 +294,15 @@ export default function NewFeatureFlagPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CreditCard className="h-5 w-5" />
-              Plan Restrictions
+              {t("planRestrictions.title")}
             </CardTitle>
             <CardDescription>
-              Limit this feature to specific subscription plans
+              {t("planRestrictions.description")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-4">
-              <Label>Allowed Plans</Label>
+              <Label>{t("planRestrictions.allowedPlans")}</Label>
               <div className="flex gap-6">
                 {PLAN_OPTIONS.map((plan) => (
                   <div key={plan} className="flex items-center gap-2">
@@ -316,7 +318,7 @@ export default function NewFeatureFlagPage() {
                 ))}
               </div>
               <p className="text-xs text-muted-foreground">
-                Leave empty to allow all plans. Select specific plans to restrict access.
+                {t("planRestrictions.allowAllDescription")}
               </p>
             </div>
           </CardContent>

@@ -487,6 +487,7 @@ export function HabitsBehaviors({
   audienceCriteria,
   className,
 }: HabitsBehaviorsProps) {
+  const t = useTranslations("audiences")
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState<ReturnType<typeof generateHabitData> | null>(null)
 

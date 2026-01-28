@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Header } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 import { Button } from "@/components/ui/button"
@@ -13,49 +14,51 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { MapPin, MessageSquare, Building2, Users, Headphones } from "lucide-react"
 
-const contactOptions = [
-  {
-    icon: Building2,
-    title: "Sales",
-    description: "Learn how GWI can help your team",
-    action: "Talk to Sales",
-    href: "mailto:sales@gwi.com",
-  },
-  {
-    icon: Headphones,
-    title: "Support",
-    description: "Get help with technical issues",
-    action: "Get Support",
-    href: "mailto:support@gwi.com",
-  },
-  {
-    icon: Users,
-    title: "Partnerships",
-    description: "Explore partnership opportunities",
-    action: "Partner with Us",
-    href: "mailto:partners@gwi.com",
-  },
-]
-
-const offices = [
-  {
-    city: "London (HQ)",
-    address: "25 Farringdon Street, London EC4A 4AB",
-    phone: "+44 20 7731 1614",
-  },
-  {
-    city: "New York",
-    address: "45 W 25th St, 8th Floor, New York, NY 10010",
-    phone: "+1 646 600 6867",
-  },
-  {
-    city: "Athens",
-    address: "Athens, Greece",
-    phone: "+30 210 300 0000",
-  },
-]
-
 export default function ContactPage() {
+  const t = useTranslations("landing.contact")
+
+  const contactOptions = [
+    {
+      icon: Building2,
+      titleKey: "options.sales.title",
+      descriptionKey: "options.sales.description",
+      actionKey: "options.sales.action",
+      href: "mailto:sales@gwi.com",
+    },
+    {
+      icon: Headphones,
+      titleKey: "options.support.title",
+      descriptionKey: "options.support.description",
+      actionKey: "options.support.action",
+      href: "mailto:support@gwi.com",
+    },
+    {
+      icon: Users,
+      titleKey: "options.partnerships.title",
+      descriptionKey: "options.partnerships.description",
+      actionKey: "options.partnerships.action",
+      href: "mailto:partners@gwi.com",
+    },
+  ]
+
+  const offices = [
+    {
+      cityKey: "offices.london.city",
+      address: "25 Farringdon Street, London EC4A 4AB",
+      phone: "+44 20 7731 1614",
+    },
+    {
+      cityKey: "offices.newYork.city",
+      address: "45 W 25th St, 8th Floor, New York, NY 10010",
+      phone: "+1 646 600 6867",
+    },
+    {
+      cityKey: "offices.athens.city",
+      address: "Athens, Greece",
+      phone: "+30 210 300 0000",
+    },
+  ]
+
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -83,9 +86,9 @@ export default function ContactPage() {
         {/* Hero */}
         <section className="py-16">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl font-bold mb-4">Get in Touch</h1>
+            <h1 className="text-4xl font-bold mb-4">{t("hero.title")}</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Have questions about GWI? We'd love to hear from you.
+              {t("hero.subtitle")}
             </p>
           </div>
         </section>
@@ -95,17 +98,17 @@ export default function ContactPage() {
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {contactOptions.map((option) => (
-                <Card key={option.title} className="text-center">
+                <Card key={option.titleKey} className="text-center">
                   <CardHeader>
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
                       <option.icon className="h-6 w-6 text-primary" />
                     </div>
-                    <CardTitle>{option.title}</CardTitle>
-                    <CardDescription>{option.description}</CardDescription>
+                    <CardTitle>{t(option.titleKey)}</CardTitle>
+                    <CardDescription>{t(option.descriptionKey)}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Button variant="outline" asChild>
-                      <a href={option.href}>{option.action}</a>
+                      <a href={option.href}>{t(option.actionKey)}</a>
                     </Button>
                   </CardContent>
                 </Card>
@@ -120,8 +123,8 @@ export default function ContactPage() {
             <div className="max-w-2xl mx-auto">
               <Card>
                 <CardHeader>
-                  <CardTitle>Send us a message</CardTitle>
-                  <CardDescription>Fill out the form below and we'll get back to you within 24 hours.</CardDescription>
+                  <CardTitle>{t("form.title")}</CardTitle>
+                  <CardDescription>{t("form.description")}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   {isSubmitted ? (
@@ -129,14 +132,14 @@ export default function ContactPage() {
                       <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
                         <MessageSquare className="h-8 w-8 text-primary" />
                       </div>
-                      <h3 className="text-xl font-semibold mb-2">Message Sent!</h3>
-                      <p className="text-muted-foreground">Thanks for reaching out. We'll be in touch soon.</p>
+                      <h3 className="text-xl font-semibold mb-2">{t("form.successTitle")}</h3>
+                      <p className="text-muted-foreground">{t("form.successMessage")}</p>
                     </div>
                   ) : (
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="name">Name</Label>
+                          <Label htmlFor="name">{t("form.fields.name")}</Label>
                           <Input
                             id="name"
                             value={formState.name}
@@ -145,7 +148,7 @@ export default function ContactPage() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="email">Work Email</Label>
+                          <Label htmlFor="email">{t("form.fields.workEmail")}</Label>
                           <Input
                             id="email"
                             type="email"
@@ -157,7 +160,7 @@ export default function ContactPage() {
                       </div>
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="company">Company</Label>
+                          <Label htmlFor="company">{t("form.fields.company")}</Label>
                           <Input
                             id="company"
                             value={formState.company}
@@ -166,7 +169,7 @@ export default function ContactPage() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="role">Role</Label>
+                          <Label htmlFor="role">{t("form.fields.role")}</Label>
                           <Input
                             id="role"
                             value={formState.role}
@@ -175,25 +178,25 @@ export default function ContactPage() {
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="topic">Topic</Label>
+                        <Label htmlFor="topic">{t("form.fields.topic")}</Label>
                         <Select
                           value={formState.topic}
                           onValueChange={(value) => setFormState({ ...formState, topic: value })}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a topic" />
+                            <SelectValue placeholder={t("form.fields.selectTopic")} />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="demo">Request a Demo</SelectItem>
-                            <SelectItem value="pricing">Pricing Question</SelectItem>
-                            <SelectItem value="support">Technical Support</SelectItem>
-                            <SelectItem value="partnership">Partnership</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
+                            <SelectItem value="demo">{t("form.topics.demo")}</SelectItem>
+                            <SelectItem value="pricing">{t("form.topics.pricing")}</SelectItem>
+                            <SelectItem value="support">{t("form.topics.support")}</SelectItem>
+                            <SelectItem value="partnership">{t("form.topics.partnership")}</SelectItem>
+                            <SelectItem value="other">{t("form.topics.other")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="message">Message</Label>
+                        <Label htmlFor="message">{t("form.fields.message")}</Label>
                         <Textarea
                           id="message"
                           rows={4}
@@ -203,7 +206,7 @@ export default function ContactPage() {
                         />
                       </div>
                       <Button type="submit" className="w-full" disabled={isSubmitting}>
-                        {isSubmitting ? "Sending..." : "Send Message"}
+                        {isSubmitting ? t("form.sending") : t("form.sendMessage")}
                       </Button>
                     </form>
                   )}
@@ -216,14 +219,14 @@ export default function ContactPage() {
         {/* Offices */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-center mb-12">Our Offices</h2>
+            <h2 className="text-2xl font-bold text-center mb-12">{t("officesTitle")}</h2>
             <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               {offices.map((office) => (
-                <div key={office.city} className="text-center">
+                <div key={office.cityKey} className="text-center">
                   <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                     <MapPin className="h-6 w-6 text-muted-foreground" />
                   </div>
-                  <h3 className="font-semibold text-lg mb-2">{office.city}</h3>
+                  <h3 className="font-semibold text-lg mb-2">{t(office.cityKey)}</h3>
                   <p className="text-sm text-muted-foreground mb-1">{office.address}</p>
                   <p className="text-sm text-muted-foreground">{office.phone}</p>
                 </div>

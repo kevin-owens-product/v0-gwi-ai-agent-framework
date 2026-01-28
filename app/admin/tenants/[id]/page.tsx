@@ -56,6 +56,8 @@ import {
   CreditCard,
 } from "lucide-react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { showErrorToast } from "@/lib/toast-utils"
 
 interface Member {
   id: string
@@ -180,6 +182,7 @@ export default function TenantDetailPage() {
   const params = useParams()
   const router = useRouter()
   const tenantId = params.id as string
+  const t = useTranslations("admin.tenants")
 
   const [tenant, setTenant] = useState<Tenant | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -332,7 +335,7 @@ export default function TenantDetailPage() {
         fetchTenant()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to assign plan")
+        showErrorToast(data.error || t("toast.assignPlanFailed"))
       }
     } catch (error) {
       console.error("Failed to assign plan:", error)
@@ -363,7 +366,7 @@ export default function TenantDetailPage() {
         fetchEntitlements()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to grant feature")
+        showErrorToast(data.error || t("toast.grantFeatureFailed"))
       }
     } catch (error) {
       console.error("Failed to grant feature:", error)
@@ -381,7 +384,7 @@ export default function TenantDetailPage() {
         fetchEntitlements()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to revoke entitlement")
+        showErrorToast(data.error || t("toast.revokeEntitlementFailed"))
       }
     } catch (error) {
       console.error("Failed to revoke entitlement:", error)

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -74,6 +75,7 @@ export function ChartTemplateGallery({
   onCreateChart,
   className,
 }: ChartTemplateGalleryProps) {
+  const t = useTranslations('dashboard.charts.templateGallery')
   const [activeTab, setActiveTab] = useState<string>("popular")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTemplate, setSelectedTemplate] = useState<GWIChartTemplate | null>(null)
@@ -129,15 +131,15 @@ export function ChartTemplateGallery({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold">Chart Templates</h2>
+          <h2 className="text-xl font-semibold">{t('title')}</h2>
           <p className="text-sm text-muted-foreground">
-            Start with a pre-built template designed for consumer insights
+            {t('description')}
           </p>
         </div>
         <div className="relative w-full sm:w-64">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search templates..."
+            placeholder={t('searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9"
@@ -150,24 +152,24 @@ export function ChartTemplateGallery({
         <TabsList className="flex-wrap h-auto gap-1">
           <TabsTrigger value="popular" className="text-xs">
             <Sparkles className="h-3 w-3 mr-1" />
-            Popular
+            {t('tabs.popular')}
           </TabsTrigger>
-          <TabsTrigger value="all" className="text-xs">All Templates</TabsTrigger>
+          <TabsTrigger value="all" className="text-xs">{t('tabs.all')}</TabsTrigger>
           <TabsTrigger value="audience" className="text-xs">
             <Users className="h-3 w-3 mr-1" />
-            Audience
+            {t('tabs.audience')}
           </TabsTrigger>
           <TabsTrigger value="brand" className="text-xs">
             <Activity className="h-3 w-3 mr-1" />
-            Brand
+            {t('tabs.brand')}
           </TabsTrigger>
           <TabsTrigger value="media" className="text-xs">
             <BarChart3 className="h-3 w-3 mr-1" />
-            Media
+            {t('tabs.media')}
           </TabsTrigger>
           <TabsTrigger value="conversion" className="text-xs">
             <TrendingUp className="h-3 w-3 mr-1" />
-            Conversion
+            {t('tabs.conversion')}
           </TabsTrigger>
         </TabsList>
 
@@ -175,8 +177,8 @@ export function ChartTemplateGallery({
           {filteredTemplates.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <Search className="h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No templates found</h3>
-              <p className="text-sm text-muted-foreground">Try adjusting your search or filter</p>
+              <h3 className="text-lg font-medium">{t('noTemplatesFound')}</h3>
+              <p className="text-sm text-muted-foreground">{t('adjustSearch')}</p>
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -250,7 +252,7 @@ export function ChartTemplateGallery({
                           }}
                         >
                           <Plus className="h-3 w-3 mr-1" />
-                          Use Template
+                          {t('useTemplate')}
                         </Button>
                         <Button
                           size="sm"
@@ -286,11 +288,11 @@ export function ChartTemplateGallery({
               </div>
               <div className="flex items-center gap-2">
                 <Button size="sm" variant="outline" onClick={() => setPreviewTemplate(null)}>
-                  Close Preview
+                  {t('closePreview')}
                 </Button>
                 <Button size="sm" onClick={() => handleCreateChart(previewTemplate)}>
                   <Plus className="h-4 w-4 mr-1" />
-                  Use Template
+                  {t('useTemplate')}
                 </Button>
               </div>
             </div>

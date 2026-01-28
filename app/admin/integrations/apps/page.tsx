@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Puzzle,
   Plus,
@@ -63,31 +64,34 @@ interface IntegrationApp {
   }
 }
 
-const categories = [
-  { value: "PRODUCTIVITY", label: "Productivity" },
-  { value: "COMMUNICATION", label: "Communication" },
-  { value: "PROJECT_MANAGEMENT", label: "Project Management" },
-  { value: "CRM", label: "CRM" },
-  { value: "ANALYTICS", label: "Analytics" },
-  { value: "SECURITY", label: "Security" },
-  { value: "DEVELOPER_TOOLS", label: "Developer Tools" },
-  { value: "HR", label: "HR" },
-  { value: "FINANCE", label: "Finance" },
-  { value: "MARKETING", label: "Marketing" },
-  { value: "CUSTOMER_SUPPORT", label: "Customer Support" },
-  { value: "OTHER", label: "Other" },
-]
-
-const statuses = [
-  { value: "DRAFT", label: "Draft" },
-  { value: "PENDING_REVIEW", label: "Pending Review" },
-  { value: "APPROVED", label: "Approved" },
-  { value: "PUBLISHED", label: "Published" },
-  { value: "DEPRECATED", label: "Deprecated" },
-  { value: "REMOVED", label: "Removed" },
-]
-
 export default function IntegrationAppsPage() {
+  const t = useTranslations("admin.integrations.apps")
+  const tCommon = useTranslations("common")
+
+  const categories = [
+    { value: "PRODUCTIVITY", label: t("categories.productivity") },
+    { value: "COMMUNICATION", label: t("categories.communication") },
+    { value: "PROJECT_MANAGEMENT", label: t("categories.projectManagement") },
+    { value: "CRM", label: t("categories.crm") },
+    { value: "ANALYTICS", label: t("categories.analytics") },
+    { value: "SECURITY", label: t("categories.security") },
+    { value: "DEVELOPER_TOOLS", label: t("categories.developerTools") },
+    { value: "HR", label: t("categories.hr") },
+    { value: "FINANCE", label: t("categories.finance") },
+    { value: "MARKETING", label: t("categories.marketing") },
+    { value: "CUSTOMER_SUPPORT", label: t("categories.customerSupport") },
+    { value: "OTHER", label: t("categories.other") },
+  ]
+
+  const statuses = [
+    { value: "DRAFT", label: t("status.draft") },
+    { value: "PENDING_REVIEW", label: t("status.pendingReview") },
+    { value: "APPROVED", label: t("status.approved") },
+    { value: "PUBLISHED", label: t("status.published") },
+    { value: "DEPRECATED", label: t("status.deprecated") },
+    { value: "REMOVED", label: t("status.removed") },
+  ]
+
   const [apps, setApps] = useState<IntegrationApp[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -151,7 +155,7 @@ export default function IntegrationAppsPage() {
         throw new Error(data.error || "Failed to create app")
       }
 
-      toast.success("Integration app created")
+      toast.success(t("toast.appCreated"))
 
       setIsCreateOpen(false)
       setNewApp({
@@ -167,7 +171,7 @@ export default function IntegrationAppsPage() {
       })
       fetchApps()
     } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : "Failed to create app")
+      toast.error(error instanceof Error ? error.message : t("toast.createFailed"))
     }
   }
 
@@ -183,10 +187,10 @@ export default function IntegrationAppsPage() {
         throw new Error("Failed to update app")
       }
 
-      toast.success(app.isFeatured ? "Removed from featured" : "Added to featured")
+      toast.success(app.isFeatured ? t("toast.removedFromFeatured") : t("toast.addedToFeatured"))
       fetchApps()
     } catch (error) {
-      toast.error("Failed to update app")
+      toast.error(t("toast.updateFailed"))
     }
   }
 
@@ -202,10 +206,10 @@ export default function IntegrationAppsPage() {
         throw new Error("Failed to update app")
       }
 
-      toast.success(`Status updated to ${newStatus.toLowerCase()}`)
+      toast.success(t("toast.statusUpdated", { status: newStatus.toLowerCase() }))
       fetchApps()
     } catch (error) {
-      toast.error("Failed to update status")
+      toast.error(t("toast.updateStatusFailed"))
     }
   }
 
@@ -220,10 +224,10 @@ export default function IntegrationAppsPage() {
         throw new Error(data.error || "Failed to delete app")
       }
 
-      toast.success("Integration app deleted")
+      toast.success(t("toast.appDeleted"))
       fetchApps()
     } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete app")
+      toast.error(error instanceof Error ? error.message : t("toast.deleteFailed"))
     }
   }
 
@@ -238,10 +242,10 @@ export default function IntegrationAppsPage() {
           })
         )
       )
-      toast.success(`${ids.length} app(s) updated to ${newStatus.toLowerCase()}`)
+      toast.success(t("toast.bulkStatusUpdated", { count: ids.length, status: newStatus.toLowerCase() }))
       fetchApps()
     } catch (error) {
-      toast.error("Failed to update apps")
+      toast.error(t("toast.bulkUpdateFailed"))
     }
   }
 
@@ -254,27 +258,27 @@ export default function IntegrationAppsPage() {
           })
         )
       )
-      toast.success(`${ids.length} app(s) deleted`)
+      toast.success(t("toast.bulkDeleted", { count: ids.length }))
       fetchApps()
     } catch (error) {
-      toast.error("Failed to delete apps")
+      toast.error(t("toast.bulkDeleteFailed"))
     }
   }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "PUBLISHED":
-        return <Badge className="bg-green-500">Published</Badge>
+        return <Badge className="bg-green-500">{t("status.published")}</Badge>
       case "APPROVED":
-        return <Badge className="bg-blue-500">Approved</Badge>
+        return <Badge className="bg-blue-500">{t("status.approved")}</Badge>
       case "PENDING_REVIEW":
-        return <Badge className="bg-yellow-500">Pending Review</Badge>
+        return <Badge className="bg-yellow-500">{t("status.pendingReview")}</Badge>
       case "DRAFT":
-        return <Badge variant="outline">Draft</Badge>
+        return <Badge variant="outline">{t("status.draft")}</Badge>
       case "DEPRECATED":
-        return <Badge variant="secondary">Deprecated</Badge>
+        return <Badge variant="secondary">{t("status.deprecated")}</Badge>
       case "REMOVED":
-        return <Badge variant="destructive">Removed</Badge>
+        return <Badge variant="destructive">{t("status.removed")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -298,7 +302,7 @@ export default function IntegrationAppsPage() {
   const columns: Column<IntegrationApp>[] = [
     {
       id: "app",
-      header: "App",
+      header: t("table.app"),
       cell: (app) => (
         <div className="flex items-center gap-3">
           {app.iconUrl ? (
@@ -316,12 +320,12 @@ export default function IntegrationAppsPage() {
             <div className="flex items-center gap-2">
               <p className="font-medium">{app.name}</p>
               {app.isOfficial && (
-                <span title="Official">
+                <span title={t("badges.official")}>
                   <Shield className="h-4 w-4 text-blue-500" />
                 </span>
               )}
               {app.isFeatured && (
-                <span title="Featured">
+                <span title={t("badges.featured")}>
                   <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
                 </span>
               )}
@@ -335,7 +339,7 @@ export default function IntegrationAppsPage() {
     },
     {
       id: "category",
-      header: "Category",
+      header: t("table.category"),
       cell: (app) => (
         <Badge variant="outline">
           {categories.find((c) => c.value === app.category)?.label || app.category}
@@ -344,7 +348,7 @@ export default function IntegrationAppsPage() {
     },
     {
       id: "developer",
-      header: "Developer",
+      header: t("table.developer"),
       cell: (app) => (
         <div className="flex items-center gap-2">
           <Building2 className="h-4 w-4 text-muted-foreground" />
@@ -354,12 +358,12 @@ export default function IntegrationAppsPage() {
     },
     {
       id: "status",
-      header: "Status",
+      header: t("table.status"),
       cell: (app) => getStatusBadge(app.status),
     },
     {
       id: "installs",
-      header: "Installs",
+      header: t("table.installs"),
       cell: (app) => (
         <div className="flex items-center gap-1">
           <Download className="h-4 w-4 text-muted-foreground" />
@@ -369,7 +373,7 @@ export default function IntegrationAppsPage() {
     },
     {
       id: "rating",
-      header: "Rating",
+      header: t("table.rating"),
       cell: (app) =>
         app.rating ? (
           <div className="flex items-center gap-1">
@@ -378,7 +382,7 @@ export default function IntegrationAppsPage() {
             <span className="text-xs text-muted-foreground">({app.reviewCount})</span>
           </div>
         ) : (
-          <span className="text-xs text-muted-foreground">No reviews</span>
+          <span className="text-xs text-muted-foreground">{t("table.noReviews")}</span>
         ),
     },
   ]
@@ -386,38 +390,38 @@ export default function IntegrationAppsPage() {
   // Row actions
   const rowActions: RowAction<IntegrationApp>[] = [
     {
-      label: "Make Featured",
+      label: t("actions.makeFeatured"),
       icon: <Star className="h-4 w-4" />,
       onClick: handleToggleFeatured,
       hidden: (app) => app.isFeatured,
     },
     {
-      label: "Remove Featured",
+      label: t("actions.removeFeatured"),
       icon: <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />,
       onClick: handleToggleFeatured,
       hidden: (app) => !app.isFeatured,
     },
     {
       separator: true,
-      label: "Approve",
+      label: t("actions.approve"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (app) => handleUpdateStatus(app, "APPROVED"),
       hidden: (app) => app.status === "APPROVED",
     },
     {
-      label: "Publish",
+      label: t("actions.publish"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (app) => handleUpdateStatus(app, "PUBLISHED"),
       hidden: (app) => app.status === "PUBLISHED",
     },
     {
-      label: "Deprecate",
+      label: t("actions.deprecate"),
       icon: <Clock className="h-4 w-4" />,
       onClick: (app) => handleUpdateStatus(app, "DEPRECATED"),
       hidden: (app) => app.status === "DEPRECATED",
     },
     {
-      label: "Remove",
+      label: t("actions.remove"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: (app) => handleUpdateStatus(app, "REMOVED"),
       variant: "destructive",
@@ -428,34 +432,34 @@ export default function IntegrationAppsPage() {
   // Bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Approve Selected",
+      label: t("bulkActions.approveSelected"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusUpdate(ids, "APPROVED"),
-      confirmTitle: "Approve Apps",
-      confirmDescription: "Are you sure you want to approve the selected apps?",
+      confirmTitle: t("bulkActions.approveConfirmTitle"),
+      confirmDescription: t("bulkActions.approveConfirmDescription"),
     },
     {
-      label: "Publish Selected",
+      label: t("bulkActions.publishSelected"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusUpdate(ids, "PUBLISHED"),
-      confirmTitle: "Publish Apps",
-      confirmDescription: "Are you sure you want to publish the selected apps?",
+      confirmTitle: t("bulkActions.publishConfirmTitle"),
+      confirmDescription: t("bulkActions.publishConfirmDescription"),
     },
     {
-      label: "Deprecate Selected",
+      label: t("bulkActions.deprecateSelected"),
       icon: <Clock className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusUpdate(ids, "DEPRECATED"),
-      confirmTitle: "Deprecate Apps",
-      confirmDescription: "Are you sure you want to deprecate the selected apps?",
+      confirmTitle: t("bulkActions.deprecateConfirmTitle"),
+      confirmDescription: t("bulkActions.deprecateConfirmDescription"),
     },
     {
       separator: true,
-      label: "Delete Selected",
+      label: t("bulkActions.deleteSelected"),
       icon: <Trash className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
-      confirmTitle: "Delete Apps",
-      confirmDescription: "Are you sure you want to delete the selected apps? This action cannot be undone.",
+      confirmTitle: t("bulkActions.deleteConfirmTitle"),
+      confirmDescription: t("bulkActions.deleteConfirmDescription"),
     },
   ]
 
@@ -466,33 +470,33 @@ export default function IntegrationAppsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Puzzle className="h-8 w-8 text-primary" />
-            Integration Apps
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Manage the integration app marketplace
+            {t("description")}
           </p>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              Create App
+              {t("createButton")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Create Integration App</DialogTitle>
+              <DialogTitle>{t("createDialog.title")}</DialogTitle>
               <DialogDescription>
-                Add a new integration app to the marketplace
+                {t("createDialog.description")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto">
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="name">App Name *</Label>
+                  <Label htmlFor="name">{t("form.appNameRequired")}</Label>
                   <Input
                     id="name"
-                    placeholder="My Integration"
+                    placeholder={t("form.appNamePlaceholder")}
                     value={newApp.name}
                     onChange={(e) =>
                       setNewApp({ ...newApp, name: e.target.value })
@@ -500,7 +504,7 @@ export default function IntegrationAppsPage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label>Category *</Label>
+                  <Label>{t("form.categoryRequired")}</Label>
                   <Select
                     value={newApp.category}
                     onValueChange={(value) =>
@@ -521,10 +525,10 @@ export default function IntegrationAppsPage() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="shortDescription">Short Description</Label>
+                <Label htmlFor="shortDescription">{t("form.shortDescription")}</Label>
                 <Input
                   id="shortDescription"
-                  placeholder="A brief description of the app"
+                  placeholder={t("form.shortDescriptionPlaceholder")}
                   value={newApp.shortDescription}
                   onChange={(e) =>
                     setNewApp({ ...newApp, shortDescription: e.target.value })
@@ -532,10 +536,10 @@ export default function IntegrationAppsPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="description">Full Description</Label>
+                <Label htmlFor="description">{t("form.fullDescription")}</Label>
                 <Textarea
                   id="description"
-                  placeholder="Detailed description of the integration"
+                  placeholder={t("form.fullDescriptionPlaceholder")}
                   value={newApp.description}
                   onChange={(e) =>
                     setNewApp({ ...newApp, description: e.target.value })
@@ -545,10 +549,10 @@ export default function IntegrationAppsPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="developer">Developer *</Label>
+                  <Label htmlFor="developer">{t("form.developerRequired")}</Label>
                   <Input
                     id="developer"
-                    placeholder="Developer name"
+                    placeholder={t("form.developerPlaceholder")}
                     value={newApp.developer}
                     onChange={(e) =>
                       setNewApp({ ...newApp, developer: e.target.value })
@@ -556,10 +560,10 @@ export default function IntegrationAppsPage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="developerUrl">Developer URL</Label>
+                  <Label htmlFor="developerUrl">{t("form.developerUrl")}</Label>
                   <Input
                     id="developerUrl"
-                    placeholder="https://developer.com"
+                    placeholder={t("form.developerUrlPlaceholder")}
                     value={newApp.developerUrl}
                     onChange={(e) =>
                       setNewApp({ ...newApp, developerUrl: e.target.value })
@@ -568,10 +572,10 @@ export default function IntegrationAppsPage() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="iconUrl">Icon URL</Label>
+                <Label htmlFor="iconUrl">{t("form.iconUrl")}</Label>
                 <Input
                   id="iconUrl"
-                  placeholder="https://example.com/icon.png"
+                  placeholder={t("form.iconUrlPlaceholder")}
                   value={newApp.iconUrl}
                   onChange={(e) =>
                     setNewApp({ ...newApp, iconUrl: e.target.value })
@@ -587,7 +591,7 @@ export default function IntegrationAppsPage() {
                       setNewApp({ ...newApp, isOfficial: checked as boolean })
                     }
                   />
-                  <Label htmlFor="isOfficial">Official App</Label>
+                  <Label htmlFor="isOfficial">{t("form.officialApp")}</Label>
                 </div>
                 <div className="flex items-center gap-2">
                   <Checkbox
@@ -597,19 +601,19 @@ export default function IntegrationAppsPage() {
                       setNewApp({ ...newApp, isFeatured: checked as boolean })
                     }
                   />
-                  <Label htmlFor="isFeatured">Featured App</Label>
+                  <Label htmlFor="isFeatured">{t("form.featuredApp")}</Label>
                 </div>
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button
                 onClick={handleCreateApp}
                 disabled={!newApp.name || !newApp.developer}
               >
-                Create App
+                {t("createButton")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -621,7 +625,7 @@ export default function IntegrationAppsPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{apps.length}</div>
-            <p className="text-xs text-muted-foreground">Total Apps</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalApps")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -629,7 +633,7 @@ export default function IntegrationAppsPage() {
             <div className="text-2xl font-bold text-green-500">
               {apps.filter((a) => a.status === "PUBLISHED").length}
             </div>
-            <p className="text-xs text-muted-foreground">Published</p>
+            <p className="text-xs text-muted-foreground">{t("stats.published")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -637,7 +641,7 @@ export default function IntegrationAppsPage() {
             <div className="text-2xl font-bold text-blue-500">
               {formatNumber(apps.reduce((acc, a) => acc + a.installCount, 0))}
             </div>
-            <p className="text-xs text-muted-foreground">Total Installs</p>
+            <p className="text-xs text-muted-foreground">{t("stats.totalInstalls")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -645,7 +649,7 @@ export default function IntegrationAppsPage() {
             <div className="text-2xl font-bold text-yellow-500">
               {apps.filter((a) => a.isFeatured).length}
             </div>
-            <p className="text-xs text-muted-foreground">Featured</p>
+            <p className="text-xs text-muted-foreground">{t("stats.featured")}</p>
           </CardContent>
         </Card>
       </div>
@@ -658,7 +662,7 @@ export default function IntegrationAppsPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search apps..."
+                  placeholder={t("filters.searchPlaceholder")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -667,10 +671,10 @@ export default function IntegrationAppsPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={tCommon("status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
                 {statuses.map((status) => (
                   <SelectItem key={status.value} value={status.value}>
                     {status.label}
@@ -680,10 +684,10 @@ export default function IntegrationAppsPage() {
             </Select>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Category" />
+                <SelectValue placeholder={t("table.category")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="all">{t("filters.allCategories")}</SelectItem>
                 {categories.map((cat) => (
                   <SelectItem key={cat.value} value={cat.value}>
                     {cat.label} {categoryCounts[cat.value] ? `(${categoryCounts[cat.value]})` : ""}
@@ -701,12 +705,12 @@ export default function IntegrationAppsPage() {
         columns={columns}
         getRowId={(app) => app.id}
         isLoading={loading}
-        emptyMessage="No integration apps found"
+        emptyMessage={t("table.noAppsFound")}
         viewHref={(app) => `/admin/integrations/apps/${app.id}`}
         onDelete={handleDeleteApp}
-        deleteConfirmTitle="Delete Integration App"
+        deleteConfirmTitle={t("deleteDialog.title")}
         deleteConfirmDescription={(app) =>
-          `Are you sure you want to delete "${app.name}"? This action cannot be undone.`
+          t("deleteDialog.description", { name: app.name })
         }
         rowActions={rowActions}
         bulkActions={bulkActions}

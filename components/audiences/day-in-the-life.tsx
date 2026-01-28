@@ -595,6 +595,7 @@ export function DayInTheLife({
   audienceCriteria,
   className,
 }: DayInTheLifeProps) {
+  const t = useTranslations("audiences")
   const [dayType, setDayType] = useState<"weekday" | "weekend">("weekday")
   const [isLoading, setIsLoading] = useState(true)
   const [dayProfile, setDayProfile] = useState<DayProfile | null>(null)

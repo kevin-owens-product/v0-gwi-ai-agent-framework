@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Users, GripVertical, Maximize2, Download, MoreHorizontal, Plus, Sparkles, BarChart3, Table as TableIcon } from "lucide-react"
@@ -32,7 +33,7 @@ function outputBlockToCanvasBlock(outputBlock: OutputBlock, index: number): Canv
   }
 }
 
-function PersonaBlock({ block }: { block: CanvasBlock }) {
+function PersonaBlock({ block, t }: { block: CanvasBlock; t: ReturnType<typeof useTranslations> }) {
   return (
     <div className="h-full flex flex-col">
       <div className="flex items-center gap-3 mb-4">
@@ -48,7 +49,7 @@ function PersonaBlock({ block }: { block: CanvasBlock }) {
       </div>
       <div className="space-y-3 flex-1">
         <div>
-          <p className="text-xs font-medium text-muted-foreground mb-1.5">VALUES</p>
+          <p className="text-xs font-medium text-muted-foreground mb-1.5">{t("values")}</p>
           <div className="flex flex-wrap gap-1.5">
             {block.data.values.map((value: string) => (
               <span key={value} className="px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs">
@@ -58,7 +59,7 @@ function PersonaBlock({ block }: { block: CanvasBlock }) {
           </div>
         </div>
         <div>
-          <p className="text-xs font-medium text-muted-foreground mb-1.5">BEHAVIORS</p>
+          <p className="text-xs font-medium text-muted-foreground mb-1.5">{t("behaviors")}</p>
           <ul className="space-y-1">
             {block.data.behaviors.map((behavior: string) => (
               <li key={behavior} className="text-xs text-muted-foreground flex items-center gap-2">
@@ -107,7 +108,7 @@ function ChartBlock({ block }: { block: CanvasBlock }) {
   )
 }
 
-function InsightBlock({ block }: { block: CanvasBlock }) {
+function InsightBlock({ block, t }: { block: CanvasBlock; t: ReturnType<typeof useTranslations> }) {
   return (
     <div className="h-full flex flex-col">
       <div className="flex-1">
@@ -118,7 +119,7 @@ function InsightBlock({ block }: { block: CanvasBlock }) {
         <span className="text-xs text-muted-foreground">{block.data.source}</span>
         <div className="flex items-center gap-1.5">
           <div className="w-2 h-2 rounded-full bg-emerald-500" />
-          <span className="text-xs font-medium text-emerald-500">{block.data.confidence}% confidence</span>
+          <span className="text-xs font-medium text-emerald-500">{block.data.confidence}% {t("confidence")}</span>
         </div>
       </div>
     </div>
@@ -216,6 +217,7 @@ function TableBlock({ block }: { block: CanvasBlock }) {
 }
 
 export function PlaygroundCanvas() {
+  const t = useTranslations("playground.canvas")
   const { selectedBlocks, setSelectedBlocks, messages, addOutput } = usePlayground()
   const [, setHoveredBlock] = useState<string | null>(null)
   const [removedBlockIds, setRemovedBlockIds] = useState<Set<string>>(new Set())
@@ -247,11 +249,11 @@ export function PlaygroundCanvas() {
   const renderBlockContent = (block: CanvasBlock) => {
     switch (block.type) {
       case "persona":
-        return <PersonaBlock block={block} />
+        return <PersonaBlock block={block} t={t} />
       case "chart":
         return <ChartBlock block={block} />
       case "insight":
-        return <InsightBlock block={block} />
+        return <InsightBlock block={block} t={t} />
       case "comparison":
         return <ComparisonBlock block={block} />
       case "table":
@@ -269,9 +271,9 @@ export function PlaygroundCanvas() {
             <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mx-auto mb-4">
               <Sparkles className="h-8 w-8 text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-medium text-foreground mb-2">No blocks yet</h3>
+            <h3 className="text-lg font-medium text-foreground mb-2">{t("noBlocksYet")}</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Use the chat to ask questions and generate insights. Output blocks like charts, personas, and comparisons will appear here for you to visualize and export.
+              {t("useChat")}
             </p>
             <div className="flex flex-wrap justify-center gap-2 mb-4">
               <Button
@@ -281,7 +283,7 @@ export function PlaygroundCanvas() {
                 onClick={() => addOutput("chart")}
               >
                 <BarChart3 className="h-3 w-3 mr-1" />
-                Add Chart
+                {t("addChart")}
               </Button>
               <Button
                 variant="outline"
@@ -290,7 +292,7 @@ export function PlaygroundCanvas() {
                 onClick={() => addOutput("table")}
               >
                 <TableIcon className="h-3 w-3 mr-1" />
-                Add Table
+                {t("addTable")}
               </Button>
               <Button
                 variant="outline"
@@ -299,11 +301,11 @@ export function PlaygroundCanvas() {
                 onClick={() => addOutput("persona")}
               >
                 <Users className="h-3 w-3 mr-1" />
-                Add Persona
+                {t("addPersona")}
               </Button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Or use the toolbar to add blocks manually.
+              {t("useToolbar")}
             </p>
           </div>
         </div>
@@ -343,11 +345,11 @@ export function PlaygroundCanvas() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                    <DropdownMenuItem>Export</DropdownMenuItem>
+                    <DropdownMenuItem>{t("edit")}</DropdownMenuItem>
+                    <DropdownMenuItem>{t("duplicate")}</DropdownMenuItem>
+                    <DropdownMenuItem>{t("export")}</DropdownMenuItem>
                     <DropdownMenuItem className="text-destructive" onClick={() => removeBlock(block.id)}>
-                      Delete
+                      {t("delete")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -372,7 +374,7 @@ export function PlaygroundCanvas() {
                     <Plus className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
                   </div>
                   <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-                    Add Block
+                    {t("addBlock")}
                   </p>
                 </div>
               </Card>
@@ -380,19 +382,19 @@ export function PlaygroundCanvas() {
             <DropdownMenuContent align="center">
               <DropdownMenuItem onClick={() => addOutput("chart")}>
                 <BarChart3 className="h-4 w-4 mr-2" />
-                Chart
+                {t("chart")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => addOutput("table")}>
                 <TableIcon className="h-4 w-4 mr-2" />
-                Table
+                {t("table")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => addOutput("persona")}>
                 <Users className="h-4 w-4 mr-2" />
-                Persona
+                {t("persona")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => addOutput("comparison")}>
                 <BarChart3 className="h-4 w-4 mr-2" />
-                Comparison
+                {t("comparison")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

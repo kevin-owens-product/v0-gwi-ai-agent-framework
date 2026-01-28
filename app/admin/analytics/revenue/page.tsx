@@ -7,6 +7,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -101,6 +102,8 @@ interface RevenueForecast {
 }
 
 export default function RevenueAnalyticsPage() {
+  const t = useTranslations("admin.analytics.revenue")
+  const tCommon = useTranslations("admin.analytics")
   const [summary, setSummary] = useState<RevenueSummary | null>(null)
   const [metrics, setMetrics] = useState<RevenueMetric[]>([])
   const [mrrBreakdown, setMrrBreakdown] = useState<MRRBreakdown | null>(null)
@@ -198,10 +201,10 @@ export default function RevenueAnalyticsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <DollarSign className="h-8 w-8 text-primary" />
-            Revenue Analytics
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Track MRR, ARR, churn, and revenue trends
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
@@ -211,16 +214,16 @@ export default function RevenueAnalyticsPage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="DAILY">Daily</SelectItem>
-              <SelectItem value="WEEKLY">Weekly</SelectItem>
-              <SelectItem value="MONTHLY">Monthly</SelectItem>
-              <SelectItem value="QUARTERLY">Quarterly</SelectItem>
-              <SelectItem value="YEARLY">Yearly</SelectItem>
+              <SelectItem value="DAILY">{tCommon("periodOptions.daily")}</SelectItem>
+              <SelectItem value="WEEKLY">{tCommon("periodOptions.weekly")}</SelectItem>
+              <SelectItem value="MONTHLY">{tCommon("periodOptions.monthly")}</SelectItem>
+              <SelectItem value="QUARTERLY">{tCommon("periodOptions.quarterly")}</SelectItem>
+              <SelectItem value="YEARLY">{tCommon("periodOptions.yearly")}</SelectItem>
             </SelectContent>
           </Select>
           <Button variant="outline" onClick={fetchRevenueData} disabled={isLoading}>
             <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
-            Refresh
+            {tCommon("actions.refresh")}
           </Button>
           <Button variant="outline" onClick={calculateMetrics} disabled={isCalculating}>
             {isCalculating ? (
@@ -228,11 +231,11 @@ export default function RevenueAnalyticsPage() {
             ) : (
               <Calculator className="h-4 w-4 mr-2" />
             )}
-            Calculate
+            {t("actions.calculate")}
           </Button>
           <Button variant="outline" onClick={exportData}>
             <Download className="h-4 w-4 mr-2" />
-            Export
+            {tCommon("actions.export")}
           </Button>
         </div>
       </div>
@@ -247,19 +250,19 @@ export default function RevenueAnalyticsPage() {
         <TabsList>
           <TabsTrigger value="overview" className="gap-2">
             <BarChart3 className="h-4 w-4" />
-            Overview
+            {t("tabs.overview")}
           </TabsTrigger>
           <TabsTrigger value="trends" className="gap-2">
             <TrendingUp className="h-4 w-4" />
-            Trends
+            {t("tabs.trends")}
           </TabsTrigger>
           <TabsTrigger value="cohorts" className="gap-2">
             <DollarSign className="h-4 w-4" />
-            Cohorts
+            {t("tabs.cohorts")}
           </TabsTrigger>
           <TabsTrigger value="forecast" className="gap-2">
             <Calendar className="h-4 w-4" />
-            Forecast
+            {t("tabs.forecast")}
           </TabsTrigger>
         </TabsList>
 
@@ -298,29 +301,29 @@ export default function RevenueAnalyticsPage() {
           {/* Detailed Metrics Table */}
           <Card>
             <CardHeader>
-              <CardTitle>Revenue Metrics History</CardTitle>
-              <CardDescription>Detailed breakdown by period</CardDescription>
+              <CardTitle>{t("metricsHistory.title")}</CardTitle>
+              <CardDescription>{t("metricsHistory.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="rounded-md border overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b bg-muted/50">
-                      <th className="text-left p-3">Date</th>
-                      <th className="text-right p-3">MRR</th>
-                      <th className="text-right p-3">New</th>
-                      <th className="text-right p-3">Expansion</th>
-                      <th className="text-right p-3">Contraction</th>
-                      <th className="text-right p-3">Churn</th>
-                      <th className="text-right p-3">Net New</th>
-                      <th className="text-right p-3">Customers</th>
+                      <th className="text-left p-3">{t("metricsHistory.date")}</th>
+                      <th className="text-right p-3">{t("metricsHistory.mrr")}</th>
+                      <th className="text-right p-3">{t("metricsHistory.new")}</th>
+                      <th className="text-right p-3">{t("metricsHistory.expansion")}</th>
+                      <th className="text-right p-3">{t("metricsHistory.contraction")}</th>
+                      <th className="text-right p-3">{t("metricsHistory.churn")}</th>
+                      <th className="text-right p-3">{t("metricsHistory.netNew")}</th>
+                      <th className="text-right p-3">{t("metricsHistory.customers")}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {metrics.length === 0 ? (
                       <tr>
                         <td colSpan={8} className="text-center py-8 text-muted-foreground">
-                          No metrics data available. Click "Calculate" to generate.
+                          {t("metricsHistory.noData")}
                         </td>
                       </tr>
                     ) : (
@@ -372,8 +375,8 @@ export default function RevenueAnalyticsPage() {
           {mrrBreakdown && (
             <Card>
               <CardHeader>
-                <CardTitle>Plan Distribution</CardTitle>
-                <CardDescription>Revenue and customer breakdown by plan tier</CardDescription>
+                <CardTitle>{t("planDistribution.title")}</CardTitle>
+                <CardDescription>{t("planDistribution.description")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4 md:grid-cols-3">
@@ -384,10 +387,10 @@ export default function RevenueAnalyticsPage() {
                         {formatCurrency(plan.mrr)}
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        {plan.customerCount} customers ({plan.percentage.toFixed(1)}%)
+                        {t("planDistribution.customers", { count: plan.customerCount, percentage: plan.percentage.toFixed(1) })}
                       </div>
                       <div className="mt-2 text-sm">
-                        ARPU: {plan.customerCount > 0 ? formatCurrency(plan.mrr / plan.customerCount) : "$0"}
+                        {t("planDistribution.arpu")}: {plan.customerCount > 0 ? formatCurrency(plan.mrr / plan.customerCount) : "$0"}
                       </div>
                     </div>
                   ))}
@@ -400,13 +403,13 @@ export default function RevenueAnalyticsPage() {
         <TabsContent value="forecast" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Revenue Forecast</CardTitle>
-              <CardDescription>12-month revenue projections based on historical trends</CardDescription>
+              <CardTitle>{t("forecast.title")}</CardTitle>
+              <CardDescription>{t("forecast.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               {forecast.length === 0 ? (
                 <div className="h-48 flex items-center justify-center text-muted-foreground">
-                  No forecast data available. Calculate metrics to generate forecasts.
+                  {t("forecast.noData")}
                 </div>
               ) : (
                 <>
@@ -428,9 +431,9 @@ export default function RevenueAnalyticsPage() {
                             <div className="absolute bottom-full mb-2 hidden group-hover:block z-10">
                               <div className="bg-popover text-popover-foreground rounded-md shadow-lg p-2 text-xs whitespace-nowrap">
                                 <div className="font-medium">{point.period}</div>
-                                <div>Projected: {formatCurrency(point.projectedMrr)}</div>
-                                <div>Range: {formatCurrency(point.lowerBound)} - {formatCurrency(point.upperBound)}</div>
-                                <div>Confidence: {point.confidence}%</div>
+                                <div>{t("forecast.projected")}: {formatCurrency(point.projectedMrr)}</div>
+                                <div>{t("forecast.range")}: {formatCurrency(point.lowerBound)} - {formatCurrency(point.upperBound)}</div>
+                                <div>{t("forecast.confidence")}: {point.confidence}%</div>
                               </div>
                             </div>
 
@@ -466,12 +469,12 @@ export default function RevenueAnalyticsPage() {
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-b bg-muted/50">
-                          <th className="text-left p-3">Period</th>
-                          <th className="text-right p-3">Projected MRR</th>
-                          <th className="text-right p-3">Projected ARR</th>
-                          <th className="text-right p-3">Lower Bound</th>
-                          <th className="text-right p-3">Upper Bound</th>
-                          <th className="text-right p-3">Confidence</th>
+                          <th className="text-left p-3">{t("forecast.period")}</th>
+                          <th className="text-right p-3">{t("forecast.projectedMrr")}</th>
+                          <th className="text-right p-3">{t("forecast.projectedArr")}</th>
+                          <th className="text-right p-3">{t("forecast.lowerBound")}</th>
+                          <th className="text-right p-3">{t("forecast.upperBound")}</th>
+                          <th className="text-right p-3">{t("forecast.confidenceLabel")}</th>
                         </tr>
                       </thead>
                       <tbody>

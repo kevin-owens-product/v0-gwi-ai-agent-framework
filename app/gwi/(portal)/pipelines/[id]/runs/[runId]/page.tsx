@@ -285,7 +285,7 @@ async function PipelineRunDetailContent({
                   <dd className="mt-1">{new Date(run.startedAt).toLocaleString()}</dd>
                 </div>
                 <div>
-                  <dt className="text-sm font-medium text-muted-foreground">Completed At</dt>
+                  <dt className="text-sm font-medium text-muted-foreground">{t('completedAt')}</dt>
                   <dd className="mt-1">
                     {run.completedAt
                       ? new Date(run.completedAt).toLocaleString()

@@ -6,6 +6,7 @@
 
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
@@ -57,6 +58,8 @@ export function HealthScoreBreakdown({
   metadata,
   className,
 }: HealthScoreBreakdownProps) {
+  const t = useTranslations("admin.healthScores.breakdown")
+  
   const getScoreColor = (value: number) => {
     if (value >= 70) return "text-green-500"
     if (value >= 50) return "text-amber-500"
@@ -68,52 +71,52 @@ export function HealthScoreBreakdown({
 
   const components = [
     {
-      name: "Usage",
+      name: t("usage.name"),
       score: usageScore,
-      weight: "25%",
+      weight: t("usage.weight"),
       icon: Activity,
-      description: "API calls, token usage, and feature utilization",
-      detail: details ? `${details.apiCalls?.toLocaleString() || 0} API calls, ${details.featureUsageCount || 0} features used` : undefined,
+      description: t("usage.description"),
+      detail: details ? `${t("apiCalls", { count: details.apiCalls?.toLocaleString() || 0 })}, ${t("featuresUsed", { count: details.featureUsageCount || 0 })}` : undefined,
     },
     {
-      name: "Engagement",
+      name: t("engagement.name"),
       score: engagementScore,
-      weight: "25%",
+      weight: t("engagement.weight"),
       icon: Users,
-      description: "Active users and login frequency",
-      detail: details ? `${details.activeUsers || 0}/${details.totalMembers || 0} active users, ${details.logins || 0} logins` : undefined,
+      description: t("engagement.description"),
+      detail: details ? `${t("activeUsers", { active: details.activeUsers || 0, total: details.totalMembers || 0 })}, ${t("logins", { count: details.logins || 0 })}` : undefined,
     },
     {
-      name: "Support",
+      name: t("support.name"),
       score: supportScore,
-      weight: "15%",
+      weight: t("support.weight"),
       icon: Headphones,
-      description: "Ticket volume and resolution time",
-      detail: details ? `${details.ticketCount || 0} tickets, ~${details.avgResolutionTime || 0}h avg resolution` : undefined,
+      description: t("support.description"),
+      detail: details ? `${t("tickets", { count: details.ticketCount || 0 })}, ${t("avgResolution", { hours: details.avgResolutionTime || 0 })}` : undefined,
     },
     {
-      name: "Payment",
+      name: t("payment.name"),
       score: paymentScore,
-      weight: "20%",
+      weight: t("payment.weight"),
       icon: CreditCard,
-      description: "Payment success rate and billing health",
-      detail: details ? `${details.paymentSuccess || 0} successful, ${details.paymentFailures || 0} failed` : undefined,
+      description: t("payment.description"),
+      detail: details ? `${t("paymentSuccess", { count: details.paymentSuccess || 0 })}, ${t("paymentFailures", { count: details.paymentFailures || 0 })}` : undefined,
     },
     {
-      name: "Growth",
+      name: t("growth.name"),
       score: growthScore,
-      weight: "15%",
+      weight: t("growth.weight"),
       icon: TrendingUp,
-      description: "User and usage growth trends",
-      detail: details ? `${details.userGrowth || 0}% user growth, ${details.usageGrowth || 0}% usage growth` : undefined,
+      description: t("growth.description"),
+      detail: details ? `${t("userGrowth", { percent: details.userGrowth || 0 })}, ${t("usageGrowth", { percent: details.usageGrowth || 0 })}` : undefined,
     },
   ]
 
   return (
     <Card className={cn(className)}>
       <CardHeader>
-        <CardTitle>Score Breakdown</CardTitle>
-        <CardDescription>Detailed analysis of health score components</CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <TooltipProvider>
@@ -158,7 +161,7 @@ export function HealthScoreBreakdown({
         {/* Weight explanation */}
         <div className="pt-4 border-t">
           <p className="text-xs text-muted-foreground">
-            Overall score is calculated as: Usage (25%) + Engagement (25%) + Support (15%) + Payment (20%) + Growth (15%)
+            {t("formula")}
           </p>
         </div>
       </CardContent>

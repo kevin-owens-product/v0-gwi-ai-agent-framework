@@ -68,32 +68,32 @@ interface SyncHistoryTableProps {
 
 const STATUS_CONFIG: Record<DataSyncStatus, {
   icon: React.ComponentType<{ className?: string }>
-  label: string
+  labelKey: string
   className: string
 }> = {
   COMPLETED: {
     icon: CheckCircle2,
-    label: 'Completed',
+    labelKey: 'completed',
     className: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
   },
   RUNNING: {
     icon: Loader2,
-    label: 'Running',
+    labelKey: 'running',
     className: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
   },
   PENDING: {
     icon: Clock,
-    label: 'Pending',
+    labelKey: 'pending',
     className: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20',
   },
   FAILED: {
     icon: XCircle,
-    label: 'Failed',
+    labelKey: 'failed',
     className: 'bg-red-500/10 text-red-600 border-red-500/20',
   },
   CANCELLED: {
     icon: AlertTriangle,
-    label: 'Cancelled',
+    labelKey: 'cancelled',
     className: 'bg-gray-500/10 text-gray-600 border-gray-500/20',
   },
 }
@@ -104,6 +104,7 @@ export function SyncHistoryTable({
   isLoading: initialLoading,
   onRefresh,
 }: SyncHistoryTableProps) {
+  const t = useTranslations('connectors')
   const tTable = useTranslations('ui.table')
   const tPagination = useTranslations('ui.pagination')
   const tCommon = useTranslations('common')
@@ -153,8 +154,8 @@ export function SyncHistoryTable({
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
   }
 
-  const formatDuration = (start: Date, end: Date | null): string => {
-    if (!end) return 'In progress'
+  const formatDuration = (start: Date, end: Date | null, inProgressText: string): string => {
+    if (!end) return inProgressText
     const ms = new Date(end).getTime() - new Date(start).getTime()
     if (ms < 1000) return `${ms}ms`
     if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`
@@ -181,15 +182,15 @@ export function SyncHistoryTable({
             }}
           >
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by status" />
+              <SelectValue placeholder={t('syncHistory.filterByStatus')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
-              <SelectItem value="COMPLETED">Completed</SelectItem>
-              <SelectItem value="RUNNING">Running</SelectItem>
-              <SelectItem value="PENDING">Pending</SelectItem>
-              <SelectItem value="FAILED">Failed</SelectItem>
-              <SelectItem value="CANCELLED">Cancelled</SelectItem>
+              <SelectItem value="all">{t('syncHistory.allStatuses')}</SelectItem>
+              <SelectItem value="COMPLETED">{tCommon('completed')}</SelectItem>
+              <SelectItem value="RUNNING">{tCommon('running')}</SelectItem>
+              <SelectItem value="PENDING">{tCommon('pending')}</SelectItem>
+              <SelectItem value="FAILED">{tCommon('failed')}</SelectItem>
+              <SelectItem value="CANCELLED">{tCommon('cancelled')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -204,11 +205,11 @@ export function SyncHistoryTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Status</TableHead>
-              <TableHead>Started</TableHead>
-              <TableHead className="text-right">Records</TableHead>
-              <TableHead className="text-right">Data</TableHead>
-              <TableHead className="text-right">Duration</TableHead>
+              <TableHead>{tCommon('status')}</TableHead>
+              <TableHead>{t('syncHistory.started')}</TableHead>
+              <TableHead className="text-right">{t('syncHistory.records')}</TableHead>
+              <TableHead className="text-right">{t('syncHistory.data')}</TableHead>
+              <TableHead className="text-right">{t('syncHistory.duration')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -253,7 +254,7 @@ export function SyncHistoryTable({
                               log.status === 'RUNNING' ? 'animate-spin' : ''
                             }`}
                           />
-                          {statusConfig.label}
+                          {tCommon(statusConfig.labelKey)}
                         </Badge>
                         {log.error && (
                           <TooltipProvider>
@@ -302,7 +303,7 @@ export function SyncHistoryTable({
                     </TableCell>
                     <TableCell className="text-right">
                       <span className="text-sm text-muted-foreground">
-                        {formatDuration(log.startedAt, log.completedAt)}
+                        {formatDuration(log.startedAt, log.completedAt, t('syncHistory.inProgress'))}
                       </span>
                     </TableCell>
                   </TableRow>

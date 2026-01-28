@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -27,6 +28,7 @@ interface StatusData {
 }
 
 export default function StatusPage() {
+  const t = useTranslations("status")
   const [statusData, setStatusData] = useState<StatusData | null>(null)
   const [historicalIncidents, setHistoricalIncidents] = useState<Incident[]>([])
   const [loading, setLoading] = useState(true)
@@ -93,9 +95,9 @@ export default function StatusPage() {
       <div className="container mx-auto max-w-4xl py-12 px-4 space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold">System Status</h1>
+          <h1 className="text-4xl font-bold">{t("page.title")}</h1>
           <p className="text-lg text-muted-foreground">
-            Real-time status and incident history for our platform.
+            {t("page.description")}
           </p>
           <div className="flex items-center justify-center gap-4">
             <Button
@@ -107,11 +109,11 @@ export default function StatusPage() {
               <RefreshCw
                 className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`}
               />
-              Refresh
+              {t("page.refresh")}
             </Button>
             {statusData?.lastUpdated && (
               <span className="text-sm text-muted-foreground">
-                Last updated: {new Date(statusData.lastUpdated).toLocaleString()}
+                {t("page.lastUpdated", { time: new Date(statusData.lastUpdated).toLocaleString() })}
               </span>
             )}
           </div>
@@ -129,7 +131,7 @@ export default function StatusPage() {
         {/* Active Incidents */}
         {statusData && statusData.activeIncidents.length > 0 && (
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Active Incidents</h2>
+            <h2 className="text-2xl font-bold">{t("page.activeIncidents")}</h2>
             {statusData.activeIncidents.map((incident) => (
               <IncidentCard
                 key={incident.id}
@@ -147,13 +149,13 @@ export default function StatusPage() {
         {/* Incident History */}
         <Card>
           <CardHeader>
-            <CardTitle>Incident History</CardTitle>
-            <CardDescription>Past incidents from the last 30 days</CardDescription>
+            <CardTitle>{t("page.incidentHistory")}</CardTitle>
+            <CardDescription>{t("page.incidentHistoryDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             {historicalIncidents.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
-                No incidents in the last 30 days.
+                {t("page.noIncidents")}
               </div>
             ) : (
               <div className="space-y-4">
@@ -176,7 +178,7 @@ export default function StatusPage() {
         {/* Footer */}
         <footer className="text-center py-8 border-t">
           <p className="text-sm text-muted-foreground">
-            For urgent issues, please contact{" "}
+            {t("page.contactSupport")}{" "}
             <a href="mailto:support@example.com" className="underline">
               support@example.com
             </a>

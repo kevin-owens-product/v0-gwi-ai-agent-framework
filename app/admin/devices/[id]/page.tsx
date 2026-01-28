@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -100,6 +101,9 @@ export default function DeviceDetailPage() {
   const params = useParams()
   const router = useRouter()
   const deviceId = params.id as string
+  const t = useTranslations("admin.devices.detail")
+  const tMain = useTranslations("admin.devices")
+  const tCommon = useTranslations("common")
 
   const [device, setDevice] = useState<Device | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -132,11 +136,11 @@ export default function DeviceDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch device:", error)
-      toast.error("Failed to fetch device")
+      toast.error(t("errors.fetchFailed"))
     } finally {
       setIsLoading(false)
     }
-  }, [deviceId, router])
+  }, [deviceId, router, t])
 
   useEffect(() => {
     fetchDevice()
@@ -151,14 +155,14 @@ export default function DeviceDetailPage() {
         body: JSON.stringify(editForm),
       })
       if (response.ok) {
-        toast.success("Device updated successfully")
+        toast.success(t("messages.deviceUpdated"))
         setIsEditing(false)
         fetchDevice()
       } else {
-        throw new Error("Failed to update device")
+        throw new Error(t("errors.updateFailed"))
       }
-    } catch (error) {
-      toast.error("Failed to update device")
+    } catch {
+      toast.error(t("errors.updateFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -171,12 +175,12 @@ export default function DeviceDetailPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to trust device")
+        throw new Error(data.error || t("errors.trustFailed"))
       }
-      toast.success("Device trusted successfully")
+      toast.success(t("messages.deviceTrusted"))
       fetchDevice()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to trust device")
+      toast.error(error instanceof Error ? error.message : t("errors.trustFailed"))
     }
   }
 
@@ -189,16 +193,16 @@ export default function DeviceDetailPage() {
       const response = await fetch(`/api/admin/devices/${deviceId}/revoke`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reason: "Revoked by admin" }),
+        body: JSON.stringify({ reason: t("revokedByAdmin") }),
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to revoke device")
+        throw new Error(data.error || t("errors.revokeFailed"))
       }
-      toast.success("Device trust revoked")
+      toast.success(t("messages.trustRevoked"))
       fetchDevice()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to revoke device")
+      toast.error(error instanceof Error ? error.message : t("errors.revokeFailed"))
     } finally {
       setShowRevokeConfirm(false)
     }
@@ -214,13 +218,13 @@ export default function DeviceDetailPage() {
         method: "DELETE",
       })
       if (response.ok) {
-        toast.success("Device deleted successfully")
+        toast.success(t("messages.deviceDeleted"))
         router.push("/admin/devices")
       } else {
-        throw new Error("Failed to delete device")
+        throw new Error(t("errors.deleteFailed"))
       }
-    } catch (error) {
-      toast.error("Failed to delete device")
+    } catch {
+      toast.error(t("errors.deleteFailed"))
     } finally {
       setShowDeleteConfirm(false)
     }
@@ -247,28 +251,28 @@ export default function DeviceDetailPage() {
         return (
           <Badge className="bg-green-500">
             <CheckCircle className="h-3 w-3 mr-1" />
-            Trusted
+            {t("trustStatuses.trusted")}
           </Badge>
         )
       case "PENDING":
         return (
           <Badge variant="secondary">
             <Clock className="h-3 w-3 mr-1" />
-            Pending
+            {t("trustStatuses.pending")}
           </Badge>
         )
       case "BLOCKED":
         return (
           <Badge variant="destructive">
             <XCircle className="h-3 w-3 mr-1" />
-            Blocked
+            {t("trustStatuses.blocked")}
           </Badge>
         )
       case "REVOKED":
         return (
           <Badge variant="outline" className="text-orange-600 border-orange-600">
             <ShieldX className="h-3 w-3 mr-1" />
-            Revoked
+            {t("trustStatuses.revoked")}
           </Badge>
         )
       default:
@@ -289,11 +293,11 @@ export default function DeviceDetailPage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {tCommon("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Device not found</p>
+            <p className="text-muted-foreground">{t("deviceNotFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -308,7 +312,7 @@ export default function DeviceDetailPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/devices">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Link>
           </Button>
           <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -320,11 +324,11 @@ export default function DeviceDetailPage() {
             </h1>
             <div className="flex items-center gap-2">
               {getTrustStatusBadge(device.trustStatus)}
-              <Badge variant="outline">{device.type}</Badge>
+              <Badge variant="outline">{tMain(`deviceTypes.${device.type.toLowerCase()}`)}</Badge>
               {device.isManaged && (
                 <Badge variant="secondary">
                   <Settings className="h-3 w-3 mr-1" />
-                  MDM Managed
+                  {t("mdmManaged")}
                 </Badge>
               )}
             </div>
@@ -334,18 +338,18 @@ export default function DeviceDetailPage() {
           {device.trustStatus === "PENDING" && (
             <Button onClick={handleTrust}>
               <ShieldCheck className="h-4 w-4 mr-2" />
-              Approve Trust
+              {t("actions.approveTrust")}
             </Button>
           )}
           {device.trustStatus === "TRUSTED" && (
             <Button variant="secondary" onClick={handleRevokeClick}>
               <ShieldX className="h-4 w-4 mr-2" />
-              Revoke Trust
+              {t("actions.revokeTrust")}
             </Button>
           )}
           <Button variant="destructive" onClick={handleDeleteClick}>
             <Trash className="h-4 w-4 mr-2" />
-            Delete
+            {tCommon("delete")}
           </Button>
         </div>
       </div>
@@ -357,9 +361,9 @@ export default function DeviceDetailPage() {
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-destructive" />
               <div>
-                <p className="font-medium text-destructive">Device Non-Compliant</p>
+                <p className="font-medium text-destructive">{t("compliance.nonCompliantTitle")}</p>
                 <p className="text-sm text-muted-foreground">
-                  This device does not meet the required compliance standards
+                  {t("compliance.nonCompliantDescription")}
                 </p>
               </div>
             </div>
@@ -369,10 +373,10 @@ export default function DeviceDetailPage() {
 
       <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          <TabsTrigger value="user">User</TabsTrigger>
-          <TabsTrigger value="activity">Activity</TabsTrigger>
+          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="compliance">{t("tabs.compliance")}</TabsTrigger>
+          <TabsTrigger value="user">{t("tabs.user")}</TabsTrigger>
+          <TabsTrigger value="activity">{t("tabs.activity")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -380,7 +384,7 @@ export default function DeviceDetailPage() {
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Trust Status</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.trustStatus")}</CardTitle>
                 <ShieldCheck className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -389,33 +393,33 @@ export default function DeviceDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Compliance</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.compliance")}</CardTitle>
                 <ShieldAlert className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 {device.isCompliant ? (
-                  <Badge className="bg-green-500">Compliant</Badge>
+                  <Badge className="bg-green-500">{t("complianceStatuses.compliant")}</Badge>
                 ) : (
-                  <Badge variant="destructive">Non-Compliant</Badge>
+                  <Badge variant="destructive">{t("complianceStatuses.nonCompliant")}</Badge>
                 )}
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Last Active</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.lastActive")}</CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-sm font-medium">
                   {device.lastActiveAt
                     ? new Date(device.lastActiveAt).toLocaleDateString()
-                    : "Never"}
+                    : t("never")}
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Enrolled</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.enrolled")}</CardTitle>
                 <Calendar className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -430,7 +434,7 @@ export default function DeviceDetailPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Device Details</CardTitle>
+                <CardTitle>{t("sections.deviceDetails")}</CardTitle>
                 {isEditing ? (
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" onClick={() => setIsEditing(false)}>
@@ -451,18 +455,18 @@ export default function DeviceDetailPage() {
               {isEditing ? (
                 <>
                   <div className="space-y-2">
-                    <Label>Device Name</Label>
+                    <Label>{t("form.deviceName")}</Label>
                     <Input
                       value={editForm.name}
                       onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                      placeholder="Enter device name"
+                      placeholder={t("form.deviceNamePlaceholder")}
                     />
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label>MDM Managed</Label>
+                      <Label>{t("form.mdmManaged")}</Label>
                       <p className="text-sm text-muted-foreground">
-                        Mark this device as MDM managed
+                        {t("form.mdmManagedDescription")}
                       </p>
                     </div>
                     <Switch
@@ -476,46 +480,46 @@ export default function DeviceDetailPage() {
               ) : (
                 <>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Device ID</span>
+                    <span className="text-muted-foreground">{t("fields.deviceId")}</span>
                     <span className="font-mono text-sm">{device.deviceId}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Name</span>
-                    <span className="font-medium">{device.name || "Not set"}</span>
+                    <span className="text-muted-foreground">{t("fields.name")}</span>
+                    <span className="font-medium">{device.name || t("notSet")}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Type</span>
-                    <Badge variant="outline">{device.type}</Badge>
+                    <span className="text-muted-foreground">{t("fields.type")}</span>
+                    <Badge variant="outline">{tMain(`deviceTypes.${device.type.toLowerCase()}`)}</Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Platform</span>
-                    <span className="font-medium">{device.platform || "Unknown"}</span>
+                    <span className="text-muted-foreground">{t("fields.platform")}</span>
+                    <span className="font-medium">{device.platform || t("unknown")}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">OS Version</span>
-                    <span className="font-medium">{device.osVersion || "Unknown"}</span>
+                    <span className="text-muted-foreground">{t("fields.osVersion")}</span>
+                    <span className="font-medium">{device.osVersion || t("unknown")}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Manufacturer</span>
-                    <span className="font-medium">{device.manufacturer || "Unknown"}</span>
+                    <span className="text-muted-foreground">{t("fields.manufacturer")}</span>
+                    <span className="font-medium">{device.manufacturer || t("unknown")}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Model</span>
-                    <span className="font-medium">{device.model || "Unknown"}</span>
+                    <span className="text-muted-foreground">{t("fields.model")}</span>
+                    <span className="font-medium">{device.model || t("unknown")}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">App Version</span>
-                    <span className="font-medium">{device.appVersion || "Unknown"}</span>
+                    <span className="text-muted-foreground">{t("fields.appVersion")}</span>
+                    <span className="font-medium">{device.appVersion || t("unknown")}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">MDM Managed</span>
+                    <span className="text-muted-foreground">{t("fields.mdmManaged")}</span>
                     <Badge variant={device.isManaged ? "default" : "secondary"}>
-                      {device.isManaged ? "Yes" : "No"}
+                      {device.isManaged ? tCommon("yes") : tCommon("no")}
                     </Badge>
                   </div>
                   {device.mdmEnrolledAt && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">MDM Enrolled</span>
+                      <span className="text-muted-foreground">{t("fields.mdmEnrolled")}</span>
                       <span className="font-medium">
                         {new Date(device.mdmEnrolledAt).toLocaleDateString()}
                       </span>
@@ -529,32 +533,32 @@ export default function DeviceDetailPage() {
           {/* Location Info */}
           <Card>
             <CardHeader>
-              <CardTitle>Last Known Location</CardTitle>
+              <CardTitle>{t("sections.lastKnownLocation")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-muted-foreground flex items-center gap-2">
                   <Globe className="h-4 w-4" />
-                  IP Address
+                  {t("fields.ipAddress")}
                 </span>
-                <span className="font-mono">{device.lastIpAddress || "Unknown"}</span>
+                <span className="font-mono">{device.lastIpAddress || t("unknown")}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground flex items-center gap-2">
                   <MapPin className="h-4 w-4" />
-                  Location
+                  {t("fields.location")}
                 </span>
-                <span className="font-medium">{device.lastLocation || "Unknown"}</span>
+                <span className="font-medium">{device.lastLocation || t("unknown")}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground flex items-center gap-2">
                   <Clock className="h-4 w-4" />
-                  Last Seen
+                  {t("fields.lastSeen")}
                 </span>
                 <span className="font-medium">
                   {device.lastActiveAt
                     ? new Date(device.lastActiveAt).toLocaleString()
-                    : "Never"}
+                    : t("never")}
                 </span>
               </div>
             </CardContent>
@@ -564,21 +568,21 @@ export default function DeviceDetailPage() {
           {device.trustStatus === "TRUSTED" && (
             <Card>
               <CardHeader>
-                <CardTitle>Trust Information</CardTitle>
+                <CardTitle>{t("sections.trustInformation")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Trusted At</span>
+                  <span className="text-muted-foreground">{t("fields.trustedAt")}</span>
                   <span className="font-medium">
                     {device.trustedAt
                       ? new Date(device.trustedAt).toLocaleString()
-                      : "Unknown"}
+                      : t("unknown")}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Approved By</span>
+                  <span className="text-muted-foreground">{t("fields.approvedBy")}</span>
                   <span className="font-mono text-sm">
-                    {device.trustedBy || "System"}
+                    {device.trustedBy || t("system")}
                   </span>
                 </div>
               </CardContent>
@@ -589,11 +593,11 @@ export default function DeviceDetailPage() {
         <TabsContent value="compliance" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Compliance Checks</CardTitle>
+              <CardTitle>{t("compliance.checksTitle")}</CardTitle>
               <CardDescription>
-                Last checked: {device.lastComplianceCheck
+                {t("compliance.lastChecked")}: {device.lastComplianceCheck
                   ? new Date(device.lastComplianceCheck).toLocaleString()
-                  : "Never"}
+                  : t("never")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -601,9 +605,9 @@ export default function DeviceDetailPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Check</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Message</TableHead>
+                      <TableHead>{t("compliance.columns.check")}</TableHead>
+                      <TableHead>{t("compliance.columns.status")}</TableHead>
+                      <TableHead>{t("compliance.columns.message")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -614,12 +618,12 @@ export default function DeviceDetailPage() {
                           {check.passed ? (
                             <Badge className="bg-green-500">
                               <CheckCircle className="h-3 w-3 mr-1" />
-                              Passed
+                              {t("compliance.passed")}
                             </Badge>
                           ) : (
                             <Badge variant="destructive">
                               <XCircle className="h-3 w-3 mr-1" />
-                              Failed
+                              {t("compliance.failed")}
                             </Badge>
                           )}
                         </TableCell>
@@ -633,7 +637,7 @@ export default function DeviceDetailPage() {
               ) : (
                 <div className="text-center py-8">
                   <ShieldCheck className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground">No compliance checks recorded</p>
+                  <p className="text-muted-foreground">{t("compliance.noChecksRecorded")}</p>
                 </div>
               )}
             </CardContent>
@@ -643,7 +647,7 @@ export default function DeviceDetailPage() {
         <TabsContent value="user" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Device Owner</CardTitle>
+              <CardTitle>{t("user.deviceOwner")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-4">
@@ -651,12 +655,12 @@ export default function DeviceDetailPage() {
                   <User className="h-6 w-6" />
                 </div>
                 <div>
-                  <p className="font-medium">{device.user.name || "No name"}</p>
+                  <p className="font-medium">{device.user.name || t("user.noName")}</p>
                   <p className="text-sm text-muted-foreground">{device.user.email}</p>
                 </div>
                 <Button variant="outline" size="sm" asChild className="ml-auto">
                   <Link href={`/admin/users/${device.user.id}`}>
-                    View User
+                    {t("user.viewUser")}
                   </Link>
                 </Button>
               </div>
@@ -666,15 +670,15 @@ export default function DeviceDetailPage() {
           {device.user.memberships.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Organizations</CardTitle>
-                <CardDescription>Organizations this user belongs to</CardDescription>
+                <CardTitle>{t("user.organizations")}</CardTitle>
+                <CardDescription>{t("user.organizationsDescription")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Organization</TableHead>
-                      <TableHead>Slug</TableHead>
+                      <TableHead>{t("user.columns.organization")}</TableHead>
+                      <TableHead>{t("user.columns.slug")}</TableHead>
                       <TableHead></TableHead>
                     </TableRow>
                   </TableHeader>
@@ -690,7 +694,7 @@ export default function DeviceDetailPage() {
                         <TableCell>
                           <Button variant="ghost" size="sm" asChild>
                             <Link href={`/admin/tenants/${membership.organization.id}`}>
-                              View
+                              {tCommon("viewDetails")}
                             </Link>
                           </Button>
                         </TableCell>
@@ -706,17 +710,17 @@ export default function DeviceDetailPage() {
         <TabsContent value="activity" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Activity Log</CardTitle>
-              <CardDescription>Recent actions related to this device</CardDescription>
+              <CardTitle>{t("activity.title")}</CardTitle>
+              <CardDescription>{t("activity.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               {device.activityLogs && device.activityLogs.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Action</TableHead>
-                      <TableHead>Details</TableHead>
-                      <TableHead>Date</TableHead>
+                      <TableHead>{t("activity.columns.action")}</TableHead>
+                      <TableHead>{t("activity.columns.details")}</TableHead>
+                      <TableHead>{t("activity.columns.date")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -740,7 +744,7 @@ export default function DeviceDetailPage() {
               ) : (
                 <div className="text-center py-8">
                   <Activity className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground">No activity recorded</p>
+                  <p className="text-muted-foreground">{t("activity.noActivity")}</p>
                 </div>
               )}
             </CardContent>
@@ -751,9 +755,9 @@ export default function DeviceDetailPage() {
       <ConfirmationDialog
         open={showRevokeConfirm}
         onOpenChange={setShowRevokeConfirm}
-        title="Revoke Device Trust"
-        description="Are you sure you want to revoke trust for this device? The device will need to be re-approved to regain access."
-        confirmText="Revoke Trust"
+        title={t("dialogs.revokeTitle")}
+        description={t("dialogs.revokeDescription")}
+        confirmText={t("actions.revokeTrust")}
         variant="destructive"
         onConfirm={handleConfirmRevoke}
       />
@@ -761,9 +765,9 @@ export default function DeviceDetailPage() {
       <ConfirmationDialog
         open={showDeleteConfirm}
         onOpenChange={setShowDeleteConfirm}
-        title="Delete Device"
-        description="Are you sure you want to delete this device? This action cannot be undone."
-        confirmText="Delete"
+        title={t("dialogs.deleteTitle")}
+        description={t("dialogs.deleteDescription")}
+        confirmText={tCommon("delete")}
         variant="destructive"
         onConfirm={handleConfirmDelete}
       />

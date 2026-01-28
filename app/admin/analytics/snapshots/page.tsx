@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -76,21 +77,9 @@ interface Pagination {
   totalPages: number
 }
 
-const SNAPSHOT_TYPES = [
-  { value: "PLATFORM", label: "Platform" },
-  { value: "USAGE", label: "Usage" },
-  { value: "REVENUE", label: "Revenue" },
-  { value: "ENGAGEMENT", label: "Engagement" },
-  { value: "SECURITY", label: "Security" },
-]
-
-const PERIODS = [
-  { value: "daily", label: "Daily" },
-  { value: "weekly", label: "Weekly" },
-  { value: "monthly", label: "Monthly" },
-]
-
 export default function AnalyticsSnapshotsPage() {
+  const t = useTranslations("admin.analytics.snapshots")
+  const tCommon = useTranslations("admin.analytics")
   const [snapshots, setSnapshots] = useState<AnalyticsSnapshot[]>([])
   const [pagination, setPagination] = useState<Pagination | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -112,6 +101,20 @@ export default function AnalyticsSnapshotsPage() {
     type: "PLATFORM",
     period: "daily",
   })
+
+  const SNAPSHOT_TYPES = [
+    { value: "PLATFORM", label: t("types.platform") },
+    { value: "USAGE", label: t("types.usage") },
+    { value: "REVENUE", label: t("types.revenue") },
+    { value: "ENGAGEMENT", label: t("types.engagement") },
+    { value: "SECURITY", label: t("types.security") },
+  ]
+
+  const PERIODS = [
+    { value: "daily", label: tCommon("periodOptions.daily") },
+    { value: "weekly", label: tCommon("periodOptions.weekly") },
+    { value: "monthly", label: tCommon("periodOptions.monthly") },
+  ]
 
   const fetchSnapshots = async () => {
     setIsLoading(true)
@@ -146,7 +149,7 @@ export default function AnalyticsSnapshotsPage() {
 
   useEffect(() => {
     fetchSnapshots()
-  }, [currentPage, filterType, filterPeriod, startDate, endDate])
+  }, [currentPage, filterType, filterPeriod, startDate, endDate, fetchSnapshots])
 
   const handleCreateSnapshot = async () => {
     setIsSubmitting(true)
@@ -210,7 +213,7 @@ export default function AnalyticsSnapshotsPage() {
   const columns: Column<AnalyticsSnapshot>[] = [
     {
       id: "type",
-      header: "Type",
+      header: t("table.type"),
       cell: (snapshot) => (
         <Badge className={getTypeColor(snapshot.type)}>
           {snapshot.type}
@@ -219,42 +222,42 @@ export default function AnalyticsSnapshotsPage() {
     },
     {
       id: "period",
-      header: "Period",
+      header: t("table.period"),
       cell: (snapshot) => (
         <Badge variant="outline">{snapshot.period}</Badge>
       ),
     },
     {
       id: "orgs",
-      header: "Orgs",
+      header: t("table.orgs"),
       headerClassName: "text-right",
       className: "text-right",
       cell: (snapshot) => (
         <div>
           <div className="font-medium">{formatNumber(snapshot.totalOrgs)}</div>
           <div className="text-xs text-muted-foreground">
-            +{formatNumber(snapshot.newOrgs)} new
+            +{formatNumber(snapshot.newOrgs)} {t("table.new")}
           </div>
         </div>
       ),
     },
     {
       id: "users",
-      header: "Users",
+      header: t("table.users"),
       headerClassName: "text-right",
       className: "text-right",
       cell: (snapshot) => (
         <div>
           <div className="font-medium">{formatNumber(snapshot.totalUsers)}</div>
           <div className="text-xs text-muted-foreground">
-            {formatNumber(snapshot.activeUsers)} active
+            {formatNumber(snapshot.activeUsers)} {t("table.active")}
           </div>
         </div>
       ),
     },
     {
       id: "mrr",
-      header: "MRR",
+      header: t("table.mrr"),
       headerClassName: "text-right",
       className: "text-right",
       cell: (snapshot) => (
@@ -268,14 +271,14 @@ export default function AnalyticsSnapshotsPage() {
     },
     {
       id: "agentRuns",
-      header: "Agent Runs",
+      header: t("table.agentRuns"),
       headerClassName: "text-right",
       className: "text-right",
       cell: (snapshot) => formatNumber(snapshot.totalAgentRuns),
     },
     {
       id: "date",
-      header: "Date",
+      header: t("table.date"),
       cell: (snapshot) => (
         <div className="flex items-center gap-1 text-sm">
           <Calendar className="h-3 w-3" />
@@ -288,12 +291,12 @@ export default function AnalyticsSnapshotsPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Delete Selected",
+      label: t("actions.deleteSelected"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
-      confirmTitle: "Delete Snapshots",
-      confirmDescription: "Are you sure you want to delete the selected snapshots? This action cannot be undone.",
+      confirmTitle: t("confirmDelete.title"),
+      confirmDescription: t("confirmDelete.description"),
     },
   ]
 
@@ -307,34 +310,34 @@ export default function AnalyticsSnapshotsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Camera className="h-8 w-8 text-primary" />
-            Analytics Snapshots
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Historical platform analytics data and metrics
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button onClick={fetchSnapshots} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            {tCommon("actions.refresh")}
           </Button>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button size="sm">
                 <Plus className="h-4 w-4 mr-2" />
-                Create Snapshot
+                {t("actions.createSnapshot")}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Create Analytics Snapshot</DialogTitle>
+                <DialogTitle>{t("dialog.title")}</DialogTitle>
                 <DialogDescription>
-                  Generate a new analytics snapshot to capture current platform metrics
+                  {t("dialog.description")}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Snapshot Type</Label>
+                  <Label>{t("dialog.snapshotType")}</Label>
                   <Select
                     value={formData.type}
                     onValueChange={(v) => setFormData(prev => ({ ...prev, type: v }))}
@@ -352,7 +355,7 @@ export default function AnalyticsSnapshotsPage() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Period</Label>
+                  <Label>{t("dialog.period")}</Label>
                   <Select
                     value={formData.period}
                     onValueChange={(v) => setFormData(prev => ({ ...prev, period: v }))}
@@ -372,16 +375,16 @@ export default function AnalyticsSnapshotsPage() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                  Cancel
+                  {t("dialog.cancel")}
                 </Button>
                 <Button onClick={handleCreateSnapshot} disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Creating...
+                      {t("dialog.creating")}
                     </>
                   ) : (
-                    "Create Snapshot"
+                    t("dialog.create")
                   )}
                 </Button>
               </DialogFooter>
@@ -395,7 +398,7 @@ export default function AnalyticsSnapshotsPage() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Total Organizations</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("summary.totalOrganizations")}</CardTitle>
               <Building2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -409,28 +412,28 @@ export default function AnalyticsSnapshotsPage() {
                 <span className={latestSnapshot.newOrgs > 0 ? "text-green-500" : "text-red-500"}>
                   +{formatNumber(latestSnapshot.newOrgs)}
                 </span>
-                <span className="ml-1">new this period</span>
+                <span className="ml-1">{t("summary.newThisPeriod")}</span>
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("summary.totalUsers")}</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{formatNumber(latestSnapshot.totalUsers)}</div>
               <div className="flex items-center text-xs text-muted-foreground">
                 <Activity className="h-3 w-3 mr-1" />
-                {formatNumber(latestSnapshot.activeUsers)} active
+                {formatNumber(latestSnapshot.activeUsers)} {t("summary.active")}
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">MRR</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("summary.mrr")}</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -444,20 +447,20 @@ export default function AnalyticsSnapshotsPage() {
                 <span className={latestSnapshot.newMrr > 0 ? "text-green-500" : "text-red-500"}>
                   +{formatCurrency(latestSnapshot.newMrr)}
                 </span>
-                <span className="ml-1">new</span>
+                <span className="ml-1">{t("summary.new")}</span>
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Agent Runs</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("summary.agentRuns")}</CardTitle>
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{formatNumber(latestSnapshot.totalAgentRuns)}</div>
               <p className="text-xs text-muted-foreground">
-                {formatNumber(parseInt(latestSnapshot.totalTokens))} tokens consumed
+                {t("summary.tokensConsumed", { count: formatNumber(parseInt(latestSnapshot.totalTokens)) })}
               </p>
             </CardContent>
           </Card>
@@ -469,19 +472,19 @@ export default function AnalyticsSnapshotsPage() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4" />
-            <CardTitle className="text-lg">Filters</CardTitle>
+            <CardTitle className="text-lg">{t("filters.title")}</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-4">
             <div className="space-y-2">
-              <Label className="text-sm">Type</Label>
+              <Label className="text-sm">{t("filters.type")}</Label>
               <Select value={filterType} onValueChange={setFilterType}>
                 <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="All Types" />
+                  <SelectValue placeholder={t("filters.allTypes")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="all">{t("filters.allTypes")}</SelectItem>
                   {SNAPSHOT_TYPES.map((type) => (
                     <SelectItem key={type.value} value={type.value}>
                       {type.label}
@@ -491,13 +494,13 @@ export default function AnalyticsSnapshotsPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm">Period</Label>
+              <Label className="text-sm">{t("filters.period")}</Label>
               <Select value={filterPeriod} onValueChange={setFilterPeriod}>
                 <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="All Periods" />
+                  <SelectValue placeholder={t("filters.allPeriods")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Periods</SelectItem>
+                  <SelectItem value="all">{t("filters.allPeriods")}</SelectItem>
                   {PERIODS.map((period) => (
                     <SelectItem key={period.value} value={period.value}>
                       {period.label}
@@ -507,7 +510,7 @@ export default function AnalyticsSnapshotsPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm">Start Date</Label>
+              <Label className="text-sm">{t("filters.startDate")}</Label>
               <Input
                 type="date"
                 value={startDate}
@@ -516,7 +519,7 @@ export default function AnalyticsSnapshotsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-sm">End Date</Label>
+              <Label className="text-sm">{t("filters.endDate")}</Label>
               <Input
                 type="date"
                 value={endDate}
@@ -536,7 +539,7 @@ export default function AnalyticsSnapshotsPage() {
                   setCurrentPage(1)
                 }}
               >
-                Clear Filters
+                {t("filters.clearFilters")}
               </Button>
             </div>
           </div>
@@ -546,9 +549,9 @@ export default function AnalyticsSnapshotsPage() {
       {/* Snapshots Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Snapshot History</CardTitle>
+          <CardTitle>{t("table.title")}</CardTitle>
           <CardDescription>
-            {pagination?.total || 0} total snapshots
+            {t("table.description", { count: pagination?.total || 0 })}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -557,7 +560,7 @@ export default function AnalyticsSnapshotsPage() {
             columns={columns}
             getRowId={(snapshot) => snapshot.id}
             isLoading={isLoading}
-            emptyMessage="No snapshots found"
+            emptyMessage={t("table.noSnapshots")}
             viewHref={(snapshot) => `/admin/analytics/snapshots/${snapshot.id}`}
             bulkActions={bulkActions}
             selectedIds={selectedIds}

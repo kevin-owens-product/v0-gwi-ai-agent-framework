@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { showErrorToast } from "@/lib/toast-utils"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -31,6 +32,7 @@ interface Organization {
 
 export default function NewLegalHoldPage() {
   const router = useRouter()
+  const t = useTranslations("admin.compliance.legalHolds.new")
   const [isSaving, setIsSaving] = useState(false)
   const [organizations, setOrganizations] = useState<Organization[]>([])
   const [formData, setFormData] = useState({
@@ -62,7 +64,7 @@ export default function NewLegalHoldPage() {
 
   const handleCreate = async () => {
     if (!formData.name || !formData.startDate) {
-      toast.error("Name and start date are required")
+      showErrorToast(t("validation.nameAndStartDateRequired"))
       return
     }
 
@@ -89,14 +91,14 @@ export default function NewLegalHoldPage() {
           return
         }
         const data = await response.json()
-        throw new Error(data.error || "Failed to create legal hold")
+        throw new Error(data.error || t("errors.createFailed"))
       }
 
       const data = await response.json()
       router.push(`/admin/compliance/legal-holds/${data.legalHold?.id || ""}`)
     } catch (error) {
       console.error("Failed to create legal hold:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to create legal hold")
+      showErrorToast(error instanceof Error ? error.message : t("errors.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -110,16 +112,16 @@ export default function NewLegalHoldPage() {
           <Link href="/admin/compliance/legal-holds">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Gavel className="h-6 w-6 text-red-500" />
-              Create Legal Hold
+              {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Create a new data preservation order
+              {t("description")}
             </p>
           </div>
         </div>
@@ -127,12 +129,12 @@ export default function NewLegalHoldPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Legal Hold
+              {t("createLegalHold")}
             </>
           )}
         </Button>
@@ -141,44 +143,44 @@ export default function NewLegalHoldPage() {
       {/* Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Legal Hold Details</CardTitle>
+          <CardTitle>{t("sections.legalHoldDetails")}</CardTitle>
           <CardDescription>
-            Define the scope and details of the data preservation order
+            {t("sections.detailsDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Legal Hold Name *</Label>
+              <Label htmlFor="name">{t("fields.legalHoldName")} *</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Investigation Q1 2024"
+                placeholder={t("placeholders.name")}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="caseNumber">Case Number</Label>
+              <Label htmlFor="caseNumber">{t("fields.caseNumber")}</Label>
               <Input
                 id="caseNumber"
                 value={formData.caseNumber}
                 onChange={(e) => setFormData({ ...formData, caseNumber: e.target.value })}
-                placeholder="CASE-2024-001"
+                placeholder={t("placeholders.caseNumber")}
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label>Organization (Optional)</Label>
+            <Label>{t("fields.organization")}</Label>
             <Select
               value={formData.orgId || "none"}
               onValueChange={(value) => setFormData({ ...formData, orgId: value === "none" ? "" : value })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Platform-wide (no specific org)" />
+                <SelectValue placeholder={t("placeholders.organization")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">Platform-wide (no specific org)</SelectItem>
+                <SelectItem value="none">{t("placeholders.organization")}</SelectItem>
                 {organizations.map((org) => (
                   <SelectItem key={org.id} value={org.id}>
                     {org.name}
@@ -187,13 +189,13 @@ export default function NewLegalHoldPage() {
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              Leave empty for platform-wide legal holds
+              {t("hints.organization")}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="startDate">Start Date *</Label>
+              <Label htmlFor="startDate">{t("fields.startDate")} *</Label>
               <Input
                 id="startDate"
                 type="date"
@@ -202,7 +204,7 @@ export default function NewLegalHoldPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="endDate">End Date (Optional)</Label>
+              <Label htmlFor="endDate">{t("fields.endDate")}</Label>
               <Input
                 id="endDate"
                 type="date"
@@ -210,29 +212,29 @@ export default function NewLegalHoldPage() {
                 onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
               />
               <p className="text-xs text-muted-foreground">
-                Leave empty for indefinite holds
+                {t("hints.endDate")}
               </p>
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{t("fields.description")}</Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Describe the purpose and scope of this legal hold..."
+              placeholder={t("placeholders.description")}
               rows={3}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="notes">Internal Notes</Label>
+            <Label htmlFor="notes">{t("fields.internalNotes")}</Label>
             <Textarea
               id="notes"
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="Any additional internal notes or instructions..."
+              placeholder={t("placeholders.notes")}
               rows={2}
             />
           </div>

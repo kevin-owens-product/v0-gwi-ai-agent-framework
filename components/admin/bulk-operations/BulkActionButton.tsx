@@ -7,6 +7,7 @@
  */
 
 import { ReactNode, useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button, ButtonProps } from "@/components/ui/button"
 import {
   AlertDialog,
@@ -84,9 +85,9 @@ export function BulkActionButton({
   selectedIds,
   onClick,
   requiresConfirmation = false,
-  confirmTitle = "Confirm Action",
+  confirmTitle,
   confirmDescription,
-  confirmButtonText = "Confirm",
+  confirmButtonText,
   destructive = false,
   itemLabel = "item",
   onSuccess,
@@ -95,8 +96,13 @@ export function BulkActionButton({
   variant,
   className,
 }: BulkActionButtonProps) {
+  const t = useTranslations("admin.bulk")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  // Use translations for defaults
+  const dialogTitle = confirmTitle || t("confirmAction")
+  const dialogConfirmText = confirmButtonText || t("confirm")
 
   const handleClick = () => {
     if (requiresConfirmation) {
@@ -127,8 +133,8 @@ export function BulkActionButton({
     if (confirmDescription) {
       return confirmDescription
     }
-    const items = `${selectedCount} ${itemLabel}${selectedCount !== 1 ? "s" : ""}`
-    return `This action will affect ${items}. Are you sure you want to continue?`
+    const itemsLabel = `${itemLabel}${selectedCount !== 1 ? "s" : ""}`
+    return t("defaultConfirmDescription", { count: selectedCount, itemLabel: itemsLabel })
   }
 
   const buttonVariant = variant ?? (destructive ? "destructive" : "default")
@@ -155,11 +161,11 @@ export function BulkActionButton({
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{confirmTitle}</AlertDialogTitle>
+            <AlertDialogTitle>{dialogTitle}</AlertDialogTitle>
             <AlertDialogDescription>{getDescription()}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isLoading}>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={(e) => {
                 e.preventDefault()
@@ -174,10 +180,10 @@ export function BulkActionButton({
               {isLoading ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Processing...
+                  {t("processing")}
                 </>
               ) : (
-                confirmButtonText
+                dialogConfirmText
               )}
             </AlertDialogAction>
           </AlertDialogFooter>

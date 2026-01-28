@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast } from "@/lib/toast-utils"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -18,6 +19,7 @@ import {
 import Link from "next/link"
 
 export default function NewFrameworkPage() {
+  const t = useTranslations()
   const router = useRouter()
   const [isSaving, setIsSaving] = useState(false)
   const [formData, setFormData] = useState({
@@ -30,7 +32,7 @@ export default function NewFrameworkPage() {
 
   const handleCreate = async () => {
     if (!formData.name || !formData.code) {
-      toast.error("Name and code are required")
+      showErrorToast(t("toast.error.validationError"))
       return
     }
 
@@ -55,14 +57,14 @@ export default function NewFrameworkPage() {
           return
         }
         const data = await response.json()
-        throw new Error(data.error || "Failed to create framework")
+        throw new Error(data.error || t("admin.compliance.frameworks.createFailed"))
       }
 
       const data = await response.json()
       router.push(`/admin/compliance/frameworks/${data.framework?.id || ""}`)
     } catch (error) {
       console.error("Failed to create framework:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to create framework")
+      showErrorToast(error instanceof Error ? error.message : t("admin.compliance.frameworks.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -76,16 +78,16 @@ export default function NewFrameworkPage() {
           <Link href="/admin/compliance/frameworks">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("common.back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Shield className="h-6 w-6 text-primary" />
-              Create Compliance Framework
+              {t("admin.compliance.frameworks.createTitle")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Add a new compliance standard (SOC2, HIPAA, GDPR, etc.)
+              {t("admin.compliance.frameworks.createDescription")}
             </p>
           </div>
         </div>
@@ -93,12 +95,12 @@ export default function NewFrameworkPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {t("common.creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Framework
+              {t("admin.compliance.frameworks.createButton")}
             </>
           )}
         </Button>
@@ -107,65 +109,65 @@ export default function NewFrameworkPage() {
       {/* Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Framework Details</CardTitle>
+          <CardTitle>{t("admin.compliance.frameworks.details")}</CardTitle>
           <CardDescription>
-            Define the compliance framework standards and requirements
+            {t("admin.compliance.frameworks.detailsDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Framework Name *</Label>
+              <Label htmlFor="name">{t("admin.compliance.frameworks.nameRequired")}</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="SOC 2 Type II"
+                placeholder={t("admin.compliance.frameworks.namePlaceholder")}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="code">Code *</Label>
+              <Label htmlFor="code">{t("admin.compliance.frameworks.codeRequired")}</Label>
               <Input
                 id="code"
                 value={formData.code}
                 onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                placeholder="SOC2"
+                placeholder={t("admin.compliance.frameworks.codePlaceholder")}
               />
               <p className="text-xs text-muted-foreground">
-                Short identifier code (e.g., SOC2, HIPAA, GDPR)
+                {t("admin.compliance.frameworks.codeHint")}
               </p>
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="version">Version</Label>
+            <Label htmlFor="version">{t("common.version")}</Label>
             <Input
               id="version"
               value={formData.version}
               onChange={(e) => setFormData({ ...formData, version: e.target.value })}
-              placeholder="2023"
+              placeholder={t("admin.compliance.frameworks.versionPlaceholder")}
             />
             <p className="text-xs text-muted-foreground">
-              The version or year of the framework standard
+              {t("admin.compliance.frameworks.versionHint")}
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{t("common.description")}</Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Service Organization Control 2 compliance framework for security, availability, processing integrity, confidentiality, and privacy..."
+              placeholder={t("admin.compliance.frameworks.descriptionPlaceholder")}
               rows={4}
             />
           </div>
 
           <div className="flex items-center justify-between rounded-lg border p-4">
             <div className="space-y-0.5">
-              <Label htmlFor="isActive">Active Status</Label>
+              <Label htmlFor="isActive">{t("admin.compliance.frameworks.activeStatus")}</Label>
               <p className="text-sm text-muted-foreground">
-                Enable this framework for attestations and audits
+                {t("admin.compliance.frameworks.activeStatusDescription")}
               </p>
             </div>
             <Switch

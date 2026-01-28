@@ -3,12 +3,12 @@
 import { useState, useEffect, useCallback } from "react"
 import { toast } from "sonner"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-// Textarea import removed - unused
 import {
   Select,
   SelectContent,
@@ -89,21 +89,9 @@ interface Audit {
   organization: Organization | null
 }
 
-const STATUS_OPTIONS = [
-  { value: "SCHEDULED", label: "Scheduled" },
-  { value: "IN_PROGRESS", label: "In Progress" },
-  { value: "COMPLETED", label: "Completed" },
-  { value: "CANCELLED", label: "Cancelled" },
-]
-
-const TYPE_OPTIONS = [
-  { value: "INTERNAL", label: "Internal" },
-  { value: "EXTERNAL", label: "External" },
-  { value: "SELF_ASSESSMENT", label: "Self Assessment" },
-  { value: "CERTIFICATION", label: "Certification" },
-]
-
 export default function AuditDetailPage() {
+  const t = useTranslations("admin.compliance")
+  const tCommon = useTranslations("common")
   const params = useParams()
   const router = useRouter()
   const auditId = params.id as string
@@ -120,6 +108,20 @@ export default function AuditDetailPage() {
   })
   const [isSaving, setIsSaving] = useState(false)
 
+  const STATUS_OPTIONS = [
+    { value: "SCHEDULED", label: t("audits.status.scheduled") },
+    { value: "IN_PROGRESS", label: t("audits.status.inProgress") },
+    { value: "COMPLETED", label: t("audits.status.completed") },
+    { value: "CANCELLED", label: t("audits.status.cancelled") },
+  ]
+
+  const TYPE_OPTIONS = [
+    { value: "INTERNAL", label: t("audits.types.internal") },
+    { value: "EXTERNAL", label: t("audits.types.external") },
+    { value: "SELF_ASSESSMENT", label: t("audits.types.selfAssessment") },
+    { value: "CERTIFICATION", label: t("audits.types.certification") },
+  ]
+
   const fetchAudit = useCallback(async () => {
     setIsLoading(true)
     try {
@@ -131,7 +133,7 @@ export default function AuditDetailPage() {
           window.location.href = "/login?type=admin"
           return
         }
-        throw new Error("Failed to fetch audit")
+        throw new Error(t("audits.errors.fetchFailed"))
       }
       const data = await response.json()
       setAudit(data.audit)
@@ -147,7 +149,7 @@ export default function AuditDetailPage() {
     } finally {
       setIsLoading(false)
     }
-  }, [auditId])
+  }, [auditId, t])
 
   useEffect(() => {
     fetchAudit()
@@ -173,7 +175,7 @@ export default function AuditDetailPage() {
         fetchAudit()
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to update audit")
+        toast.error(data.error || t("audits.errors.updateFailed"))
       }
     } catch (error) {
       console.error("Failed to update audit:", error)
@@ -185,13 +187,13 @@ export default function AuditDetailPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "COMPLETED":
-        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Completed</Badge>
+        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />{t("audits.status.completed")}</Badge>
       case "IN_PROGRESS":
-        return <Badge className="bg-blue-500"><PlayCircle className="h-3 w-3 mr-1" />In Progress</Badge>
+        return <Badge className="bg-blue-500"><PlayCircle className="h-3 w-3 mr-1" />{t("audits.status.inProgress")}</Badge>
       case "SCHEDULED":
-        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />Scheduled</Badge>
+        return <Badge variant="secondary"><Clock className="h-3 w-3 mr-1" />{t("audits.status.scheduled")}</Badge>
       case "CANCELLED":
-        return <Badge variant="outline" className="text-muted-foreground">Cancelled</Badge>
+        return <Badge variant="outline" className="text-muted-foreground">{t("audits.status.cancelled")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -200,13 +202,13 @@ export default function AuditDetailPage() {
   const getTypeBadge = (type: string) => {
     switch (type) {
       case "INTERNAL":
-        return <Badge variant="outline">Internal</Badge>
+        return <Badge variant="outline">{t("audits.types.internal")}</Badge>
       case "EXTERNAL":
-        return <Badge variant="outline" className="border-blue-500 text-blue-500">External</Badge>
+        return <Badge variant="outline" className="border-blue-500 text-blue-500">{t("audits.types.external")}</Badge>
       case "SELF_ASSESSMENT":
-        return <Badge variant="outline" className="border-purple-500 text-purple-500">Self Assessment</Badge>
+        return <Badge variant="outline" className="border-purple-500 text-purple-500">{t("audits.types.selfAssessment")}</Badge>
       case "CERTIFICATION":
-        return <Badge variant="outline" className="border-green-500 text-green-500">Certification</Badge>
+        return <Badge variant="outline" className="border-green-500 text-green-500">{t("audits.types.certification")}</Badge>
       default:
         return <Badge variant="outline">{type}</Badge>
     }
@@ -215,13 +217,13 @@ export default function AuditDetailPage() {
   const getSeverityBadge = (severity: string) => {
     switch (severity?.toLowerCase()) {
       case "critical":
-        return <Badge variant="destructive">Critical</Badge>
+        return <Badge variant="destructive">{t("severity.critical")}</Badge>
       case "high":
-        return <Badge className="bg-orange-500">High</Badge>
+        return <Badge className="bg-orange-500">{t("severity.high")}</Badge>
       case "medium":
-        return <Badge className="bg-yellow-500">Medium</Badge>
+        return <Badge className="bg-yellow-500">{t("severity.medium")}</Badge>
       case "low":
-        return <Badge variant="secondary">Low</Badge>
+        return <Badge variant="secondary">{t("severity.low")}</Badge>
       default:
         return <Badge variant="outline">{severity}</Badge>
     }
@@ -230,13 +232,13 @@ export default function AuditDetailPage() {
   const getPriorityBadge = (priority: string) => {
     switch (priority?.toLowerCase()) {
       case "critical":
-        return <Badge variant="destructive">Critical</Badge>
+        return <Badge variant="destructive">{t("priority.critical")}</Badge>
       case "high":
-        return <Badge className="bg-orange-500">High</Badge>
+        return <Badge className="bg-orange-500">{t("priority.high")}</Badge>
       case "medium":
-        return <Badge className="bg-yellow-500">Medium</Badge>
+        return <Badge className="bg-yellow-500">{t("priority.medium")}</Badge>
       case "low":
-        return <Badge variant="secondary">Low</Badge>
+        return <Badge variant="secondary">{t("priority.low")}</Badge>
       default:
         return <Badge variant="outline">{priority}</Badge>
     }
@@ -255,11 +257,11 @@ export default function AuditDetailPage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {tCommon("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Audit not found</p>
+            <p className="text-muted-foreground">{t("audits.notFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -274,7 +276,7 @@ export default function AuditDetailPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/compliance/audits">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Link>
           </Button>
           <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -282,11 +284,11 @@ export default function AuditDetailPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              {audit.framework.name} Audit
+              {t("audits.detail.frameworkAudit", { framework: audit.framework.name })}
               {getTypeBadge(audit.type)}
             </h1>
             <p className="text-muted-foreground">
-              Scheduled for {new Date(audit.scheduledDate).toLocaleDateString()}
+              {t("audits.detail.scheduledFor", { date: new Date(audit.scheduledDate).toLocaleDateString() })}
             </p>
           </div>
         </div>
@@ -305,7 +307,7 @@ export default function AuditDetailPage() {
           <CardContent className="py-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Audit Score</p>
+                <p className="text-sm font-medium text-muted-foreground">{t("audits.detail.auditScore")}</p>
                 <div className="flex items-center gap-4 mt-1">
                   <span className={`text-4xl font-bold ${
                     audit.score >= 80 ? "text-green-500" :
@@ -325,7 +327,7 @@ export default function AuditDetailPage() {
                 <Button variant="outline" asChild>
                   <a href={audit.reportUrl} target="_blank" rel="noopener noreferrer">
                     <FileText className="h-4 w-4 mr-2" />
-                    View Report
+                    {t("audits.detail.viewReport")}
                     <ExternalLink className="h-3 w-3 ml-2" />
                   </a>
                 </Button>
@@ -337,14 +339,14 @@ export default function AuditDetailPage() {
 
       <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
           <TabsTrigger value="findings">
             <AlertTriangle className="h-4 w-4 mr-1" />
-            Findings ({audit.findings.length})
+            {t("audits.tabs.findings")} ({audit.findings.length})
           </TabsTrigger>
           <TabsTrigger value="recommendations">
             <Lightbulb className="h-4 w-4 mr-1" />
-            Recommendations ({audit.recommendations.length})
+            {t("audits.tabs.recommendations")} ({audit.recommendations.length})
           </TabsTrigger>
         </TabsList>
 
@@ -354,7 +356,7 @@ export default function AuditDetailPage() {
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>Audit Details</CardTitle>
+                  <CardTitle>{t("audits.detail.auditDetails")}</CardTitle>
                   {isEditing ? (
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" onClick={() => setIsEditing(false)}>
@@ -376,7 +378,7 @@ export default function AuditDetailPage() {
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Status</Label>
+                        <Label>{t("audits.fields.status")}</Label>
                         <Select
                           value={editForm.status}
                           onValueChange={(value) => setEditForm({ ...editForm, status: value })}
@@ -394,7 +396,7 @@ export default function AuditDetailPage() {
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label>Type</Label>
+                        <Label>{t("audits.fields.type")}</Label>
                         <Select
                           value={editForm.type}
                           onValueChange={(value) => setEditForm({ ...editForm, type: value })}
@@ -413,7 +415,7 @@ export default function AuditDetailPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Score (%)</Label>
+                      <Label>{t("audits.fields.scorePercent")}</Label>
                       <Input
                         type="number"
                         min="0"
@@ -424,15 +426,15 @@ export default function AuditDetailPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Auditor</Label>
+                      <Label>{t("audits.fields.auditor")}</Label>
                       <Input
                         value={editForm.auditor}
                         onChange={(e) => setEditForm({ ...editForm, auditor: e.target.value })}
-                        placeholder="Auditor name or company"
+                        placeholder={t("audits.dialog.auditorPlaceholder")}
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Report URL</Label>
+                      <Label>{t("audits.fields.reportUrl")}</Label>
                       <Input
                         value={editForm.reportUrl}
                         onChange={(e) => setEditForm({ ...editForm, reportUrl: e.target.value })}
@@ -443,25 +445,25 @@ export default function AuditDetailPage() {
                 ) : (
                   <>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Status</span>
+                      <span className="text-muted-foreground">{t("audits.fields.status")}</span>
                       {getStatusBadge(audit.status)}
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Type</span>
+                      <span className="text-muted-foreground">{t("audits.fields.type")}</span>
                       {getTypeBadge(audit.type)}
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Score</span>
+                      <span className="text-muted-foreground">{t("audits.fields.score")}</span>
                       <span className="font-bold">
                         {audit.score !== null ? `${audit.score}%` : "-"}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Auditor</span>
+                      <span className="text-muted-foreground">{t("audits.fields.auditor")}</span>
                       <span className="font-medium">{audit.auditor || "-"}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Scheduled</span>
+                      <span className="text-muted-foreground">{t("audits.fields.scheduled")}</span>
                       <span className="font-medium flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {new Date(audit.scheduledDate).toLocaleDateString()}
@@ -469,7 +471,7 @@ export default function AuditDetailPage() {
                     </div>
                     {audit.startedAt && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Started</span>
+                        <span className="text-muted-foreground">{t("audits.fields.started")}</span>
                         <span className="font-medium">
                           {new Date(audit.startedAt).toLocaleDateString()}
                         </span>
@@ -477,7 +479,7 @@ export default function AuditDetailPage() {
                     )}
                     {audit.completedAt && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Completed</span>
+                        <span className="text-muted-foreground">{t("audits.fields.completed")}</span>
                         <span className="font-medium">
                           {new Date(audit.completedAt).toLocaleDateString()}
                         </span>
@@ -494,25 +496,25 @@ export default function AuditDetailPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Shield className="h-5 w-5" />
-                    Framework
+                    {t("audits.detail.framework")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Name</span>
+                    <span className="text-muted-foreground">{t("fields.name")}</span>
                     <span className="font-medium">{audit.framework.name}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Code</span>
+                    <span className="text-muted-foreground">{t("fields.code")}</span>
                     <Badge variant="outline">{audit.framework.code}</Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Version</span>
+                    <span className="text-muted-foreground">{t("fields.version")}</span>
                     <span className="font-medium">{audit.framework.version || "-"}</span>
                   </div>
                   <Button variant="outline" className="w-full" asChild>
                     <Link href={`/admin/compliance/frameworks/${audit.frameworkId}`}>
-                      View Framework
+                      {t("audits.actions.viewFramework")}
                     </Link>
                   </Button>
                 </CardContent>
@@ -523,21 +525,21 @@ export default function AuditDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Building2 className="h-5 w-5" />
-                      Organization
+                      {t("audits.detail.organization")}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Name</span>
+                      <span className="text-muted-foreground">{t("fields.name")}</span>
                       <span className="font-medium">{audit.organization.name}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Slug</span>
+                      <span className="text-muted-foreground">{t("fields.slug")}</span>
                       <span className="font-mono text-sm">{audit.organization.slug}</span>
                     </div>
                     <Button variant="outline" className="w-full" asChild>
                       <Link href={`/admin/tenants/${audit.orgId}`}>
-                        View Organization
+                        {t("audits.actions.viewOrganization")}
                       </Link>
                     </Button>
                   </CardContent>
@@ -547,12 +549,12 @@ export default function AuditDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Building2 className="h-5 w-5" />
-                      Scope
+                      {t("audits.detail.scope")}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-muted-foreground">
-                      This is a platform-wide audit, not specific to any organization.
+                      {t("audits.detail.platformWideAudit")}
                     </p>
                   </CardContent>
                 </Card>
@@ -564,8 +566,8 @@ export default function AuditDetailPage() {
         <TabsContent value="findings">
           <Card>
             <CardHeader>
-              <CardTitle>Audit Findings</CardTitle>
-              <CardDescription>Issues identified during the audit</CardDescription>
+              <CardTitle>{t("audits.detail.auditFindings")}</CardTitle>
+              <CardDescription>{t("audits.detail.auditFindingsDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {audit.findings.length > 0 ? (
@@ -589,7 +591,7 @@ export default function AuditDetailPage() {
                 </div>
               ) : (
                 <p className="text-muted-foreground text-center py-8">
-                  No findings recorded for this audit
+                  {t("audits.detail.noFindings")}
                 </p>
               )}
             </CardContent>
@@ -599,8 +601,8 @@ export default function AuditDetailPage() {
         <TabsContent value="recommendations">
           <Card>
             <CardHeader>
-              <CardTitle>Recommendations</CardTitle>
-              <CardDescription>Suggested improvements from the audit</CardDescription>
+              <CardTitle>{t("audits.detail.recommendations")}</CardTitle>
+              <CardDescription>{t("audits.detail.recommendationsDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {audit.recommendations.length > 0 ? (
@@ -627,7 +629,7 @@ export default function AuditDetailPage() {
                 </div>
               ) : (
                 <p className="text-muted-foreground text-center py-8">
-                  No recommendations recorded for this audit
+                  {t("audits.detail.noRecommendations")}
                 </p>
               )}
             </CardContent>

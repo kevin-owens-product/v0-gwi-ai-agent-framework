@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import {
   Rocket,
@@ -37,7 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface Release {
@@ -63,33 +64,35 @@ interface Release {
   updatedAt: string
 }
 
-const typeOptions = [
-  { value: "MAJOR", label: "Major", color: "bg-purple-500" },
-  { value: "MINOR", label: "Minor", color: "bg-blue-500" },
-  { value: "PATCH", label: "Patch", color: "bg-green-500" },
-  { value: "HOTFIX", label: "Hotfix", color: "bg-red-500" },
-]
-
-const statusOptions = [
-  { value: "PLANNED", label: "Planned" },
-  { value: "IN_DEVELOPMENT", label: "In Development" },
-  { value: "STAGING", label: "Staging" },
-  { value: "ROLLING_OUT", label: "Rolling Out" },
-  { value: "COMPLETED", label: "Completed" },
-  { value: "ROLLBACK", label: "Rollback" },
-  { value: "CANCELLED", label: "Cancelled" },
-]
-
-const strategyOptions = [
-  { value: "BIG_BANG", label: "Big Bang" },
-  { value: "STAGED", label: "Staged" },
-  { value: "CANARY", label: "Canary" },
-  { value: "BLUE_GREEN", label: "Blue-Green" },
-  { value: "RING", label: "Ring" },
-]
-
 export default function ReleasesPage() {
+  const t = useTranslations("admin.operations.releases")
+  const tCommon = useTranslations("common")
   const [releases, setReleases] = useState<Release[]>([])
+  
+  const typeOptions = [
+    { value: "MAJOR", label: t("type.major"), color: "bg-purple-500" },
+    { value: "MINOR", label: t("type.minor"), color: "bg-blue-500" },
+    { value: "PATCH", label: t("type.patch"), color: "bg-green-500" },
+    { value: "HOTFIX", label: t("type.hotfix"), color: "bg-red-500" },
+  ]
+
+  const statusOptions = [
+    { value: "PLANNED", label: t("status.planned") },
+    { value: "IN_DEVELOPMENT", label: t("status.inDevelopment") },
+    { value: "STAGING", label: t("status.staging") },
+    { value: "ROLLING_OUT", label: t("status.rollingOut") },
+    { value: "COMPLETED", label: t("status.completed") },
+    { value: "ROLLBACK", label: t("status.rollback") },
+    { value: "CANCELLED", label: t("status.cancelled") },
+  ]
+
+  const strategyOptions = [
+    { value: "BIG_BANG", label: t("strategy.bigBang") },
+    { value: "STAGED", label: t("strategy.staged") },
+    { value: "CANARY", label: t("strategy.canary") },
+    { value: "BLUE_GREEN", label: t("strategy.blueGreen") },
+    { value: "RING", label: t("strategy.ring") },
+  ]
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
@@ -131,7 +134,7 @@ export default function ReleasesPage() {
       setTotal(data.total || 0)
     } catch (error) {
       console.error("Failed to fetch releases:", error)
-      toast.error("Failed to load releases")
+      showErrorToast(t("errors.createFailed"))
     } finally {
       setLoading(false)
     }
@@ -147,10 +150,10 @@ export default function ReleasesPage() {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to create release")
+        throw new Error(error.error || t("errors.createFailed"))
       }
 
-      toast.success("Release created")
+      showSuccessToast(t("messages.releaseCreated"))
       setIsCreateOpen(false)
       setNewRelease({
         version: "",
@@ -163,7 +166,7 @@ export default function ReleasesPage() {
       })
       fetchReleases()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create release")
+      showErrorToast(error instanceof Error ? error.message : t("errors.createFailed"))
     }
   }
 
@@ -179,10 +182,10 @@ export default function ReleasesPage() {
         throw new Error("Failed to update status")
       }
 
-      toast.success("Release updated")
+      showSuccessToast(t("messages.releaseCreated"))
       fetchReleases()
     } catch (error) {
-      toast.error("Failed to update release")
+      showErrorToast(t("errors.updateFailed"))
     }
   }
 
@@ -194,32 +197,32 @@ export default function ReleasesPage() {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.error || "Failed to delete release")
+        throw new Error(error.error || t("errors.deleteFailed"))
       }
 
-      toast.success("Release deleted")
+      showSuccessToast(tCommon("delete"))
       fetchReleases()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete release")
+      showErrorToast(error instanceof Error ? error.message : t("errors.deleteFailed"))
     }
   }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "PLANNED":
-        return <Badge variant="outline">Planned</Badge>
+        return <Badge variant="outline">{t("status.planned")}</Badge>
       case "IN_DEVELOPMENT":
-        return <Badge className="bg-blue-500">In Development</Badge>
+        return <Badge className="bg-blue-500">{t("status.inDevelopment")}</Badge>
       case "STAGING":
-        return <Badge className="bg-yellow-500">Staging</Badge>
+        return <Badge className="bg-yellow-500">{t("status.staging")}</Badge>
       case "ROLLING_OUT":
-        return <Badge className="bg-orange-500">Rolling Out</Badge>
+        return <Badge className="bg-orange-500">{t("status.rollingOut")}</Badge>
       case "COMPLETED":
-        return <Badge className="bg-green-500">Completed</Badge>
+        return <Badge className="bg-green-500">{t("status.completed")}</Badge>
       case "ROLLBACK":
-        return <Badge className="bg-red-500">Rollback</Badge>
+        return <Badge className="bg-red-500">{t("status.rollback")}</Badge>
       case "CANCELLED":
-        return <Badge variant="secondary">Cancelled</Badge>
+        return <Badge variant="secondary">{t("status.cancelled")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -245,7 +248,7 @@ export default function ReleasesPage() {
   const columns: Column<Release>[] = [
     {
       id: "release",
-      header: "Release",
+      header: t("columns.release"),
       cell: (release) => (
         <div>
           <Link
@@ -269,17 +272,17 @@ export default function ReleasesPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("columns.type"),
       cell: (release) => getTypeBadge(release.type),
     },
     {
       id: "status",
-      header: "Status",
+      header: t("columns.status"),
       cell: (release) => getStatusBadge(release.status),
     },
     {
       id: "rollout",
-      header: "Rollout",
+      header: t("columns.rollout"),
       cell: (release) =>
         release.status === "ROLLING_OUT" ? (
           <div className="flex items-center gap-2">
@@ -287,12 +290,12 @@ export default function ReleasesPage() {
             <span className="text-xs">{release.rolloutPercentage}%</span>
           </div>
         ) : (
-          <Badge variant="outline">{release.rolloutStrategy.replace("_", " ")}</Badge>
+          <Badge variant="outline">{t(`strategy.${release.rolloutStrategy.toLowerCase().replace("_", "")}`)}</Badge>
         ),
     },
     {
       id: "planned",
-      header: "Planned",
+      header: t("columns.plannedDate"),
       cell: (release) =>
         release.plannedDate ? (
           <div className="flex items-center gap-1 text-sm">
@@ -305,12 +308,12 @@ export default function ReleasesPage() {
     },
     {
       id: "features",
-      header: "Features",
+      header: tCommon("features"),
       cell: (release) => (
         <div className="flex gap-1">
           {Array.isArray(release.features) && release.features.length > 0 && (
             <Badge variant="secondary" className="text-xs">
-              {release.features.length} features
+              {release.features.length} {tCommon("features")}
             </Badge>
           )}
           {Array.isArray(release.bugFixes) && release.bugFixes.length > 0 && (
@@ -326,26 +329,26 @@ export default function ReleasesPage() {
   // Define row actions
   const rowActions: RowAction<Release>[] = [
     {
-      label: "Start Rollout",
+      label: t("actions.startRollout"),
       icon: <Play className="h-4 w-4" />,
       onClick: (release) => handleUpdateStatus(release.id, "ROLLING_OUT"),
       hidden: (release) => release.status !== "STAGING",
     },
     {
-      label: "Complete",
+      label: t("actions.complete"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: (release) => handleUpdateStatus(release.id, "COMPLETED"),
       hidden: (release) => release.status !== "ROLLING_OUT",
     },
     {
-      label: "Rollback",
+      label: t("actions.rollback"),
       icon: <Undo className="h-4 w-4" />,
       onClick: (release) => handleUpdateStatus(release.id, "ROLLBACK"),
       variant: "destructive" as const,
       hidden: (release) => release.status !== "ROLLING_OUT",
     },
     {
-      label: "Cancel",
+      label: t("actions.cancel"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: (release) => handleUpdateStatus(release.id, "CANCELLED"),
       hidden: (release) => !["PLANNED", "IN_DEVELOPMENT"].includes(release.status),
@@ -354,7 +357,7 @@ export default function ReleasesPage() {
 
   const bulkActions: BulkAction[] = [
     {
-      label: "Delete Selected",
+      label: tCommon("delete"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: async (ids) => {
         for (const id of ids) {
@@ -363,18 +366,18 @@ export default function ReleasesPage() {
               method: "DELETE",
             })
             if (!response.ok) {
-              throw new Error("Failed to delete release")
+              throw new Error(t("errors.deleteFailed"))
             }
           } catch (error) {
-            toast.error(`Failed to delete release ${id}`)
+            showErrorToast(t("errors.deleteFailed"))
           }
         }
-        toast.success(`Deleted ${ids.length} release${ids.length !== 1 ? "s" : ""}`)
+        showSuccessToast(tCommon("delete"))
         fetchReleases()
       },
       variant: "destructive",
-      confirmTitle: "Delete Releases",
-      confirmDescription: "Are you sure you want to delete the selected releases? This action cannot be undone.",
+      confirmTitle: t("bulk.cancelTitle"),
+      confirmDescription: t("bulk.cancelConfirm"),
     },
   ]
 
@@ -385,35 +388,35 @@ export default function ReleasesPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Rocket className="h-8 w-8 text-primary" />
-            Release Management
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Plan, track, and deploy platform releases
+            {t("description", { total })}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={fetchReleases}>
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            {tCommon("refresh")}
           </Button>
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
-                New Release
+                {t("createRelease")}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
-                <DialogTitle>Create New Release</DialogTitle>
+                <DialogTitle>{t("dialog.createTitle")}</DialogTitle>
                 <DialogDescription>
-                  Plan a new platform release
+                  {t("dialog.createDescription")}
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="version">Version</Label>
+                    <Label htmlFor="version">{t("fields.version")}</Label>
                     <Input
                       id="version"
                       placeholder="e.g., 2.5.0"
@@ -424,7 +427,7 @@ export default function ReleasesPage() {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="name">Name (optional)</Label>
+                    <Label htmlFor="name">{t("fields.name")} ({tCommon("optional")})</Label>
                     <Input
                       id="name"
                       placeholder="e.g., Phoenix"
@@ -436,7 +439,7 @@ export default function ReleasesPage() {
                   </div>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">{t("fields.description")}</Label>
                   <Textarea
                     id="description"
                     placeholder="Describe the release..."
@@ -449,7 +452,7 @@ export default function ReleasesPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label>Type</Label>
+                    <Label>{t("fields.type")}</Label>
                     <Select
                       value={newRelease.type}
                       onValueChange={(value) =>
@@ -469,7 +472,7 @@ export default function ReleasesPage() {
                     </Select>
                   </div>
                   <div className="grid gap-2">
-                    <Label>Rollout Strategy</Label>
+                    <Label>{t("fields.rolloutStrategy")}</Label>
                     <Select
                       value={newRelease.rolloutStrategy}
                       onValueChange={(value) =>
@@ -491,7 +494,7 @@ export default function ReleasesPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label>Planned Date</Label>
+                    <Label>{t("fields.plannedDate")}</Label>
                     <Input
                       type="date"
                       value={newRelease.plannedDate}
@@ -501,7 +504,7 @@ export default function ReleasesPage() {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label>Changelog URL (optional)</Label>
+                    <Label>{t("fields.changelogUrl")} ({tCommon("optional")})</Label>
                     <Input
                       placeholder="https://..."
                       value={newRelease.changelogUrl}
@@ -514,10 +517,10 @@ export default function ReleasesPage() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                  Cancel
+                  {tCommon("cancel")}
                 </Button>
                 <Button onClick={handleCreateRelease} disabled={!newRelease.version}>
-                  Create Release
+                  {t("dialog.createTitle")}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -533,7 +536,7 @@ export default function ReleasesPage() {
               <Rocket className="h-8 w-8 text-blue-500" />
               <div className="flex-1">
                 <h3 className="font-semibold">
-                  {activeReleases.length} Active Release{activeReleases.length !== 1 ? "s" : ""}
+                  {activeReleases.length} {t("status.rollingOut")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   {activeReleases.map((r) => `v${r.version}`).join(", ")}
@@ -541,7 +544,7 @@ export default function ReleasesPage() {
               </div>
               {activeReleases.some((r) => r.status === "ROLLING_OUT") && (
                 <div className="text-right">
-                  <p className="text-sm font-medium">Rolling Out</p>
+                  <p className="text-sm font-medium">{t("status.rollingOut")}</p>
                   <Progress
                     value={activeReleases.find((r) => r.status === "ROLLING_OUT")?.rolloutPercentage || 0}
                     className="w-32 mt-1"
@@ -558,7 +561,7 @@ export default function ReleasesPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{total}</div>
-            <p className="text-xs text-muted-foreground">Total Releases</p>
+            <p className="text-xs text-muted-foreground">{tCommon("total")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -566,7 +569,7 @@ export default function ReleasesPage() {
             <div className="text-2xl font-bold text-blue-500">
               {releases.filter((r) => r.status === "IN_DEVELOPMENT").length}
             </div>
-            <p className="text-xs text-muted-foreground">In Development</p>
+            <p className="text-xs text-muted-foreground">{t("status.inDevelopment")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -574,7 +577,7 @@ export default function ReleasesPage() {
             <div className="text-2xl font-bold text-orange-500">
               {releases.filter((r) => r.status === "ROLLING_OUT").length}
             </div>
-            <p className="text-xs text-muted-foreground">Rolling Out</p>
+            <p className="text-xs text-muted-foreground">{t("status.rollingOut")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -582,7 +585,7 @@ export default function ReleasesPage() {
             <div className="text-2xl font-bold text-green-500">
               {releases.filter((r) => r.status === "COMPLETED").length}
             </div>
-            <p className="text-xs text-muted-foreground">Completed</p>
+            <p className="text-xs text-muted-foreground">{t("status.completed")}</p>
           </CardContent>
         </Card>
       </div>
@@ -595,7 +598,7 @@ export default function ReleasesPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search releases..."
+                  placeholder={tCommon("search")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -604,10 +607,10 @@ export default function ReleasesPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("filters.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
                 {statusOptions.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -617,10 +620,10 @@ export default function ReleasesPage() {
             </Select>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder={t("filters.type")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="all">{t("filters.allTypes")}</SelectItem>
                 {typeOptions.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -638,12 +641,12 @@ export default function ReleasesPage() {
         columns={columns}
         getRowId={(release) => release.id}
         isLoading={loading}
-        emptyMessage="No releases found"
+        emptyMessage={t("noReleases")}
         viewHref={(release) => `/admin/operations/releases/${release.id}`}
         onDelete={handleDelete}
-        deleteConfirmTitle="Delete Release"
+        deleteConfirmTitle={tCommon("delete")}
         deleteConfirmDescription={(release) =>
-          `Are you sure you want to delete release v${release.version}? This action cannot be undone.`
+          t("errors.deleteFailed")
         }
         rowActions={rowActions}
         bulkActions={bulkActions}

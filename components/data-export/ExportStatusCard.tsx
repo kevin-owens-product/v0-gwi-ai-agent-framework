@@ -10,6 +10,7 @@
 
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -44,41 +45,44 @@ interface ExportStatusCardProps {
 
 const STATUS_CONFIG = {
   PENDING: {
-    color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
+    key: 'pending',
     icon: Clock,
-    label: 'Pending',
     progress: 10,
   },
   PROCESSING: {
-    color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+    key: 'processing',
     icon: Loader2,
-    label: 'Processing',
     progress: 50,
   },
   COMPLETED: {
-    color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+    key: 'completed',
     icon: CheckCircle,
-    label: 'Completed',
     progress: 100,
   },
   FAILED: {
-    color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+    key: 'failed',
     icon: XCircle,
-    label: 'Failed',
     progress: 0,
   },
   EXPIRED: {
-    color: 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400',
+    key: 'expired',
     icon: AlertTriangle,
-    label: 'Expired',
     progress: 0,
   },
   CANCELLED: {
-    color: 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400',
+    key: 'cancelled',
     icon: XCircle,
-    label: 'Cancelled',
     progress: 0,
   },
+}
+
+const STATUS_COLORS = {
+  PENDING: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
+  PROCESSING: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+  COMPLETED: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+  FAILED: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+  EXPIRED: 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400',
+  CANCELLED: 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400',
 }
 
 function formatBytes(bytes: number): string {
@@ -90,7 +94,9 @@ function formatBytes(bytes: number): string {
 }
 
 export function ExportStatusCard({ export: exportData, onDownload }: ExportStatusCardProps) {
+  const t = useTranslations('dataExport.status')
   const status = STATUS_CONFIG[exportData.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG.PENDING
+  const statusColor = STATUS_COLORS[exportData.status as keyof typeof STATUS_COLORS] || STATUS_COLORS.PENDING
   const StatusIcon = status.icon
 
   const handleDownload = () => {
@@ -112,11 +118,11 @@ export function ExportStatusCard({ export: exportData, onDownload }: ExportStatu
               {exportData.type.replace(/_/g, ' ')}
             </CardTitle>
           </div>
-          <Badge className={status.color}>
+          <Badge className={statusColor}>
             <StatusIcon
               className={`mr-1 h-3 w-3 ${exportData.status === 'PROCESSING' ? 'animate-spin' : ''}`}
             />
-            {status.label}
+            {t(`statuses.${status.key}`)}
           </Badge>
         </div>
       </CardHeader>
@@ -127,8 +133,8 @@ export function ExportStatusCard({ export: exportData, onDownload }: ExportStatu
             <Progress value={status.progress} className="h-2" />
             <p className="text-xs text-muted-foreground">
               {exportData.status === 'PENDING'
-                ? 'Waiting to start...'
-                : 'Collecting your data...'}
+                ? t('waitingToStart')
+                : t('collectingData')}
             </p>
           </div>
         )}
@@ -143,13 +149,13 @@ export function ExportStatusCard({ export: exportData, onDownload }: ExportStatu
         {/* Export details */}
         <div className="grid gap-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Requested</span>
+            <span className="text-muted-foreground">{t('labels.requested')}</span>
             <span>{formatDistanceToNow(new Date(exportData.createdAt), { addSuffix: true })}</span>
           </div>
 
           {exportData.completedAt && (
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Completed</span>
+              <span className="text-muted-foreground">{t('labels.completed')}</span>
               <span>
                 {formatDistanceToNow(new Date(exportData.completedAt), { addSuffix: true })}
               </span>
@@ -158,14 +164,14 @@ export function ExportStatusCard({ export: exportData, onDownload }: ExportStatu
 
           {exportData.fileSize && (
             <div className="flex justify-between">
-              <span className="text-muted-foreground">File size</span>
+              <span className="text-muted-foreground">{t('labels.fileSize')}</span>
               <span>{formatBytes(exportData.fileSize)}</span>
             </div>
           )}
 
           {exportData.expiresAt && exportData.status === 'COMPLETED' && (
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Expires</span>
+              <span className="text-muted-foreground">{t('labels.expires')}</span>
               <span>
                 {formatDistanceToNow(new Date(exportData.expiresAt), { addSuffix: true })}
               </span>
@@ -173,7 +179,7 @@ export function ExportStatusCard({ export: exportData, onDownload }: ExportStatu
           )}
 
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Format</span>
+            <span className="text-muted-foreground">{t('labels.format')}</span>
             <span className="uppercase">{exportData.format}</span>
           </div>
         </div>
@@ -182,14 +188,14 @@ export function ExportStatusCard({ export: exportData, onDownload }: ExportStatu
         {exportData.downloadAvailable && (
           <Button onClick={handleDownload} className="w-full">
             <Download className="mr-2 h-4 w-4" />
-            Download Export
+            {t('downloadButton')}
           </Button>
         )}
 
         {/* Expired notice */}
         {exportData.status === 'EXPIRED' && (
           <p className="text-xs text-muted-foreground text-center">
-            This export has expired. Please request a new export.
+            {t('expiredNotice')}
           </p>
         )}
       </CardContent>

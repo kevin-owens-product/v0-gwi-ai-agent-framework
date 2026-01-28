@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -6,8 +8,11 @@ import { ArrowRight, ArrowLeft, TrendingUp, Users, Target, BarChart3, Brain, Che
 import { LandingHeader } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 import { salesAgents } from "@/lib/solution-agents"
+import { useTranslations } from "next-intl"
 
 export default function SalesPage() {
+  const t = useTranslations("solutions.sales")
+
   return (
     <div className="min-h-screen bg-background">
       <LandingHeader />
@@ -20,31 +25,30 @@ export default function SalesPage() {
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Home
+              {t("backToHome")}
             </Link>
           </div>
 
           <div className="mb-16 text-center">
             <Badge className="mb-4" variant="outline">
-              For Sales Teams
+              {t("badge")}
             </Badge>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-balance mb-6">
-              Close Deals with <span className="text-accent">Human Intelligence</span>
+              {t("hero.titleStart")} <span className="text-accent">{t("hero.titleHighlight")}</span>
             </h1>
             <p className="text-xl text-muted-foreground text-balance max-w-3xl mx-auto mb-8">
-              Understand your prospects deeply, personalize outreach at scale, and predict buyer behavior with
-              AI-powered human insights.
+              {t("hero.description")}
             </p>
             <div className="flex gap-4 justify-center">
               <Link href="/dashboard">
                 <Button size="lg">
-                  Start Free Trial
+                  {t("cta.startTrial")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/contact">
                 <Button size="lg" variant="outline">
-                  Book a Demo
+                  {t("cta.bookDemo")}
                 </Button>
               </Link>
             </div>
@@ -57,26 +61,26 @@ export default function SalesPage() {
                   <Target className="h-6 w-6 text-accent" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">Key Challenges We Solve</h2>
-                  <p className="text-muted-foreground">Common pain points for modern sales teams</p>
+                  <h2 className="text-2xl font-bold mb-2">{t("challengesTitle")}</h2>
+                  <p className="text-muted-foreground">{t("challengesSubtitle")}</p>
                 </div>
               </div>
               <div className="grid md:grid-cols-3 gap-6">
                 <div>
-                  <h3 className="font-semibold mb-2">Generic Outreach</h3>
+                  <h3 className="font-semibold mb-2">{t("challenges.genericOutreach.title")}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Prospects ignore one-size-fits-all messages that don't speak to their specific needs
+                    {t("challenges.genericOutreach.description")}
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-2">Limited Buyer Insights</h3>
+                  <h3 className="font-semibold mb-2">{t("challenges.limitedInsights.title")}</h3>
                   <p className="text-sm text-muted-foreground">
-                    Sales reps lack deep understanding of prospect motivations and decision drivers
+                    {t("challenges.limitedInsights.description")}
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-2">Manual Research</h3>
-                  <p className="text-sm text-muted-foreground">Hours spent researching accounts instead of selling</p>
+                  <h3 className="font-semibold mb-2">{t("challenges.manualResearch.title")}</h3>
+                  <p className="text-sm text-muted-foreground">{t("challenges.manualResearch.description")}</p>
                 </div>
               </div>
             </Card>
@@ -84,8 +88,8 @@ export default function SalesPage() {
 
           <div className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Sales AI Agents</h2>
-              <p className="text-muted-foreground">AI agents designed to accelerate your sales process</p>
+              <h2 className="text-3xl font-bold mb-4">{t("agentsTitle")}</h2>
+              <p className="text-muted-foreground">{t("agentsDescription")}</p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {salesAgents.map((agent) => {
@@ -127,7 +131,7 @@ export default function SalesPage() {
                       </ul>
                       <div className="mt-4 pt-4 border-t">
                         <span className="text-sm text-accent flex items-center gap-1">
-                          Open Agent <ArrowRight className="h-3 w-3" />
+                          {t("openAgent")} <ArrowRight className="h-3 w-3" />
                         </span>
                       </div>
                     </Card>
@@ -139,72 +143,71 @@ export default function SalesPage() {
 
           <div className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Pre-Built Workflows</h2>
-              <p className="text-muted-foreground">Ready-to-use automation for common sales tasks</p>
+              <h2 className="text-3xl font-bold mb-4">{t("workflowsTitle")}</h2>
+              <p className="text-muted-foreground">{t("workflowsDescription")}</p>
             </div>
             <div className="grid md:grid-cols-2 gap-6">
               <Card className="p-6">
-                <h3 className="font-semibold mb-3">Account Research Workflow</h3>
+                <h3 className="font-semibold mb-3">{t("workflows.accountResearch.title")}</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Automatically researches accounts, identifies key stakeholders, and generates personalized talking
-                  points
+                  {t("workflows.accountResearch.description")}
                 </p>
                 <div className="flex gap-2">
-                  <Badge variant="secondary">Buyer Persona</Badge>
-                  <Badge variant="secondary">Competitive Intelligence</Badge>
+                  <Badge variant="secondary">{t("workflows.accountResearch.badge1")}</Badge>
+                  <Badge variant="secondary">{t("workflows.accountResearch.badge2")}</Badge>
                 </div>
               </Card>
 
               <Card className="p-6">
-                <h3 className="font-semibold mb-3">Outreach Personalization Workflow</h3>
+                <h3 className="font-semibold mb-3">{t("workflows.outreachPersonalization.title")}</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Generates personalized email sequences based on prospect segment, industry, and behavior
+                  {t("workflows.outreachPersonalization.description")}
                 </p>
                 <div className="flex gap-2">
-                  <Badge variant="secondary">Message Personalization</Badge>
-                  <Badge variant="secondary">Deal Intelligence</Badge>
+                  <Badge variant="secondary">{t("workflows.outreachPersonalization.badge1")}</Badge>
+                  <Badge variant="secondary">{t("workflows.outreachPersonalization.badge2")}</Badge>
                 </div>
               </Card>
 
               <Card className="p-6">
-                <h3 className="font-semibold mb-3">Deal Review Workflow</h3>
+                <h3 className="font-semibold mb-3">{t("workflows.dealReview.title")}</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Analyzes deal status, identifies risks, and recommends next actions to move deals forward
+                  {t("workflows.dealReview.description")}
                 </p>
                 <div className="flex gap-2">
-                  <Badge variant="secondary">Deal Intelligence</Badge>
-                  <Badge variant="secondary">Account Scoring</Badge>
+                  <Badge variant="secondary">{t("workflows.dealReview.badge1")}</Badge>
+                  <Badge variant="secondary">{t("workflows.dealReview.badge2")}</Badge>
                 </div>
               </Card>
 
               <Card className="p-6">
-                <h3 className="font-semibold mb-3">Territory Planning Workflow</h3>
+                <h3 className="font-semibold mb-3">{t("workflows.territoryPlanning.title")}</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Segments accounts by opportunity, creates target lists, and prioritizes outreach
+                  {t("workflows.territoryPlanning.description")}
                 </p>
                 <div className="flex gap-2">
-                  <Badge variant="secondary">Account Scoring</Badge>
-                  <Badge variant="secondary">Sales Enablement</Badge>
+                  <Badge variant="secondary">{t("workflows.territoryPlanning.badge1")}</Badge>
+                  <Badge variant="secondary">{t("workflows.territoryPlanning.badge2")}</Badge>
                 </div>
               </Card>
             </div>
           </div>
 
           <div className="bg-accent/5 rounded-2xl p-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Sales Process?</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("finalCta.title")}</h2>
             <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join hundreds of sales teams using GWI Insights to understand buyers better and close more deals
+              {t("finalCta.description")}
             </p>
             <div className="flex gap-4 justify-center">
               <Link href="/dashboard">
                 <Button size="lg">
-                  Start Free Trial
+                  {t("finalCta.startTrial")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/contact">
                 <Button size="lg" variant="outline">
-                  Talk to Sales
+                  {t("finalCta.talkToSales")}
                 </Button>
               </Link>
             </div>

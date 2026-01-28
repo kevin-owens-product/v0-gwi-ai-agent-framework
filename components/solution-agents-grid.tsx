@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -112,6 +113,7 @@ interface SolutionAgentCardProps {
 }
 
 export function SolutionAgentCard({ agent, compact = false }: SolutionAgentCardProps) {
+  const t = useTranslations("dashboard.solutionAgents")
   const colors = solutionColors[agent.solutionAreaSlug] || solutionColors.core
 
   if (compact) {
@@ -156,7 +158,7 @@ export function SolutionAgentCard({ agent, compact = false }: SolutionAgentCardP
         <CardContent>
           <div className="space-y-3">
             <div>
-              <p className="text-xs font-medium text-muted-foreground mb-2">Capabilities</p>
+              <p className="text-xs font-medium text-muted-foreground mb-2">{t("capabilities")}</p>
               <ul className="text-xs text-muted-foreground space-y-1">
                 {agent.capabilities.slice(0, 3).map((cap, idx) => (
                   <li key={idx} className="flex items-start gap-2">
@@ -174,7 +176,7 @@ export function SolutionAgentCard({ agent, compact = false }: SolutionAgentCardP
               ))}
             </div>
             <Button variant="ghost" size="sm" className="w-full mt-2 group">
-              Open Agent
+              {t("openAgent")}
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
@@ -199,6 +201,8 @@ export function SolutionAgentsGrid({
   limit,
   compact = false
 }: SolutionAgentsGridProps) {
+  const t = useTranslations("dashboard.solutionAgents")
+  const tCommon = useTranslations("common")
   const [searchQuery, setSearchQuery] = useState("")
   const [activeTab, setActiveTab] = useState(solutionSlug || "all")
 
@@ -224,14 +228,14 @@ export function SolutionAgentsGrid({
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search agents..."
+              placeholder={t("searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
             />
           </div>
           <p className="text-sm text-muted-foreground">
-            {agents.length} agent{agents.length !== 1 ? 's' : ''} found
+            {t("agentsFound", { count: agents.length })}
           </p>
         </div>
       )}
@@ -243,7 +247,7 @@ export function SolutionAgentsGrid({
               value="all"
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
             >
-              All ({allSolutionAgents.length})
+              {tCommon("all")} ({allSolutionAgents.length})
             </TabsTrigger>
             {solutionAreas.map((area) => (
               <TabsTrigger
@@ -266,7 +270,7 @@ export function SolutionAgentsGrid({
 
       {agents.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">No agents found matching your search.</p>
+          <p className="text-muted-foreground">{t("noAgentsFound")}</p>
         </div>
       )}
     </div>
@@ -280,6 +284,7 @@ interface SolutionPageAgentsProps {
 }
 
 export function SolutionPageAgents({ solutionSlug, title }: SolutionPageAgentsProps) {
+  const t = useTranslations("dashboard.solutionAgents")
   const agents = getAgentsBySolution(solutionSlug)
   const solutionArea = solutionAreas.find(s => s.slug === solutionSlug)
 
@@ -288,10 +293,10 @@ export function SolutionPageAgents({ solutionSlug, title }: SolutionPageAgentsPr
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-4">
-            {title || `${solutionArea?.name || 'Solution'} AI Agents`}
+            {title || t("solutionAIAgents", { name: solutionArea?.name || t("solution") })}
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            {solutionArea?.description || 'Specialized AI agents to help you succeed'}
+            {solutionArea?.description || t("specializedAgentsDescription")}
           </p>
         </div>
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

@@ -7,6 +7,7 @@
 "use client"
 
 import { useState, useMemo } from 'react'
+import { useTranslations } from 'next-intl'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -49,6 +50,7 @@ const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>
 }
 
 export function ConnectorTypeSelector({ onSelect, selectedProvider }: ConnectorTypeSelectorProps) {
+  const t = useTranslations('connectors.typeSelector')
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
 
@@ -90,7 +92,7 @@ export function ConnectorTypeSelector({ onSelect, selectedProvider }: ConnectorT
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search connectors..."
+            placeholder={t('searchPlaceholder')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-10"
@@ -104,14 +106,14 @@ export function ConnectorTypeSelector({ onSelect, selectedProvider }: ConnectorT
             value="all"
             className="data-[state=active]:bg-secondary"
           >
-            All
+            {t('tabs.all')}
           </TabsTrigger>
           <TabsTrigger
             value="popular"
             className="data-[state=active]:bg-secondary"
           >
             <Star className="h-3 w-3 mr-1" />
-            Popular
+            {t('tabs.popular')}
           </TabsTrigger>
           {CONNECTOR_CATEGORIES.map((category) => (
             <TabsTrigger
@@ -129,10 +131,10 @@ export function ConnectorTypeSelector({ onSelect, selectedProvider }: ConnectorT
           {filteredProviders.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
               <Plug className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No connectors found</p>
+              <p>{t('empty.title')}</p>
               {search && (
                 <p className="text-sm mt-2">
-                  Try a different search term or browse by category
+                  {t('empty.suggestion')}
                 </p>
               )}
             </div>
@@ -161,6 +163,7 @@ interface ProviderCardProps {
 }
 
 function ProviderCard({ provider, isSelected, onClick }: ProviderCardProps) {
+  const t = useTranslations('connectors.typeSelector')
   const CategoryIcon = CATEGORY_ICONS[provider.type] || Plug
 
   return (
@@ -191,12 +194,12 @@ function ProviderCard({ provider, isSelected, onClick }: ProviderCardProps) {
               <h3 className="font-medium text-sm truncate">{provider.name}</h3>
               {provider.popular && (
                 <Badge variant="secondary" className="text-xs px-1.5 py-0">
-                  Popular
+                  {t('badges.popular')}
                 </Badge>
               )}
               {provider.comingSoon && (
                 <Badge variant="outline" className="text-xs px-1.5 py-0">
-                  Soon
+                  {t('badges.soon')}
                 </Badge>
               )}
             </div>

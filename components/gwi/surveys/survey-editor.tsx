@@ -68,44 +68,46 @@ export function SurveyEditor({ survey }: SurveyEditorProps) {
     }
   }
 
+  const STATUS_VALUES = ["DRAFT", "ACTIVE", "PAUSED", "COMPLETED", "ARCHIVED"] as const
+
   return (
     <form onSubmit={handleSubmit}>
       <Card>
         <CardHeader>
-          <CardTitle>Survey Settings</CardTitle>
+          <CardTitle>{t("surveySettings")}</CardTitle>
           <CardDescription>
-            Configure the basic settings for this survey
+            {t("surveySettingsDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="name">Survey Name</Label>
+            <Label htmlFor="name">{t("surveyName")}</Label>
             <Input
               id="name"
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              placeholder="Enter survey name"
+              placeholder={t("placeholders.surveyName")}
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{tCommon("description")}</Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
-              placeholder="Enter survey description (optional)"
+              placeholder={t("placeholders.description")}
               rows={4}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="status">Status</Label>
+            <Label htmlFor="status">{tCommon("status")}</Label>
             <Select
               value={formData.status}
               onValueChange={(value) =>
@@ -113,14 +115,14 @@ export function SurveyEditor({ survey }: SurveyEditorProps) {
               }
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select status" />
+                <SelectValue placeholder={t("placeholders.selectStatus")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="DRAFT">Draft</SelectItem>
-                <SelectItem value="ACTIVE">Active</SelectItem>
-                <SelectItem value="PAUSED">Paused</SelectItem>
-                <SelectItem value="COMPLETED">Completed</SelectItem>
-                <SelectItem value="ARCHIVED">Archived</SelectItem>
+                {STATUS_VALUES.map((statusValue) => (
+                  <SelectItem key={statusValue} value={statusValue}>
+                    {t(`statuses.${statusValue}`)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -128,25 +130,25 @@ export function SurveyEditor({ survey }: SurveyEditorProps) {
           {survey && (
             <div className="pt-4 border-t">
               <p className="text-sm text-muted-foreground">
-                Current Version: {survey.version}
+                {t("currentVersion", { version: survey.version })}
               </p>
             </div>
           )}
 
           <div className="flex justify-end gap-2 pt-4">
             <Button type="button" variant="outline" onClick={() => router.back()}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {tCommon("saving")}
                 </>
               ) : (
                 <>
                   <Save className="mr-2 h-4 w-4" />
-                  Save Changes
+                  {tCommon("saveChanges")}
                 </>
               )}
             </Button>

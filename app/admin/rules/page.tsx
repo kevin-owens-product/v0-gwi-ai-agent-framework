@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast } from "@/lib/toast-utils"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -57,24 +58,26 @@ interface SystemRule {
   createdAt: string
 }
 
-const ruleTypes = [
-  { value: "RATE_LIMIT", label: "Rate Limit", icon: Clock },
-  { value: "CONTENT_POLICY", label: "Content Policy", icon: AlertTriangle },
-  { value: "SECURITY", label: "Security", icon: Shield },
-  { value: "BILLING", label: "Billing", icon: Zap },
-  { value: "USAGE", label: "Usage", icon: Zap },
-  { value: "COMPLIANCE", label: "Compliance", icon: Scale },
-  { value: "NOTIFICATION", label: "Notification", icon: Zap },
-  { value: "AUTO_SUSPEND", label: "Auto Suspend", icon: AlertTriangle },
-]
-
 export default function RulesPage() {
+  const t = useTranslations("admin.rules")
+  const tCommon = useTranslations("common")
   const [rules, setRules] = useState<SystemRule[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingRule, setEditingRule] = useState<SystemRule | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+
+  const ruleTypes = [
+    { value: "RATE_LIMIT", label: t("types.rateLimit"), icon: Clock },
+    { value: "CONTENT_POLICY", label: t("types.contentPolicy"), icon: AlertTriangle },
+    { value: "SECURITY", label: t("types.security"), icon: Shield },
+    { value: "BILLING", label: t("types.billing"), icon: Zap },
+    { value: "USAGE", label: t("types.usage"), icon: Zap },
+    { value: "COMPLIANCE", label: t("types.compliance"), icon: Scale },
+    { value: "NOTIFICATION", label: t("types.notification"), icon: Zap },
+    { value: "AUTO_SUSPEND", label: t("types.autoSuspend"), icon: AlertTriangle },
+  ]
 
   const [formData, setFormData] = useState({
     name: "",
@@ -142,7 +145,7 @@ export default function RulesPage() {
         conditions = JSON.parse(formData.conditions)
         actions = JSON.parse(formData.actions)
       } catch {
-        toast.error("Invalid JSON in conditions or actions")
+        showErrorToast(t("errors.invalidJson"))
         setIsSubmitting(false)
         return
       }
@@ -249,7 +252,7 @@ export default function RulesPage() {
   const columns: Column<SystemRule>[] = [
     {
       id: "rule",
-      header: "Rule",
+      header: t("columns.rule"),
       cell: (rule) => {
         const typeInfo = getRuleTypeInfo(rule.type)
         const TypeIcon = typeInfo.icon
@@ -272,7 +275,7 @@ export default function RulesPage() {
     },
     {
       id: "type",
-      header: "Type",
+      header: t("columns.type"),
       cell: (rule) => {
         const typeInfo = getRuleTypeInfo(rule.type)
         return <Badge variant="outline">{typeInfo.label}</Badge>
@@ -280,14 +283,14 @@ export default function RulesPage() {
     },
     {
       id: "priority",
-      header: "Priority",
+      header: t("columns.priority"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (rule) => <Badge variant="secondary">{rule.priority}</Badge>,
     },
     {
       id: "status",
-      header: "Status",
+      header: t("columns.status"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (rule) => (
@@ -299,19 +302,19 @@ export default function RulesPage() {
     },
     {
       id: "triggers",
-      header: "Triggers",
+      header: t("columns.triggers"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (rule) => <span className="text-sm font-medium">{rule.triggerCount}</span>,
     },
     {
       id: "lastTriggered",
-      header: "Last Triggered",
+      header: t("columns.lastTriggered"),
       cell: (rule) => (
         <span className="text-muted-foreground">
           {rule.lastTriggered
             ? new Date(rule.lastTriggered).toLocaleDateString()
-            : "Never"}
+            : tCommon("never")}
         </span>
       ),
     },
@@ -320,7 +323,7 @@ export default function RulesPage() {
   // Define row actions
   const rowActions: RowAction<SystemRule>[] = [
     {
-      label: "Edit Rule",
+      label: t("editRule"),
       icon: <Pencil className="h-4 w-4" />,
       onClick: (rule) => handleOpenDialog(rule),
     },
@@ -329,27 +332,27 @@ export default function RulesPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Enable All",
+      label: t("enableAll"),
       icon: <CheckCircle className="h-4 w-4" />,
       onClick: handleBulkEnable,
-      confirmTitle: "Enable Selected Rules",
-      confirmDescription: "Are you sure you want to enable all selected rules?",
+      confirmTitle: t("enableSelectedRules"),
+      confirmDescription: t("enableConfirm"),
     },
     {
-      label: "Disable All",
+      label: t("disableAll"),
       icon: <XCircle className="h-4 w-4" />,
       onClick: handleBulkDisable,
-      confirmTitle: "Disable Selected Rules",
-      confirmDescription: "Are you sure you want to disable all selected rules?",
+      confirmTitle: t("disableSelectedRules"),
+      confirmDescription: t("disableConfirm"),
     },
     {
-      label: "Delete All",
+      label: t("deleteAll"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
       separator: true,
-      confirmTitle: "Delete Selected Rules",
-      confirmDescription: "Are you sure you want to permanently delete all selected rules? This action cannot be undone.",
+      confirmTitle: t("deleteSelectedRules"),
+      confirmDescription: t("deleteConfirm"),
     },
   ]
 
@@ -359,44 +362,44 @@ export default function RulesPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>System Rules</CardTitle>
+              <CardTitle>{t("title")}</CardTitle>
               <CardDescription>
-                Configure platform-wide rules for rate limiting, security, compliance, and more
+                {t("description")}
               </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchRules} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {tCommon("refresh")}
               </Button>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
                   <Button size="sm" onClick={() => handleOpenDialog()}>
                     <Plus className="h-4 w-4 mr-2" />
-                    New Rule
+                    {t("newRule")}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl">
                   <DialogHeader>
                     <DialogTitle>
-                      {editingRule ? "Edit System Rule" : "Create System Rule"}
+                      {editingRule ? t("editSystemRule") : t("createSystemRule")}
                     </DialogTitle>
                     <DialogDescription>
-                      Configure a platform-wide rule that applies to all or specific tenants
+                      {t("configurePlatformWide")}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4 max-h-[60vh] overflow-y-auto">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Rule Name</Label>
+                        <Label>{t("ruleName")}</Label>
                         <Input
-                          placeholder="e.g., API Rate Limit"
+                          placeholder={t("placeholders.ruleName")}
                           value={formData.name}
                           onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Type</Label>
+                        <Label>{t("type")}</Label>
                         <Select
                           value={formData.type}
                           onValueChange={(v) => setFormData(prev => ({ ...prev, type: v }))}
@@ -415,9 +418,9 @@ export default function RulesPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Description</Label>
+                      <Label>{t("description")}</Label>
                       <Textarea
-                        placeholder="Describe what this rule does..."
+                        placeholder={t("placeholders.description")}
                         value={formData.description}
                         onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                         rows={2}
@@ -425,19 +428,19 @@ export default function RulesPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Priority</Label>
+                        <Label>{t("priority")}</Label>
                         <Input
                           type="number"
                           placeholder="0"
                           value={formData.priority}
                           onChange={(e) => setFormData(prev => ({ ...prev, priority: parseInt(e.target.value) || 0 }))}
                         />
-                        <p className="text-xs text-muted-foreground">Higher priority rules execute first</p>
+                        <p className="text-xs text-muted-foreground">{t("higherPriority")}</p>
                       </div>
                       <div className="flex items-center justify-between pt-6">
                         <div className="space-y-0.5">
-                          <Label>Active</Label>
-                          <p className="text-xs text-muted-foreground">Enable this rule</p>
+                          <Label>{t("active")}</Label>
+                          <p className="text-xs text-muted-foreground">{t("enableThisRule")}</p>
                         </div>
                         <Switch
                           checked={formData.isActive}
@@ -446,9 +449,9 @@ export default function RulesPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Conditions (JSON)</Label>
+                      <Label>{t("conditions")}</Label>
                       <Textarea
-                        placeholder='{"maxRequests": 100, "windowMs": 60000}'
+                        placeholder={t("placeholders.conditions")}
                         value={formData.conditions}
                         onChange={(e) => setFormData(prev => ({ ...prev, conditions: e.target.value }))}
                         rows={4}
@@ -456,9 +459,9 @@ export default function RulesPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Actions (JSON)</Label>
+                      <Label>{t("actions")}</Label>
                       <Textarea
-                        placeholder='{"block": true, "notify": true}'
+                        placeholder={t("placeholders.actions")}
                         value={formData.actions}
                         onChange={(e) => setFormData(prev => ({ ...prev, actions: e.target.value }))}
                         rows={4}
@@ -468,18 +471,18 @@ export default function RulesPage() {
                   </div>
                   <DialogFooter>
                     <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                      Cancel
+                      {t("cancel")}
                     </Button>
                     <Button onClick={handleSubmit} disabled={!formData.name || isSubmitting}>
                       {isSubmitting ? (
                         <>
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Saving...
+                          {t("saving")}
                         </>
                       ) : editingRule ? (
-                        "Update Rule"
+                        t("updateRule")
                       ) : (
-                        "Create Rule"
+                        t("createRuleButton")
                       )}
                     </Button>
                   </DialogFooter>
@@ -494,12 +497,12 @@ export default function RulesPage() {
             columns={columns}
             getRowId={(rule) => rule.id}
             isLoading={isLoading}
-            emptyMessage="No system rules configured"
+            emptyMessage={t("noRulesConfigured")}
             viewHref={(rule) => `/admin/rules/${rule.id}`}
             onDelete={(rule) => handleDelete(rule.id)}
-            deleteConfirmTitle="Delete Rule"
+            deleteConfirmTitle={t("deleteRule")}
             deleteConfirmDescription={(rule) =>
-              `Are you sure you want to delete the rule "${rule.name}"? This action cannot be undone.`
+              t("deleteRuleConfirm", { name: rule.name })
             }
             rowActions={rowActions}
             bulkActions={bulkActions}

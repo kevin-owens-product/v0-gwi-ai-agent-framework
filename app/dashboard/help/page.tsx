@@ -31,7 +31,7 @@ const quickLinkIcons = {
 }
 
 export default function HelpPage() {
-  const t = useTranslations("settings.help")
+  const t = useTranslations("dashboard.help")
   const [searchQuery, setSearchQuery] = useState("")
 
   const quickLinks = [

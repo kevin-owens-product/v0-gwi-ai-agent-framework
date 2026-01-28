@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -86,34 +87,49 @@ const roleColors: Record<string, string> = {
   ANALYST: "bg-slate-500",
 }
 
-const ROLE_PERMISSIONS: Record<string, string[]> = {
-  SUPER_ADMIN: ["Full platform access", "All permissions granted"],
-  ADMIN: [
-    "Tenant management",
-    "User management",
-    "Feature flags",
-    "System rules",
-    "Support tickets",
-    "Notifications",
-    "View analytics",
-  ],
-  SUPPORT: [
-    "View tenants",
-    "View users",
-    "Support tickets (full access)",
-    "View analytics",
-    "View audit logs",
-  ],
-  ANALYST: [
-    "View tenants (read-only)",
-    "View users (read-only)",
-    "View analytics",
-    "Export data",
-    "View audit logs",
-  ],
-}
-
 export default function AdminDetailPage() {
+  const t = useTranslations("admin.admins")
+  const tCommon = useTranslations("common")
+
+  const getRolePermissions = (role: string): string[] => {
+    const permissions: Record<string, string[]> = {
+      SUPER_ADMIN: [t("permissions.fullPlatformAccess"), t("permissions.allPermissionsGranted")],
+      ADMIN: [
+        t("permissions.tenantManagement"),
+        t("permissions.userManagement"),
+        t("permissions.featureFlags"),
+        t("permissions.systemRules"),
+        t("permissions.supportTickets"),
+        t("permissions.notifications"),
+        t("permissions.viewAnalytics"),
+      ],
+      SUPPORT: [
+        t("permissions.viewTenants"),
+        t("permissions.viewUsers"),
+        t("permissions.supportTicketsFullAccess"),
+        t("permissions.viewAnalytics"),
+        t("permissions.viewAuditLogs"),
+      ],
+      ANALYST: [
+        t("permissions.viewTenantsReadOnly"),
+        t("permissions.viewUsersReadOnly"),
+        t("permissions.viewAnalytics"),
+        t("permissions.exportData"),
+        t("permissions.viewAuditLogs"),
+      ],
+    }
+    return permissions[role] || []
+  }
+
+  const getRoleLabel = (role: string): string => {
+    const roleLabels: Record<string, string> = {
+      SUPER_ADMIN: t("roles.superAdmin"),
+      ADMIN: t("roles.admin"),
+      SUPPORT: t("roles.support"),
+      ANALYST: t("roles.analyst"),
+    }
+    return roleLabels[role] || role
+  }
   const params = useParams()
   const router = useRouter()
   const { admin: currentAdmin } = useAdmin()
@@ -185,11 +201,11 @@ export default function AdminDetailPage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {tCommon("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Admin not found</p>
+            <p className="text-muted-foreground">{t("notFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -204,7 +220,7 @@ export default function AdminDetailPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/admins">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Link>
           </Button>
           <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -214,23 +230,23 @@ export default function AdminDetailPage() {
             <h1 className="text-2xl font-bold flex items-center gap-2">
               {admin.name}
               {isOwnAccount && (
-                <span className="text-sm font-normal text-muted-foreground">(You)</span>
+                <span className="text-sm font-normal text-muted-foreground">({t("you")})</span>
               )}
             </h1>
             <p className="text-muted-foreground">{admin.email}</p>
           </div>
         </div>
         <Badge className={`${roleColors[admin.role]} text-white`}>
-          {admin.role.replace("_", " ")}
+          {getRoleLabel(admin.role)}
         </Badge>
       </div>
 
       <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="permissions">Permissions</TabsTrigger>
-          <TabsTrigger value="sessions">Sessions ({admin.sessions.length})</TabsTrigger>
-          <TabsTrigger value="activity">Activity</TabsTrigger>
+          <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="permissions">{t("tabs.permissions")}</TabsTrigger>
+          <TabsTrigger value="sessions">{t("tabs.sessions", { count: admin.sessions.length })}</TabsTrigger>
+          <TabsTrigger value="activity">{t("tabs.activity")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -238,7 +254,7 @@ export default function AdminDetailPage() {
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Actions</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.totalActions")}</CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -247,7 +263,7 @@ export default function AdminDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Recent Logins (30d)</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.recentLogins")}</CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -256,7 +272,7 @@ export default function AdminDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Tickets Handled (30d)</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.ticketsHandled")}</CardTitle>
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -265,12 +281,12 @@ export default function AdminDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">2FA Status</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("stats.twoFactorStatus")}</CardTitle>
                 <Key className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <Badge variant={admin.twoFactorEnabled ? "default" : "secondary"}>
-                  {admin.twoFactorEnabled ? "Enabled" : "Disabled"}
+                  {admin.twoFactorEnabled ? tCommon("enabled") : tCommon("disabled")}
                 </Badge>
               </CardContent>
             </Card>
@@ -280,7 +296,7 @@ export default function AdminDetailPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Admin Details</CardTitle>
+                <CardTitle>{t("details.title")}</CardTitle>
                 {isSuperAdmin && !isOwnAccount && (
                   isEditing ? (
                     <div className="flex gap-2">
@@ -303,14 +319,14 @@ export default function AdminDetailPage() {
               {isEditing ? (
                 <>
                   <div className="space-y-2">
-                    <Label>Name</Label>
+                    <Label>{tCommon("name")}</Label>
                     <Input
                       value={editForm.name}
                       onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Role</Label>
+                    <Label>{t("role")}</Label>
                     <Select
                       value={editForm.role}
                       onValueChange={(value) => setEditForm({ ...editForm, role: value })}
@@ -319,17 +335,17 @@ export default function AdminDetailPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="SUPER_ADMIN">Super Admin</SelectItem>
-                        <SelectItem value="ADMIN">Admin</SelectItem>
-                        <SelectItem value="SUPPORT">Support</SelectItem>
-                        <SelectItem value="ANALYST">Analyst</SelectItem>
+                        <SelectItem value="SUPER_ADMIN">{t("roles.superAdmin")}</SelectItem>
+                        <SelectItem value="ADMIN">{t("roles.admin")}</SelectItem>
+                        <SelectItem value="SUPPORT">{t("roles.support")}</SelectItem>
+                        <SelectItem value="ANALYST">{t("roles.analyst")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>Active Status</Label>
-                      <p className="text-xs text-muted-foreground">Allow login to admin portal</p>
+                      <Label>{t("details.activeStatus")}</Label>
+                      <p className="text-xs text-muted-foreground">{t("allowLogin")}</p>
                     </div>
                     <Switch
                       checked={editForm.isActive}
@@ -340,37 +356,37 @@ export default function AdminDetailPage() {
               ) : (
                 <>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Name</span>
+                    <span className="text-muted-foreground">{tCommon("name")}</span>
                     <span className="font-medium">{admin.name}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Email</span>
+                    <span className="text-muted-foreground">{t("email")}</span>
                     <span className="font-medium">{admin.email}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Role</span>
+                    <span className="text-muted-foreground">{t("role")}</span>
                     <Badge className={`${roleColors[admin.role]} text-white`}>
-                      {admin.role.replace("_", " ")}
+                      {getRoleLabel(admin.role)}
                     </Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Status</span>
+                    <span className="text-muted-foreground">{tCommon("status")}</span>
                     {admin.isActive ? (
-                      <Badge variant="default" className="bg-green-500">Active</Badge>
+                      <Badge variant="default" className="bg-green-500">{tCommon("active")}</Badge>
                     ) : (
-                      <Badge variant="secondary">Inactive</Badge>
+                      <Badge variant="secondary">{tCommon("inactive")}</Badge>
                     )}
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">2FA</span>
+                    <span className="text-muted-foreground">{t("twoFactor")}</span>
                     {admin.twoFactorEnabled ? (
-                      <Badge variant="default" className="bg-green-500">Enabled</Badge>
+                      <Badge variant="default" className="bg-green-500">{tCommon("enabled")}</Badge>
                     ) : (
-                      <Badge variant="secondary">Not Enabled</Badge>
+                      <Badge variant="secondary">{t("notEnabled")}</Badge>
                     )}
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Created</span>
+                    <span className="text-muted-foreground">{t("created")}</span>
                     <span className="font-medium flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       {new Date(admin.createdAt).toLocaleDateString()}
@@ -379,7 +395,7 @@ export default function AdminDetailPage() {
                   {admin.lastLoginAt && (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Last Login</span>
+                        <span className="text-muted-foreground">{t("lastLogin")}</span>
                         <span className="font-medium flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {new Date(admin.lastLoginAt).toLocaleString()}
@@ -387,7 +403,7 @@ export default function AdminDetailPage() {
                       </div>
                       {admin.lastLoginIp && (
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Last IP</span>
+                          <span className="text-muted-foreground">{t("details.lastIp")}</span>
                           <span className="font-medium flex items-center gap-1">
                             <Globe className="h-3 w-3" />
                             {admin.lastLoginIp}
@@ -405,14 +421,14 @@ export default function AdminDetailPage() {
         <TabsContent value="permissions">
           <Card>
             <CardHeader>
-              <CardTitle>Role Permissions</CardTitle>
+              <CardTitle>{t("permissionsTab.title")}</CardTitle>
               <CardDescription>
-                Permissions granted to the {admin.role.replace("_", " ")} role
+                {t("permissionsTab.description", { role: getRoleLabel(admin.role) })}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {ROLE_PERMISSIONS[admin.role]?.map((permission, index) => (
+                {getRolePermissions(admin.role).map((permission, index) => (
                   <div key={index} className="flex items-center gap-2 p-2 rounded-lg border">
                     <Shield className="h-4 w-4 text-primary" />
                     <span>{permission}</span>
@@ -426,19 +442,19 @@ export default function AdminDetailPage() {
         <TabsContent value="sessions">
           <Card>
             <CardHeader>
-              <CardTitle>Login Sessions</CardTitle>
-              <CardDescription>Recent login sessions for this admin account</CardDescription>
+              <CardTitle>{t("sessionsTab.title")}</CardTitle>
+              <CardDescription>{t("sessionsTab.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               {admin.sessions.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>IP Address</TableHead>
-                      <TableHead>User Agent</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead>Expires</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead>{t("sessionsTab.ipAddress")}</TableHead>
+                      <TableHead>{t("sessionsTab.userAgent")}</TableHead>
+                      <TableHead>{t("created")}</TableHead>
+                      <TableHead>{t("sessionsTab.expires")}</TableHead>
+                      <TableHead>{tCommon("status")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -447,10 +463,10 @@ export default function AdminDetailPage() {
                       return (
                         <TableRow key={session.id}>
                           <TableCell className="font-mono">
-                            {session.ipAddress || "Unknown"}
+                            {session.ipAddress || tCommon("unknown")}
                           </TableCell>
                           <TableCell className="max-w-[200px] truncate text-muted-foreground">
-                            {session.userAgent || "Unknown"}
+                            {session.userAgent || tCommon("unknown")}
                           </TableCell>
                           <TableCell className="text-muted-foreground">
                             {new Date(session.createdAt).toLocaleString()}
@@ -460,7 +476,7 @@ export default function AdminDetailPage() {
                           </TableCell>
                           <TableCell>
                             <Badge variant={isExpired ? "secondary" : "default"}>
-                              {isExpired ? "Expired" : "Active"}
+                              {isExpired ? t("sessionsTab.expired") : tCommon("active")}
                             </Badge>
                           </TableCell>
                         </TableRow>
@@ -469,7 +485,7 @@ export default function AdminDetailPage() {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground text-center py-4">No session data available</p>
+                <p className="text-muted-foreground text-center py-4">{t("sessionsTab.noData")}</p>
               )}
             </CardContent>
           </Card>
@@ -478,18 +494,18 @@ export default function AdminDetailPage() {
         <TabsContent value="activity">
           <Card>
             <CardHeader>
-              <CardTitle>Activity Log</CardTitle>
-              <CardDescription>Recent actions performed by this admin</CardDescription>
+              <CardTitle>{t("activityTab.title")}</CardTitle>
+              <CardDescription>{t("activityTab.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               {admin.auditLogs.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Action</TableHead>
-                      <TableHead>Resource</TableHead>
-                      <TableHead>IP Address</TableHead>
-                      <TableHead>Date</TableHead>
+                      <TableHead>{t("activityTab.action")}</TableHead>
+                      <TableHead>{t("activityTab.resource")}</TableHead>
+                      <TableHead>{t("sessionsTab.ipAddress")}</TableHead>
+                      <TableHead>{t("activityTab.date")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -515,7 +531,7 @@ export default function AdminDetailPage() {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground text-center py-4">No activity recorded</p>
+                <p className="text-muted-foreground text-center py-4">{t("activityTab.noData")}</p>
               )}
             </CardContent>
           </Card>

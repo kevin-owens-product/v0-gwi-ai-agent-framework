@@ -7,6 +7,7 @@
 "use client"
 
 import { useState, useRef, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -61,6 +62,7 @@ export function TemplateEditor({
   onInsertVariable,
   variables,
 }: TemplateEditorProps) {
+  const t = useTranslations("admin.emailTemplates")
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [selectionStart, setSelectionStart] = useState(0)
   const [selectionEnd, setSelectionEnd] = useState(0)
@@ -200,7 +202,7 @@ export function TemplateEditor({
   return (
     <TooltipProvider>
       <div className="space-y-2">
-        <Label>HTML Content</Label>
+        <Label>{t("editor.htmlContent")}</Label>
 
         {/* Toolbar */}
         <div className="flex flex-wrap items-center gap-1 p-2 bg-muted rounded-t-lg border border-b-0">
@@ -215,15 +217,15 @@ export function TemplateEditor({
             <DropdownMenuContent>
               <DropdownMenuItem onClick={() => insertHeading(1)}>
                 <Heading1 className="h-4 w-4 mr-2" />
-                Heading 1
+                {t("editor.heading1")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => insertHeading(2)}>
                 <Heading2 className="h-4 w-4 mr-2" />
-                Heading 2
+                {t("editor.heading2")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => insertHeading(3)}>
                 <Heading3 className="h-4 w-4 mr-2" />
-                Heading 3
+                {t("editor.heading3")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -237,7 +239,7 @@ export function TemplateEditor({
                 <Bold className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Bold</TooltipContent>
+            <TooltipContent>{t("editor.bold")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -246,7 +248,7 @@ export function TemplateEditor({
                 <Italic className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Italic</TooltipContent>
+            <TooltipContent>{t("editor.italic")}</TooltipContent>
           </Tooltip>
 
           <div className="w-px h-6 bg-border mx-1" />
@@ -263,7 +265,7 @@ export function TemplateEditor({
                 <AlignLeft className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Align Left</TooltipContent>
+            <TooltipContent>{t("editor.alignLeft")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -277,7 +279,7 @@ export function TemplateEditor({
                 <AlignCenter className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Align Center</TooltipContent>
+            <TooltipContent>{t("editor.alignCenter")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -291,7 +293,7 @@ export function TemplateEditor({
                 <AlignRight className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Align Right</TooltipContent>
+            <TooltipContent>{t("editor.alignRight")}</TooltipContent>
           </Tooltip>
 
           <div className="w-px h-6 bg-border mx-1" />
@@ -308,7 +310,7 @@ export function TemplateEditor({
                 <List className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Bullet List</TooltipContent>
+            <TooltipContent>{t("editor.bulletList")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -322,7 +324,7 @@ export function TemplateEditor({
                 <ListOrdered className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Numbered List</TooltipContent>
+            <TooltipContent>{t("editor.numberedList")}</TooltipContent>
           </Tooltip>
 
           <div className="w-px h-6 bg-border mx-1" />
@@ -334,7 +336,7 @@ export function TemplateEditor({
                 <Link2 className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Insert Link</TooltipContent>
+            <TooltipContent>{t("editor.insertLink")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -343,7 +345,7 @@ export function TemplateEditor({
                 <Image className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Insert Image</TooltipContent>
+            <TooltipContent>{t("editor.insertImage")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -352,18 +354,18 @@ export function TemplateEditor({
                 <Code className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Code Block</TooltipContent>
+            <TooltipContent>{t("editor.codeBlock")}</TooltipContent>
           </Tooltip>
 
           <div className="w-px h-6 bg-border mx-1" />
 
           {/* Button Insert */}
           <Button variant="ghost" size="sm" className="h-8" onClick={insertButton}>
-            Button
+            {t("editor.button")}
           </Button>
 
           <Button variant="ghost" size="sm" className="h-8" onClick={insertDivider}>
-            Divider
+            {t("editor.divider")}
           </Button>
 
           <div className="w-px h-6 bg-border mx-1" />
@@ -373,7 +375,7 @@ export function TemplateEditor({
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="h-8">
                 <Variable className="h-4 w-4 mr-1" />
-                Insert Variable
+                {t("editor.insertVariable")}
                 <ChevronDown className="h-3 w-3 ml-1" />
               </Button>
             </DropdownMenuTrigger>
@@ -402,12 +404,11 @@ export function TemplateEditor({
           onFocus={updateSelection}
           rows={20}
           className="font-mono text-sm rounded-t-none border-t-0 resize-y min-h-[400px]"
-          placeholder="Enter HTML email content..."
+          placeholder={t("editor.placeholder")}
         />
 
         <p className="text-xs text-muted-foreground">
-          Use {"{{variableName}}"} syntax for dynamic variables. Email clients have limited CSS
-          support - use inline styles for best compatibility.
+          {t("editor.helpText")}
         </p>
       </div>
     </TooltipProvider>

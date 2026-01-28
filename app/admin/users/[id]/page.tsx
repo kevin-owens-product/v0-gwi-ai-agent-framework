@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -110,6 +111,8 @@ interface User {
 }
 
 export default function UserDetailPage() {
+  const t = useTranslations("admin.users")
+  const tCommon = useTranslations("common")
   const params = useParams()
   const router = useRouter()
   const userId = params.id as string
@@ -219,11 +222,11 @@ export default function UserDetailPage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {t("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">User not found</p>
+            <p className="text-muted-foreground">{t("userNotFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -238,7 +241,7 @@ export default function UserDetailPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/users">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Link>
           </Button>
           <Avatar className="h-12 w-12">
@@ -246,7 +249,7 @@ export default function UserDetailPage() {
             <AvatarFallback>{getInitials(user.name, user.email)}</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-2xl font-bold">{user.name || "No name"}</h1>
+            <h1 className="text-2xl font-bold">{user.name || t("noName")}</h1>
             <p className="text-muted-foreground flex items-center gap-1">
               <Mail className="h-3 w-3" />
               {user.email}
@@ -257,12 +260,12 @@ export default function UserDetailPage() {
           {user.isBanned ? (
             <Button onClick={handleLiftBan}>
               <CheckCircle className="h-4 w-4 mr-2" />
-              Lift Ban
+              {t("liftBan")}
             </Button>
           ) : (
             <Button variant="destructive" onClick={() => setBanDialogOpen(true)}>
               <Ban className="h-4 w-4 mr-2" />
-              Ban User
+              {t("banUser")}
             </Button>
           )}
         </div>
@@ -275,9 +278,9 @@ export default function UserDetailPage() {
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-destructive" />
               <div>
-                <p className="font-medium text-destructive">User Banned</p>
+                <p className="font-medium text-destructive">{t("userBanned")}</p>
                 <p className="text-sm text-muted-foreground">
-                  {user.activeBan.banType} ban - {user.activeBan.reason}
+                  {user.activeBan.banType} {t("banLabel")} - {user.activeBan.reason}
                 </p>
               </div>
             </div>
@@ -287,10 +290,10 @@ export default function UserDetailPage() {
 
       <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="organizations">Organizations ({user.memberships.length})</TabsTrigger>
-          <TabsTrigger value="sessions">Sessions</TabsTrigger>
-          <TabsTrigger value="history">History</TabsTrigger>
+          <TabsTrigger value="overview">{t("overview")}</TabsTrigger>
+          <TabsTrigger value="organizations">{t("organizations")} ({user.memberships.length})</TabsTrigger>
+          <TabsTrigger value="sessions">{t("sessions")}</TabsTrigger>
+          <TabsTrigger value="history">{t("history")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -298,7 +301,7 @@ export default function UserDetailPage() {
           <div className="grid gap-4 md:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Organizations</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("organizations")}</CardTitle>
                 <Building2 className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -307,7 +310,7 @@ export default function UserDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Sessions</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("sessions")}</CardTitle>
                 <Shield className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -316,7 +319,7 @@ export default function UserDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Sessions</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("activeSessions")}</CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -325,7 +328,7 @@ export default function UserDetailPage() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Agent Runs (30d)</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("agentRuns30d")}</CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -338,7 +341,7 @@ export default function UserDetailPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>User Details</CardTitle>
+                <CardTitle>{t("userDetails")}</CardTitle>
                 {isEditing ? (
                   <div className="flex gap-2">
                     <Button size="sm" variant="outline" onClick={() => setIsEditing(false)}>
@@ -359,15 +362,15 @@ export default function UserDetailPage() {
               {isEditing ? (
                 <>
                   <div className="space-y-2">
-                    <Label>Name</Label>
+                    <Label>{t("name")}</Label>
                     <Input
                       value={editForm.name}
                       onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                      placeholder="Enter name"
+                      placeholder={t("enterName")}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Email</Label>
+                    <Label>{t("email")}</Label>
                     <Input
                       value={editForm.email}
                       onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
@@ -378,31 +381,31 @@ export default function UserDetailPage() {
               ) : (
                 <>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Name</span>
-                    <span className="font-medium">{user.name || "Not set"}</span>
+                    <span className="text-muted-foreground">{t("name")}</span>
+                    <span className="font-medium">{user.name || t("notSet")}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Email</span>
+                    <span className="text-muted-foreground">{t("email")}</span>
                     <span className="font-medium">{user.email}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Email Verified</span>
+                    <span className="text-muted-foreground">{t("emailVerified")}</span>
                     {user.emailVerified ? (
-                      <Badge variant="default" className="bg-green-500">Verified</Badge>
+                      <Badge variant="default" className="bg-green-500">{t("verified")}</Badge>
                     ) : (
-                      <Badge variant="secondary">Unverified</Badge>
+                      <Badge variant="secondary">{t("unverified")}</Badge>
                     )}
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Status</span>
+                    <span className="text-muted-foreground">{t("status")}</span>
                     {user.isBanned ? (
-                      <Badge variant="destructive">Banned</Badge>
+                      <Badge variant="destructive">{t("banned")}</Badge>
                     ) : (
-                      <Badge variant="default" className="bg-green-500">Active</Badge>
+                      <Badge variant="default" className="bg-green-500">{t("active")}</Badge>
                     )}
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Joined</span>
+                    <span className="text-muted-foreground">{t("joined")}</span>
                     <span className="font-medium flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       {new Date(user.createdAt).toLocaleDateString()}
@@ -417,19 +420,19 @@ export default function UserDetailPage() {
         <TabsContent value="organizations">
           <Card>
             <CardHeader>
-              <CardTitle>Organization Memberships</CardTitle>
-              <CardDescription>Organizations this user belongs to</CardDescription>
+              <CardTitle>{t("organizationMemberships")}</CardTitle>
+              <CardDescription>{t("organizationsDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {user.memberships.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Organization</TableHead>
-                      <TableHead>Plan</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Joined</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>{t("organization")}</TableHead>
+                      <TableHead>{t("plan")}</TableHead>
+                      <TableHead>{t("role")}</TableHead>
+                      <TableHead>{t("joined")}</TableHead>
+                      <TableHead className="text-right">{t("actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -463,7 +466,7 @@ export default function UserDetailPage() {
                         <TableCell className="text-right">
                           <Button variant="ghost" size="sm" asChild>
                             <Link href={`/admin/tenants/${membership.organization.id}`}>
-                              View Org
+                              {t("viewOrg")}
                             </Link>
                           </Button>
                         </TableCell>
@@ -472,7 +475,7 @@ export default function UserDetailPage() {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground text-center py-4">No organization memberships</p>
+                <p className="text-muted-foreground text-center py-4">{t("noOrganizationMemberships")}</p>
               )}
             </CardContent>
           </Card>
@@ -481,18 +484,18 @@ export default function UserDetailPage() {
         <TabsContent value="sessions">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Sessions</CardTitle>
-              <CardDescription>Active and recent login sessions</CardDescription>
+              <CardTitle>{t("recentSessions")}</CardTitle>
+              <CardDescription>{t("sessionsDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {user.sessions.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Session ID</TableHead>
-                      <TableHead>Expires</TableHead>
-                      <TableHead>IP Address</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead>{t("sessionId")}</TableHead>
+                      <TableHead>{t("expires")}</TableHead>
+                      <TableHead>{t("ipAddress")}</TableHead>
+                      <TableHead>{t("status")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -507,11 +510,11 @@ export default function UserDetailPage() {
                             {new Date(session.expires).toLocaleString()}
                           </TableCell>
                           <TableCell className="text-muted-foreground">
-                            {session.ipAddress || "Unknown"}
+                            {session.ipAddress || t("unknown")}
                           </TableCell>
                           <TableCell>
                             <Badge variant={isExpired ? "secondary" : "default"}>
-                              {isExpired ? "Expired" : "Active"}
+                              {isExpired ? t("expired") : t("active")}
                             </Badge>
                           </TableCell>
                         </TableRow>
@@ -520,7 +523,7 @@ export default function UserDetailPage() {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground text-center py-4">No session data available</p>
+                <p className="text-muted-foreground text-center py-4">{t("noSessionData")}</p>
               )}
             </CardContent>
           </Card>
@@ -530,19 +533,19 @@ export default function UserDetailPage() {
           {/* Ban History */}
           <Card>
             <CardHeader>
-              <CardTitle>Ban History</CardTitle>
-              <CardDescription>Past and current bans for this user</CardDescription>
+              <CardTitle>{t("banHistory")}</CardTitle>
+              <CardDescription>{t("banHistoryDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {user.banHistory.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Reason</TableHead>
-                      <TableHead>By</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Expires</TableHead>
+                      <TableHead>{t("type")}</TableHead>
+                      <TableHead>{t("reason")}</TableHead>
+                      <TableHead>{t("by")}</TableHead>
+                      <TableHead>{t("date")}</TableHead>
+                      <TableHead>{t("expires")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -561,14 +564,14 @@ export default function UserDetailPage() {
                           {new Date(ban.createdAt).toLocaleDateString()}
                         </TableCell>
                         <TableCell className="text-muted-foreground">
-                          {ban.expiresAt ? new Date(ban.expiresAt).toLocaleDateString() : "Never"}
+                          {ban.expiresAt ? new Date(ban.expiresAt).toLocaleDateString() : t("never")}
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground text-center py-4">No ban history</p>
+                <p className="text-muted-foreground text-center py-4">{t("noBanHistory")}</p>
               )}
             </CardContent>
           </Card>
@@ -576,17 +579,17 @@ export default function UserDetailPage() {
           {/* Audit Logs */}
           <Card>
             <CardHeader>
-              <CardTitle>Audit Log</CardTitle>
-              <CardDescription>Recent admin actions related to this user</CardDescription>
+              <CardTitle>{t("auditLog")}</CardTitle>
+              <CardDescription>{t("auditLogDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {user.auditLogs.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Action</TableHead>
-                      <TableHead>Resource</TableHead>
-                      <TableHead>Date</TableHead>
+                      <TableHead>{t("action")}</TableHead>
+                      <TableHead>{t("resource")}</TableHead>
+                      <TableHead>{t("date")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -606,7 +609,7 @@ export default function UserDetailPage() {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground text-center py-4">No audit logs</p>
+                <p className="text-muted-foreground text-center py-4">{t("noAuditLogs")}</p>
               )}
             </CardContent>
           </Card>
@@ -617,29 +620,29 @@ export default function UserDetailPage() {
       <Dialog open={banDialogOpen} onOpenChange={setBanDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Ban User</DialogTitle>
+            <DialogTitle>{t("banUserTitle")}</DialogTitle>
             <DialogDescription>
-              Ban {user.name || user.email}. They will be unable to access the platform.
+              {t("banDescription", { name: user.name || user.email })}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Ban Type</Label>
+              <Label>{t("banType")}</Label>
               <Select value={banType} onValueChange={setBanType}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="TEMPORARY">Temporary</SelectItem>
-                  <SelectItem value="PERMANENT">Permanent</SelectItem>
-                  <SelectItem value="SHADOW">Shadow Ban</SelectItem>
+                  <SelectItem value="TEMPORARY">{t("temporary")}</SelectItem>
+                  <SelectItem value="PERMANENT">{t("permanent")}</SelectItem>
+                  <SelectItem value="SHADOW">{t("shadowBan")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Reason</Label>
+              <Label>{t("reasonLabel")}</Label>
               <Textarea
-                placeholder="Enter the reason for banning..."
+                placeholder={t("reasonPlaceholder")}
                 value={banReason}
                 onChange={(e) => setBanReason(e.target.value)}
                 rows={3}
@@ -648,7 +651,7 @@ export default function UserDetailPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setBanDialogOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -658,10 +661,10 @@ export default function UserDetailPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Banning...
+                  {t("banning")}
                 </>
               ) : (
-                "Ban User"
+                t("banUser")
               )}
             </Button>
           </DialogFooter>

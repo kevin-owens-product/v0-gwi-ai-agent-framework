@@ -169,7 +169,7 @@ export default function PlanPage() {
           <UsageMeter feature="TEAM_MEMBERS" label={t("teamMembers")} />
           <UsageMeter feature="AGENTS" label={t("agents")} />
           <UsageMeter feature="WORKFLOW_RUNS" label={t("workflows")} />
-          <UsageMeter feature="API_REQUESTS" label="API Requests" />
+          <UsageMeter feature="API_REQUESTS" label={t("apiRequests")} />
         </CardContent>
       </Card>
 

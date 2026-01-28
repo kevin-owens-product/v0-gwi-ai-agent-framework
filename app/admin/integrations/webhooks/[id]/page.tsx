@@ -49,7 +49,8 @@ import {
   BarChart3,
 } from "lucide-react"
 import Link from "next/link"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface Organization {
   id: string
@@ -119,6 +120,7 @@ export default function WebhookDetailPage() {
   const params = useParams()
   const router = useRouter()
   const webhookId = params.id as string
+  const t = useTranslations("admin.integrations.webhooks")
 
   const [webhook, setWebhook] = useState<WebhookEndpoint | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -165,7 +167,7 @@ export default function WebhookDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch webhook:", error)
-      toast.error("Failed to load webhook")
+      showErrorToast(t("toast.loadFailed"))
     } finally {
       setIsLoading(false)
     }
@@ -215,13 +217,13 @@ export default function WebhookDetailPage() {
       if (response.ok) {
         setIsEditing(false)
         fetchWebhook()
-        toast.success("Webhook updated")
+        showSuccessToast(t("toast.updated"))
       } else {
-        toast.error("Failed to update webhook")
+        showErrorToast(t("toast.updateFailed"))
       }
     } catch (error) {
       console.error("Failed to update webhook:", error)
-      toast.error("Failed to update webhook")
+      showErrorToast(t("toast.updateFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -238,10 +240,10 @@ export default function WebhookDetailPage() {
       })
       if (response.ok) {
         fetchWebhook()
-        toast.success(`Webhook ${newStatus === "ACTIVE" ? "activated" : "paused"}`)
+        showSuccessToast(newStatus === "ACTIVE" ? t("toast.activated") : t("toast.paused"))
       }
     } catch (error) {
-      toast.error("Failed to update status")
+      showErrorToast(t("toast.updateStatusFailed"))
     }
   }
 
@@ -254,14 +256,14 @@ export default function WebhookDetailPage() {
       const data = await response.json()
 
       if (data.success) {
-        toast.success("Test webhook delivered successfully")
+        showSuccessToast(t("toast.testDelivered"))
       } else {
-        toast.error(`Test failed: ${data.delivery?.error || "Unknown error"}`)
+        showErrorToast(t("toast.testFailed", { error: data.delivery?.error || t("toast.unknownError") }))
       }
       fetchWebhook()
       fetchDeliveries()
     } catch (error) {
-      toast.error("Failed to send test webhook")
+      showErrorToast(t("toast.sendTestFailed"))
     } finally {
       setIsTesting(false)
     }
@@ -274,13 +276,13 @@ export default function WebhookDetailPage() {
         method: "DELETE",
       })
       if (response.ok) {
-        toast.success("Webhook deleted")
+        showSuccessToast(t("toast.deleted"))
         router.push("/admin/integrations/webhooks")
       } else {
-        toast.error("Failed to delete webhook")
+        showErrorToast(t("toast.deleteFailed"))
       }
     } catch (error) {
-      toast.error("Failed to delete webhook")
+      showErrorToast(t("toast.deleteFailed"))
     } finally {
       setIsDeleting(false)
       setDeleteDialogOpen(false)

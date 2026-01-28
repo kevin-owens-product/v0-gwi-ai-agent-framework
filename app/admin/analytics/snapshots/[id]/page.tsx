@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -84,6 +85,7 @@ export default function SnapshotDetailPage() {
   const params = useParams()
   const router = useRouter()
   const snapshotId = params.id as string
+  const t = useTranslations("admin.analytics.snapshots.detail")
 
   const [snapshot, setSnapshot] = useState<AnalyticsSnapshot | null>(null)
   const [previousSnapshot, setPreviousSnapshot] = useState<AnalyticsSnapshot | null>(null)
@@ -152,11 +154,11 @@ export default function SnapshotDetailPage() {
       <div className="space-y-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {t("back")}
         </Button>
         <Card>
           <CardContent className="flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Snapshot not found</p>
+            <p className="text-muted-foreground">{t("notFound")}</p>
           </CardContent>
         </Card>
       </div>
@@ -171,7 +173,7 @@ export default function SnapshotDetailPage() {
           <Button variant="ghost" asChild>
             <Link href="/admin/analytics/snapshots">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {t("back")}
             </Link>
           </Button>
           <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -179,7 +181,7 @@ export default function SnapshotDetailPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              {snapshot.type} Snapshot
+              {t("snapshotTitle", { type: snapshot.type })}
               <Badge className={getTypeColor(snapshot.type)}>{snapshot.type}</Badge>
             </h1>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -196,19 +198,19 @@ export default function SnapshotDetailPage() {
         <TabsList>
           <TabsTrigger value="overview">
             <BarChart3 className="h-4 w-4 mr-2" />
-            Overview
+            {t("tabs.overview")}
           </TabsTrigger>
           <TabsTrigger value="breakdown">
             <PieChart className="h-4 w-4 mr-2" />
-            Breakdown
+            {t("tabs.breakdown")}
           </TabsTrigger>
           <TabsTrigger value="comparison">
             <TrendingUp className="h-4 w-4 mr-2" />
-            Comparison
+            {t("tabs.comparison")}
           </TabsTrigger>
           <TabsTrigger value="history">
             <History className="h-4 w-4 mr-2" />
-            History
+            {t("tabs.history")}
           </TabsTrigger>
         </TabsList>
 
@@ -217,7 +219,7 @@ export default function SnapshotDetailPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Total Organizations</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("metrics.totalOrganizations")}</CardTitle>
                 <Building2 className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -232,7 +234,7 @@ export default function SnapshotDetailPage() {
                     <span className={deltas.totalOrgs >= 0 ? "text-green-500" : "text-red-500"}>
                       {formatPercent(deltas.totalOrgsPercent)}
                     </span>
-                    <span className="text-muted-foreground ml-1">vs previous</span>
+                    <span className="text-muted-foreground ml-1">{t("metrics.vsPrevious")}</span>
                   </div>
                 )}
               </CardContent>
@@ -240,21 +242,21 @@ export default function SnapshotDetailPage() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("metrics.totalUsers")}</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{formatNumber(snapshot.totalUsers)}</div>
                 <div className="flex items-center text-xs text-muted-foreground">
                   <Activity className="h-3 w-3 mr-1" />
-                  {formatNumber(snapshot.activeUsers)} active ({((snapshot.activeUsers / snapshot.totalUsers) * 100).toFixed(1)}%)
+                  {formatNumber(snapshot.activeUsers)} {t("metrics.active")} ({((snapshot.activeUsers / snapshot.totalUsers) * 100).toFixed(1)}%)
                 </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Monthly Recurring Revenue</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("metrics.monthlyRecurringRevenue")}</CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -269,7 +271,7 @@ export default function SnapshotDetailPage() {
                     <span className={deltas.mrr >= 0 ? "text-green-500" : "text-red-500"}>
                       {formatPercent(deltas.mrrPercent)}
                     </span>
-                    <span className="text-muted-foreground ml-1">vs previous</span>
+                    <span className="text-muted-foreground ml-1">{t("metrics.vsPrevious")}</span>
                   </div>
                 )}
               </CardContent>
@@ -277,13 +279,13 @@ export default function SnapshotDetailPage() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Agent Runs</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("metrics.agentRuns")}</CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{formatNumber(snapshot.totalAgentRuns)}</div>
                 <p className="text-xs text-muted-foreground">
-                  {formatNumber(parseInt(snapshot.totalTokens))} tokens consumed
+                  {t("metrics.tokensConsumed", { count: formatNumber(parseInt(snapshot.totalTokens)) })}
                 </p>
               </CardContent>
             </Card>
@@ -295,7 +297,7 @@ export default function SnapshotDetailPage() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">New Organizations</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t("growth.newOrganizations")}</p>
                     <p className="text-2xl font-bold text-green-500">+{formatNumber(snapshot.newOrgs)}</p>
                   </div>
                 </div>
@@ -306,7 +308,7 @@ export default function SnapshotDetailPage() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Churned Organizations</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t("growth.churnedOrganizations")}</p>
                     <p className="text-2xl font-bold text-red-500">-{formatNumber(snapshot.churnedOrgs)}</p>
                   </div>
                 </div>
@@ -317,7 +319,7 @@ export default function SnapshotDetailPage() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">New MRR</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t("growth.newMrr")}</p>
                     <p className="text-2xl font-bold text-green-500">+{formatCurrency(snapshot.newMrr)}</p>
                   </div>
                 </div>
@@ -328,7 +330,7 @@ export default function SnapshotDetailPage() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Churned MRR</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t("growth.churnedMrr")}</p>
                     <p className="text-2xl font-bold text-red-500">-{formatCurrency(snapshot.churnedMrr)}</p>
                   </div>
                 </div>
@@ -342,7 +344,7 @@ export default function SnapshotDetailPage() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Annual Recurring Revenue</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t("revenue.annualRecurringRevenue")}</p>
                     <p className="text-2xl font-bold">{formatCurrency(snapshot.arr)}</p>
                   </div>
                 </div>
@@ -353,7 +355,7 @@ export default function SnapshotDetailPage() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Expansion MRR</p>
+                    <p className="text-sm font-medium text-muted-foreground">{t("revenue.expansionMrr")}</p>
                     <p className="text-2xl font-bold text-blue-500">+{formatCurrency(snapshot.expansionMrr)}</p>
                   </div>
                 </div>
@@ -366,8 +368,8 @@ export default function SnapshotDetailPage() {
           {/* By Plan */}
           <Card>
             <CardHeader>
-              <CardTitle>Organizations by Plan</CardTitle>
-              <CardDescription>Distribution of organizations across plan tiers</CardDescription>
+              <CardTitle>{t("breakdown.organizationsByPlan")}</CardTitle>
+              <CardDescription>{t("breakdown.organizationsByPlanDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -400,8 +402,8 @@ export default function SnapshotDetailPage() {
           {/* By Industry */}
           <Card>
             <CardHeader>
-              <CardTitle>Organizations by Industry</CardTitle>
-              <CardDescription>Distribution across different industries</CardDescription>
+              <CardTitle>{t("breakdown.organizationsByIndustry")}</CardTitle>
+              <CardDescription>{t("breakdown.organizationsByIndustryDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {Object.keys(snapshot.orgsByIndustry).length > 0 ? (
@@ -429,7 +431,7 @@ export default function SnapshotDetailPage() {
                     })}
                 </div>
               ) : (
-                <p className="text-muted-foreground text-center py-4">No industry data available</p>
+                <p className="text-muted-foreground text-center py-4">{t("breakdown.noIndustryData")}</p>
               )}
             </CardContent>
           </Card>
@@ -437,8 +439,8 @@ export default function SnapshotDetailPage() {
           {/* By Region */}
           <Card>
             <CardHeader>
-              <CardTitle>Organizations by Region</CardTitle>
-              <CardDescription>Geographic distribution</CardDescription>
+              <CardTitle>{t("breakdown.organizationsByRegion")}</CardTitle>
+              <CardDescription>{t("breakdown.organizationsByRegionDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {Object.keys(snapshot.orgsByRegion).length > 0 ? (
@@ -466,7 +468,7 @@ export default function SnapshotDetailPage() {
                     })}
                 </div>
               ) : (
-                <p className="text-muted-foreground text-center py-4">No region data available</p>
+                <p className="text-muted-foreground text-center py-4">{t("breakdown.noRegionData")}</p>
               )}
             </CardContent>
           </Card>
@@ -476,24 +478,27 @@ export default function SnapshotDetailPage() {
           {previousSnapshot ? (
             <Card>
               <CardHeader>
-                <CardTitle>Period Comparison</CardTitle>
+                <CardTitle>{t("comparison.title")}</CardTitle>
                 <CardDescription>
-                  Comparing current period to {new Date(previousSnapshot.periodStart).toLocaleDateString()} - {new Date(previousSnapshot.periodEnd).toLocaleDateString()}
+                  {t("comparison.description", {
+                    start: new Date(previousSnapshot.periodStart).toLocaleDateString(),
+                    end: new Date(previousSnapshot.periodEnd).toLocaleDateString()
+                  })}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Metric</TableHead>
-                      <TableHead className="text-right">Previous</TableHead>
-                      <TableHead className="text-right">Current</TableHead>
-                      <TableHead className="text-right">Change</TableHead>
+                      <TableHead>{t("comparison.metric")}</TableHead>
+                      <TableHead className="text-right">{t("comparison.previous")}</TableHead>
+                      <TableHead className="text-right">{t("comparison.current")}</TableHead>
+                      <TableHead className="text-right">{t("comparison.change")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     <TableRow>
-                      <TableCell className="font-medium">Total Organizations</TableCell>
+                      <TableCell className="font-medium">{t("comparison.totalOrganizations")}</TableCell>
                       <TableCell className="text-right">{formatNumber(previousSnapshot.totalOrgs)}</TableCell>
                       <TableCell className="text-right">{formatNumber(snapshot.totalOrgs)}</TableCell>
                       <TableCell className={`text-right ${deltas && deltas.totalOrgs >= 0 ? "text-green-500" : "text-red-500"}`}>
@@ -501,7 +506,7 @@ export default function SnapshotDetailPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium">Active Organizations</TableCell>
+                      <TableCell className="font-medium">{t("comparison.activeOrganizations")}</TableCell>
                       <TableCell className="text-right">{formatNumber(previousSnapshot.activeOrgs)}</TableCell>
                       <TableCell className="text-right">{formatNumber(snapshot.activeOrgs)}</TableCell>
                       <TableCell className={`text-right ${deltas && deltas.activeOrgs >= 0 ? "text-green-500" : "text-red-500"}`}>
@@ -509,7 +514,7 @@ export default function SnapshotDetailPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium">Total Users</TableCell>
+                      <TableCell className="font-medium">{t("comparison.totalUsers")}</TableCell>
                       <TableCell className="text-right">{formatNumber(previousSnapshot.totalUsers)}</TableCell>
                       <TableCell className="text-right">{formatNumber(snapshot.totalUsers)}</TableCell>
                       <TableCell className={`text-right ${deltas && deltas.totalUsers >= 0 ? "text-green-500" : "text-red-500"}`}>
@@ -517,7 +522,7 @@ export default function SnapshotDetailPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium">Active Users</TableCell>
+                      <TableCell className="font-medium">{t("comparison.activeUsers")}</TableCell>
                       <TableCell className="text-right">{formatNumber(previousSnapshot.activeUsers)}</TableCell>
                       <TableCell className="text-right">{formatNumber(snapshot.activeUsers)}</TableCell>
                       <TableCell className={`text-right ${deltas && deltas.activeUsers >= 0 ? "text-green-500" : "text-red-500"}`}>
@@ -525,7 +530,7 @@ export default function SnapshotDetailPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium">MRR</TableCell>
+                      <TableCell className="font-medium">{t("comparison.mrr")}</TableCell>
                       <TableCell className="text-right">{formatCurrency(previousSnapshot.mrr)}</TableCell>
                       <TableCell className="text-right">{formatCurrency(snapshot.mrr)}</TableCell>
                       <TableCell className={`text-right ${deltas && deltas.mrr >= 0 ? "text-green-500" : "text-red-500"}`}>
@@ -533,7 +538,7 @@ export default function SnapshotDetailPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium">ARR</TableCell>
+                      <TableCell className="font-medium">{t("comparison.arr")}</TableCell>
                       <TableCell className="text-right">{formatCurrency(previousSnapshot.arr)}</TableCell>
                       <TableCell className="text-right">{formatCurrency(snapshot.arr)}</TableCell>
                       <TableCell className={`text-right ${deltas && deltas.arr >= 0 ? "text-green-500" : "text-red-500"}`}>
@@ -541,7 +546,7 @@ export default function SnapshotDetailPage() {
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium">Agent Runs</TableCell>
+                      <TableCell className="font-medium">{t("comparison.agentRuns")}</TableCell>
                       <TableCell className="text-right">{formatNumber(previousSnapshot.totalAgentRuns)}</TableCell>
                       <TableCell className="text-right">{formatNumber(snapshot.totalAgentRuns)}</TableCell>
                       <TableCell className={`text-right ${deltas && deltas.totalAgentRuns >= 0 ? "text-green-500" : "text-red-500"}`}>
@@ -555,7 +560,7 @@ export default function SnapshotDetailPage() {
           ) : (
             <Card>
               <CardContent className="flex items-center justify-center py-8">
-                <p className="text-muted-foreground">No previous snapshot available for comparison</p>
+                <p className="text-muted-foreground">{t("comparison.noPrevious")}</p>
               </CardContent>
             </Card>
           )}
@@ -564,17 +569,17 @@ export default function SnapshotDetailPage() {
         <TabsContent value="history">
           <Card>
             <CardHeader>
-              <CardTitle>Audit History</CardTitle>
-              <CardDescription>Actions performed on this snapshot</CardDescription>
+              <CardTitle>{t("history.auditTitle")}</CardTitle>
+              <CardDescription>{t("history.auditDescription")}</CardDescription>
             </CardHeader>
             <CardContent>
               {auditLogs.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Action</TableHead>
-                      <TableHead>Details</TableHead>
-                      <TableHead>Date</TableHead>
+                      <TableHead>{t("history.action")}</TableHead>
+                      <TableHead>{t("history.details")}</TableHead>
+                      <TableHead>{t("history.date")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -594,7 +599,7 @@ export default function SnapshotDetailPage() {
                   </TableBody>
                 </Table>
               ) : (
-                <p className="text-muted-foreground text-center py-4">No audit history available</p>
+                <p className="text-muted-foreground text-center py-4">{t("history.noAuditHistory")}</p>
               )}
             </CardContent>
           </Card>
@@ -602,27 +607,27 @@ export default function SnapshotDetailPage() {
           {/* Snapshot Metadata */}
           <Card>
             <CardHeader>
-              <CardTitle>Snapshot Metadata</CardTitle>
+              <CardTitle>{t("metadata.title")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Created At</span>
+                  <span className="text-muted-foreground">{t("metadata.createdAt")}</span>
                   <span>{new Date(snapshot.createdAt).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Period Start</span>
+                  <span className="text-muted-foreground">{t("metadata.periodStart")}</span>
                   <span>{new Date(snapshot.periodStart).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Period End</span>
+                  <span className="text-muted-foreground">{t("metadata.periodEnd")}</span>
                   <span>{new Date(snapshot.periodEnd).toLocaleString()}</span>
                 </div>
                 {snapshot.metadata && (
                   <>
                     {(snapshot.metadata as Record<string, string>).triggeredBy && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Triggered By</span>
+                        <span className="text-muted-foreground">{t("metadata.triggeredBy")}</span>
                         <span>{(snapshot.metadata as Record<string, string>).triggeredBy}</span>
                       </div>
                     )}

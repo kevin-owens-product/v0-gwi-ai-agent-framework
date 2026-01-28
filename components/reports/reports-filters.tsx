@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -32,6 +33,7 @@ export function ReportsFilters({
   selectedStatuses: controlledStatuses,
   onStatusesChange,
 }: ReportsFiltersProps) {
+  const t = useTranslations("reports")
   const [view, setView] = useState<"grid" | "list">("grid")
   const [internalTypes, setInternalTypes] = useState<string[]>([])
   const [internalStatuses, setInternalStatuses] = useState<string[]>([])
@@ -68,7 +70,7 @@ export function ReportsFilters({
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search reports..."
+            placeholder={t("filters.searchPlaceholder")}
             className="pl-9"
             value={searchQuery}
             onChange={(e) => onSearchChange?.(e.target.value)}
@@ -79,7 +81,7 @@ export function ReportsFilters({
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">
               <SlidersHorizontal className="mr-2 h-4 w-4" />
-              Type
+              {t("filters.type")}
               {selectedTypes.length > 0 && (
                 <span className="ml-1 rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
                   {selectedTypes.length}
@@ -103,7 +105,7 @@ export function ReportsFilters({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">
-              Status
+              {t("filters.status")}
               {selectedStatuses.length > 0 && (
                 <span className="ml-1 rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
                   {selectedStatuses.length}

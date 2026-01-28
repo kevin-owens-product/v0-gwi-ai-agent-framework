@@ -44,7 +44,8 @@ import {
   Shield,
 } from "lucide-react"
 import Link from "next/link"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 
 interface Organization {
@@ -89,6 +90,7 @@ export default function SCIMDetailPage() {
   const params = useParams()
   const router = useRouter()
   const scimId = params.id as string
+  const t = useTranslations("admin.identity.scim")
 
   const [scimIntegration, setScimIntegration] = useState<SCIMIntegration | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -123,7 +125,7 @@ export default function SCIMDetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch SCIM integration:", error)
-      toast.error("Failed to fetch SCIM integration")
+      showErrorToast(t("toast.loadFailed"))
     } finally {
       setIsLoading(false)
     }
@@ -143,15 +145,15 @@ export default function SCIMDetailPage() {
       })
 
       if (response.ok) {
-        toast.success("SCIM integration updated")
+        showSuccessToast(t("toast.updated"))
         setIsEditing(false)
         fetchSCIMIntegration()
       } else {
-        throw new Error("Failed to update SCIM integration")
+        throw new Error(t("toast.updateFailed"))
       }
     } catch (error) {
       console.error("Failed to update SCIM integration:", error)
-      toast.error("Failed to update SCIM integration")
+      showErrorToast(t("toast.updateFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -167,11 +169,11 @@ export default function SCIMDetailPage() {
       })
 
       if (response.ok) {
-        toast.success(`SCIM integration ${newStatus === "ACTIVE" ? "activated" : "paused"} successfully`)
+        showSuccessToast(newStatus === "ACTIVE" ? t("toast.activated") : t("toast.paused"))
         fetchSCIMIntegration()
       }
     } catch (error) {
-      toast.error("Failed to update status")
+      showErrorToast(t("toast.updateStatusFailed"))
     }
   }
 
@@ -192,10 +194,10 @@ export default function SCIMDetailPage() {
 
       const data = await response.json()
       setNewToken(data.scimIntegration.bearerToken)
-      toast.success("Token regenerated successfully")
+      showSuccessToast(t("toast.tokenRegenerated"))
       fetchSCIMIntegration()
     } catch (error) {
-      toast.error("Failed to regenerate token")
+      showErrorToast(t("toast.regenerateTokenFailed"))
     } finally {
       setIsRegeneratingToken(false)
       setShowRegenerateTokenDialog(false)
@@ -213,14 +215,14 @@ export default function SCIMDetailPage() {
       })
 
       if (response.ok) {
-        toast.success("SCIM integration deleted successfully")
+        showSuccessToast(t("toast.deleted"))
         router.push("/admin/identity/scim")
       } else {
         const error = await response.json()
         throw new Error(error.error)
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete SCIM integration")
+      showErrorToast(error instanceof Error ? error.message : t("toast.deleteFailed"))
     } finally {
       setShowDeleteDialog(false)
     }
@@ -228,7 +230,7 @@ export default function SCIMDetailPage() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
-    toast.success("Copied to clipboard")
+    showSuccessToast(t("toast.copied"))
   }
 
   const getStatusBadge = (status: string) => {

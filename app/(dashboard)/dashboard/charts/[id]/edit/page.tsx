@@ -53,52 +53,52 @@ import { ChartRenderer, generateSampleData } from "@/components/charts"
 import type { ChartType } from "@/components/charts"
 
 // Chart type options with icons
-const chartTypes: { value: ChartType; label: string; icon: React.ReactNode }[] = [
-  { value: "BAR", label: "Bar Chart", icon: <BarChart3 className="h-4 w-4" /> },
-  { value: "LINE", label: "Line Chart", icon: <LineChart className="h-4 w-4" /> },
-  { value: "AREA", label: "Area Chart", icon: <Activity className="h-4 w-4" /> },
-  { value: "PIE", label: "Pie Chart", icon: <PieChart className="h-4 w-4" /> },
-  { value: "DONUT", label: "Donut Chart", icon: <Circle className="h-4 w-4" /> },
-  { value: "RADAR", label: "Radar Chart", icon: <Target className="h-4 w-4" /> },
-  { value: "SCATTER", label: "Scatter Plot", icon: <Grid3X3 className="h-4 w-4" /> },
-  { value: "FUNNEL", label: "Funnel Chart", icon: <Triangle className="h-4 w-4" /> },
-  { value: "TREEMAP", label: "Treemap", icon: <GitBranch className="h-4 w-4" /> },
-  { value: "HEATMAP", label: "Heatmap", icon: <Grid3X3 className="h-4 w-4" /> },
+const chartTypes: { value: ChartType; labelKey: string; icon: React.ReactNode }[] = [
+  { value: "BAR", labelKey: "chartTypes.bar", icon: <BarChart3 className="h-4 w-4" /> },
+  { value: "LINE", labelKey: "chartTypes.line", icon: <LineChart className="h-4 w-4" /> },
+  { value: "AREA", labelKey: "chartTypes.area", icon: <Activity className="h-4 w-4" /> },
+  { value: "PIE", labelKey: "chartTypes.pie", icon: <PieChart className="h-4 w-4" /> },
+  { value: "DONUT", labelKey: "chartTypes.donut", icon: <Circle className="h-4 w-4" /> },
+  { value: "RADAR", labelKey: "chartTypes.radar", icon: <Target className="h-4 w-4" /> },
+  { value: "SCATTER", labelKey: "chartTypes.scatter", icon: <Grid3X3 className="h-4 w-4" /> },
+  { value: "FUNNEL", labelKey: "chartTypes.funnel", icon: <Triangle className="h-4 w-4" /> },
+  { value: "TREEMAP", labelKey: "chartTypes.treemap", icon: <GitBranch className="h-4 w-4" /> },
+  { value: "HEATMAP", labelKey: "chartTypes.heatmap", icon: <Grid3X3 className="h-4 w-4" /> },
 ]
 
 // Status options
 const statusOptions = [
-  { value: "DRAFT", label: "Draft" },
-  { value: "PUBLISHED", label: "Published" },
-  { value: "ARCHIVED", label: "Archived" },
+  { value: "DRAFT", labelKey: "statuses.draft" },
+  { value: "PUBLISHED", labelKey: "statuses.published" },
+  { value: "ARCHIVED", labelKey: "statuses.archived" },
 ]
 
 // Time period options
 const timePeriodOptions = [
-  { value: "7d", label: "Last 7 days" },
-  { value: "30d", label: "Last 30 days" },
-  { value: "90d", label: "Last 90 days" },
-  { value: "6m", label: "Last 6 months" },
-  { value: "12m", label: "Last 12 months" },
-  { value: "custom", label: "Custom range" },
+  { value: "7d", labelKey: "timePeriods.last7Days" },
+  { value: "30d", labelKey: "timePeriods.last30Days" },
+  { value: "90d", labelKey: "timePeriods.last90Days" },
+  { value: "6m", labelKey: "timePeriods.last6Months" },
+  { value: "12m", labelKey: "timePeriods.last12Months" },
+  { value: "custom", labelKey: "timePeriods.customRange" },
 ]
 
 // Audience options (demo data)
 const audienceOptions = [
-  { value: "all-adults", label: "All Adults 18+" },
-  { value: "eco-millennials", label: "Eco-Conscious Millennials" },
-  { value: "tech-adopters", label: "Tech Early Adopters" },
-  { value: "genz-creators", label: "Gen Z Content Creators" },
-  { value: "premium-shoppers", label: "Premium Shoppers" },
+  { value: "all-adults", labelKey: "audienceOptions.allAdults18Plus" },
+  { value: "eco-millennials", labelKey: "audienceOptions.ecoConsciousMillennials" },
+  { value: "tech-adopters", labelKey: "audienceOptions.techEarlyAdopters" },
+  { value: "genz-creators", labelKey: "audienceOptions.genZContentCreators" },
+  { value: "premium-shoppers", labelKey: "audienceOptions.premiumShoppers" },
 ]
 
 // Data source options (demo data)
 const dataSourceOptions = [
-  { value: "gwi-core", label: "GWI Core Q4 2024" },
-  { value: "gwi-usa", label: "GWI USA" },
-  { value: "gwi-uk", label: "GWI UK" },
-  { value: "gwi-zeitgeist", label: "GWI Zeitgeist" },
-  { value: "custom", label: "Custom Data Source" },
+  { value: "gwi-core", labelKey: "dataSourceOptions.gwiCoreQ4" },
+  { value: "gwi-usa", labelKey: "dataSourceOptions.gwiUsa" },
+  { value: "gwi-uk", labelKey: "dataSourceOptions.gwiUk" },
+  { value: "gwi-zeitgeist", labelKey: "dataSourceOptions.gwiZeitgeist" },
+  { value: "custom", labelKey: "dataSourceOptions.customDataSource" },
 ]
 
 interface ChartData {
@@ -119,7 +119,7 @@ interface ChartData {
     filters?: { field: string; operator: string; value: string }[]
   }
   dataSource?: string
-  data?: any
+  data?: unknown
   createdAt?: string
   updatedAt?: string
 }
@@ -174,13 +174,13 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
 
         if (!response.ok) {
           if (response.status === 404) {
-            setError("Chart not found")
+            setError(t("errors.notFound"))
           } else if (response.status === 401) {
-            setError("You must be logged in to edit this chart")
+            setError(t("errors.unauthorized"))
           } else if (response.status === 403) {
-            setError("You do not have permission to edit this chart")
+            setError(t("errors.forbidden"))
           } else {
-            setError("Failed to load chart")
+            setError(t("errors.loadFailed"))
           }
           return
         }
@@ -208,14 +208,14 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
         setShowTooltip(config.showTooltip !== false)
       } catch (err) {
         console.error("Error fetching chart:", err)
-        setError("Failed to load chart. Please try again.")
+        setError(t("errors.loadFailedRetry"))
       } finally {
         setIsLoading(false)
       }
     }
 
     fetchChart()
-  }, [id])
+  }, [id, t])
 
   // Track changes
   useEffect(() => {
@@ -248,7 +248,7 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
   // Handle save
   const handleSave = async () => {
     if (!name.trim()) {
-      setError("Please enter a chart name")
+      setError(t("errors.nameRequired"))
       return
     }
 
@@ -288,7 +288,7 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
       router.push(`/dashboard/charts/${id}`)
     } catch (err) {
       console.error("Error saving chart:", err)
-      setError(err instanceof Error ? err.message : "Failed to save chart. Please try again.")
+      setError(err instanceof Error ? err.message : t("errors.saveFailedRetry"))
     } finally {
       setIsSaving(false)
     }
@@ -522,7 +522,7 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
                     <SelectContent>
                       {statusOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
-                          {option.label}
+                          {t(option.labelKey)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -537,7 +537,7 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
                     <SelectContent>
                       {dataSourceOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
-                          {option.label}
+                          {t(option.labelKey)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -566,7 +566,7 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
                     }`}
                   >
                     {type.icon}
-                    <span className="text-xs">{type.label.split(" ")[0]}</span>
+                    <span className="text-xs">{t(type.labelKey).split(" ")[0]}</span>
                   </button>
                 ))}
               </div>
@@ -592,7 +592,7 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
                     <SelectContent>
                       {audienceOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
-                          {option.label}
+                          {t(option.labelKey)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -607,7 +607,7 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
                     <SelectContent>
                       {timePeriodOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
-                          {option.label}
+                          {t(option.labelKey)}
                         </SelectItem>
                       ))}
                     </SelectContent>

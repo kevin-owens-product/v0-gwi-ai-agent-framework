@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import {
   Server,
   AlertCircle,
@@ -47,6 +48,8 @@ interface RecentIncident {
 }
 
 export default function OperationsCenterPage() {
+  const t = useTranslations("admin.operations")
+  const tCommon = useTranslations("common")
   const [stats, setStats] = useState<OperationsStats | null>(null)
   const [incidents, setIncidents] = useState<RecentIncident[]>([])
   const [loading, setLoading] = useState(true)
@@ -87,13 +90,13 @@ export default function OperationsCenterPage() {
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "CRITICAL":
-        return <Badge variant="destructive">Critical</Badge>
+        return <Badge variant="destructive">{t("severity.critical")}</Badge>
       case "MAJOR":
-        return <Badge className="bg-orange-500">Major</Badge>
+        return <Badge className="bg-orange-500">{t("severity.major")}</Badge>
       case "MODERATE":
-        return <Badge className="bg-yellow-500">Moderate</Badge>
+        return <Badge className="bg-yellow-500">{t("severity.moderate")}</Badge>
       default:
-        return <Badge variant="secondary">Minor</Badge>
+        return <Badge variant="secondary">{t("severity.minor")}</Badge>
     }
   }
 
@@ -102,8 +105,8 @@ export default function OperationsCenterPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Operations Center</h1>
-            <p className="text-muted-foreground">Loading operations data...</p>
+            <h1 className="text-3xl font-bold">{t("overview.title")}</h1>
+            <p className="text-muted-foreground">{tCommon("loading")}</p>
           </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -129,23 +132,23 @@ export default function OperationsCenterPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Server className="h-8 w-8 text-primary" />
-            Operations Center
+            {t("overview.title")}
           </h1>
           <p className="text-muted-foreground">
-            Real-time platform health monitoring and operations management
+            {t("overview.description")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" asChild>
             <Link href="/admin/operations/incidents">
               <AlertCircle className="h-4 w-4 mr-2" />
-              Manage Incidents
+              {t("overview.manageIncidents")}
             </Link>
           </Button>
           <Button asChild>
             <Link href="/admin/operations/maintenance">
               <Calendar className="h-4 w-4 mr-2" />
-              Schedule Maintenance
+              {t("overview.scheduleMaintenance")}
             </Link>
           </Button>
         </div>
@@ -174,21 +177,21 @@ export default function OperationsCenterPage() {
               <div>
                 <h2 className="text-xl font-semibold">
                   {stats?.activeIncidents === 0
-                    ? "All Systems Operational"
+                    ? t("overview.allSystemsOperational")
                     : stats?.criticalIncidents && stats.criticalIncidents > 0
-                    ? "Critical Incidents Active"
-                    : "Some Systems Affected"}
+                    ? t("overview.criticalIncidentsActive")
+                    : t("overview.someSystemsAffected")}
                 </h2>
                 <p className="text-sm text-muted-foreground">
                   {stats?.activeIncidents === 0
-                    ? "No active incidents detected"
-                    : `${stats?.activeIncidents} active incident(s)`}
+                    ? t("overview.noActiveIncidents")
+                    : t("overview.activeIncidentsCount", { count: stats?.activeIncidents || 0 })}
                 </p>
               </div>
             </div>
             <div className="text-right">
               <p className="text-3xl font-bold text-green-500">{stats?.uptime || 99.99}%</p>
-              <p className="text-xs text-muted-foreground">30-day uptime</p>
+              <p className="text-xs text-muted-foreground">{t("overview.thirtyDayUptime")}</p>
             </div>
           </div>
         </CardContent>
@@ -198,7 +201,7 @@ export default function OperationsCenterPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Active Incidents</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("stats.activeIncidents")}</CardTitle>
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -207,71 +210,71 @@ export default function OperationsCenterPage() {
             </div>
             {(stats?.criticalIncidents ?? 0) > 0 && (
               <Badge variant="destructive" className="mt-2">
-                {stats?.criticalIncidents} critical
+                {t("stats.criticalCount", { count: stats?.criticalIncidents || 0 })}
               </Badge>
             )}
             <Link
               href="/admin/operations/incidents"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              View incidents <ArrowRight className="h-3 w-3 ml-1" />
+              {t("stats.viewIncidents")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Scheduled Maintenance</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("stats.scheduledMaintenance")}</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               {stats?.scheduledMaintenance || 0}
             </div>
-            <p className="text-xs text-muted-foreground">Upcoming windows</p>
+            <p className="text-xs text-muted-foreground">{t("stats.upcomingWindows")}</p>
             <Link
               href="/admin/operations/maintenance"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              View schedule <ArrowRight className="h-3 w-3 ml-1" />
+              {t("stats.viewSchedule")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Active Releases</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("stats.activeReleases")}</CardTitle>
             <Rocket className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               {stats?.activeReleases || 0}
             </div>
-            <p className="text-xs text-muted-foreground">Rolling out</p>
+            <p className="text-xs text-muted-foreground">{t("stats.rollingOut")}</p>
             <Link
               href="/admin/operations/releases"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              Manage releases <ArrowRight className="h-3 w-3 ml-1" />
+              {t("stats.manageReleases")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">System Health</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("stats.systemHealth")}</CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-500">
               {stats?.systemHealth || 100}%
             </div>
-            <p className="text-xs text-muted-foreground">Overall health score</p>
+            <p className="text-xs text-muted-foreground">{t("stats.overallHealthScore")}</p>
             <Link
               href="/admin/operations/capacity"
               className="text-xs text-primary hover:underline mt-2 inline-flex items-center"
             >
-              View capacity <ArrowRight className="h-3 w-3 ml-1" />
+              {t("stats.viewCapacity")} <ArrowRight className="h-3 w-3 ml-1" />
             </Link>
           </CardContent>
         </Card>
@@ -281,15 +284,15 @@ export default function OperationsCenterPage() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Resource Usage</CardTitle>
-            <CardDescription>Current infrastructure utilization</CardDescription>
+            <CardTitle>{t("resources.title")}</CardTitle>
+            <CardDescription>{t("resources.description")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="flex items-center gap-2">
                   <Cpu className="h-4 w-4" />
-                  CPU Usage
+                  {t("resources.cpuUsage")}
                 </span>
                 <span className="font-medium">{stats?.cpuUsage || 0}%</span>
               </div>
@@ -302,7 +305,7 @@ export default function OperationsCenterPage() {
               <div className="flex items-center justify-between text-sm">
                 <span className="flex items-center gap-2">
                   <HardDrive className="h-4 w-4" />
-                  Memory Usage
+                  {t("resources.memoryUsage")}
                 </span>
                 <span className="font-medium">{stats?.memoryUsage || 0}%</span>
               </div>
@@ -315,7 +318,7 @@ export default function OperationsCenterPage() {
               <div className="flex items-center justify-between text-sm">
                 <span className="flex items-center gap-2">
                   <Database className="h-4 w-4" />
-                  Storage Usage
+                  {t("resources.storageUsage")}
                 </span>
                 <span className="font-medium">{stats?.storageUsage || 0}%</span>
               </div>
@@ -327,11 +330,11 @@ export default function OperationsCenterPage() {
             <div className="grid grid-cols-2 gap-4 pt-4 border-t">
               <div className="text-center">
                 <p className="text-2xl font-bold">{stats?.apiLatency || 0}ms</p>
-                <p className="text-xs text-muted-foreground">API Latency (p99)</p>
+                <p className="text-xs text-muted-foreground">{t("resources.apiLatency")}</p>
               </div>
               <div className="text-center">
                 <p className="text-2xl font-bold">{stats?.activeConnections?.toLocaleString() || 0}</p>
-                <p className="text-xs text-muted-foreground">Active Connections</p>
+                <p className="text-xs text-muted-foreground">{t("resources.activeConnections")}</p>
               </div>
             </div>
           </CardContent>
@@ -339,15 +342,15 @@ export default function OperationsCenterPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Recent Incidents</CardTitle>
-            <CardDescription>Latest platform incidents</CardDescription>
+            <CardTitle>{t("recentIncidents.title")}</CardTitle>
+            <CardDescription>{t("recentIncidents.description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {incidents.length === 0 ? (
                 <div className="text-center py-8">
                   <CheckCircle className="h-12 w-12 mx-auto text-green-500 mb-4" />
-                  <p className="text-muted-foreground">No recent incidents</p>
+                  <p className="text-muted-foreground">{t("recentIncidents.noIncidents")}</p>
                 </div>
               ) : (
                 incidents.slice(0, 5).map((incident) => (
@@ -382,7 +385,7 @@ export default function OperationsCenterPage() {
             </div>
             {incidents.length > 0 && (
               <Button variant="outline" className="w-full mt-4" asChild>
-                <Link href="/admin/operations/incidents">View All Incidents</Link>
+                <Link href="/admin/operations/incidents">{t("recentIncidents.viewAll")}</Link>
               </Button>
             )}
           </CardContent>
@@ -399,8 +402,8 @@ export default function OperationsCenterPage() {
                   <AlertCircle className="h-6 w-6 text-red-500" />
                 </div>
                 <div>
-                  <p className="font-medium">Incidents</p>
-                  <p className="text-sm text-muted-foreground">Manage platform incidents</p>
+                  <p className="font-medium">{t("quickActions.incidents")}</p>
+                  <p className="text-sm text-muted-foreground">{t("quickActions.incidentsDescription")}</p>
                 </div>
               </div>
             </CardContent>
@@ -415,8 +418,8 @@ export default function OperationsCenterPage() {
                   <Calendar className="h-6 w-6 text-blue-500" />
                 </div>
                 <div>
-                  <p className="font-medium">Maintenance</p>
-                  <p className="text-sm text-muted-foreground">Schedule downtime windows</p>
+                  <p className="font-medium">{t("quickActions.maintenance")}</p>
+                  <p className="text-sm text-muted-foreground">{t("quickActions.maintenanceDescription")}</p>
                 </div>
               </div>
             </CardContent>
@@ -431,8 +434,8 @@ export default function OperationsCenterPage() {
                   <Rocket className="h-6 w-6 text-green-500" />
                 </div>
                 <div>
-                  <p className="font-medium">Releases</p>
-                  <p className="text-sm text-muted-foreground">Manage rollouts</p>
+                  <p className="font-medium">{t("quickActions.releases")}</p>
+                  <p className="text-sm text-muted-foreground">{t("quickActions.releasesDescription")}</p>
                 </div>
               </div>
             </CardContent>
@@ -447,8 +450,8 @@ export default function OperationsCenterPage() {
                   <Gauge className="h-6 w-6 text-purple-500" />
                 </div>
                 <div>
-                  <p className="font-medium">Capacity</p>
-                  <p className="text-sm text-muted-foreground">Monitor resources</p>
+                  <p className="font-medium">{t("quickActions.capacity")}</p>
+                  <p className="text-sm text-muted-foreground">{t("quickActions.capacityDescription")}</p>
                 </div>
               </div>
             </CardContent>

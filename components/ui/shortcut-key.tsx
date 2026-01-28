@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { formatKeyBinding } from "@/lib/keyboard-shortcuts"
 
@@ -81,6 +82,7 @@ export function ShortcutKey({
   size = "default",
   variant = "default",
 }: ShortcutKeyProps) {
+  const t = useTranslations("ui.shortcutKey")
   const [platform, setPlatform] = useState<"mac" | "other">("mac")
 
   useEffect(() => {
@@ -99,7 +101,7 @@ export function ShortcutKey({
         {parts.map((part, index) => (
           <span key={index} className="inline-flex items-center gap-1">
             {index > 0 && (
-              <span className="text-muted-foreground text-xs mx-0.5">then</span>
+              <span className="text-muted-foreground text-xs mx-0.5">{t("then")}</span>
             )}
             <KeyBadge size={size} variant={variant}>
               {part}

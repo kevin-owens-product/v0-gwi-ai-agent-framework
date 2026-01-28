@@ -128,17 +128,17 @@ export default function ScheduledExportsPage() {
 
     const isPast = diffMs < 0
 
-    if (absDiffMs < 60000) return isPast ? 'Just now' : 'In less than a minute'
+    if (absDiffMs < 60000) return isPast ? t("relativeTime.justNow") : t("relativeTime.lessThanMinute")
     if (absDiffMs < 3600000) {
       const mins = Math.round(absDiffMs / 60000)
-      return isPast ? `${mins}m ago` : `In ${mins}m`
+      return isPast ? t("relativeTime.minsAgo", { count: mins }) : t("relativeTime.inMins", { count: mins })
     }
     if (absDiffMs < 86400000) {
       const hours = Math.round(absDiffMs / 3600000)
-      return isPast ? `${hours}h ago` : `In ${hours}h`
+      return isPast ? t("relativeTime.hoursAgo", { count: hours }) : t("relativeTime.inHours", { count: hours })
     }
     const days = Math.round(absDiffMs / 86400000)
-    return isPast ? `${days}d ago` : `In ${days}d`
+    return isPast ? t("relativeTime.daysAgo", { count: days }) : t("relativeTime.inDays", { count: days })
   }
   const [formOpen, setFormOpen] = useState(false)
   const [editingExport, setEditingExport] = useState<ScheduledExport | null>(null)

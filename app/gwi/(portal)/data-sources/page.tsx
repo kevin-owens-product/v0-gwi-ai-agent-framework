@@ -123,7 +123,7 @@ async function DataSourcesContent() {
                   <TableHead>{t('type')}</TableHead>
                   <TableHead>{t('syncStatus')}</TableHead>
                   <TableHead>{t('lastSync')}</TableHead>
-                  <TableHead>Active</TableHead>
+                  <TableHead>{t('active')}</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>

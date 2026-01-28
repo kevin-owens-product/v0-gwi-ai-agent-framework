@@ -48,7 +48,8 @@ import {
   Plus,
 } from "lucide-react"
 import Link from "next/link"
-import { toast } from "sonner"
+import { useTranslations } from "next-intl"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog"
 
 interface Organization {
@@ -121,6 +122,7 @@ export default function SSODetailPage() {
   const params = useParams()
   const router = useRouter()
   const ssoId = params.id as string
+  const t = useTranslations("admin.identity.sso")
 
   const [ssoConfig, setSsoConfig] = useState<SSOConfig | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -181,7 +183,7 @@ export default function SSODetailPage() {
       })
     } catch (error) {
       console.error("Failed to fetch SSO config:", error)
-      toast.error("Failed to fetch SSO configuration")
+      showErrorToast(t("toast.loadFailed"))
     } finally {
       setIsLoading(false)
     }
@@ -228,15 +230,15 @@ export default function SSODetailPage() {
       })
 
       if (response.ok) {
-        toast.success("SSO configuration updated")
+        showSuccessToast(t("toast.updated"))
         setIsEditing(false)
         fetchSSOConfig()
       } else {
-        throw new Error("Failed to update SSO configuration")
+        throw new Error(t("toast.updateFailed"))
       }
     } catch (error) {
       console.error("Failed to update SSO config:", error)
-      toast.error("Failed to update SSO configuration")
+      showErrorToast(t("toast.updateFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -253,14 +255,14 @@ export default function SSODetailPage() {
       setTestResults(data.results)
 
       if (data.success) {
-        toast.success("All tests passed!")
+        showSuccessToast(t("toast.allTestsPassed"))
       } else {
-        toast.error("Some tests failed")
+        showErrorToast(t("toast.someTestsFailed"))
       }
       fetchSSOConfig()
     } catch (error) {
       console.error("Failed to test SSO config:", error)
-      toast.error("Failed to test SSO configuration")
+      showErrorToast(t("toast.testFailed"))
     } finally {
       setIsTesting(false)
     }
@@ -276,11 +278,11 @@ export default function SSODetailPage() {
       })
 
       if (response.ok) {
-        toast.success(`SSO ${newStatus === "ACTIVE" ? "activated" : "disabled"} successfully`)
+        showSuccessToast(newStatus === "ACTIVE" ? t("toast.activated") : t("toast.disabled"))
         fetchSSOConfig()
       }
     } catch (error) {
-      toast.error("Failed to update status")
+      showErrorToast(t("toast.updateStatusFailed"))
     }
   }
 
@@ -295,7 +297,7 @@ export default function SSODetailPage() {
       })
 
       if (response.ok) {
-        toast.success("SSO configuration deleted successfully")
+        showSuccessToast(t("toast.deleted"))
         router.push("/admin/identity/sso")
       } else {
         const error = await response.json()

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -144,6 +145,7 @@ function formatDate(dateString: string): string {
 }
 
 export function MemoryBrowser() {
+  const t = useTranslations("memory")
   const [memories, setMemories] = useState<Memory[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -248,7 +250,7 @@ export function MemoryBrowser() {
     <Card className="bg-card border-border">
       <CardHeader>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <CardTitle>Memory Browser</CardTitle>
+          <CardTitle>{t("browser.title")}</CardTitle>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -258,11 +260,11 @@ export function MemoryBrowser() {
               disabled={isRefreshing}
             >
               <RefreshCw className={cn("h-4 w-4", isRefreshing && "animate-spin")} />
-              Refresh
+              {t("browser.refresh")}
             </Button>
             <Button variant="outline" size="sm" className="gap-2 bg-transparent" onClick={handleExport}>
               <Download className="h-4 w-4" />
-              Export
+              {t("browser.export")}
             </Button>
           </div>
         </div>
@@ -275,30 +277,30 @@ export function MemoryBrowser() {
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search memories by content or tags..."
+              placeholder={t("browser.searchPlaceholder")}
               className="pl-10 bg-secondary"
             />
           </div>
           <Select value={selectedType} onValueChange={setSelectedType}>
             <SelectTrigger className="w-[130px] bg-secondary">
-              <SelectValue placeholder="Type" />
+              <SelectValue placeholder={t("browser.typePlaceholder")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="insight">Insights</SelectItem>
-              <SelectItem value="finding">Findings</SelectItem>
-              <SelectItem value="context">Context</SelectItem>
-              <SelectItem value="preference">Preferences</SelectItem>
-              <SelectItem value="fact">Facts</SelectItem>
-              <SelectItem value="conversation">Conversations</SelectItem>
+              <SelectItem value="all">{t("browser.types.all")}</SelectItem>
+              <SelectItem value="insight">{t("browser.types.insights")}</SelectItem>
+              <SelectItem value="finding">{t("browser.types.findings")}</SelectItem>
+              <SelectItem value="context">{t("browser.types.context")}</SelectItem>
+              <SelectItem value="preference">{t("browser.types.preferences")}</SelectItem>
+              <SelectItem value="fact">{t("browser.types.facts")}</SelectItem>
+              <SelectItem value="conversation">{t("browser.types.conversations")}</SelectItem>
             </SelectContent>
           </Select>
           <Select value={selectedProject} onValueChange={setSelectedProject}>
             <SelectTrigger className="w-[180px] bg-secondary">
-              <SelectValue placeholder="Project" />
+              <SelectValue placeholder={t("browser.projectPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Projects</SelectItem>
+              <SelectItem value="all">{t("browser.allProjects")}</SelectItem>
               {projects.map((project) => (
                 <SelectItem key={project} value={project}>
                   {project}
@@ -318,7 +320,7 @@ export function MemoryBrowser() {
               </div>
             ) : filteredMemories.length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
-                No memories found matching your search criteria.
+                {t("browser.noMemoriesFound")}
               </div>
             ) : (
               filteredMemories.map((memory) => (
@@ -384,17 +386,17 @@ export function MemoryBrowser() {
                 <div className="space-y-3 pt-3 border-t border-border">
                   <div className="flex items-center gap-2 text-xs">
                     <User className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-muted-foreground">Source:</span>
+                    <span className="text-muted-foreground">{t("browser.detail.source")}:</span>
                     <span className="text-foreground">{selected.source}</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs">
                     <Calendar className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-muted-foreground">Created:</span>
+                    <span className="text-muted-foreground">{t("browser.detail.created")}:</span>
                     <span className="text-foreground">{selected.timestamp}</span>
                   </div>
                   <div className="flex items-start gap-2 text-xs">
                     <Tag className="h-3 w-3 text-muted-foreground mt-0.5" />
-                    <span className="text-muted-foreground">Tags:</span>
+                    <span className="text-muted-foreground">{t("browser.detail.tags")}:</span>
                     <div className="flex flex-wrap gap-1">
                       {selected.tags.map((tag) => (
                         <span key={tag} className="px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
@@ -407,7 +409,7 @@ export function MemoryBrowser() {
 
                 {selected.citations.length > 0 && (
                   <div className="pt-3 border-t border-border">
-                    <p className="text-xs text-muted-foreground mb-2">Citations:</p>
+                    <p className="text-xs text-muted-foreground mb-2">{t("browser.detail.citations")}:</p>
                     <div className="space-y-1">
                       {selected.citations.map((citation) => (
                         <div key={citation} className="text-xs px-2 py-1 rounded bg-muted text-foreground">
@@ -420,7 +422,7 @@ export function MemoryBrowser() {
 
                 <div className="pt-3 border-t border-border">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">Confidence Score</span>
+                    <span className="text-muted-foreground">{t("browser.detail.confidenceScore")}</span>
                     <span className="font-medium text-chart-5">{selected.confidence}%</span>
                   </div>
                   <div className="w-full h-2 rounded-full bg-muted mt-2 overflow-hidden">
@@ -431,7 +433,7 @@ export function MemoryBrowser() {
             ) : (
               <div className="p-8 rounded-lg border border-dashed border-border text-center">
                 <Eye className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground">Select a memory to view details</p>
+                <p className="text-sm text-muted-foreground">{t("browser.selectMemory")}</p>
               </div>
             )}
           </div>
@@ -439,7 +441,7 @@ export function MemoryBrowser() {
 
         {/* Results summary */}
         <div className="mt-4 pt-4 border-t text-sm text-muted-foreground">
-          Showing {filteredMemories.length} of {memories.length} memories
+          {t("browser.showing", { filtered: filteredMemories.length, total: memories.length })}
         </div>
       </CardContent>
 
@@ -447,19 +449,19 @@ export function MemoryBrowser() {
       <AlertDialog open={!!deleteMemoryId} onOpenChange={() => setDeleteMemoryId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Memory</AlertDialogTitle>
+            <AlertDialogTitle>{t("browser.deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this memory? This action cannot be undone.
+              {t("browser.deleteDialog.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("browser.deleteDialog.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-              Delete
+              {t("browser.deleteDialog.confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

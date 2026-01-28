@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -32,55 +33,33 @@ interface IncidentCardProps {
   className?: string
 }
 
-const statusConfig: Record<
+const statusIconMap: Record<
   string,
-  {
-    label: string
-    icon: React.ComponentType<{ className?: string }>
-    color: string
-    bgColor: string
-  }
+  React.ComponentType<{ className?: string }>
 > = {
-  INVESTIGATING: {
-    label: "Investigating",
-    icon: Search,
-    color: "text-orange-500",
-    bgColor: "bg-orange-500",
-  },
-  IDENTIFIED: {
-    label: "Identified",
-    icon: AlertCircle,
-    color: "text-yellow-500",
-    bgColor: "bg-yellow-500",
-  },
-  MONITORING: {
-    label: "Monitoring",
-    icon: Activity,
-    color: "text-blue-500",
-    bgColor: "bg-blue-500",
-  },
-  RESOLVED: {
-    label: "Resolved",
-    icon: CheckCircle,
-    color: "text-green-500",
-    bgColor: "bg-green-500",
-  },
-  POSTMORTEM: {
-    label: "Postmortem",
-    icon: Clock,
-    color: "text-gray-500",
-    bgColor: "bg-gray-500",
-  },
+  INVESTIGATING: Search,
+  IDENTIFIED: AlertCircle,
+  MONITORING: Activity,
+  RESOLVED: CheckCircle,
+  POSTMORTEM: Clock,
 }
 
-const impactConfig: Record<
+const statusColorMap: Record<
   string,
-  { label: string; color: string }
+  { color: string; bgColor: string }
 > = {
-  NONE: { label: "None", color: "bg-gray-500" },
-  MINOR: { label: "Minor", color: "bg-yellow-500" },
-  MAJOR: { label: "Major", color: "bg-orange-500" },
-  CRITICAL: { label: "Critical", color: "bg-red-500" },
+  INVESTIGATING: { color: "text-orange-500", bgColor: "bg-orange-500" },
+  IDENTIFIED: { color: "text-yellow-500", bgColor: "bg-yellow-500" },
+  MONITORING: { color: "text-blue-500", bgColor: "bg-blue-500" },
+  RESOLVED: { color: "text-green-500", bgColor: "bg-green-500" },
+  POSTMORTEM: { color: "text-gray-500", bgColor: "bg-gray-500" },
+}
+
+const impactColorMap: Record<string, string> = {
+  NONE: "bg-gray-500",
+  MINOR: "bg-yellow-500",
+  MAJOR: "bg-orange-500",
+  CRITICAL: "bg-red-500",
 }
 
 export function IncidentCard({
@@ -89,9 +68,15 @@ export function IncidentCard({
   maxUpdates = 5,
   className,
 }: IncidentCardProps) {
-  const statusInfo = statusConfig[incident.status] || statusConfig.INVESTIGATING
-  const impactInfo = impactConfig[incident.impact] || impactConfig.NONE
-  const StatusIcon = statusInfo.icon
+  const t = useTranslations("status.incident")
+
+  const statusKey = incident.status.toLowerCase() as "investigating" | "identified" | "monitoring" | "resolved" | "postmortem"
+  const impactKey = incident.impact.toLowerCase() as "none" | "minor" | "major" | "critical"
+
+  const StatusIcon = statusIconMap[incident.status] || statusIconMap.INVESTIGATING
+  const statusColors = statusColorMap[incident.status] || statusColorMap.INVESTIGATING
+  const impactColor = impactColorMap[incident.impact] || impactColorMap.NONE
+
   const isResolved = incident.status === "RESOLVED" || incident.status === "POSTMORTEM"
 
   const publicUpdates = incident.updates
@@ -104,17 +89,17 @@ export function IncidentCard({
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 space-y-1">
             <div className="flex items-center gap-2">
-              <StatusIcon className={cn("h-5 w-5", statusInfo.color)} />
+              <StatusIcon className={cn("h-5 w-5", statusColors.color)} />
               <CardTitle className="text-lg">{incident.title}</CardTitle>
             </div>
             <CardDescription>{incident.description}</CardDescription>
           </div>
           <div className="flex flex-col items-end gap-2">
-            <Badge className={cn(statusInfo.bgColor, "text-white")}>
-              {statusInfo.label}
+            <Badge className={cn(statusColors.bgColor, "text-white")}>
+              {t(`status.${statusKey}`)}
             </Badge>
-            <Badge variant="outline" className={cn("border-2", `border-${impactInfo.color.replace('bg-', '')}`)}>
-              Impact: {impactInfo.label}
+            <Badge variant="outline" className={cn("border-2", `border-${impactColor.replace('bg-', '')}`)}>
+              {t("impact")}: {t(`impactLevel.${impactKey}`)}
             </Badge>
           </div>
         </div>
@@ -129,22 +114,23 @@ export function IncidentCard({
       {showUpdates && publicUpdates.length > 0 && (
         <CardContent>
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold text-muted-foreground">Updates</h4>
+            <h4 className="text-sm font-semibold text-muted-foreground">{t("updates")}</h4>
             <div className="space-y-4 border-l-2 border-muted pl-4">
               {publicUpdates.map((update) => {
-                const updateStatusInfo = statusConfig[update.status] || statusConfig.INVESTIGATING
+                const updateStatusKey = update.status.toLowerCase() as "investigating" | "identified" | "monitoring" | "resolved" | "postmortem"
+                const updateStatusColors = statusColorMap[update.status] || statusColorMap.INVESTIGATING
                 return (
                   <div key={update.id} className="relative">
                     <div
                       className={cn(
                         "absolute -left-[21px] h-3 w-3 rounded-full",
-                        updateStatusInfo.bgColor
+                        updateStatusColors.bgColor
                       )}
                     />
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="text-xs">
-                          {updateStatusInfo.label}
+                          {t(`status.${updateStatusKey}`)}
                         </Badge>
                         <span className="text-xs text-muted-foreground">
                           {new Date(update.createdAt).toLocaleString()}
@@ -158,9 +144,9 @@ export function IncidentCard({
             </div>
           </div>
           <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-            <span>Started: {new Date(incident.startedAt).toLocaleString()}</span>
+            <span>{t("started", { time: new Date(incident.startedAt).toLocaleString() })}</span>
             {incident.resolvedAt && (
-              <span>Resolved: {new Date(incident.resolvedAt).toLocaleString()}</span>
+              <span>{t("resolved", { time: new Date(incident.resolvedAt).toLocaleString() })}</span>
             )}
           </div>
         </CardContent>

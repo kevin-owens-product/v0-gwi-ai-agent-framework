@@ -28,11 +28,13 @@ import {
   Table2,
   PieChart,
   Target,
+  LogOut,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { LanguageSwitcher } from "@/components/ui/language-switcher"
+import { signOut } from "next-auth/react"
 
 // Storage key for persisting sidebar state
 const SIDEBAR_COMPACT_KEY = "dashboard-sidebar-compact"
@@ -362,40 +364,65 @@ export function DashboardSidebar() {
         {/* User Section */}
         <div className={cn("border-t border-sidebar-border", isCompact ? "p-2" : "p-3")}>
           {isCompact ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button className="flex h-9 w-full items-center justify-center rounded-md hover:bg-sidebar-accent/50">
-                  <div className="h-7 w-7 rounded-full bg-gradient-to-br from-accent to-accent/60 flex items-center justify-center">
-                    <span className="text-xs font-medium text-accent-foreground">{t('demo.userInitials')}</span>
+            <>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button className="flex h-9 w-full items-center justify-center rounded-md hover:bg-sidebar-accent/50">
+                    <div className="h-7 w-7 rounded-full bg-gradient-to-br from-accent to-accent/60 flex items-center justify-center">
+                      <span className="text-xs font-medium text-accent-foreground">{t('demo.userInitials')}</span>
+                    </div>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <div>
+                    <p className="font-medium">{t('demo.userName')}</p>
+                    <p className="text-xs text-muted-foreground">{t('demo.userEmail')}</p>
                   </div>
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                <div>
-                  <p className="font-medium">{t('demo.userName')}</p>
-                  <p className="text-xs text-muted-foreground">{t('demo.userEmail')}</p>
-                </div>
-              </TooltipContent>
-            </Tooltip>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/login" })}
+                    className="flex h-9 w-full items-center justify-center rounded-md text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                    aria-label={t('logout')}
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right">{t('logout')}</TooltipContent>
+              </Tooltip>
+            </>
           ) : (
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-accent to-accent/60 flex items-center justify-center shrink-0">
-                <span className="text-xs font-medium text-accent-foreground">{t('demo.userInitials')}</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-sidebar-foreground truncate">{t('demo.userName')}</p>
-                <p className="text-xs text-sidebar-foreground/50 truncate">{t('demo.userEmail')}</p>
+            <>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-accent to-accent/60 flex items-center justify-center shrink-0">
+                  <span className="text-xs font-medium text-accent-foreground">{t('demo.userInitials')}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-sidebar-foreground truncate">{t('demo.userName')}</p>
+                  <p className="text-xs text-sidebar-foreground/50 truncate">{t('demo.userEmail')}</p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 shrink-0"
+                  onClick={() => handleCompactChange(true)}
+                  aria-label="Collapse sidebar"
+                >
+                  <ChevronDown className="h-4 w-4 rotate-90" />
+                </Button>
               </div>
               <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 shrink-0"
-                onClick={() => handleCompactChange(true)}
-                aria-label="Collapse sidebar"
+                variant="outline"
+                size="sm"
+                className="w-full border-sidebar-border text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                onClick={() => signOut({ callbackUrl: "/login" })}
               >
-                <ChevronDown className="h-4 w-4 rotate-90" />
+                <LogOut className="h-4 w-4 mr-2" />
+                {t('logout')}
               </Button>
-            </div>
+            </>
           )}
 
           {/* Expand button when compact */}

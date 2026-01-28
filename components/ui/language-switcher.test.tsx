@@ -257,8 +257,8 @@ describe('handleLanguageChange Logic', () => {
   });
 
   it('should make API call when selecting different language', () => {
-    const currentLocale = 'en';
-    const selectedLocale = 'es';
+    const currentLocale: string = 'en';
+    const selectedLocale: string = 'es';
 
     expect(selectedLocale === currentLocale).toBe(false);
     // In the component, this would proceed with the API call

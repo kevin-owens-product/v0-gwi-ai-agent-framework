@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,39 +18,41 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ArrowLeft, Save, Loader2, Lock } from "lucide-react"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { useAdmin } from "@/components/providers/admin-provider"
 
-const policyTypes = [
-  { value: "PASSWORD", label: "Password Policy" },
-  { value: "SESSION", label: "Session Policy" },
-  { value: "MFA", label: "MFA Requirements" },
-  { value: "IP_ALLOWLIST", label: "IP Allowlist" },
-  { value: "DATA_ACCESS", label: "Data Access" },
-  { value: "FILE_SHARING", label: "File Sharing" },
-  { value: "EXTERNAL_SHARING", label: "External Sharing" },
-  { value: "DLP", label: "Data Loss Prevention" },
-  { value: "ENCRYPTION", label: "Encryption" },
-  { value: "DEVICE_TRUST", label: "Device Trust" },
-  { value: "API_ACCESS", label: "API Access" },
-  { value: "RETENTION", label: "Data Retention" },
-]
+const policyTypeValues = [
+  "PASSWORD",
+  "SESSION",
+  "MFA",
+  "IP_ALLOWLIST",
+  "DATA_ACCESS",
+  "FILE_SHARING",
+  "EXTERNAL_SHARING",
+  "DLP",
+  "ENCRYPTION",
+  "DEVICE_TRUST",
+  "API_ACCESS",
+  "RETENTION",
+] as const
 
-const scopeOptions = [
-  { value: "PLATFORM", label: "Platform-wide" },
-  { value: "ENTERPRISE_ONLY", label: "Enterprise Only" },
-  { value: "SPECIFIC_ORGS", label: "Specific Organizations" },
-  { value: "SPECIFIC_PLANS", label: "Specific Plans" },
-]
+const scopeValues = [
+  "PLATFORM",
+  "ENTERPRISE_ONLY",
+  "SPECIFIC_ORGS",
+  "SPECIFIC_PLANS",
+] as const
 
-const enforcementModes = [
-  { value: "MONITOR", label: "Monitor Only" },
-  { value: "WARN", label: "Warn" },
-  { value: "ENFORCE", label: "Enforce" },
-  { value: "STRICT", label: "Strict" },
-]
+const enforcementModeValues = [
+  "MONITOR",
+  "WARN",
+  "ENFORCE",
+  "STRICT",
+] as const
 
 export default function NewSecurityPolicyPage() {
+  const t = useTranslations("admin.security.policies")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const { admin: currentAdmin } = useAdmin()
   const [isSaving, setIsSaving] = useState(false)
@@ -68,7 +71,7 @@ export default function NewSecurityPolicyPage() {
 
   const handleCreate = async () => {
     if (!formData.name) {
-      toast.error("Policy name is required")
+      showErrorToast(t("validation.policyNameRequired"))
       return
     }
 
@@ -82,15 +85,15 @@ export default function NewSecurityPolicyPage() {
 
       if (response.ok) {
         const data = await response.json()
-        toast.success("Security policy created successfully")
+        showSuccessToast(t("toast.policyCreated"))
         router.push(`/admin/security/policies/${data.policy.id}`)
       } else {
         const data = await response.json()
-        toast.error(data.error || "Failed to create security policy")
+        showErrorToast(data.error || t("toast.createFailed"))
       }
     } catch (error) {
       console.error("Failed to create policy:", error)
-      toast.error("Failed to create security policy")
+      showErrorToast(t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -99,11 +102,11 @@ export default function NewSecurityPolicyPage() {
   if (!canCreate) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <p className="text-muted-foreground">You don&apos;t have permission to create security policies</p>
+        <p className="text-muted-foreground">{t("new.noPermission")}</p>
         <Link href="/admin/security/policies">
           <Button variant="outline">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Policies
+            {t("detail.backToPolicies")}
           </Button>
         </Link>
       </div>
@@ -118,16 +121,16 @@ export default function NewSecurityPolicyPage() {
           <Link href="/admin/security/policies">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Lock className="h-6 w-6 text-primary" />
-              Create Security Policy
+              {t("new.title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Define a new security enforcement rule for the platform
+              {t("new.description")}
             </p>
           </div>
         </div>
@@ -135,12 +138,12 @@ export default function NewSecurityPolicyPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Creating...
+              {tCommon("creating")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Create Policy
+              {t("new.createPolicy")}
             </>
           )}
         </Button>
@@ -149,28 +152,28 @@ export default function NewSecurityPolicyPage() {
       {/* Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Policy Details</CardTitle>
+          <CardTitle>{t("new.policyDetails")}</CardTitle>
           <CardDescription>
-            Configure the security policy settings and enforcement rules
+            {t("new.policyDetailsDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="name">Policy Name *</Label>
+              <Label htmlFor="name">{t("form.policyName")} *</Label>
               <Input
                 id="name"
-                placeholder="e.g., Enterprise Password Policy"
+                placeholder={t("form.policyNamePlaceholder")}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("form.description")}</Label>
               <Textarea
                 id="description"
-                placeholder="Describe what this policy enforces..."
+                placeholder={t("form.descriptionPlaceholder")}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
@@ -178,7 +181,7 @@ export default function NewSecurityPolicyPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label>Policy Type *</Label>
+                <Label>{t("form.policyType")} *</Label>
                 <Select
                   value={formData.type}
                   onValueChange={(value) => setFormData({ ...formData, type: value })}
@@ -187,9 +190,9 @@ export default function NewSecurityPolicyPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {policyTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
-                        {type.label}
+                    {policyTypeValues.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {t(`policyTypes.${type}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -197,7 +200,7 @@ export default function NewSecurityPolicyPage() {
               </div>
 
               <div className="grid gap-2">
-                <Label>Scope *</Label>
+                <Label>{t("form.scope")} *</Label>
                 <Select
                   value={formData.scope}
                   onValueChange={(value) => setFormData({ ...formData, scope: value })}
@@ -206,9 +209,9 @@ export default function NewSecurityPolicyPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {scopeOptions.map((scope) => (
-                      <SelectItem key={scope.value} value={scope.value}>
-                        {scope.label}
+                    {scopeValues.map((scope) => (
+                      <SelectItem key={scope} value={scope}>
+                        {t(`scopeOptions.${scope}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -218,7 +221,7 @@ export default function NewSecurityPolicyPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label>Enforcement Mode *</Label>
+                <Label>{t("form.enforcementMode")} *</Label>
                 <Select
                   value={formData.enforcementMode}
                   onValueChange={(value) => setFormData({ ...formData, enforcementMode: value })}
@@ -227,23 +230,23 @@ export default function NewSecurityPolicyPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {enforcementModes.map((mode) => (
-                      <SelectItem key={mode.value} value={mode.value}>
-                        {mode.label}
+                    {enforcementModeValues.map((mode) => (
+                      <SelectItem key={mode} value={mode}>
+                        {t(`enforcementModes.${mode}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
-                  {formData.enforcementMode === "MONITOR" && "Only log violations, no enforcement"}
-                  {formData.enforcementMode === "WARN" && "Warn users but allow actions"}
-                  {formData.enforcementMode === "ENFORCE" && "Block violations with grace period"}
-                  {formData.enforcementMode === "STRICT" && "Immediately block all violations"}
+                  {formData.enforcementMode === "MONITOR" && t("enforcementDescriptions.MONITOR")}
+                  {formData.enforcementMode === "WARN" && t("enforcementDescriptions.WARN")}
+                  {formData.enforcementMode === "ENFORCE" && t("enforcementDescriptions.ENFORCE")}
+                  {formData.enforcementMode === "STRICT" && t("enforcementDescriptions.STRICT")}
                 </p>
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="priority">Priority</Label>
+                <Label htmlFor="priority">{t("form.priority")}</Label>
                 <Input
                   id="priority"
                   type="number"
@@ -252,7 +255,7 @@ export default function NewSecurityPolicyPage() {
                   onChange={(e) => setFormData({ ...formData, priority: parseInt(e.target.value) || 0 })}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Higher priority policies are evaluated first
+                  {t("form.priorityDescription")}
                 </p>
               </div>
             </div>
@@ -263,7 +266,7 @@ export default function NewSecurityPolicyPage() {
                 checked={formData.isActive}
                 onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
               />
-              <Label htmlFor="isActive">Enable policy immediately</Label>
+              <Label htmlFor="isActive">{t("form.enableImmediately")}</Label>
             </div>
           </div>
         </CardContent>

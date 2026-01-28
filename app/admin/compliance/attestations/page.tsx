@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -57,16 +58,9 @@ interface Attestation {
   organization: Organization | null
 }
 
-const STATUS_OPTIONS = [
-  { value: "all", label: "All Status" },
-  { value: "NOT_STARTED", label: "Not Started" },
-  { value: "IN_PROGRESS", label: "In Progress" },
-  { value: "COMPLIANT", label: "Compliant" },
-  { value: "NON_COMPLIANT", label: "Non-Compliant" },
-  { value: "EXPIRED", label: "Expired" },
-]
-
 export default function AttestationsPage() {
+  const t = useTranslations("admin.compliance")
+  const tCommon = useTranslations("common")
   const [attestations, setAttestations] = useState<Attestation[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState("all")
@@ -74,6 +68,15 @@ export default function AttestationsPage() {
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+
+  const STATUS_OPTIONS = [
+    { value: "all", label: t("attestations.filters.allStatus") },
+    { value: "NOT_STARTED", label: t("attestations.status.notStarted") },
+    { value: "IN_PROGRESS", label: t("attestations.status.inProgress") },
+    { value: "COMPLIANT", label: t("attestations.status.compliant") },
+    { value: "NON_COMPLIANT", label: t("attestations.status.nonCompliant") },
+    { value: "EXPIRED", label: t("attestations.status.expired") },
+  ]
 
   const fetchAttestations = useCallback(async () => {
     setIsLoading(true)
@@ -114,15 +117,15 @@ export default function AttestationsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "COMPLIANT":
-        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />Compliant</Badge>
+        return <Badge className="bg-green-500"><CheckCircle className="h-3 w-3 mr-1" />{t("attestations.status.compliant")}</Badge>
       case "NON_COMPLIANT":
-        return <Badge variant="destructive"><AlertTriangle className="h-3 w-3 mr-1" />Non-Compliant</Badge>
+        return <Badge variant="destructive"><AlertTriangle className="h-3 w-3 mr-1" />{t("attestations.status.nonCompliant")}</Badge>
       case "IN_PROGRESS":
-        return <Badge className="bg-blue-500"><Clock className="h-3 w-3 mr-1" />In Progress</Badge>
+        return <Badge className="bg-blue-500"><Clock className="h-3 w-3 mr-1" />{t("attestations.status.inProgress")}</Badge>
       case "NOT_STARTED":
-        return <Badge variant="secondary">Not Started</Badge>
+        return <Badge variant="secondary">{t("attestations.status.notStarted")}</Badge>
       case "EXPIRED":
-        return <Badge variant="outline" className="text-orange-500 border-orange-500">Expired</Badge>
+        return <Badge variant="outline" className="text-orange-500 border-orange-500">{t("attestations.status.expired")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -139,7 +142,7 @@ export default function AttestationsPage() {
   const columns: Column<Attestation>[] = [
     {
       id: "organization",
-      header: "Organization",
+      header: t("attestations.columns.organization"),
       cell: (attestation) => (
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -147,7 +150,7 @@ export default function AttestationsPage() {
           </div>
           <div>
             <p className="font-medium">
-              {attestation.organization?.name || "Unknown Org"}
+              {attestation.organization?.name || t("attestations.unknownOrg")}
             </p>
             <p className="text-xs text-muted-foreground">
               {attestation.organization?.slug || attestation.orgId.slice(0, 8)}
@@ -158,7 +161,7 @@ export default function AttestationsPage() {
     },
     {
       id: "framework",
-      header: "Framework",
+      header: t("attestations.columns.framework"),
       cell: (attestation) => (
         <div className="flex items-center gap-2">
           <Shield className="h-4 w-4 text-muted-foreground" />
@@ -173,12 +176,12 @@ export default function AttestationsPage() {
     },
     {
       id: "status",
-      header: "Status",
+      header: t("attestations.columns.status"),
       cell: (attestation) => getStatusBadge(attestation.status),
     },
     {
       id: "score",
-      header: "Score",
+      header: t("attestations.columns.score"),
       headerClassName: "text-center",
       className: "text-center",
       cell: (attestation) => (
@@ -189,16 +192,16 @@ export default function AttestationsPage() {
     },
     {
       id: "findings",
-      header: "Findings",
+      header: t("attestations.columns.findings"),
       cell: (attestation) => (
         <Badge variant="outline">
-          {attestation.findings.length} findings
+          {t("attestations.findingsCount", { count: attestation.findings.length })}
         </Badge>
       ),
     },
     {
       id: "validUntil",
-      header: "Valid Until",
+      header: t("attestations.columns.validUntil"),
       cell: (attestation) => (
         <span className="text-muted-foreground">
           {attestation.validUntil
@@ -209,7 +212,7 @@ export default function AttestationsPage() {
     },
     {
       id: "updatedAt",
-      header: "Updated",
+      header: t("attestations.columns.updated"),
       cell: (attestation) => (
         <span className="text-muted-foreground">
           {new Date(attestation.updatedAt).toLocaleDateString()}
@@ -227,7 +230,7 @@ export default function AttestationsPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to delete attestation")
+        throw new Error(data.error || t("attestations.errors.deleteFailed"))
       }
       fetchAttestations()
     } catch (error) {
@@ -247,37 +250,37 @@ export default function AttestationsPage() {
       })
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to update attestation")
+        throw new Error(data.error || t("attestations.errors.updateFailed"))
       }
       fetchAttestations()
     } catch (error) {
       console.error("Failed to update attestation:", error)
-      toast.error(error instanceof Error ? error.message : "Failed to update attestation")
+      toast.error(error instanceof Error ? error.message : t("attestations.errors.updateFailed"))
     }
   }
 
   // Define row actions
   const rowActions: RowAction<Attestation>[] = [
     {
-      label: "Start Assessment",
+      label: t("attestations.actions.startAssessment"),
       icon: <Play className="h-4 w-4" />,
       onClick: (attestation) => handleUpdateStatus(attestation, "IN_PROGRESS"),
       hidden: (attestation) => attestation.status !== "NOT_STARTED",
     },
     {
-      label: "Reset to Not Started",
+      label: t("attestations.actions.resetToNotStarted"),
       icon: <RotateCcw className="h-4 w-4" />,
       onClick: (attestation) => handleUpdateStatus(attestation, "NOT_STARTED"),
       hidden: (attestation) => attestation.status === "NOT_STARTED",
     },
     {
-      label: "View Organization",
+      label: t("attestations.actions.viewOrganization"),
       icon: <Building2 className="h-4 w-4" />,
       href: (attestation) => `/admin/tenants/${attestation.orgId}`,
       separator: true,
     },
     {
-      label: "View Framework",
+      label: t("attestations.actions.viewFramework"),
       icon: <Shield className="h-4 w-4" />,
       href: (attestation) => `/admin/compliance/frameworks/${attestation.frameworkId}`,
     },
@@ -286,12 +289,12 @@ export default function AttestationsPage() {
   // Bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Start Selected",
+      label: t("attestations.bulk.startSelected"),
       icon: <Play className="h-4 w-4" />,
       onClick: async (ids) => {
         const notStarted = attestations.filter((a) => ids.includes(a.id) && a.status === "NOT_STARTED")
         if (notStarted.length === 0) {
-          toast.info("No 'Not Started' attestations selected")
+          toast.info(t("attestations.bulk.noNotStartedSelected"))
           return
         }
         try {
@@ -311,11 +314,11 @@ export default function AttestationsPage() {
           console.error("Failed to start attestations:", error)
         }
       },
-      confirmTitle: "Start Assessments",
-      confirmDescription: "Are you sure you want to start the selected attestation assessments?",
+      confirmTitle: t("attestations.bulk.startAssessmentsTitle"),
+      confirmDescription: t("attestations.bulk.startAssessmentsConfirm"),
     },
     {
-      label: "Reset Selected",
+      label: t("attestations.bulk.resetSelected"),
       icon: <RotateCcw className="h-4 w-4" />,
       onClick: async (ids) => {
         try {
@@ -335,12 +338,12 @@ export default function AttestationsPage() {
           console.error("Failed to reset attestations:", error)
         }
       },
-      confirmTitle: "Reset Attestations",
-      confirmDescription: "Are you sure you want to reset the selected attestations to 'Not Started'? This will clear any progress.",
+      confirmTitle: t("attestations.bulk.resetAttestationsTitle"),
+      confirmDescription: t("attestations.bulk.resetAttestationsConfirm"),
     },
     {
       separator: true,
-      label: "Delete Selected",
+      label: t("attestations.bulk.deleteSelected"),
       icon: <Trash2 className="h-4 w-4" />,
       onClick: async (ids) => {
         try {
@@ -359,8 +362,8 @@ export default function AttestationsPage() {
         }
       },
       variant: "destructive",
-      confirmTitle: "Delete Attestations",
-      confirmDescription: "Are you sure you want to delete the selected attestations? This action cannot be undone.",
+      confirmTitle: t("attestations.bulk.deleteAttestationsTitle"),
+      confirmDescription: t("attestations.bulk.deleteAttestationsConfirm"),
     },
   ]
 
@@ -373,23 +376,23 @@ export default function AttestationsPage() {
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/admin/compliance">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
+                  {tCommon("back")}
                 </Link>
               </Button>
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="h-5 w-5 text-primary" />
-                  Compliance Attestations
+                  {t("attestations.title")}
                 </CardTitle>
                 <CardDescription>
-                  Organization compliance attestations across all frameworks - {total} total
+                  {t("attestations.description", { total })}
                 </CardDescription>
               </div>
             </div>
             <div className="flex gap-2">
               <Button onClick={fetchAttestations} variant="outline" size="sm">
                 <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
+                {tCommon("refresh")}
               </Button>
             </div>
           </div>
@@ -399,7 +402,7 @@ export default function AttestationsPage() {
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("attestations.filters.status")} />
               </SelectTrigger>
               <SelectContent>
                 {STATUS_OPTIONS.map((option) => (
@@ -417,14 +420,17 @@ export default function AttestationsPage() {
             columns={columns}
             getRowId={(attestation) => attestation.id}
             isLoading={isLoading}
-            emptyMessage="No attestations found"
+            emptyMessage={t("attestations.noAttestations")}
             viewHref={(attestation) => `/admin/compliance/attestations/${attestation.id}`}
             rowActions={rowActions}
             bulkActions={bulkActions}
             onDelete={handleDeleteAttestation}
-            deleteConfirmTitle="Delete Attestation"
+            deleteConfirmTitle={t("attestations.deleteTitle")}
             deleteConfirmDescription={(attestation) =>
-              `Are you sure you want to delete the ${attestation.framework.name} attestation for ${attestation.organization?.name || "this organization"}? This action cannot be undone.`
+              t("attestations.deleteConfirm", {
+                framework: attestation.framework.name,
+                organization: attestation.organization?.name || t("attestations.thisOrganization")
+              })
             }
             page={page}
             totalPages={totalPages}

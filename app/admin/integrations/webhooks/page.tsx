@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Webhook,
   Plus,
@@ -38,7 +39,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 import { AdminDataTable, Column, RowAction, BulkAction } from "@/components/admin/data-table"
 
 interface WebhookEndpoint {
@@ -73,6 +74,8 @@ const webhookEvents = [
 ]
 
 export default function WebhooksPage() {
+  const t = useTranslations("admin.integrations.webhooks")
+  const tCommon = useTranslations("common")
   const [webhooks, setWebhooks] = useState<WebhookEndpoint[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -129,12 +132,12 @@ export default function WebhooksPage() {
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || "Failed to create webhook")
+        throw new Error(data.error || t("toast.createFailed"))
       }
 
       const data = await response.json()
 
-      toast.success("Webhook created - Make sure to save the signing secret!")
+      showSuccessToast(t("toast.webhookCreated"))
 
       if (data.secret) {
         setShowSecret(data.secret)
@@ -151,7 +154,7 @@ export default function WebhooksPage() {
       })
       fetchWebhooks()
     } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : "Failed to create webhook")
+      showErrorToast(error instanceof Error ? error.message : t("toast.createFailed"))
     }
   }
 
@@ -165,13 +168,13 @@ export default function WebhooksPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to update webhook")
+        throw new Error(t("toast.updateStatusFailed"))
       }
 
-      toast.success(`Webhook ${newStatus === "ACTIVE" ? "activated" : "paused"}`)
+      showSuccessToast(newStatus === "ACTIVE" ? t("toast.activated") : t("toast.paused"))
       fetchWebhooks()
     } catch (error) {
-      toast.error("Failed to update webhook status")
+      showErrorToast(t("toast.updateStatusFailed"))
     }
   }
 
@@ -184,13 +187,13 @@ export default function WebhooksPage() {
       const data = await response.json()
 
       if (data.success) {
-        toast.success("Test webhook delivered successfully")
+        showSuccessToast(t("toast.testSuccess"))
       } else {
-        toast.error(`Test failed: ${data.delivery?.error || "Unknown error"}`)
+        showErrorToast(t("toast.testFailed", { error: data.delivery?.error || "Unknown error" }))
       }
       fetchWebhooks()
     } catch (error) {
-      toast.error("Failed to send test webhook")
+      showErrorToast(t("toast.testError"))
     }
   }
 
@@ -201,13 +204,13 @@ export default function WebhooksPage() {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to delete webhook")
+        throw new Error(t("toast.deleteFailed"))
       }
 
-      toast.success("Webhook deleted")
+      showSuccessToast(t("toast.deleted"))
       fetchWebhooks()
     } catch (error) {
-      toast.error("Failed to delete webhook")
+      showErrorToast(t("toast.deleteFailed"))
     }
   }
 
@@ -222,10 +225,10 @@ export default function WebhooksPage() {
           })
         )
       )
-      toast.success(`${ids.length} webhook(s) ${newStatus === "ACTIVE" ? "activated" : "paused"}`)
+      showSuccessToast(newStatus === "ACTIVE" ? t("toast.activated") : t("toast.paused"))
       fetchWebhooks()
     } catch (error) {
-      toast.error("Failed to update webhooks")
+      showErrorToast(t("toast.updateStatusFailed"))
     }
   }
 
@@ -238,28 +241,28 @@ export default function WebhooksPage() {
           })
         )
       )
-      toast.success(`${ids.length} webhook(s) deleted`)
+      showSuccessToast(t("toast.deleted"))
       fetchWebhooks()
     } catch (error) {
-      toast.error("Failed to delete webhooks")
+      showErrorToast(t("toast.deleteFailed"))
     }
   }
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
-    toast.success("Copied to clipboard")
+    showSuccessToast(tCommon("copied"))
   }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "ACTIVE":
-        return <Badge className="bg-green-500">Active</Badge>
+        return <Badge className="bg-green-500">{t("status.active")}</Badge>
       case "PAUSED":
-        return <Badge className="bg-yellow-500">Paused</Badge>
+        return <Badge className="bg-yellow-500">{t("status.paused")}</Badge>
       case "DISABLED":
-        return <Badge variant="secondary">Disabled</Badge>
+        return <Badge variant="secondary">{t("status.disabled")}</Badge>
       case "FAILED":
-        return <Badge variant="destructive">Failed</Badge>
+        return <Badge variant="destructive">{tCommon("failed")}</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -301,10 +304,10 @@ export default function WebhooksPage() {
   const columns: Column<WebhookEndpoint>[] = [
     {
       id: "webhook",
-      header: "Webhook",
+      header: t("columns.webhook"),
       cell: (webhook) => (
         <div>
-          <p className="font-medium">{webhook.name || "Unnamed"}</p>
+          <p className="font-medium">{webhook.name || tCommon("unnamed")}</p>
           <p className="text-xs text-muted-foreground truncate max-w-[200px]">
             {webhook.url}
           </p>
@@ -313,7 +316,7 @@ export default function WebhooksPage() {
     },
     {
       id: "organization",
-      header: "Organization",
+      header: t("columns.organization"),
       cell: (webhook) => (
         <div className="flex items-center gap-2">
           <Building2 className="h-4 w-4 text-muted-foreground" />
@@ -323,18 +326,18 @@ export default function WebhooksPage() {
     },
     {
       id: "status",
-      header: "Status",
+      header: t("columns.status"),
       cell: (webhook) => getStatusBadge(webhook.status),
     },
     {
       id: "health",
-      header: "Health",
+      header: t("columns.health"),
       cell: (webhook) => (
         <div className="flex items-center gap-2">
           {getHealthIndicator(webhook)}
           {webhook.consecutiveFailures > 0 && (
             <span className="text-xs text-muted-foreground">
-              {webhook.consecutiveFailures} failures
+              {webhook.consecutiveFailures} {tCommon("failures")}
             </span>
           )}
         </div>
@@ -342,7 +345,7 @@ export default function WebhooksPage() {
     },
     {
       id: "deliveries",
-      header: "Deliveries",
+      header: t("columns.deliveries"),
       cell: (webhook) => (
         <div className="flex items-center gap-1">
           <Activity className="h-4 w-4 text-muted-foreground" />
@@ -352,7 +355,7 @@ export default function WebhooksPage() {
     },
     {
       id: "successRate",
-      header: "Success Rate",
+      header: t("columns.successRate"),
       cell: (webhook) =>
         webhook.totalDeliveries > 0 ? (
           <span className={`font-medium ${
@@ -370,7 +373,7 @@ export default function WebhooksPage() {
     },
     {
       id: "lastDelivery",
-      header: "Last Delivery",
+      header: t("columns.lastDelivery"),
       cell: (webhook) =>
         webhook.lastDeliveryAt ? (
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -378,7 +381,7 @@ export default function WebhooksPage() {
             {new Date(webhook.lastDeliveryAt).toLocaleDateString()}
           </div>
         ) : (
-          <span className="text-xs text-muted-foreground">Never</span>
+          <span className="text-xs text-muted-foreground">{tCommon("never")}</span>
         ),
     },
   ]
@@ -386,18 +389,18 @@ export default function WebhooksPage() {
   // Define row actions
   const rowActions: RowAction<WebhookEndpoint>[] = [
     {
-      label: "Send Test",
+      label: t("actions.test"),
       icon: <Send className="h-4 w-4" />,
       onClick: handleTestWebhook,
     },
     {
-      label: "Pause",
+      label: t("actions.pause"),
       icon: <PowerOff className="h-4 w-4" />,
       onClick: handleToggleStatus,
       hidden: (webhook) => webhook.status !== "ACTIVE",
     },
     {
-      label: "Activate",
+      label: t("actions.activate"),
       icon: <Power className="h-4 w-4" />,
       onClick: handleToggleStatus,
       hidden: (webhook) => webhook.status === "ACTIVE",
@@ -407,27 +410,27 @@ export default function WebhooksPage() {
   // Define bulk actions
   const bulkActions: BulkAction[] = [
     {
-      label: "Activate Selected",
+      label: t("actions.activate"),
       icon: <Power className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusChange(ids, "ACTIVE"),
-      confirmTitle: "Activate Webhooks",
-      confirmDescription: "Are you sure you want to activate the selected webhooks?",
+      confirmTitle: t("actions.activate"),
+      confirmDescription: t("bulk.deleteConfirm"),
     },
     {
-      label: "Pause Selected",
+      label: t("actions.pause"),
       icon: <PowerOff className="h-4 w-4" />,
       onClick: (ids) => handleBulkStatusChange(ids, "PAUSED"),
-      confirmTitle: "Pause Webhooks",
-      confirmDescription: "Are you sure you want to pause the selected webhooks?",
+      confirmTitle: t("actions.pause"),
+      confirmDescription: t("bulk.deleteConfirm"),
     },
     {
-      label: "Delete Selected",
+      label: t("bulk.deleteSelected"),
       icon: <Trash className="h-4 w-4" />,
       onClick: handleBulkDelete,
       variant: "destructive",
       separator: true,
-      confirmTitle: "Delete Webhooks",
-      confirmDescription: "Are you sure you want to delete the selected webhooks? This action cannot be undone.",
+      confirmTitle: t("bulk.deleteTitle"),
+      confirmDescription: t("bulk.deleteConfirm"),
     },
   ]
 
@@ -437,9 +440,9 @@ export default function WebhooksPage() {
       <Dialog open={!!showSecret} onOpenChange={() => setShowSecret(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Webhook Signing Secret</DialogTitle>
+            <DialogTitle>{t("dialog.secretTitle")}</DialogTitle>
             <DialogDescription>
-              Copy this secret now - it will not be shown again! Use this to verify webhook signatures.
+              {t("dialog.secretDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="p-4 bg-muted rounded-lg font-mono text-sm break-all">
@@ -447,7 +450,7 @@ export default function WebhooksPage() {
           </div>
           <DialogFooter>
             <Button onClick={() => copyToClipboard(showSecret!)}>
-              Copy Secret
+              {tCommon("copy")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -458,30 +461,30 @@ export default function WebhooksPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Webhook className="h-8 w-8 text-primary" />
-            Webhooks
+            {t("title")}
           </h1>
           <p className="text-muted-foreground">
-            Manage webhook endpoints and monitor deliveries
+            {t("description", { total })}
           </p>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              Create Webhook
+              {t("createWebhook")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Create Webhook Endpoint</DialogTitle>
+              <DialogTitle>{t("dialog.createTitle")}</DialogTitle>
               <DialogDescription>
-                Create a new webhook endpoint to receive event notifications
+                {t("dialog.createDescription")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="name">Webhook Name</Label>
+                  <Label htmlFor="name">{t("fields.name")}</Label>
                   <Input
                     id="name"
                     placeholder="My Webhook"
@@ -492,10 +495,10 @@ export default function WebhooksPage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="orgId">Organization ID</Label>
+                  <Label htmlFor="orgId">{t("fields.organization")}</Label>
                   <Input
                     id="orgId"
-                    placeholder="Organization ID"
+                    placeholder={t("fields.organization")}
                     value={newWebhook.orgId}
                     onChange={(e) =>
                       setNewWebhook({ ...newWebhook, orgId: e.target.value })
@@ -504,7 +507,7 @@ export default function WebhooksPage() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="url">Endpoint URL</Label>
+                <Label htmlFor="url">{t("fields.url")}</Label>
                 <Input
                   id="url"
                   placeholder="https://example.com/webhooks"
@@ -515,7 +518,7 @@ export default function WebhooksPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="description">Description (optional)</Label>
+                <Label htmlFor="description">{t("fields.description")} ({tCommon("optional")})</Label>
                 <Textarea
                   id="description"
                   placeholder="What is this webhook used for?"
@@ -526,7 +529,7 @@ export default function WebhooksPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label>Events to subscribe</Label>
+                <Label>{t("fields.events")}</Label>
                 <div className="flex flex-wrap gap-2">
                   {webhookEvents.map((event) => (
                     <Badge
@@ -535,13 +538,18 @@ export default function WebhooksPage() {
                       className="cursor-pointer"
                       onClick={() => toggleEvent(event)}
                     >
-                      {event}
+                      {(() => {
+                        const key = event.split('.').map((part, i) => 
+                          i === 0 ? part : part.charAt(0).toUpperCase() + part.slice(1)
+                        ).join('')
+                        return t(`events.${key}`) || event
+                      })()}
                     </Badge>
                   ))}
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="timeout">Timeout (seconds)</Label>
+                <Label htmlFor="timeout">{t("fields.timeout")}</Label>
                 <Input
                   id="timeout"
                   type="number"
@@ -554,13 +562,13 @@ export default function WebhooksPage() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button
                 onClick={handleCreateWebhook}
                 disabled={!newWebhook.url || !newWebhook.orgId}
               >
-                Create Webhook
+                {t("dialog.createTitle")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -571,8 +579,8 @@ export default function WebhooksPage() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">{webhooks.length}</div>
-            <p className="text-xs text-muted-foreground">Total Webhooks</p>
+            <div className="text-2xl font-bold">{total}</div>
+            <p className="text-xs text-muted-foreground">{tCommon("total")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -580,7 +588,7 @@ export default function WebhooksPage() {
             <div className="text-2xl font-bold text-green-500">
               {webhooks.filter((w) => w.status === "ACTIVE" && w.isHealthy).length}
             </div>
-            <p className="text-xs text-muted-foreground">Healthy</p>
+            <p className="text-xs text-muted-foreground">{t("health.healthy")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -588,7 +596,7 @@ export default function WebhooksPage() {
             <div className="text-2xl font-bold text-yellow-500">
               {webhooks.filter((w) => !w.isHealthy && w.status === "ACTIVE").length}
             </div>
-            <p className="text-xs text-muted-foreground">Unhealthy</p>
+            <p className="text-xs text-muted-foreground">{t("health.unhealthy")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -596,7 +604,7 @@ export default function WebhooksPage() {
             <div className="text-2xl font-bold text-blue-500">
               {formatNumber(webhooks.reduce((acc, w) => acc + w.totalDeliveries, 0))}
             </div>
-            <p className="text-xs text-muted-foreground">Total Deliveries</p>
+            <p className="text-xs text-muted-foreground">{t("columns.deliveries")}</p>
           </CardContent>
         </Card>
       </div>
@@ -609,7 +617,7 @@ export default function WebhooksPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search webhooks..."
+                  placeholder={tCommon("search")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10"
@@ -618,23 +626,23 @@ export default function WebhooksPage() {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("filters.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="ACTIVE">Active</SelectItem>
-                <SelectItem value="PAUSED">Paused</SelectItem>
-                <SelectItem value="DISABLED">Disabled</SelectItem>
+                <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
+                <SelectItem value="ACTIVE">{t("status.active")}</SelectItem>
+                <SelectItem value="PAUSED">{t("status.paused")}</SelectItem>
+                <SelectItem value="DISABLED">{t("status.disabled")}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={healthFilter} onValueChange={setHealthFilter}>
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Health" />
+                <SelectValue placeholder={t("filters.health")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Health</SelectItem>
-                <SelectItem value="true">Healthy</SelectItem>
-                <SelectItem value="false">Unhealthy</SelectItem>
+                <SelectItem value="all">{t("filters.allHealth")}</SelectItem>
+                <SelectItem value="true">{t("health.healthy")}</SelectItem>
+                <SelectItem value="false">{t("health.unhealthy")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -647,12 +655,12 @@ export default function WebhooksPage() {
         columns={columns}
         getRowId={(webhook) => webhook.id}
         isLoading={loading}
-        emptyMessage="No webhooks found"
+        emptyMessage={t("noWebhooks")}
         viewHref={(webhook) => `/admin/integrations/webhooks/${webhook.id}`}
         onDelete={handleDeleteWebhook}
-        deleteConfirmTitle="Delete Webhook"
+        deleteConfirmTitle={tCommon("delete")}
         deleteConfirmDescription={(webhook) =>
-          `Are you sure you want to delete "${webhook.name || webhook.url}"? This action cannot be undone.`
+          t("bulk.deleteConfirm")
         }
         rowActions={rowActions}
         bulkActions={bulkActions}

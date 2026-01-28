@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import {
   ArrowLeft,
   Save,
@@ -23,41 +24,44 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { toast } from "sonner"
-
-const severityOptions = [
-  { value: "MINOR", label: "Minor", color: "bg-blue-500", description: "Low impact, workaround available" },
-  { value: "MODERATE", label: "Moderate", color: "bg-yellow-500", description: "Medium impact, some users affected" },
-  { value: "MAJOR", label: "Major", color: "bg-orange-500", description: "High impact, many users affected" },
-  { value: "CRITICAL", label: "Critical", color: "bg-red-500", description: "Service down, all users affected" },
-]
-
-const typeOptions = [
-  { value: "OUTAGE", label: "Outage", description: "Complete service unavailability" },
-  { value: "DEGRADATION", label: "Degradation", description: "Reduced performance or functionality" },
-  { value: "SECURITY", label: "Security", description: "Security-related incident" },
-  { value: "DATA_ISSUE", label: "Data Issue", description: "Data integrity or availability issue" },
-  { value: "THIRD_PARTY", label: "Third Party", description: "External dependency failure" },
-  { value: "CAPACITY", label: "Capacity", description: "Resource constraints" },
-  { value: "NETWORK", label: "Network", description: "Network connectivity issues" },
-  { value: "DATABASE", label: "Database", description: "Database-related issues" },
-]
-
-const serviceOptions = [
-  "API Gateway",
-  "Authentication",
-  "Database",
-  "File Storage",
-  "Messaging",
-  "Search",
-  "Analytics",
-  "Payments",
-  "Notifications",
-]
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 export default function NewIncidentPage() {
   const router = useRouter()
+  const t = useTranslations("admin.operations.incidents")
+  const tCommon = useTranslations("common")
+  const tOps = useTranslations("admin.operations")
   const [isSaving, setIsSaving] = useState(false)
+
+  const serviceOptions = [
+    tOps("services.apiGateway"),
+    tOps("services.authentication"),
+    tOps("services.database"),
+    tOps("services.fileStorage"),
+    tOps("services.messaging"),
+    tOps("services.search"),
+    tOps("services.analytics"),
+    tOps("services.payments"),
+    tOps("services.notifications"),
+  ]
+
+  const severityOptions = [
+    { value: "MINOR", label: tOps("severity.minor"), color: "bg-blue-500", description: t("severityDescriptions.minor") },
+    { value: "MODERATE", label: tOps("severity.moderate"), color: "bg-yellow-500", description: t("severityDescriptions.moderate") },
+    { value: "MAJOR", label: tOps("severity.major"), color: "bg-orange-500", description: t("severityDescriptions.major") },
+    { value: "CRITICAL", label: tOps("severity.critical"), color: "bg-red-500", description: t("severityDescriptions.critical") },
+  ]
+
+  const typeOptions = [
+    { value: "OUTAGE", label: t("type.outage"), description: t("typeDescriptions.outage") },
+    { value: "DEGRADATION", label: t("type.degradation"), description: t("typeDescriptions.degradation") },
+    { value: "SECURITY", label: t("type.security"), description: t("typeDescriptions.security") },
+    { value: "DATA_ISSUE", label: t("type.dataIssue"), description: t("typeDescriptions.dataIssue") },
+    { value: "THIRD_PARTY", label: t("type.thirdParty"), description: t("typeDescriptions.thirdParty") },
+    { value: "CAPACITY", label: t("type.capacity"), description: t("typeDescriptions.capacity") },
+    { value: "NETWORK", label: t("type.network"), description: t("typeDescriptions.network") },
+    { value: "DATABASE", label: t("type.database"), description: t("typeDescriptions.database") },
+  ]
 
   const [formData, setFormData] = useState({
     title: "",
@@ -70,7 +74,7 @@ export default function NewIncidentPage() {
 
   const handleCreate = async () => {
     if (!formData.title || !formData.description) {
-      toast.error("Title and description are required")
+      showErrorToast(t("validation.titleDescriptionRequired"))
       return
     }
 
@@ -91,10 +95,10 @@ export default function NewIncidentPage() {
       }
 
       await response.json()
-      toast.success("Incident reported and team notified")
+      showSuccessToast(t("toast.incidentCreated"))
       router.push(`/admin/operations/incidents`)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to create incident")
+      showErrorToast(error instanceof Error ? error.message : t("toast.createFailed"))
     } finally {
       setIsSaving(false)
     }
@@ -119,16 +123,16 @@ export default function NewIncidentPage() {
           <Link href="/admin/operations/incidents">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {tCommon("back")}
             </Button>
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <AlertCircle className="h-6 w-6 text-primary" />
-              Report New Incident
+              {t("new.title")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Log a new incident to track and communicate with users
+              {t("new.description")}
             </p>
           </div>
         </div>
@@ -136,12 +140,12 @@ export default function NewIncidentPage() {
           {isSaving ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Reporting...
+              {t("new.reporting")}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Report Incident
+              {t("reportIncident")}
             </>
           )}
         </Button>
@@ -153,10 +157,9 @@ export default function NewIncidentPage() {
           <div className="flex items-center gap-4">
             <AlertTriangle className="h-8 w-8 text-yellow-500" />
             <div>
-              <h3 className="font-semibold">Incident Reporting</h3>
+              <h3 className="font-semibold">{t("new.warningTitle")}</h3>
               <p className="text-sm text-muted-foreground">
-                Reporting an incident will notify the on-call team and may trigger status page updates.
-                Please ensure all information is accurate.
+                {t("new.warningDescription")}
               </p>
             </div>
           </div>
@@ -167,17 +170,17 @@ export default function NewIncidentPage() {
         {/* Basic Info */}
         <Card>
           <CardHeader>
-            <CardTitle>Incident Details</CardTitle>
+            <CardTitle>{t("new.incidentDetails")}</CardTitle>
             <CardDescription>
-              Describe the incident and its impact
+              {t("new.incidentDetailsDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Incident Title *</Label>
+              <Label htmlFor="title">{t("form.incidentTitle")} *</Label>
               <Input
                 id="title"
-                placeholder="Brief description of the incident"
+                placeholder={t("form.titlePlaceholder")}
                 value={formData.title}
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
@@ -186,10 +189,10 @@ export default function NewIncidentPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description *</Label>
+              <Label htmlFor="description">{t("form.description")} *</Label>
               <Textarea
                 id="description"
-                placeholder="Detailed description of the incident, what is happening, and what is being done..."
+                placeholder={t("form.descriptionPlaceholder")}
                 rows={4}
                 value={formData.description}
                 onChange={(e) =>
@@ -199,10 +202,10 @@ export default function NewIncidentPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="impact">Business Impact</Label>
+              <Label htmlFor="impact">{t("form.businessImpact")}</Label>
               <Textarea
                 id="impact"
-                placeholder="Describe the business impact (optional)..."
+                placeholder={t("form.impactPlaceholder")}
                 rows={2}
                 value={formData.impact}
                 onChange={(e) =>
@@ -217,14 +220,14 @@ export default function NewIncidentPage() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Classification</CardTitle>
+              <CardTitle>{t("new.classification")}</CardTitle>
               <CardDescription>
-                Categorize the incident severity and type
+                {t("new.classificationDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Severity *</Label>
+                <Label>{t("form.severity")} *</Label>
                 <Select
                   value={formData.severity}
                   onValueChange={(value) =>
@@ -259,7 +262,7 @@ export default function NewIncidentPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Incident Type *</Label>
+                <Label>{t("form.incidentType")} *</Label>
                 <Select
                   value={formData.type}
                   onValueChange={(value) =>
@@ -288,9 +291,9 @@ export default function NewIncidentPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Affected Services</CardTitle>
+              <CardTitle>{t("form.affectedServices")}</CardTitle>
               <CardDescription>
-                Select all services impacted by this incident
+                {t("new.selectAffectedServices")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -312,7 +315,7 @@ export default function NewIncidentPage() {
               </div>
               {formData.affectedServices.length === 0 && (
                 <p className="text-sm text-muted-foreground mt-2">
-                  Click to select affected services
+                  {t("new.clickToSelectServices")}
                 </p>
               )}
             </CardContent>

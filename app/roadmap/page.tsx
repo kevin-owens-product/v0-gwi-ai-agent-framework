@@ -1,3 +1,6 @@
+"use client"
+
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { ArrowLeft, CheckCircle2, Circle, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,41 +9,43 @@ import { Header } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
 
 export default function RoadmapPage() {
+  const t = useTranslations("roadmap")
+
   const roadmapItems = [
     {
-      quarter: "Q1 2025",
+      quarter: t("quarters.q1_2025"),
       status: "completed",
       items: [
-        { title: "Inbox Agents", description: "AI assistants for automated request handling" },
-        { title: "Command Palette", description: "Quick access to all features via ⌘K" },
-        { title: "Canvas Mode", description: "Visual playground for building insights" },
+        { title: t("items.inboxAgents.title"), description: t("items.inboxAgents.description") },
+        { title: t("items.commandPalette.title"), description: t("items.commandPalette.description") },
+        { title: t("items.canvasMode.title"), description: t("items.canvasMode.description") },
       ],
     },
     {
-      quarter: "Q2 2025",
+      quarter: t("quarters.q2_2025"),
       status: "in-progress",
       items: [
-        { title: "Mobile Apps", description: "iOS and Android native applications" },
-        { title: "Advanced Workflows", description: "Complex multi-step automation builder" },
-        { title: "Real-time Collaboration", description: "Live co-editing and commenting" },
+        { title: t("items.mobileApps.title"), description: t("items.mobileApps.description") },
+        { title: t("items.advancedWorkflows.title"), description: t("items.advancedWorkflows.description") },
+        { title: t("items.realTimeCollaboration.title"), description: t("items.realTimeCollaboration.description") },
       ],
     },
     {
-      quarter: "Q3 2025",
+      quarter: t("quarters.q3_2025"),
       status: "planned",
       items: [
-        { title: "Agent Marketplace", description: "Community-built agent store" },
-        { title: "API v2", description: "Enhanced REST and GraphQL APIs" },
-        { title: "Custom Integrations", description: "Build your own data connectors" },
+        { title: t("items.agentMarketplace.title"), description: t("items.agentMarketplace.description") },
+        { title: t("items.apiV2.title"), description: t("items.apiV2.description") },
+        { title: t("items.customIntegrations.title"), description: t("items.customIntegrations.description") },
       ],
     },
     {
-      quarter: "Q4 2025",
+      quarter: t("quarters.q4_2025"),
       status: "planned",
       items: [
-        { title: "Enterprise SSO", description: "SAML and OAuth 2.0 support" },
-        { title: "Advanced Analytics", description: "Predictive insights and forecasting" },
-        { title: "White Label", description: "Fully branded deployments" },
+        { title: t("items.enterpriseSso.title"), description: t("items.enterpriseSso.description") },
+        { title: t("items.advancedAnalytics.title"), description: t("items.advancedAnalytics.description") },
+        { title: t("items.whiteLabel.title"), description: t("items.whiteLabel.description") },
       ],
     },
   ]
@@ -55,16 +60,16 @@ export default function RoadmapPage() {
     if (status === "completed")
       return (
         <Badge variant="default" className="bg-green-500/10 text-green-500">
-          Completed
+          {t("status.completed")}
         </Badge>
       )
     if (status === "in-progress")
       return (
         <Badge variant="default" className="bg-amber-500/10 text-amber-500">
-          In Progress
+          {t("status.inProgress")}
         </Badge>
       )
-    return <Badge variant="secondary">Planned</Badge>
+    return <Badge variant="secondary">{t("status.planned")}</Badge>
   }
 
   return (
@@ -76,13 +81,13 @@ export default function RoadmapPage() {
           <Link href="/">
             <Button variant="ghost" size="sm" className="mb-8">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
+              {t("backToHome")}
             </Button>
           </Link>
 
           <div className="mb-12">
-            <h1 className="text-4xl font-bold text-foreground mb-4">Product Roadmap</h1>
-            <p className="text-lg text-muted-foreground">See what we're building next and share your feedback.</p>
+            <h1 className="text-4xl font-bold text-foreground mb-4">{t("title")}</h1>
+            <p className="text-lg text-muted-foreground">{t("subtitle")}</p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-2">

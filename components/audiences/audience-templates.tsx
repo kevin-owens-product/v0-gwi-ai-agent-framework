@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -265,15 +266,16 @@ interface AudienceTemplatesProps {
 }
 
 export function AudienceTemplates({ onSelect, className }: AudienceTemplatesProps) {
+  const t = useTranslations("audiences")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [previewTemplate, setPreviewTemplate] = useState<AudienceTemplate | null>(null)
 
   const categories = [
-    { id: "all", label: "All Templates", icon: <Star className="h-4 w-4" /> },
-    { id: "demographic", label: "Demographic", icon: <Users className="h-4 w-4" /> },
-    { id: "behavioral", label: "Behavioral", icon: <TrendingUp className="h-4 w-4" /> },
-    { id: "psychographic", label: "Psychographic", icon: <Target className="h-4 w-4" /> },
+    { id: "all", label: t("templates.categories.all"), icon: <Star className="h-4 w-4" /> },
+    { id: "demographic", label: t("templates.categories.demographic"), icon: <Users className="h-4 w-4" /> },
+    { id: "behavioral", label: t("templates.categories.behavioral"), icon: <TrendingUp className="h-4 w-4" /> },
+    { id: "psychographic", label: t("templates.categories.psychographic"), icon: <Target className="h-4 w-4" /> },
   ]
 
   const filteredTemplates = audienceTemplates.filter((template) => {
@@ -311,7 +313,7 @@ export function AudienceTemplates({ onSelect, className }: AudienceTemplatesProp
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search templates..."
+            placeholder={t("templates.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -365,7 +367,7 @@ export function AudienceTemplates({ onSelect, className }: AudienceTemplatesProp
               <div className="flex items-center justify-between pt-2 border-t">
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                  {template.popularity}% popular
+                  {t("templates.popular", { percent: template.popularity })}
                 </div>
                 <Button
                   size="sm"
@@ -375,7 +377,7 @@ export function AudienceTemplates({ onSelect, className }: AudienceTemplatesProp
                     onSelect(template)
                   }}
                 >
-                  Use Template
+                  {t("templates.useTemplate")}
                 </Button>
               </div>
             </div>
@@ -387,8 +389,8 @@ export function AudienceTemplates({ onSelect, className }: AudienceTemplatesProp
       {sortedTemplates.length === 0 && (
         <div className="text-center py-12 text-muted-foreground">
           <Sparkles className="h-12 w-12 mx-auto mb-4 opacity-50" />
-          <h3 className="font-medium mb-1">No templates found</h3>
-          <p className="text-sm">Try adjusting your search or filters</p>
+          <h3 className="font-medium mb-1">{t("templates.noTemplatesFound")}</h3>
+          <p className="text-sm">{t("templates.tryAdjustingFilters")}</p>
         </div>
       )}
 
@@ -408,17 +410,17 @@ export function AudienceTemplates({ onSelect, className }: AudienceTemplatesProp
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
                   <div>
-                    <p className="text-sm text-muted-foreground">Estimated Size</p>
+                    <p className="text-sm text-muted-foreground">{t("templates.dialog.estimatedSize")}</p>
                     <p className="text-2xl font-bold">{previewTemplate.estimatedSize}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Popularity</p>
+                    <p className="text-sm text-muted-foreground">{t("templates.dialog.popularity")}</p>
                     <p className="text-2xl font-bold">{previewTemplate.popularity}%</p>
                   </div>
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium mb-2">Included Attributes</p>
+                  <p className="text-sm font-medium mb-2">{t("templates.dialog.includedAttributes")}</p>
                   <div className="space-y-2">
                     {previewTemplate.attributes.map((attr, i) => (
                       <div key={i} className="flex items-center gap-2 p-2 bg-muted rounded-lg">
@@ -431,7 +433,7 @@ export function AudienceTemplates({ onSelect, className }: AudienceTemplatesProp
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium mb-2">Tags</p>
+                  <p className="text-sm font-medium mb-2">{t("templates.dialog.tags")}</p>
                   <div className="flex flex-wrap gap-2">
                     {previewTemplate.tags.map((tag) => (
                       <Badge key={tag} variant="secondary">
@@ -444,7 +446,7 @@ export function AudienceTemplates({ onSelect, className }: AudienceTemplatesProp
 
               <DialogFooter>
                 <Button variant="outline" onClick={() => setPreviewTemplate(null)}>
-                  Cancel
+                  {t("templates.dialog.cancel")}
                 </Button>
                 <Button
                   onClick={() => {
@@ -453,7 +455,7 @@ export function AudienceTemplates({ onSelect, className }: AudienceTemplatesProp
                   }}
                 >
                   <Sparkles className="h-4 w-4 mr-2" />
-                  Use This Template
+                  {t("templates.dialog.useThisTemplate")}
                 </Button>
               </DialogFooter>
             </>

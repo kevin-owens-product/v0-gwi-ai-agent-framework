@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 import {
   Monitor,
   Search,
@@ -38,7 +39,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { toast } from "sonner"
+import { showErrorToast, showSuccessToast } from "@/lib/toast-utils"
 
 interface SessionUser {
   id: string
@@ -66,6 +67,8 @@ interface SessionStats {
 }
 
 export default function SessionsPage() {
+  const t = useTranslations("admin.security.sessions")
+  const tCommon = useTranslations("common")
   const [sessions, setSessions] = useState<PlatformSession[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -117,7 +120,7 @@ export default function SessionsPage() {
       }))
     } catch (error) {
       console.error("Failed to fetch sessions:", error)
-      toast.error("Failed to fetch sessions")
+      showErrorToast(t("toast.fetchFailed"))
     } finally {
       setLoading(false)
     }
@@ -130,7 +133,7 @@ export default function SessionsPage() {
 
   const handleRefresh = () => {
     fetchSessions()
-    toast.success("Sessions refreshed")
+    showSuccessToast(t("toast.refreshed"))
   }
 
   const handleSort = (column: string) => {
@@ -143,11 +146,11 @@ export default function SessionsPage() {
   }
 
   const parseUserAgent = (userAgent: string | null) => {
-    if (!userAgent) return { browser: "Unknown", os: "Unknown", device: "Unknown" }
+    if (!userAgent) return { browser: t("unknown"), os: t("unknown"), device: t("unknown") }
 
-    let browser = "Unknown"
-    let os = "Unknown"
-    let device = "Desktop"
+    let browser = t("unknown")
+    let os = t("unknown")
+    let device = t("device.desktop")
 
     // Browser detection
     if (userAgent.includes("Chrome")) browser = "Chrome"
@@ -165,9 +168,9 @@ export default function SessionsPage() {
 
     // Device detection
     if (userAgent.includes("Mobile") || userAgent.includes("Android") || userAgent.includes("iPhone")) {
-      device = "Mobile"
+      device = t("device.mobile")
     } else if (userAgent.includes("Tablet") || userAgent.includes("iPad")) {
-      device = "Tablet"
+      device = t("device.tablet")
     }
 
     return { browser, os, device }
@@ -184,7 +187,7 @@ export default function SessionsPage() {
     const now = new Date()
     const diff = expiresDate.getTime() - now.getTime()
 
-    if (diff <= 0) return "Expired"
+    if (diff <= 0) return t("expired")
 
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const days = Math.floor(hours / 24)
@@ -217,11 +220,11 @@ export default function SessionsPage() {
         throw new Error("Failed to terminate session")
       }
 
-      toast.success("Session terminated successfully")
+      showSuccessToast(t("toast.terminated"))
       fetchSessions()
     } catch (error) {
       console.error("Failed to terminate session:", error)
-      toast.error("Failed to terminate session")
+      showErrorToast(t("toast.terminateFailed"))
     }
   }
 
@@ -237,12 +240,12 @@ export default function SessionsPage() {
         throw new Error("Failed to terminate sessions")
       }
 
-      toast.success(`${sessionIds.length} session(s) terminated successfully`)
+      showSuccessToast(t("toast.bulkTerminated", { count: sessionIds.length }))
       setSelectedIds(new Set())
       fetchSessions()
     } catch (error) {
       console.error("Failed to terminate sessions:", error)
-      toast.error("Failed to terminate sessions")
+      showErrorToast(t("toast.bulkTerminateFailed"))
     }
   }
 
@@ -257,7 +260,7 @@ export default function SessionsPage() {
   const columns: Column<PlatformSession>[] = [
     {
       id: "user",
-      header: "User",
+      header: t("table.user"),
       cell: (session) => (
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8">
@@ -268,7 +271,7 @@ export default function SessionsPage() {
           </Avatar>
           <div>
             <p className="font-medium">
-              {session.user?.name || "Unknown User"}
+              {session.user?.name || t("unknownUser")}
             </p>
             <p className="text-xs text-muted-foreground">
               {session.user?.email}
@@ -279,7 +282,7 @@ export default function SessionsPage() {
     },
     {
       id: "session",
-      header: "Session",
+      header: t("table.session"),
       cell: (session) => (
         <code className="font-mono text-xs text-muted-foreground">
           {session.sessionTokenPrefix}
@@ -291,19 +294,19 @@ export default function SessionsPage() {
       header: (
         <div className="flex items-center gap-2">
           <Globe className="h-4 w-4" />
-          IP Address
+          {t("table.ipAddress")}
         </div>
       ),
       cell: (session) => (
         <div className="flex items-center gap-1 text-sm">
           <Globe className="h-3 w-3 text-muted-foreground" />
-          {session.ipAddress || "N/A"}
+          {session.ipAddress || tCommon("na")}
         </div>
       ),
     },
     {
       id: "device",
-      header: "Device",
+      header: t("table.device"),
       cell: (session) => {
         const { browser, os, device } = parseUserAgent(session.userAgent)
         return (
@@ -317,9 +320,9 @@ export default function SessionsPage() {
               </TooltipTrigger>
               <TooltipContent>
                 <div className="text-xs">
-                  <p>Browser: {browser}</p>
-                  <p>OS: {os}</p>
-                  <p>Device: {device}</p>
+                  <p>{t("tooltip.browser")}: {browser}</p>
+                  <p>{t("tooltip.os")}: {os}</p>
+                  <p>{t("tooltip.device")}: {device}</p>
                 </div>
               </TooltipContent>
             </Tooltip>
@@ -329,14 +332,14 @@ export default function SessionsPage() {
     },
     {
       id: "status",
-      header: "Status",
+      header: t("table.status"),
       cell: (session) => (
         session.isActive ? (
           <Badge variant="default" className="bg-green-500">
-            Active
+            {t("status.active")}
           </Badge>
         ) : (
-          <Badge variant="secondary">Expired</Badge>
+          <Badge variant="secondary">{t("status.expired")}</Badge>
         )
       ),
     },
@@ -344,7 +347,7 @@ export default function SessionsPage() {
       id: "expires",
       header: (
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleSort("expires")}>
-          Expires
+          {t("table.expires")}
           <ArrowUpDown className="h-4 w-4" />
         </div>
       ),

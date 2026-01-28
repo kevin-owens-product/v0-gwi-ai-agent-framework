@@ -13,7 +13,7 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  const t = useTranslations('ui.errors')
+  const t = useTranslations('errors')
 
   useEffect(() => {
     console.error(error)

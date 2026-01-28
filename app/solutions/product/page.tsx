@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Package, Users, Lightbulb, TrendingUp, Target, TestTube, ArrowRight, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -5,68 +7,110 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { LandingHeader } from "@/components/landing/header"
 import { Footer } from "@/components/landing/footer"
+import { useTranslations } from "next-intl"
 
 export default function ProductPage() {
+  const t = useTranslations("solutions.product")
+
   const agents = [
     {
-      name: "Opportunity Scout",
+      nameKey: "agents.opportunityScout.name",
       icon: Lightbulb,
-      description: "Identify unmet needs and market gaps through consumer behavior analysis",
-      capabilities: ["Need identification", "Gap analysis", "Opportunity scoring", "Market sizing"],
+      descriptionKey: "agents.opportunityScout.description",
+      capabilitiesKeys: [
+        "agents.opportunityScout.capabilities.needIdentification",
+        "agents.opportunityScout.capabilities.gapAnalysis",
+        "agents.opportunityScout.capabilities.opportunityScoring",
+        "agents.opportunityScout.capabilities.marketSizing",
+      ],
     },
     {
-      name: "Feature Prioritizer",
+      nameKey: "agents.featurePrioritizer.name",
       icon: Target,
-      description: "Rank feature requests based on user impact, effort, and market demand",
-      capabilities: ["User impact scoring", "Effort estimation", "ROI calculation", "Roadmap optimization"],
+      descriptionKey: "agents.featurePrioritizer.description",
+      capabilitiesKeys: [
+        "agents.featurePrioritizer.capabilities.userImpact",
+        "agents.featurePrioritizer.capabilities.effortEstimation",
+        "agents.featurePrioritizer.capabilities.roiCalculation",
+        "agents.featurePrioritizer.capabilities.roadmapOptimization",
+      ],
     },
     {
-      name: "User Persona Builder",
+      nameKey: "agents.userPersonaBuilder.name",
       icon: Users,
-      description: "Create detailed user personas with jobs-to-be-done and pain points",
-      capabilities: ["Persona generation", "Journey mapping", "Pain point analysis", "Use case documentation"],
+      descriptionKey: "agents.userPersonaBuilder.description",
+      capabilitiesKeys: [
+        "agents.userPersonaBuilder.capabilities.personaGeneration",
+        "agents.userPersonaBuilder.capabilities.journeyMapping",
+        "agents.userPersonaBuilder.capabilities.painPointAnalysis",
+        "agents.userPersonaBuilder.capabilities.useCaseDocumentation",
+      ],
     },
     {
-      name: "Concept Validator",
+      nameKey: "agents.conceptValidator.name",
       icon: TestTube,
-      description: "Test product concepts against real user needs and market demand",
-      capabilities: ["Concept testing", "Demand validation", "Competitive analysis", "Risk assessment"],
+      descriptionKey: "agents.conceptValidator.description",
+      capabilitiesKeys: [
+        "agents.conceptValidator.capabilities.conceptTesting",
+        "agents.conceptValidator.capabilities.demandValidation",
+        "agents.conceptValidator.capabilities.competitiveAnalysis",
+        "agents.conceptValidator.capabilities.riskAssessment",
+      ],
     },
     {
-      name: "Pricing Strategist",
+      nameKey: "agents.pricingStrategist.name",
       icon: TrendingUp,
-      description: "Optimize pricing based on value perception and competitive landscape",
-      capabilities: ["Price sensitivity analysis", "Value mapping", "Competitive benchmarking", "Tier recommendations"],
+      descriptionKey: "agents.pricingStrategist.description",
+      capabilitiesKeys: [
+        "agents.pricingStrategist.capabilities.priceSensitivity",
+        "agents.pricingStrategist.capabilities.valueMapping",
+        "agents.pricingStrategist.capabilities.competitiveBenchmarking",
+        "agents.pricingStrategist.capabilities.tierRecommendations",
+      ],
     },
     {
-      name: "Launch Planner",
+      nameKey: "agents.launchPlanner.name",
       icon: Package,
-      description: "Create go-to-market strategies informed by audience insights and timing",
-      capabilities: ["GTM strategy", "Channel selection", "Message positioning", "Launch timing"],
+      descriptionKey: "agents.launchPlanner.description",
+      capabilitiesKeys: [
+        "agents.launchPlanner.capabilities.gtmStrategy",
+        "agents.launchPlanner.capabilities.channelSelection",
+        "agents.launchPlanner.capabilities.messagePositioning",
+        "agents.launchPlanner.capabilities.launchTiming",
+      ],
     },
   ]
 
   const workflows = [
     {
-      name: "Product Discovery Sprint",
-      time: "4 hours",
-      description: "Identify opportunities, validate demand, prioritize features",
+      nameKey: "workflows.discoverySprint.name",
+      timeKey: "workflows.discoverySprint.time",
+      descriptionKey: "workflows.discoverySprint.description",
     },
     {
-      name: "Feature Impact Analysis",
-      time: "1 hour",
-      description: "Analyze user impact, estimate effort, recommend priority",
+      nameKey: "workflows.featureImpact.name",
+      timeKey: "workflows.featureImpact.time",
+      descriptionKey: "workflows.featureImpact.description",
     },
     {
-      name: "Competitive Product Analysis",
-      time: "2 hours",
-      description: "Map competitor features, identify differentiators, recommend positioning",
+      nameKey: "workflows.competitiveProduct.name",
+      timeKey: "workflows.competitiveProduct.time",
+      descriptionKey: "workflows.competitiveProduct.description",
     },
     {
-      name: "Launch Readiness Check",
-      time: "2 hours",
-      description: "Validate market fit, assess timing, create launch plan",
+      nameKey: "workflows.launchReadiness.name",
+      timeKey: "workflows.launchReadiness.time",
+      descriptionKey: "workflows.launchReadiness.description",
     },
+  ]
+
+  const challenges = [
+    "challenges.assumptions",
+    "challenges.limitedResources",
+    "challenges.prioritizing",
+    "challenges.validating",
+    "challenges.whyBehavior",
+    "challenges.productMarketFit",
   ]
 
   return (
@@ -77,37 +121,36 @@ export default function ProductPage() {
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
             <Badge variant="secondary" className="mb-4">
-              Product Development
+              {t("badge")}
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
-              Build Products People <span className="text-primary">Actually Want and Need</span>
+              {t("hero.titleStart")} <span className="text-primary">{t("hero.titleHighlight")}</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-3xl text-pretty">
-              Make confident product decisions backed by real human insights. Understand what problems people are trying
-              to solve and build solutions that truly resonate.
+              {t("hero.description")}
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-12">
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">80% Faster</h3>
-                <p className="text-sm text-muted-foreground">Market research and opportunity identification</p>
+                <h3 className="font-semibold mb-2">{t("stats.faster.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.faster.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">3x More</h3>
-                <p className="text-sm text-muted-foreground">Product concepts validated per quarter</p>
+                <h3 className="font-semibold mb-2">{t("stats.more.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.more.description")}</p>
               </Card>
               <Card className="p-6 border-border/40">
-                <h3 className="font-semibold mb-2">45% Higher</h3>
-                <p className="text-sm text-muted-foreground">Product-market fit scores at launch</p>
+                <h3 className="font-semibold mb-2">{t("stats.higher.value")}</h3>
+                <p className="text-sm text-muted-foreground">{t("stats.higher.description")}</p>
               </Card>
             </div>
 
             <div className="flex flex-wrap gap-4">
               <Button size="lg" asChild>
-                <Link href="/dashboard">Start Building Products</Link>
+                <Link href="/dashboard">{t("cta.startBuilding")}</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Request Demo</Link>
+                <Link href="/contact">{t("cta.requestDemo")}</Link>
               </Button>
             </div>
           </div>
@@ -115,19 +158,12 @@ export default function ProductPage() {
 
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-8">Key Challenges We Solve</h2>
+            <h2 className="text-3xl font-bold mb-8">{t("challengesTitle")}</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {[
-                "Building features based on assumptions rather than real user needs",
-                "Limited resources for comprehensive market research",
-                "Difficulty prioritizing features with confidence",
-                "Validating concepts before significant investment",
-                'Understanding the "why" behind user behavior',
-                "Launching products that fail to achieve product-market fit",
-              ].map((challenge, i) => (
+              {challenges.map((challengeKey, i) => (
                 <div key={i} className="flex gap-3">
                   <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                  <p className="text-muted-foreground">{challenge}</p>
+                  <p className="text-muted-foreground">{t(challengeKey)}</p>
                 </div>
               ))}
             </div>
@@ -136,9 +172,9 @@ export default function ProductPage() {
 
         <section className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Recommended AI Agents</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("agentsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Purpose-built agents that help you discover opportunities and validate ideas with confidence.
+              {t("agentsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -149,12 +185,12 @@ export default function ProductPage() {
                       <agent.icon className="h-6 w-6 text-primary" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold mb-2">{agent.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-4">{agent.description}</p>
+                      <h3 className="font-semibold mb-2">{t(agent.nameKey)}</h3>
+                      <p className="text-sm text-muted-foreground mb-4">{t(agent.descriptionKey)}</p>
                       <div className="flex flex-wrap gap-2">
-                        {agent.capabilities.map((cap, j) => (
+                        {agent.capabilitiesKeys.map((capKey, j) => (
                           <Badge key={j} variant="secondary" className="text-xs">
-                            {cap}
+                            {t(capKey)}
                           </Badge>
                         ))}
                       </div>
@@ -168,19 +204,19 @@ export default function ProductPage() {
 
         <section className="py-16 px-4 bg-muted/30">
           <div className="container mx-auto max-w-6xl">
-            <h2 className="text-3xl font-bold mb-4">Pre-built Workflows</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("workflowsTitle")}</h2>
             <p className="text-muted-foreground mb-12 max-w-3xl">
-              Accelerate your product development process with proven workflows.
+              {t("workflowsDescription")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
               {workflows.map((workflow, i) => (
                 <Card key={i} className="p-6 border-border/40">
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-semibold">{workflow.name}</h3>
-                    <Badge variant="outline">{workflow.time}</Badge>
+                    <h3 className="font-semibold">{t(workflow.nameKey)}</h3>
+                    <Badge variant="outline">{t(workflow.timeKey)}</Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">{workflow.description}</p>
+                  <p className="text-sm text-muted-foreground">{t(workflow.descriptionKey)}</p>
                 </Card>
               ))}
             </div>
@@ -189,18 +225,18 @@ export default function ProductPage() {
 
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Build Better Products?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("finalCta.title")}</h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Join leading product teams using human insights to drive innovation.
+              {t("finalCta.description")}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Button size="lg" asChild>
                 <Link href="/signup">
-                  Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("finalCta.getStarted")} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/contact">Talk to Sales</Link>
+                <Link href="/contact">{t("finalCta.talkToSales")}</Link>
               </Button>
             </div>
           </div>

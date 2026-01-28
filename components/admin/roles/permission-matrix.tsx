@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -43,6 +44,7 @@ export function PermissionMatrix({
   inheritedPermissions = [],
   disabled = false,
 }: PermissionMatrixProps) {
+  const t = useTranslations("admin.permissions.matrix")
   const [permissions, setPermissions] = useState<Record<string, Permission[]>>({})
   const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
@@ -157,18 +159,18 @@ export function PermissionMatrix({
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search permissions..."
+              placeholder={t("searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9 w-64"
             />
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Badge variant="outline">{selectedCount} selected</Badge>
+            <Badge variant="outline">{t("selected", { count: selectedCount })}</Badge>
             {inheritedCount > 0 && (
-              <Badge variant="secondary">{inheritedCount} inherited</Badge>
+              <Badge variant="secondary">{t("inherited", { count: inheritedCount })}</Badge>
             )}
-            <span>of {totalPermissions} total</span>
+            <span>{t("ofTotal", { count: totalPermissions })}</span>
           </div>
         </div>
         {!disabled && (
@@ -183,12 +185,12 @@ export function PermissionMatrix({
               .every(p => selectedPermissions.includes(p.key)) ? (
               <>
                 <Square className="h-4 w-4 mr-2" />
-                Deselect All
+                {t("deselectAll")}
               </>
             ) : (
               <>
                 <CheckSquare className="h-4 w-4 mr-2" />
-                Select All
+                {t("selectAll")}
               </>
             )}
           </Button>
@@ -233,7 +235,7 @@ export function PermissionMatrix({
                         handleSelectAllCategory(category)
                       }}
                     >
-                      {allSelected ? "Deselect All" : "Select All"}
+                      {allSelected ? t("deselectAll") : t("selectAll")}
                     </Button>
                   )}
                 </div>
@@ -277,7 +279,7 @@ export function PermissionMatrix({
                             </label>
                             {isInherited && (
                               <Badge variant="secondary" className="text-xs">
-                                Inherited
+                                {t("inheritedBadge")}
                               </Badge>
                             )}
                             {permission.description && (
@@ -310,8 +312,8 @@ export function PermissionMatrix({
       {Object.keys(filteredPermissions).length === 0 && (
         <div className="text-center py-8 text-muted-foreground">
           {searchQuery
-            ? "No permissions match your search"
-            : "No permissions available"}
+            ? t("noMatchingPermissions")
+            : t("noPermissionsAvailable")}
         </div>
       )}
     </div>

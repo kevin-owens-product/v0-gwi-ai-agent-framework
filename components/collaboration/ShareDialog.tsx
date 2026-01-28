@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback, useEffect } from 'react'
+import { useTranslations } from "next-intl"
 import { cn } from '@/lib/utils'
 import {
   Dialog,
@@ -47,6 +48,7 @@ interface LinkCardProps {
 }
 
 function LinkCard({ link, onCopy, onDelete, onEdit }: LinkCardProps) {
+  const t = useTranslations("collaboration")
   const [copied, setCopied] = useState(false)
 
   const handleCopy = () => {
@@ -70,13 +72,13 @@ function LinkCard({ link, onCopy, onDelete, onEdit }: LinkCardProps) {
               {link.permissions}
             </Badge>
             {!link.isActive && (
-              <Badge variant="destructive">Revoked</Badge>
+              <Badge variant="destructive">{t("revoked")}</Badge>
             )}
             {isExpired && (
-              <Badge variant="secondary">Expired</Badge>
+              <Badge variant="secondary">{t("expired")}</Badge>
             )}
             {isMaxedOut && (
-              <Badge variant="secondary">Max views reached</Badge>
+              <Badge variant="secondary">{t("maxViewsReached")}</Badge>
             )}
           </div>
           <p className="text-xs text-muted-foreground mt-1 truncate font-mono">
@@ -111,35 +113,35 @@ function LinkCard({ link, onCopy, onDelete, onEdit }: LinkCardProps) {
       <div className="flex items-center gap-4 text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
           <Eye className="h-3 w-3" />
-          {link.viewCount} {link.viewCount === 1 ? 'view' : 'views'}
-          {link.maxViews && ` / ${link.maxViews} max`}
+          {t("viewCount", { count: link.viewCount })}
+          {link.maxViews && ` / ${link.maxViews} ${t("max")}`}
         </span>
         {link.hasPassword && (
           <span className="flex items-center gap-1">
             <Lock className="h-3 w-3" />
-            Password protected
+            {t("passwordProtected")}
           </span>
         )}
         {link.expiresAt && (
           <span className="flex items-center gap-1">
             <Clock className="h-3 w-3" />
             {isExpired
-              ? 'Expired'
-              : `Expires ${formatDistanceToNow(new Date(link.expiresAt), { addSuffix: true })}`
+              ? t("expired")
+              : t("expiresIn", { time: formatDistanceToNow(new Date(link.expiresAt), { addSuffix: true }) })
             }
           </span>
         )}
         {link.allowedEmails.length > 0 && (
           <span className="flex items-center gap-1">
             <Users className="h-3 w-3" />
-            {link.allowedEmails.length} allowed
+            {t("allowedCount", { count: link.allowedEmails.length })}
           </span>
         )}
       </div>
 
       <div className="flex items-center gap-2 pt-2 border-t">
         <span className="text-xs text-muted-foreground">
-          Created {formatDistanceToNow(new Date(link.createdAt), { addSuffix: true })}
+          {t("createdTime", { time: formatDistanceToNow(new Date(link.createdAt), { addSuffix: true }) })}
         </span>
         <div className="flex-1" />
         <Button
@@ -149,7 +151,7 @@ function LinkCard({ link, onCopy, onDelete, onEdit }: LinkCardProps) {
           onClick={() => onEdit(link)}
         >
           <Settings className="h-3 w-3 mr-1" />
-          Settings
+          {t("settings")}
         </Button>
         <Button
           variant="ghost"
@@ -158,7 +160,7 @@ function LinkCard({ link, onCopy, onDelete, onEdit }: LinkCardProps) {
           onClick={() => onDelete(link.id)}
         >
           <Trash2 className="h-3 w-3 mr-1" />
-          Delete
+          {t("delete")}
         </Button>
       </div>
     </div>
@@ -172,6 +174,7 @@ export function ShareDialog({
   trigger,
   className,
 }: ShareDialogProps) {
+  const t = useTranslations("collaboration")
   const [open, setOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<'create' | 'manage'>('create')
   const [copied, setCopied] = useState(false)
@@ -245,7 +248,7 @@ export function ShareDialog({
   const defaultTrigger = (
     <Button variant="outline" size="sm">
       <Share2 className="h-4 w-4 mr-2" />
-      Share
+      {t("share")}
     </Button>
   )
 
@@ -258,10 +261,10 @@ export function ShareDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Share2 className="h-5 w-5" />
-            Share {entityName || entityType}
+            {t("shareTitle", { name: entityName || entityType })}
           </DialogTitle>
           <DialogDescription>
-            Create a shareable link to give others access to this content.
+            {t("shareDescription")}
           </DialogDescription>
         </DialogHeader>
 
@@ -274,11 +277,11 @@ export function ShareDialog({
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="create">
               <Link2 className="h-4 w-4 mr-2" />
-              Create Link
+              {t("createLink")}
             </TabsTrigger>
             <TabsTrigger value="manage">
               <Settings className="h-4 w-4 mr-2" />
-              Manage ({sharedLinks.length})
+              {t("manage")} ({sharedLinks.length})
             </TabsTrigger>
           </TabsList>
 
@@ -291,7 +294,7 @@ export function ShareDialog({
             {copied && (
               <div className="flex items-center gap-2 mt-4 p-3 rounded-md bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400">
                 <Check className="h-4 w-4" />
-                <span className="text-sm">Link created and copied to clipboard!</span>
+                <span className="text-sm">{t("linkCreatedAndCopied")}</span>
               </div>
             )}
           </TabsContent>
@@ -311,20 +314,20 @@ export function ShareDialog({
                   className="mt-2"
                   onClick={() => fetchSharedLinks({ entityType, entityId })}
                 >
-                  Retry
+                  {t("retry")}
                 </Button>
               </div>
             ) : sharedLinks.length === 0 ? (
               <div className="text-center py-8">
                 <Link2 className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                <p className="text-sm text-muted-foreground">No shared links yet</p>
+                <p className="text-sm text-muted-foreground">{t("noSharedLinksYet")}</p>
                 <Button
                   variant="outline"
                   size="sm"
                   className="mt-2"
                   onClick={() => setActiveTab('create')}
                 >
-                  Create your first link
+                  {t("createFirstLink")}
                 </Button>
               </div>
             ) : (
@@ -350,7 +353,7 @@ export function ShareDialog({
                   size="sm"
                   onClick={() => setEditingLink(null)}
                 >
-                  Back to all links
+                  {t("backToAllLinks")}
                 </Button>
               </div>
               <SharedLinkSettings

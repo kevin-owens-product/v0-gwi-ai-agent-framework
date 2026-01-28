@@ -208,6 +208,7 @@ export function AdvancedChartRenderer({
 }: AdvancedChartRendererProps) {
   const t = useTranslations('ui.empty')
   const tLoading = useTranslations('ui.loading')
+  const tCharts = useTranslations('charts')
   const chartRef = useRef<HTMLDivElement>(null)
   const [zoomLevel, setZoomLevel] = useState(1)
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
@@ -972,7 +973,7 @@ export function AdvancedChartRenderer({
       default:
         return (
           <div className="flex items-center justify-center text-muted-foreground" style={{ height }}>
-            Unsupported chart type: {type}
+            {tCharts('unsupportedType', { type })}
           </div>
         )
     }

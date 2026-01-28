@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
@@ -139,15 +140,15 @@ interface ExportManagerProps {
   trigger?: React.ReactNode
 }
 
-const FORMAT_INFO: Record<ExportFormat, { icon: React.ReactNode; label: string; description: string; extension: string }> = {
-  pdf: { icon: <FileText className="h-4 w-4" />, label: "PDF Document", description: "Portable document with formatting", extension: ".pdf" },
-  excel: { icon: <FileSpreadsheet className="h-4 w-4" />, label: "Excel Spreadsheet", description: "Full-featured spreadsheet with formulas", extension: ".xlsx" },
-  csv: { icon: <File className="h-4 w-4" />, label: "CSV File", description: "Simple comma-separated values", extension: ".csv" },
-  png: { icon: <FileImage className="h-4 w-4" />, label: "PNG Image", description: "High-quality raster image", extension: ".png" },
-  svg: { icon: <FileImage className="h-4 w-4" />, label: "SVG Vector", description: "Scalable vector graphics", extension: ".svg" },
-  json: { icon: <FileJson className="h-4 w-4" />, label: "JSON Data", description: "Raw data in JSON format", extension: ".json" },
-  pptx: { icon: <FileText className="h-4 w-4" />, label: "PowerPoint", description: "Presentation slides", extension: ".pptx" },
-  html: { icon: <FileText className="h-4 w-4" />, label: "HTML Page", description: "Interactive web page", extension: ".html" },
+const FORMAT_ICONS: Record<ExportFormat, { icon: React.ReactNode; extension: string }> = {
+  pdf: { icon: <FileText className="h-4 w-4" />, extension: ".pdf" },
+  excel: { icon: <FileSpreadsheet className="h-4 w-4" />, extension: ".xlsx" },
+  csv: { icon: <File className="h-4 w-4" />, extension: ".csv" },
+  png: { icon: <FileImage className="h-4 w-4" />, extension: ".png" },
+  svg: { icon: <FileImage className="h-4 w-4" />, extension: ".svg" },
+  json: { icon: <FileJson className="h-4 w-4" />, extension: ".json" },
+  pptx: { icon: <FileText className="h-4 w-4" />, extension: ".pptx" },
+  html: { icon: <FileText className="h-4 w-4" />, extension: ".html" },
 }
 
 const DEFAULT_OPTIONS: ExportOptions = {
@@ -179,6 +180,16 @@ export function ExportManager({
   className,
   trigger,
 }: ExportManagerProps) {
+  const t = useTranslations("export")
+
+  // Helper function to get format info with translations
+  const getFormatInfo = useCallback((format: ExportFormat) => ({
+    icon: FORMAT_ICONS[format].icon,
+    extension: FORMAT_ICONS[format].extension,
+    label: t(`formats.${format}.label`),
+    description: t(`formats.${format}.description`),
+  }), [t])
+
   const [isOpen, setIsOpen] = useState(false)
   const [options, setOptions] = useState<ExportOptions>(DEFAULT_OPTIONS)
   const [isExporting, setIsExporting] = useState(false)
@@ -214,7 +225,7 @@ export function ExportManager({
       const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)
       name = `${name}_${timestamp}`
     }
-    return `${name}${FORMAT_INFO[options.format].extension}`
+    return `${name}${FORMAT_ICONS[options.format].extension}`
   }, [options.fileName, options.format, options.includeTimestamp, data.title])
 
   // Export to CSV
@@ -458,12 +469,12 @@ export function ExportManager({
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className={className}>
               <Download className="h-4 w-4 mr-2" />
-              Export
+              {t("button")}
               <ChevronDown className="h-4 w-4 ml-2" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>Quick Export</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("quickExport")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {(["pdf", "excel", "csv", "png"] as ExportFormat[]).map(format => (
               <DropdownMenuItem
@@ -473,14 +484,14 @@ export function ExportManager({
                   performExport()
                 }}
               >
-                {FORMAT_INFO[format].icon}
-                <span className="ml-2">{FORMAT_INFO[format].label}</span>
+                {FORMAT_ICONS[format].icon}
+                <span className="ml-2">{getFormatInfo(format).label}</span>
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setIsOpen(true)}>
               <Settings className="h-4 w-4 mr-2" />
-              Advanced Options...
+              {t("advancedOptions")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -489,57 +500,60 @@ export function ExportManager({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-3xl max-h-[85vh] overflow-hidden flex flex-col">
           <DialogHeader>
-            <DialogTitle>Export {data.title || "Data"}</DialogTitle>
+            <DialogTitle>{t("dialog.title", { name: data.title || t("dialog.defaultDataName") })}</DialogTitle>
             <DialogDescription>
-              Configure export settings and download your data
+              {t("dialog.description")}
             </DialogDescription>
           </DialogHeader>
 
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} className="flex-1 overflow-hidden">
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="format">Format</TabsTrigger>
-              <TabsTrigger value="options">Options</TabsTrigger>
-              <TabsTrigger value="schedule">Schedule</TabsTrigger>
-              <TabsTrigger value="history">History</TabsTrigger>
+              <TabsTrigger value="format">{t("tabs.format")}</TabsTrigger>
+              <TabsTrigger value="options">{t("tabs.options")}</TabsTrigger>
+              <TabsTrigger value="schedule">{t("tabs.schedule")}</TabsTrigger>
+              <TabsTrigger value="history">{t("tabs.history")}</TabsTrigger>
             </TabsList>
 
             <div className="overflow-auto flex-1 py-4">
               <TabsContent value="format" className="mt-0 space-y-4">
                 {/* Format Selection */}
                 <div className="grid grid-cols-4 gap-3">
-                  {Object.entries(FORMAT_INFO).map(([format, info]) => (
-                    <button
-                      key={format}
-                      className={cn(
-                        "flex flex-col items-center p-3 rounded-lg border transition-all",
-                        options.format === format
-                          ? "border-primary bg-primary/10 ring-1 ring-primary"
-                          : "border-muted hover:border-muted-foreground/30 hover:bg-muted/50"
-                      )}
-                      onClick={() => updateOptions({ format: format as ExportFormat })}
-                    >
-                      <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center mb-2">
-                        {info.icon}
-                      </div>
-                      <span className="font-medium text-sm">{info.label}</span>
-                      <span className="text-xs text-muted-foreground text-center mt-1">
-                        {info.extension}
-                      </span>
-                    </button>
-                  ))}
+                  {(Object.keys(FORMAT_ICONS) as ExportFormat[]).map((format) => {
+                    const info = getFormatInfo(format)
+                    return (
+                      <button
+                        key={format}
+                        className={cn(
+                          "flex flex-col items-center p-3 rounded-lg border transition-all",
+                          options.format === format
+                            ? "border-primary bg-primary/10 ring-1 ring-primary"
+                            : "border-muted hover:border-muted-foreground/30 hover:bg-muted/50"
+                        )}
+                        onClick={() => updateOptions({ format: format as ExportFormat })}
+                      >
+                        <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center mb-2">
+                          {info.icon}
+                        </div>
+                        <span className="font-medium text-sm">{info.label}</span>
+                        <span className="text-xs text-muted-foreground text-center mt-1">
+                          {info.extension}
+                        </span>
+                      </button>
+                    )
+                  })}
                 </div>
 
                 {/* File Name */}
                 <div className="space-y-2">
-                  <Label>File Name</Label>
+                  <Label>{t("formatTab.fileName")}</Label>
                   <div className="flex gap-2">
                     <Input
                       value={options.fileName}
                       onChange={(e) => updateOptions({ fileName: e.target.value })}
-                      placeholder="Enter file name"
+                      placeholder={t("formatTab.fileNamePlaceholder")}
                     />
                     <Badge variant="secondary" className="flex items-center">
-                      {FORMAT_INFO[options.format].extension}
+                      {FORMAT_ICONS[options.format].extension}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-4 text-sm">
@@ -548,7 +562,7 @@ export function ExportManager({
                         checked={options.includeTimestamp}
                         onCheckedChange={(v) => updateOptions({ includeTimestamp: !!v })}
                       />
-                      Include timestamp
+                      {t("formatTab.includeTimestamp")}
                     </label>
                   </div>
                 </div>
@@ -556,7 +570,7 @@ export function ExportManager({
                 {/* Column Selection */}
                 {data.columns && data.columns.length > 0 && (
                   <div className="space-y-2">
-                    <Label>Columns to Export</Label>
+                    <Label>{t("formatTab.columnsToExport")}</Label>
                     <div className="border rounded-lg p-3 max-h-40 overflow-auto">
                       <div className="grid grid-cols-2 gap-2">
                         {data.columns.map(col => (
@@ -581,14 +595,14 @@ export function ExportManager({
                         size="sm"
                         onClick={() => setSelectedColumns(new Set(data.columns?.map(c => c.key) || []))}
                       >
-                        Select All
+                        {t("formatTab.selectAll")}
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setSelectedColumns(new Set())}
                       >
-                        Clear All
+                        {t("formatTab.clearAll")}
                       </Button>
                     </div>
                   </div>
@@ -598,17 +612,17 @@ export function ExportManager({
               <TabsContent value="options" className="mt-0 space-y-4">
                 {/* General Options */}
                 <div className="space-y-3">
-                  <h4 className="font-medium">General Options</h4>
+                  <h4 className="font-medium">{t("optionsTab.generalOptions")}</h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex items-center justify-between">
-                      <Label>Include Title</Label>
+                      <Label>{t("optionsTab.includeTitle")}</Label>
                       <Switch
                         checked={options.includeTitle}
                         onCheckedChange={(v) => updateOptions({ includeTitle: v })}
                       />
                     </div>
                     <div className="flex items-center justify-between">
-                      <Label>Include Logo</Label>
+                      <Label>{t("optionsTab.includeLogo")}</Label>
                       <Switch
                         checked={options.includeLogo}
                         onCheckedChange={(v) => updateOptions({ includeLogo: v })}
@@ -617,7 +631,7 @@ export function ExportManager({
                   </div>
                   {options.includeLogo && (
                     <div className="space-y-1.5">
-                      <Label className="text-xs">Logo URL</Label>
+                      <Label className="text-xs">{t("optionsTab.logoUrl")}</Label>
                       <Input
                         value={options.logoUrl || ""}
                         onChange={(e) => updateOptions({ logoUrl: e.target.value })}
@@ -626,11 +640,11 @@ export function ExportManager({
                     </div>
                   )}
                   <div className="space-y-1.5">
-                    <Label className="text-xs">Watermark Text (optional)</Label>
+                    <Label className="text-xs">{t("optionsTab.watermarkText")}</Label>
                     <Input
                       value={options.watermark || ""}
                       onChange={(e) => updateOptions({ watermark: e.target.value })}
-                      placeholder="e.g., CONFIDENTIAL"
+                      placeholder={t("optionsTab.watermarkPlaceholder")}
                     />
                   </div>
                 </div>
@@ -638,10 +652,10 @@ export function ExportManager({
                 {/* Format-specific options */}
                 {(options.format === "pdf" || options.format === "pptx") && (
                   <div className="space-y-3">
-                    <h4 className="font-medium">Document Options</h4>
+                    <h4 className="font-medium">{t("optionsTab.documentOptions")}</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Orientation</Label>
+                        <Label className="text-xs">{t("optionsTab.orientation")}</Label>
                         <Select
                           value={options.orientation}
                           onValueChange={(v) => updateOptions({ orientation: v as any })}
@@ -650,13 +664,13 @@ export function ExportManager({
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="portrait">Portrait</SelectItem>
-                            <SelectItem value="landscape">Landscape</SelectItem>
+                            <SelectItem value="portrait">{t("optionsTab.portrait")}</SelectItem>
+                            <SelectItem value="landscape">{t("optionsTab.landscape")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Paper Size</Label>
+                        <Label className="text-xs">{t("optionsTab.paperSize")}</Label>
                         <Select
                           value={options.paperSize}
                           onValueChange={(v) => updateOptions({ paperSize: v as any })}
@@ -667,26 +681,26 @@ export function ExportManager({
                           <SelectContent>
                             <SelectItem value="a4">A4</SelectItem>
                             <SelectItem value="a3">A3</SelectItem>
-                            <SelectItem value="letter">Letter</SelectItem>
-                            <SelectItem value="legal">Legal</SelectItem>
+                            <SelectItem value="letter">{t("optionsTab.letter")}</SelectItem>
+                            <SelectItem value="legal">{t("optionsTab.legal")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-xs">Header Text</Label>
+                      <Label className="text-xs">{t("optionsTab.headerText")}</Label>
                       <Input
                         value={options.pdfHeader || ""}
                         onChange={(e) => updateOptions({ pdfHeader: e.target.value })}
-                        placeholder="Header text for each page"
+                        placeholder={t("optionsTab.headerPlaceholder")}
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-xs">Footer Text</Label>
+                      <Label className="text-xs">{t("optionsTab.footerText")}</Label>
                       <Input
                         value={options.pdfFooter || ""}
                         onChange={(e) => updateOptions({ pdfFooter: e.target.value })}
-                        placeholder="Footer text for each page"
+                        placeholder={t("optionsTab.footerPlaceholder")}
                       />
                     </div>
                   </div>
@@ -694,9 +708,9 @@ export function ExportManager({
 
                 {options.format === "excel" && (
                   <div className="space-y-3">
-                    <h4 className="font-medium">Excel Options</h4>
+                    <h4 className="font-medium">{t("optionsTab.excelOptions")}</h4>
                     <div className="space-y-1.5">
-                      <Label className="text-xs">Sheet Name</Label>
+                      <Label className="text-xs">{t("optionsTab.sheetName")}</Label>
                       <Input
                         value={options.excelSheetName || ""}
                         onChange={(e) => updateOptions({ excelSheetName: e.target.value })}
@@ -705,14 +719,14 @@ export function ExportManager({
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="flex items-center justify-between">
-                        <Label className="text-xs">Auto Filter</Label>
+                        <Label className="text-xs">{t("optionsTab.autoFilter")}</Label>
                         <Switch
                           checked={options.excelAutoFilter}
                           onCheckedChange={(v) => updateOptions({ excelAutoFilter: v })}
                         />
                       </div>
                       <div className="flex items-center justify-between">
-                        <Label className="text-xs">Include Formulas</Label>
+                        <Label className="text-xs">{t("optionsTab.includeFormulas")}</Label>
                         <Switch
                           checked={options.excelIncludeFormulas}
                           onCheckedChange={(v) => updateOptions({ excelIncludeFormulas: v })}
@@ -721,7 +735,7 @@ export function ExportManager({
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Freeze Rows</Label>
+                        <Label className="text-xs">{t("optionsTab.freezeRows")}</Label>
                         <Input
                           type="number"
                           min="0"
@@ -730,7 +744,7 @@ export function ExportManager({
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Freeze Columns</Label>
+                        <Label className="text-xs">{t("optionsTab.freezeColumns")}</Label>
                         <Input
                           type="number"
                           min="0"
@@ -744,10 +758,10 @@ export function ExportManager({
 
                 {options.format === "csv" && (
                   <div className="space-y-3">
-                    <h4 className="font-medium">CSV Options</h4>
+                    <h4 className="font-medium">{t("optionsTab.csvOptions")}</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Delimiter</Label>
+                        <Label className="text-xs">{t("optionsTab.delimiter")}</Label>
                         <Select
                           value={options.csvDelimiter}
                           onValueChange={(v) => updateOptions({ csvDelimiter: v as any })}
@@ -756,15 +770,15 @@ export function ExportManager({
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value=",">Comma (,)</SelectItem>
-                            <SelectItem value=";">Semicolon (;)</SelectItem>
-                            <SelectItem value="\t">Tab</SelectItem>
-                            <SelectItem value="|">Pipe (|)</SelectItem>
+                            <SelectItem value=",">{t("optionsTab.comma")}</SelectItem>
+                            <SelectItem value=";">{t("optionsTab.semicolon")}</SelectItem>
+                            <SelectItem value="\t">{t("optionsTab.tab")}</SelectItem>
+                            <SelectItem value="|">{t("optionsTab.pipe")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Encoding</Label>
+                        <Label className="text-xs">{t("optionsTab.encoding")}</Label>
                         <Select
                           value={options.csvEncoding}
                           onValueChange={(v) => updateOptions({ csvEncoding: v as any })}
@@ -781,7 +795,7 @@ export function ExportManager({
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <Label className="text-xs">Quote String Values</Label>
+                      <Label className="text-xs">{t("optionsTab.quoteStrings")}</Label>
                       <Switch
                         checked={options.csvQuoteStrings}
                         onCheckedChange={(v) => updateOptions({ csvQuoteStrings: v })}
@@ -792,10 +806,10 @@ export function ExportManager({
 
                 {(options.format === "png" || options.format === "svg") && (
                   <div className="space-y-3">
-                    <h4 className="font-medium">Image Options</h4>
+                    <h4 className="font-medium">{t("optionsTab.imageOptions")}</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Scale</Label>
+                        <Label className="text-xs">{t("optionsTab.scale")}</Label>
                         <Select
                           value={options.imageScale?.toString() || "2"}
                           onValueChange={(v) => updateOptions({ imageScale: parseFloat(v) })}
@@ -804,15 +818,15 @@ export function ExportManager({
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="1">1x (Standard)</SelectItem>
-                            <SelectItem value="2">2x (Retina)</SelectItem>
-                            <SelectItem value="3">3x (High DPI)</SelectItem>
-                            <SelectItem value="4">4x (Ultra)</SelectItem>
+                            <SelectItem value="1">{t("optionsTab.scale1x")}</SelectItem>
+                            <SelectItem value="2">{t("optionsTab.scale2x")}</SelectItem>
+                            <SelectItem value="3">{t("optionsTab.scale3x")}</SelectItem>
+                            <SelectItem value="4">{t("optionsTab.scale4x")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Background</Label>
+                        <Label className="text-xs">{t("optionsTab.background")}</Label>
                         <div className="flex gap-2">
                           <Input
                             type="color"
@@ -829,7 +843,7 @@ export function ExportManager({
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-xs">Quality</Label>
+                      <Label className="text-xs">{t("optionsTab.quality")}</Label>
                       <RadioGroup
                         value={options.quality}
                         onValueChange={(v) => updateOptions({ quality: v as any })}
@@ -837,15 +851,15 @@ export function ExportManager({
                       >
                         <label className="flex items-center gap-2">
                           <RadioGroupItem value="low" />
-                          <span className="text-sm">Low</span>
+                          <span className="text-sm">{t("optionsTab.qualityLow")}</span>
                         </label>
                         <label className="flex items-center gap-2">
                           <RadioGroupItem value="medium" />
-                          <span className="text-sm">Medium</span>
+                          <span className="text-sm">{t("optionsTab.qualityMedium")}</span>
                         </label>
                         <label className="flex items-center gap-2">
                           <RadioGroupItem value="high" />
-                          <span className="text-sm">High</span>
+                          <span className="text-sm">{t("optionsTab.qualityHigh")}</span>
                         </label>
                       </RadioGroup>
                     </div>
@@ -856,9 +870,9 @@ export function ExportManager({
               <TabsContent value="schedule" className="mt-0 space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Enable Scheduled Exports</Label>
+                    <Label>{t("scheduleTab.enableScheduled")}</Label>
                     <p className="text-xs text-muted-foreground">
-                      Automatically export data on a schedule
+                      {t("scheduleTab.enableScheduledDescription")}
                     </p>
                   </div>
                   <Switch
@@ -870,23 +884,23 @@ export function ExportManager({
                 {options.scheduled && (
                   <>
                     <div className="space-y-1.5">
-                      <Label>Frequency</Label>
+                      <Label>{t("scheduleTab.frequency")}</Label>
                       <Select
                         value={options.scheduleFrequency}
                         onValueChange={(v) => updateOptions({ scheduleFrequency: v as any })}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select frequency" />
+                          <SelectValue placeholder={t("scheduleTab.selectFrequency")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="daily">Daily</SelectItem>
-                          <SelectItem value="weekly">Weekly</SelectItem>
-                          <SelectItem value="monthly">Monthly</SelectItem>
+                          <SelectItem value="daily">{t("scheduleTab.daily")}</SelectItem>
+                          <SelectItem value="weekly">{t("scheduleTab.weekly")}</SelectItem>
+                          <SelectItem value="monthly">{t("scheduleTab.monthly")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-1.5">
-                      <Label>Time</Label>
+                      <Label>{t("scheduleTab.time")}</Label>
                       <Input
                         type="time"
                         value={options.scheduleTime || "09:00"}
@@ -894,7 +908,7 @@ export function ExportManager({
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <Label>Send to Email</Label>
+                      <Label>{t("scheduleTab.sendToEmail")}</Label>
                       <Input
                         type="email"
                         value={options.scheduleEmail || ""}
@@ -910,8 +924,8 @@ export function ExportManager({
                 {exportHistory.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
                     <Clock className="h-12 w-12 mb-4" />
-                    <p>No export history yet</p>
-                    <p className="text-sm">Your recent exports will appear here</p>
+                    <p>{t("historyTab.noHistory")}</p>
+                    <p className="text-sm">{t("historyTab.recentExportsWillAppear")}</p>
                   </div>
                 ) : (
                   <div className="space-y-2">
@@ -921,7 +935,7 @@ export function ExportManager({
                         className="flex items-center justify-between p-3 border rounded-lg"
                       >
                         <div className="flex items-center gap-3">
-                          {FORMAT_INFO[item.format].icon}
+                          {FORMAT_ICONS[item.format].icon}
                           <div>
                             <p className="font-medium text-sm">{item.fileName}</p>
                             <p className="text-xs text-muted-foreground">
@@ -958,27 +972,27 @@ export function ExportManager({
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={copyToClipboard}>
                 <Copy className="h-4 w-4 mr-2" />
-                Copy
+                {t("actions.copy")}
               </Button>
               <Button variant="outline" size="sm" onClick={() => console.log('Preview mode')}>
                 <Eye className="h-4 w-4 mr-2" />
-                Preview
+                {t("actions.preview")}
               </Button>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" onClick={() => setIsOpen(false)}>
-                Cancel
+                {t("actions.cancel")}
               </Button>
               <Button onClick={performExport} disabled={isExporting}>
                 {isExporting ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Exporting... {exportProgress}%
+                    {t("actions.exporting", { progress: exportProgress })}
                   </>
                 ) : (
                   <>
                     <Download className="h-4 w-4 mr-2" />
-                    Export {FORMAT_INFO[options.format].label}
+                    {t("actions.exportFormat", { format: getFormatInfo(options.format).label })}
                   </>
                 )}
               </Button>
@@ -1007,6 +1021,7 @@ export function QuickExportButton({
   onExport?: (result: ExportResult) => void
   className?: string
 }) {
+  const t = useTranslations("export")
   const [isExporting, setIsExporting] = useState(false)
 
   const handleExport = async () => {
@@ -1017,7 +1032,7 @@ export function QuickExportButton({
     onExport?.({
       success: true,
       format,
-      fileName: `${data.title || "export"}${FORMAT_INFO[format].extension}`,
+      fileName: `${data.title || "export"}${FORMAT_ICONS[format].extension}`,
     })
   }
 
@@ -1032,9 +1047,9 @@ export function QuickExportButton({
       {isExporting ? (
         <Loader2 className="h-4 w-4 animate-spin" />
       ) : (
-        FORMAT_INFO[format].icon
+        FORMAT_ICONS[format].icon
       )}
-      <span className="ml-2">{FORMAT_INFO[format].label}</span>
+      <span className="ml-2">{t(`formats.${format}.label`)}</span>
     </Button>
   )
 }

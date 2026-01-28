@@ -1,109 +1,111 @@
+"use client"
+
 import Link from "next/link"
 import { ArrowLeft, Play } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useTranslations } from "next-intl"
 
 export default function QuickstartPage() {
+  const t = useTranslations("docs")
+
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <Link href="/docs">
           <Button variant="ghost" size="sm" className="mb-8">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Docs
+            {t("common.backToDocs")}
           </Button>
         </Link>
 
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-4">
             <Play className="h-8 w-8 text-accent" />
-            <h1 className="text-4xl font-bold text-foreground">Quick Start Guide</h1>
+            <h1 className="text-4xl font-bold text-foreground">{t("quickstart.title")}</h1>
           </div>
           <p className="text-lg text-muted-foreground">
-            Get up and running with GWI AI agents in minutes.
+            {t("quickstart.subtitle")}
           </p>
         </div>
 
         <div className="space-y-8">
           <Card>
             <CardHeader>
-              <CardTitle>Step 1: Access Your Dashboard</CardTitle>
+              <CardTitle>{t("quickstart.step1.title")}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Log in to your GWI account and navigate to the AI Agent Framework dashboard. If you don&apos;t
-                have access yet, contact your account manager to enable this feature.
+                {t("quickstart.step1.description")}
               </p>
               <Link href="/dashboard">
-                <Button variant="outline" size="sm">Go to Dashboard</Button>
+                <Button variant="outline" size="sm">{t("quickstart.step1.button")}</Button>
               </Link>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Step 2: Choose an Agent</CardTitle>
+              <CardTitle>{t("quickstart.step2.title")}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Browse our library of pre-built agents designed for common research tasks:
+                {t("quickstart.step2.description")}
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-2 mb-4">
-                <li><strong>Audience Strategist</strong> - Deep audience profiling and segmentation</li>
-                <li><strong>Creative Brief Builder</strong> - Generate creative briefs from audience insights</li>
-                <li><strong>Competitive Tracker</strong> - Monitor and analyze competitor positioning</li>
-                <li><strong>Trend Spotter</strong> - Identify emerging market trends</li>
+                <li><strong>{t("quickstart.step2.agents.audienceStrategist.name")}</strong> - {t("quickstart.step2.agents.audienceStrategist.description")}</li>
+                <li><strong>{t("quickstart.step2.agents.creativeBrief.name")}</strong> - {t("quickstart.step2.agents.creativeBrief.description")}</li>
+                <li><strong>{t("quickstart.step2.agents.competitiveTracker.name")}</strong> - {t("quickstart.step2.agents.competitiveTracker.description")}</li>
+                <li><strong>{t("quickstart.step2.agents.trendSpotter.name")}</strong> - {t("quickstart.step2.agents.trendSpotter.description")}</li>
               </ul>
               <Link href="/dashboard/agents">
-                <Button variant="outline" size="sm">Browse Agents</Button>
+                <Button variant="outline" size="sm">{t("quickstart.step2.button")}</Button>
               </Link>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Step 3: Run Your First Query</CardTitle>
+              <CardTitle>{t("quickstart.step3.title")}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Select an agent and enter a natural language prompt describing what you want to learn.
-                For example:
+                {t("quickstart.step3.description")}
               </p>
               <div className="rounded bg-muted p-4 font-mono text-sm mb-4">
-                <pre className="text-foreground whitespace-pre-wrap">{`"Analyze Gen Z attitudes toward sustainable fashion in the UK market,
-including key motivations and purchase barriers."`}</pre>
+                <pre className="text-foreground whitespace-pre-wrap">{t("quickstart.step3.examplePrompt")}</pre>
               </div>
               <p className="text-muted-foreground">
-                The agent will analyze GWI data and return actionable insights within seconds.
+                {t("quickstart.step3.result")}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Step 4: Export & Share</CardTitle>
+              <CardTitle>{t("quickstart.step4.title")}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Export your insights in multiple formats:
+                {t("quickstart.step4.description")}
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-2">
-                <li>PDF reports with charts and visualizations</li>
-                <li>PowerPoint slides ready for presentations</li>
-                <li>Raw data in CSV or JSON format</li>
-                <li>Share links for team collaboration</li>
+                <li>{t("quickstart.step4.formats.pdf")}</li>
+                <li>{t("quickstart.step4.formats.pptx")}</li>
+                <li>{t("quickstart.step4.formats.data")}</li>
+                <li>{t("quickstart.step4.formats.share")}</li>
               </ul>
             </CardContent>
           </Card>
 
           <section>
-            <h2 className="text-2xl font-semibold text-foreground mb-4">What&apos;s Next?</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">{t("quickstart.whatsNext.title")}</h2>
             <div className="flex flex-wrap gap-4">
               <Link href="/docs/first-agent">
-                <Button>Create a Custom Agent</Button>
+                <Button>{t("quickstart.whatsNext.createCustomAgent")}</Button>
               </Link>
               <Link href="/docs/workflows-intro">
-                <Button variant="outline">Learn About Workflows</Button>
+                <Button variant="outline">{t("quickstart.whatsNext.learnWorkflows")}</Button>
               </Link>
             </div>
           </section>

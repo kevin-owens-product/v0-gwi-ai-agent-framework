@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -115,20 +116,21 @@ function mapApiWorkflowToUI(apiWorkflow: any): Workflow {
   }
 }
 
-const statusConfig = {
-  active: { icon: CheckCircle2, color: "text-chart-5", bg: "bg-chart-5/10", label: "Active" },
-  running: { icon: Loader2, color: "text-accent", bg: "bg-accent/10", label: "Running", spin: true },
-  scheduled: { icon: Clock, color: "text-chart-3", bg: "bg-chart-3/10", label: "Scheduled" },
-  failed: { icon: AlertCircle, color: "text-destructive", bg: "bg-destructive/10", label: "Failed" },
-  paused: { icon: Pause, color: "text-muted-foreground", bg: "bg-muted", label: "Paused" },
-}
-
 export function WorkflowList() {
+  const t = useTranslations("dashboard.pages.workflows.list")
   const router = useRouter()
   const [workflows, setWorkflows] = useState<Workflow[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [workflowToDelete, setWorkflowToDelete] = useState<Workflow | null>(null)
+
+  const statusConfig = {
+    active: { icon: CheckCircle2, color: "text-chart-5", bg: "bg-chart-5/10", label: t("status.active") },
+    running: { icon: Loader2, color: "text-accent", bg: "bg-accent/10", label: t("status.running"), spin: true },
+    scheduled: { icon: Clock, color: "text-chart-3", bg: "bg-chart-3/10", label: t("status.scheduled") },
+    failed: { icon: AlertCircle, color: "text-destructive", bg: "bg-destructive/10", label: t("status.failed") },
+    paused: { icon: Pause, color: "text-muted-foreground", bg: "bg-muted", label: t("status.paused") },
+  }
 
   // Fetch workflows from API
   useEffect(() => {
@@ -321,22 +323,22 @@ export function WorkflowList() {
                               disabled={workflow.status === "running"}
                             >
                               <Play className="h-4 w-4 mr-2" />
-                              Run Now
+                              {t("actions.runNow")}
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => handlePauseWorkflow(workflow)}
                               disabled={workflow.status === "paused" || workflow.status === "running"}
                             >
                               <Pause className="h-4 w-4 mr-2" />
-                              Pause
+                              {t("actions.pause")}
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleEditWorkflow(workflow)}>
                               <Edit className="h-4 w-4 mr-2" />
-                              Edit
+                              {t("actions.edit")}
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleDuplicateWorkflow(workflow)}>
                               <Copy className="h-4 w-4 mr-2" />
-                              Duplicate
+                              {t("actions.duplicate")}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
@@ -344,7 +346,7 @@ export function WorkflowList() {
                               onClick={() => handleDeleteWorkflow(workflow)}
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
+                              {t("actions.delete")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -353,24 +355,24 @@ export function WorkflowList() {
 
                     <div className="flex flex-wrap items-center gap-4 mt-4 text-sm">
                       <div>
-                        <span className="text-muted-foreground">Agents: </span>
+                        <span className="text-muted-foreground">{t("agents")}: </span>
                         <span className="text-foreground">{workflow.agents.join(" → ")}</span>
                       </div>
                       <div className="text-muted-foreground">•</div>
                       <div>
-                        <span className="text-muted-foreground">Schedule: </span>
+                        <span className="text-muted-foreground">{t("schedule")}: </span>
                         <span className="text-foreground">{workflow.schedule}</span>
                       </div>
                       <div className="text-muted-foreground">•</div>
                       <div>
-                        <span className="text-muted-foreground">Runs: </span>
+                        <span className="text-muted-foreground">{t("runs")}: </span>
                         <span className="text-foreground">{workflow.runs}</span>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-6 mt-3 text-xs text-muted-foreground">
-                      <span>Last run: {workflow.lastRun}</span>
-                      <span>Next run: {workflow.nextRun}</span>
+                      <span>{t("lastRun")}: {workflow.lastRun}</span>
+                      <span>{t("nextRun")}: {workflow.nextRun}</span>
                     </div>
                   </div>
                 </div>
@@ -383,15 +385,15 @@ export function WorkflowList() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Workflow</AlertDialogTitle>
+            <AlertDialogTitle>{t("deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{workflowToDelete?.name}"? This action cannot be undone.
+              {t("deleteDialog.description", { name: workflowToDelete?.name || "" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("deleteDialog.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Delete
+              {t("deleteDialog.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

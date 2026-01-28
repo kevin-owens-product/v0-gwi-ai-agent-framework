@@ -8,6 +8,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { usePinnedViews, type SavedView } from '@/hooks/use-saved-views'
 import { Button } from '@/components/ui/button'
@@ -89,6 +90,7 @@ interface PinnedItemProps {
 }
 
 function PinnedItem({ view, onUnpin, onRemove, isProcessing }: PinnedItemProps) {
+  const t = useTranslations('savedViews')
   const IconComponent = entityTypeIcons[view.entityType] || FileText
   const basePath = entityTypeRoutes[view.entityType] || '/dashboard'
   const href = `${basePath}/${view.entityId}`
@@ -118,27 +120,27 @@ function PinnedItem({ view, onUnpin, onRemove, isProcessing }: PinnedItemProps) 
             className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity ml-1 shrink-0"
           >
             <X className="h-3 w-3" />
-            <span className="sr-only">Actions</span>
+            <span className="sr-only">{t('actions')}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem asChild>
             <Link href={href} className="cursor-pointer">
               <ExternalLink className="mr-2 h-4 w-4" />
-              Open
+              {t('open')}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => onUnpin(view.id)}>
             <Pin className="mr-2 h-4 w-4" />
-            Unpin
+            {t('unpin')}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => onRemove(view.id)}
             className="text-destructive focus:text-destructive"
           >
             <Trash2 className="mr-2 h-4 w-4" />
-            Remove
+            {t('remove')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -182,6 +184,7 @@ export function PinnedItemsBar({
   className,
   showNavigation = true,
 }: PinnedItemsBarProps) {
+  const t = useTranslations('savedViews')
   const [processingIds, setProcessingIds] = useState<Set<string>>(new Set())
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
@@ -259,7 +262,7 @@ export function PinnedItemsBar({
         {/* Pin icon label */}
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground shrink-0">
           <Pin className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">Pinned</span>
+          <span className="hidden sm:inline">{t('pinned')}</span>
         </div>
 
         {/* Divider */}
@@ -274,7 +277,7 @@ export function PinnedItemsBar({
             onClick={() => scroll('left')}
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="sr-only">Scroll left</span>
+            <span className="sr-only">{t('scrollLeft')}</span>
           </Button>
         )}
 
@@ -315,7 +318,7 @@ export function PinnedItemsBar({
             onClick={() => scroll('right')}
           >
             <ChevronRight className="h-4 w-4" />
-            <span className="sr-only">Scroll right</span>
+            <span className="sr-only">{t('scrollRight')}</span>
           </Button>
         )}
       </div>
@@ -327,6 +330,7 @@ export function PinnedItemsBar({
  * Compact version of PinnedItemsBar for smaller spaces
  */
 export function CompactPinnedItemsBar({ className }: { className?: string }) {
+  const t = useTranslations('savedViews')
   const { savedViews: pinnedViews, isLoading } = usePinnedViews()
 
   if (!isLoading && pinnedViews.length === 0) {
@@ -376,7 +380,7 @@ export function CompactPinnedItemsBar({ className }: { className?: string }) {
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{pinnedViews.length - 5} more pinned</p>
+              <p>{t('morePinned', { count: pinnedViews.length - 5 })}</p>
             </TooltipContent>
           </Tooltip>
         )}
