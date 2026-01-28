@@ -229,14 +229,10 @@ function NavSectionComponent({ section }: { section: NavSection }) {
   const userInteracted = useRef(false)
   const initializedRef = useRef(false)
 
-  // Initialize state from persisted storage or defaults
-  const [isOpen, setIsOpen] = useState(() => {
-    const persisted = loadPersistedState()
-    if (section.titleKey in persisted) {
-      return persisted[section.titleKey]
-    }
-    return section.defaultOpen ?? false
-  })
+  // Initialize state with defaultOpen to prevent hydration mismatch
+  // localStorage will be read after mount in useEffect
+  const [isOpen, setIsOpen] = useState(section.defaultOpen ?? false)
+  const [isHydrated, setIsHydrated] = useState(false)
 
   const isActive = (href: string) => {
     if (href === "/gwi") return pathname === "/gwi"
@@ -245,16 +241,29 @@ function NavSectionComponent({ section }: { section: NavSection }) {
 
   const hasActiveItem = section.items.some((item) => isActive(item.href))
 
+  // Read from localStorage after mount to prevent hydration mismatch
+  useEffect(() => {
+    if (!isHydrated) {
+      const persisted = loadPersistedState()
+      if (section.titleKey in persisted) {
+        setIsOpen(persisted[section.titleKey])
+      }
+      setIsHydrated(true)
+    }
+  }, [isHydrated, section.titleKey])
+
   // Handle open state changes with persistence
   const handleOpenChange = useCallback((open: boolean) => {
     userInteracted.current = true
     setIsOpen(open)
 
-    // Persist to localStorage
-    const currentState = loadPersistedState()
-    currentState[section.titleKey] = open
-    savePersistedState(currentState)
-  }, [section.titleKey])
+    // Persist to localStorage (only after hydration)
+    if (isHydrated) {
+      const currentState = loadPersistedState()
+      currentState[section.titleKey] = open
+      savePersistedState(currentState)
+    }
+  }, [section.titleKey, isHydrated])
 
   // Auto-expand on initial render if has active item and user hasn't interacted
   useEffect(() => {
@@ -270,14 +279,16 @@ function NavSectionComponent({ section }: { section: NavSection }) {
       sidebarContext.registerSection(section.titleKey, (open) => {
         userInteracted.current = true
         setIsOpen(open)
-        const currentState = loadPersistedState()
-        currentState[section.titleKey] = open
-        savePersistedState(currentState)
+        if (isHydrated) {
+          const currentState = loadPersistedState()
+          currentState[section.titleKey] = open
+          savePersistedState(currentState)
+        }
       })
       return () => sidebarContext.unregisterSection(section.titleKey)
     }
     return undefined
-  }, [sidebarContext, section.titleKey])
+  }, [sidebarContext, section.titleKey, isHydrated])
 
   return (
     <Collapsible open={isOpen} onOpenChange={handleOpenChange} className="mb-1">
