@@ -264,10 +264,10 @@ function LoginForm() {
 
             <Button type="submit" className="w-full" disabled={isLoading || isPending}>
               {isLoading || isPending ? (
-                <>
+                <span className="flex items-center">
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {t('signingIn')}
-                </>
+                </span>
               ) : (
                 t('portal.signInToPlatform')
               )}
@@ -289,7 +289,7 @@ function LoginForm() {
               disabled={isOAuthLoading !== null}
             >
               {isOAuthLoading === "google" ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" key="google-loader" />
               ) : (
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                   <path
@@ -319,7 +319,7 @@ function LoginForm() {
               disabled={isOAuthLoading !== null}
             >
               {isOAuthLoading === "microsoft-entra-id" ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" key="ms-loader" />
               ) : (
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                   <path fill="currentColor" d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z" />
@@ -396,15 +396,15 @@ function LoginForm() {
 
             <Button type="submit" className="w-full" disabled={isLoading || isPending}>
               {isLoading || isPending ? (
-                <>
+                <span className="flex items-center">
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {t('signingIn')}
-                </>
+                </span>
               ) : (
-                <>
+                <span className="flex items-center">
                   <Shield className="mr-2 h-4 w-4" />
                   {t('portal.signInToAdmin')}
-                </>
+                </span>
               )}
             </Button>
           </form>
@@ -473,15 +473,15 @@ function LoginForm() {
 
             <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700" disabled={isLoading || isPending}>
               {isLoading || isPending ? (
-                <>
+                <span className="flex items-center">
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {t('signingIn')}
-                </>
+                </span>
               ) : (
-                <>
+                <span className="flex items-center">
                   <Database className="mr-2 h-4 w-4" />
                   {t('portal.signInToGwi')}
-                </>
+                </span>
               )}
             </Button>
           </form>
