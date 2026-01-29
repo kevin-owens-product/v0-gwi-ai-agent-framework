@@ -3948,7 +3948,11 @@
       "templates": "[RU] Templates",
       "title": "[RU] Charts",
       "totalCharts": "[RU] Total Charts",
-      "totalViews": "[RU] Total Views"
+      "totalViews": "[RU] Total Views",
+      "new": {
+        "title": "[LOCALE] New Chart",
+        "description": "[LOCALE] Create a new chart to visualize your data"
+      }
     },
     "brandTracking": {
       "edit": {

@@ -3948,7 +3948,11 @@
       "templates": "[ZH] Templates",
       "title": "[ZH] Charts",
       "totalCharts": "[ZH] Total Charts",
-      "totalViews": "[ZH] Total Views"
+      "totalViews": "[ZH] Total Views",
+      "new": {
+        "title": "[LOCALE] New Chart",
+        "description": "[LOCALE] Create a new chart to visualize your data"
+      }
     },
     "brandTracking": {
       "edit": {

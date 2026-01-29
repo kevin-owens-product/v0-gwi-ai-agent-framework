@@ -3940,6 +3940,10 @@
       "exports": "[ES] Exports",
       "favorites": "[ES] Favorites",
       "mostViewed": "[ES] Most Viewed",
+      "new": {
+        "title": "[ES] New Chart",
+        "description": "[ES] Create a new chart to visualize your data"
+      },
       "newChart": "[ES] New Chart",
       "pageTracker": "[ES] Charts",
       "recent": "[ES] Recent",

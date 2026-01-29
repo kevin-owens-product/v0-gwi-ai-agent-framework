@@ -3948,7 +3948,11 @@
       "templates": "[EL] Templates",
       "title": "[EL] Charts",
       "totalCharts": "[EL] Total Charts",
-      "totalViews": "[EL] Total Views"
+      "totalViews": "[EL] Total Views",
+      "new": {
+        "title": "[LOCALE] New Chart",
+        "description": "[LOCALE] Create a new chart to visualize your data"
+      }
     },
     "brandTracking": {
       "edit": {

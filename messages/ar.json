@@ -3948,7 +3948,11 @@
       "templates": "[AR] Templates",
       "title": "[AR] Charts",
       "totalCharts": "[AR] Total Charts",
-      "totalViews": "[AR] Total Views"
+      "totalViews": "[AR] Total Views",
+      "new": {
+        "title": "[LOCALE] New Chart",
+        "description": "[LOCALE] Create a new chart to visualize your data"
+      }
     },
     "brandTracking": {
       "edit": {

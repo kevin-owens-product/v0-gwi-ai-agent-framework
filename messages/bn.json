@@ -3948,7 +3948,11 @@
       "templates": "[BN] Templates",
       "title": "[BN] Charts",
       "totalCharts": "[BN] Total Charts",
-      "totalViews": "[BN] Total Views"
+      "totalViews": "[BN] Total Views",
+      "new": {
+        "title": "[LOCALE] New Chart",
+        "description": "[LOCALE] Create a new chart to visualize your data"
+      }
     },
     "brandTracking": {
       "edit": {

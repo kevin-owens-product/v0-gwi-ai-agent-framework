@@ -3948,7 +3948,11 @@
       "templates": "[HI] Templates",
       "title": "[HI] Charts",
       "totalCharts": "[HI] Total Charts",
-      "totalViews": "[HI] Total Views"
+      "totalViews": "[HI] Total Views",
+      "new": {
+        "title": "[LOCALE] New Chart",
+        "description": "[LOCALE] Create a new chart to visualize your data"
+      }
     },
     "brandTracking": {
       "edit": {

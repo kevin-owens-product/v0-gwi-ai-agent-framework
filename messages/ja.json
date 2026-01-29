@@ -3948,7 +3948,11 @@
       "templates": "[JA] Templates",
       "title": "[JA] Charts",
       "totalCharts": "[JA] Total Charts",
-      "totalViews": "[JA] Total Views"
+      "totalViews": "[JA] Total Views",
+      "new": {
+        "title": "[LOCALE] New Chart",
+        "description": "[LOCALE] Create a new chart to visualize your data"
+      }
     },
     "brandTracking": {
       "edit": {
