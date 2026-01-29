@@ -133,3 +133,10 @@ export type {
   CreateConnectorInput,
   UpdateConnectorInput,
 } from './use-connectors'
+
+// API Error Handling
+export { useApiErrorHandler } from './use-api-error-handler'
+export type { ErrorType } from './use-api-error-handler'
+
+// Async Operations
+export { useAsyncOperation } from './use-async-operation'

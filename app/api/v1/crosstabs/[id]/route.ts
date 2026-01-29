@@ -44,16 +44,6 @@ export async function GET(
 
     const crosstab = await prisma.crosstab.findFirst({
       where: { id, orgId },
-      include: {
-        creator: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            avatarUrl: true,
-          },
-        },
-      },
     })
 
     if (!crosstab) {
@@ -149,16 +139,6 @@ export async function PATCH(
         ...rest,
         ...(filters !== undefined && { filters: filters as Prisma.InputJsonValue }),
         ...(results !== undefined && { results: results as Prisma.InputJsonValue }),
-      },
-      include: {
-        creator: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            avatarUrl: true,
-          },
-        },
       },
     })
 

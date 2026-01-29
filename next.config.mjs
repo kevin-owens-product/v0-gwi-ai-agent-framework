@@ -31,6 +31,8 @@ const nextConfig = {
     workerThreads: isMemoryConstrained ? false : undefined,
     cpus: isMemoryConstrained ? 1 : undefined,
   },
+  // Suppress Fast Refresh logs in development
+  reactStrictMode: true,
   // Add cache-control headers to prevent stale HTML caching
   async headers() {
     const commonNoCacheHeaders = [
@@ -83,7 +85,7 @@ const nextConfig = {
     ];
   },
   // Optimize webpack for memory-constrained environments
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
     if (isMemoryConstrained) {
       // Disable source maps entirely to save memory
       config.devtool = false;
@@ -100,6 +102,15 @@ const nextConfig = {
       // Disable performance hints to reduce memory overhead
       config.performance = { hints: false };
     }
+
+    // Suppress Fast Refresh logs in development
+    if (dev && !isServer) {
+      // Reduce webpack logging verbosity to suppress Fast Refresh messages
+      config.infrastructureLogging = {
+        level: 'warn', // Show warnings and errors, suppress info logs (including Fast Refresh)
+      };
+    }
+
     return config;
   },
 }

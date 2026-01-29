@@ -1064,38 +1064,62 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
     <TooltipProvider>
     <div className={`flex-1 space-y-6 p-6 ${isFullscreen ? 'fixed inset-0 z-50 bg-background overflow-auto' : ''}`}>
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div className="flex items-start gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex items-start gap-4 min-w-0 flex-1">
           <Link href="/dashboard/crosstabs">
-            <Button variant="ghost" size="icon" className="mt-1">
+            <Button variant="ghost" size="icon" className="mt-1 flex-shrink-0">
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-2xl font-bold">{crosstab.name}</h1>
-              <Badge variant="secondary">{crosstab.audiences.length} audiences</Badge>
-              <Badge variant="outline">{crosstab.metrics.length} metrics</Badge>
+          <div className="space-y-2 min-w-0 flex-1">
+            <div className="flex items-start gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap min-w-0">
+                <h1 className="text-2xl font-bold break-words">{crosstab.name}</h1>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Badge variant="secondary" className="whitespace-nowrap">{crosstab.audiences.length} audiences</Badge>
+                  <Badge variant="outline" className="whitespace-nowrap">{crosstab.metrics.length} metrics</Badge>
+                  {crosstab.category && (
+                    <Badge variant="outline" className="whitespace-nowrap">{crosstab.category}</Badge>
+                  )}
+                </div>
+              </div>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsFavorite(!isFavorite)}>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={() => setIsFavorite(!isFavorite)}>
                     {isFavorite ? <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" /> : <StarOff className="h-4 w-4" />}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>{isFavorite ? t('actions.removeFromFavorites') : t('actions.addToFavorites')}</TooltipContent>
               </Tooltip>
             </div>
-            <p className="text-sm text-muted-foreground max-w-2xl">{crosstab.description}</p>
-            <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground pt-1">
-              <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {crosstab.views.toLocaleString()} views</span>
-              <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> Modified {crosstab.lastModified}</span>
-              <span className="flex items-center gap-1"><Users className="h-3 w-3" /> {crosstab.createdBy}</span>
+            {crosstab.description && (
+              <p className="text-sm text-muted-foreground max-w-3xl line-clamp-2">{crosstab.description}</p>
+            )}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5 whitespace-nowrap">
+                <Eye className="h-3.5 w-3.5 flex-shrink-0" />
+                <span>{crosstab.views.toLocaleString()} views</span>
+              </span>
+              <span className="flex items-center gap-1.5 whitespace-nowrap">
+                <Calendar className="h-3.5 w-3.5 flex-shrink-0" />
+                <span>Modified {crosstab.lastModified}</span>
+              </span>
+              <span className="flex items-center gap-1.5 whitespace-nowrap">
+                <Users className="h-3.5 w-3.5 flex-shrink-0" />
+                <span>{crosstab.createdBy}</span>
+              </span>
+              {crosstab.dataSource && (
+                <span className="flex items-center gap-1.5 whitespace-nowrap">
+                  <Table2 className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span>{crosstab.dataSource}</span>
+                </span>
+              )}
             </div>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-2 flex-shrink-0 flex-wrap sm:flex-nowrap">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="outline" size="sm" onClick={() => setAutoRefresh(!autoRefresh)}>
@@ -1327,23 +1351,19 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
             </SheetContent>
           </Sheet>
 
-          <Button variant="outline" size="sm" className="bg-transparent">
-            <BarChart3 className="h-4 w-4 mr-2" />
-            {t('actions.visualize')}
-          </Button>
-          <Button variant="outline" size="sm" className="bg-transparent">
+          <Button variant="outline" size="sm" onClick={() => setShowShareDialog(true)}>
             <Share2 className="h-4 w-4 mr-2" />
             {t('actions.share')}
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="bg-transparent" disabled={isExporting}>
+              <Button variant="outline" size="sm" disabled={isExporting}>
                 {isExporting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
                 Export
-                <ChevronDown className="h-4 w-4 ml-2" />
+                <ChevronDown className="h-3 w-3 ml-1" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => handleExport("json")}>
                 {t('export.asJson')}
               </DropdownMenuItem>
@@ -1378,9 +1398,15 @@ export default function CrosstabDetailPage({ params }: { params: Promise<{ id: s
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleDuplicate}>{t('actions.duplicate')}</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDuplicate}>
+                <Copy className="h-4 w-4 mr-2" />
+                {t('actions.duplicate')}
+              </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={`/dashboard/dashboards/new?crosstab=${crosstab.id}`}>{t('actions.addToDashboard')}</Link>
+                <Link href={`/dashboard/dashboards/new?crosstab=${crosstab.id}`}>
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  {t('actions.addToDashboard')}
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleCopyLink}>

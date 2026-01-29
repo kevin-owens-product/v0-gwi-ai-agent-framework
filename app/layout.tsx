@@ -48,6 +48,50 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
+        {process.env.NODE_ENV === 'development' && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function() {
+                  const originalLog = console.log;
+                  const originalInfo = console.info;
+                  const originalWarn = console.warn;
+                  
+                  const suppressPatterns = [
+                    /\\[Fast Refresh\\]/i,
+                    /Fast Refresh/i,
+                    /rebuilding/i,
+                    /HMR/i,
+                    /Hot Module Replacement/i
+                  ];
+                  
+                  const shouldSuppress = (message) => {
+                    const messageStr = typeof message === 'string' ? message : String(message);
+                    return suppressPatterns.some(pattern => pattern.test(messageStr));
+                  };
+                  
+                  console.log = function(...args) {
+                    if (!shouldSuppress(args[0])) {
+                      originalLog.apply(console, args);
+                    }
+                  };
+                  
+                  console.info = function(...args) {
+                    if (!shouldSuppress(args[0])) {
+                      originalInfo.apply(console, args);
+                    }
+                  };
+                  
+                  console.warn = function(...args) {
+                    if (!shouldSuppress(args[0])) {
+                      originalWarn.apply(console, args);
+                    }
+                  };
+                })();
+              `,
+            }}
+          />
+        )}
       </head>
       <body className="font-sans antialiased" style={{ fontFamily: 'Geist, system-ui, arial, sans-serif' }} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>

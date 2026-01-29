@@ -922,44 +922,46 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
 
       {/* Main Tabs for Audience Insights */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-4">
-        <TabsList className="w-full justify-start flex-wrap h-auto gap-1">
-          <TabsTrigger value="overview" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="persona" className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4" />
-            Persona
-          </TabsTrigger>
-          <TabsTrigger value="day-in-life" className="flex items-center gap-2">
-            <Clock className="h-4 w-4" />
-            Day in the Life
-          </TabsTrigger>
-          <TabsTrigger value="habits" className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4" />
-            Habits & Behaviors
-          </TabsTrigger>
-          <TabsTrigger value="media" className="flex items-center gap-2">
-            <Tv className="h-4 w-4" />
-            Media Consumption
-          </TabsTrigger>
-          <TabsTrigger value="brands" className="flex items-center gap-2">
-            <Heart className="h-4 w-4" />
-            Brand Affinities
-          </TabsTrigger>
-          <TabsTrigger value="comments" className="flex items-center gap-2">
-            <MessageSquare className="h-4 w-4" />
-            Comments
-          </TabsTrigger>
-          <TabsTrigger value="activity" className="flex items-center gap-2">
-            <Activity className="h-4 w-4" />
-            Activity
-          </TabsTrigger>
-          <TabsTrigger value="history" className="flex items-center gap-2">
-            <History className="h-4 w-4" />
-            History
-          </TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+          <TabsList className="inline-flex w-auto min-w-full sm:min-w-0 justify-start h-auto gap-1">
+            <TabsTrigger value="overview" className="flex items-center gap-2 flex-none">
+              <Users className="h-4 w-4" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="persona" className="flex items-center gap-2 flex-none">
+              <Sparkles className="h-4 w-4" />
+              Persona
+            </TabsTrigger>
+            <TabsTrigger value="day-in-life" className="flex items-center gap-2 flex-none">
+              <Clock className="h-4 w-4" />
+              Day in the Life
+            </TabsTrigger>
+            <TabsTrigger value="habits" className="flex items-center gap-2 flex-none">
+              <TrendingUp className="h-4 w-4" />
+              Habits & Behaviors
+            </TabsTrigger>
+            <TabsTrigger value="media" className="flex items-center gap-2 flex-none">
+              <Tv className="h-4 w-4" />
+              Media Consumption
+            </TabsTrigger>
+            <TabsTrigger value="brands" className="flex items-center gap-2 flex-none">
+              <Heart className="h-4 w-4" />
+              Brand Affinities
+            </TabsTrigger>
+            <TabsTrigger value="comments" className="flex items-center gap-2 flex-none">
+              <MessageSquare className="h-4 w-4" />
+              Comments
+            </TabsTrigger>
+            <TabsTrigger value="activity" className="flex items-center gap-2 flex-none">
+              <Activity className="h-4 w-4" />
+              Activity
+            </TabsTrigger>
+            <TabsTrigger value="history" className="flex items-center gap-2 flex-none">
+              <History className="h-4 w-4" />
+              History
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* Overview Tab - Original Content */}
         <TabsContent value="overview">

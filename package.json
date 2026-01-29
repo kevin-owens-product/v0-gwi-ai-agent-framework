@@ -35,6 +35,7 @@
     "test:all": "npm run test:coverage && npm run test:e2e",
     "type-check": "tsc --noEmit",
     "i18n:validate": "node scripts/validate-translations.js",
+    "i18n:check": "node scripts/validate-translations.js --verbose",
     "i18n:validate:verbose": "node scripts/validate-translations.js --verbose",
     "i18n:fix": "node scripts/validate-translations.js --fix",
     "i18n:clean": "node scripts/validate-translations.js --clean",

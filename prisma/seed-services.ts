@@ -572,6 +572,7 @@ async function createInvoices(clients: any[], projects: any[]) {
   
   // Create invoices for completed and in-progress projects
   const invoices = []
+  let invoiceCounter = 1 // Global counter to ensure unique invoice numbers
   
   for (const project of projects) {
     if (project.status === 'COMPLETED' || project.status === 'IN_PROGRESS') {
@@ -600,10 +601,17 @@ async function createInvoices(clients: any[], projects: any[]) {
         const amountPaid = status === 'PAID' ? total : new Decimal('0')
         const amountDue = new Decimal((Number(total) - Number(amountPaid)).toFixed(2))
         
-        const invoice = await prisma.invoice.create({
-          data: {
+        // Generate unique invoice number using project code and global counter
+        const projectCodePart = project.code.split('-')[2] || '000'
+        const invoiceNumber = `INV-2024-${String(projectCodePart).padStart(3, '0')}-${String(invoiceCounter++).padStart(4, '0')}`
+        
+        // Use upsert to handle existing invoices gracefully
+        const invoice = await prisma.invoice.upsert({
+          where: { invoiceNumber },
+          update: {}, // Don't update if exists
+          create: {
             clientId: project.clientId,
-            invoiceNumber: `INV-2024-${String(project.code.split('-')[2]).padStart(3, '0')}-${String(i + 1).padStart(2, '0')}`,
+            invoiceNumber,
             status,
             issueDate,
             dueDate,
@@ -619,27 +627,44 @@ async function createInvoices(clients: any[], projects: any[]) {
           },
         })
         
-        // Create line items
-        const numLineItems = Math.floor(Math.random() * 3) + 2
-        for (let j = 0; j < numLineItems; j++) {
-          const quantity = new Decimal((Math.random() * 50 + 10).toFixed(2))
-          const unitPrice = new Decimal((Math.random() * 200 + 100).toFixed(2))
-          const amount = new Decimal((Number(quantity) * Number(unitPrice)).toFixed(2))
-          
-          await prisma.invoiceLineItem.create({
-            data: {
-              invoiceId: invoice.id,
-              projectId: project.id,
-              description: `Professional services - ${project.name} (${['Analysis', 'Consulting', 'Reporting', 'Data Processing'][j % 4]})`,
-              quantity,
-              unitPrice,
-              amount,
-              hours: j === 0 ? quantity : null,
-              hourlyRate: j === 0 ? unitPrice : null,
-              taxable: true,
-              sortOrder: j,
-            },
-          })
+        // Check if line items already exist for this invoice
+        const existingLineItems = await prisma.invoiceLineItem.findMany({
+          where: { invoiceId: invoice.id },
+        })
+        
+        // Create line items only if they don't exist
+        if (existingLineItems.length === 0) {
+          const numLineItems = Math.floor(Math.random() * 3) + 2
+          for (let j = 0; j < numLineItems; j++) {
+            const quantity = new Decimal((Math.random() * 50 + 10).toFixed(2))
+            const unitPrice = new Decimal((Math.random() * 200 + 100).toFixed(2))
+            const amount = new Decimal((Number(quantity) * Number(unitPrice)).toFixed(2))
+            
+            // Check if line item already exists
+            const existingLineItem = await prisma.invoiceLineItem.findFirst({
+              where: {
+                invoiceId: invoice.id,
+                sortOrder: j,
+              },
+            })
+            
+            if (!existingLineItem) {
+              await prisma.invoiceLineItem.create({
+                data: {
+                  invoiceId: invoice.id,
+                  projectId: project.id,
+                  description: `Professional services - ${project.name} (${['Analysis', 'Consulting', 'Reporting', 'Data Processing'][j % 4]})`,
+                  quantity,
+                  unitPrice,
+                  amount,
+                  hours: j === 0 ? quantity : null,
+                  hourlyRate: j === 0 ? unitPrice : null,
+                  taxable: true,
+                  sortOrder: j,
+                },
+              })
+            }
+          }
         }
         
         invoices.push(invoice)
