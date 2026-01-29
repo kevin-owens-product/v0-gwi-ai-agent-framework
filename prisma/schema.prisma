@@ -1320,6 +1320,7 @@ model SuperAdmin {
   monitoringAlerts      GWIMonitoringAlert[]      @relation("AlertCreator")
   gwiAuditLogs          GWIAuditLog[]             @relation("GWIAuditPerformer")
   gwiApiKeys            GWIApiKey[]               @relation("GWIApiKeyCreator")
+  taxonomyVersions      TaxonomyVersion[]         @relation("TaxonomyVersionCreator")
 
   @@index([email])
   @@index([role])
@@ -3774,6 +3775,9 @@ model Survey {
   questions     SurveyQuestion[]
   responses     SurveyResponse[]
   distributions SurveyDistribution[]
+  routingRules  SurveyRoutingRule[]
+  quotas        SurveyQuota[]
+  versions      SurveyVersion[]
   createdById   String
   createdBy     SuperAdmin           @relation("SurveyCreator", fields: [createdById], references: [id])
   createdAt     DateTime             @default(now())
@@ -3809,6 +3813,12 @@ model SurveyQuestion {
   order           Int
   required        Boolean      @default(true)
   taxonomyLinks   Json?
+  displayLogic    Json?
+  pipingRules     Json?
+  randomization   Json?
+  loopConfig      Json?
+  routingRules    SurveyRoutingRule[] @relation("RoutingSource")
+  targetRouting   SurveyRoutingRule[] @relation("RoutingTarget")
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
@@ -3825,6 +3835,13 @@ enum QuestionType {
   NUMERIC
   DATE
   MATRIX
+  RANKING
+  SLIDER
+  HEATMAP
+  DROPDOWN
+  STAR_RATING
+  NPS_SCALE
+  SEMANTIC_DIFFERENTIAL
 }
 
 model SurveyResponse {
@@ -3858,6 +3875,62 @@ model SurveyDistribution {
   @@index([status])
 }
 
+// Survey Routing and Logic
+model SurveyRoutingRule {
+  id              String   @id @default(cuid())
+  surveyId       String
+  survey         Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  sourceQuestionId String?
+  sourceQuestion SurveyQuestion? @relation("RoutingSource", fields: [sourceQuestionId], references: [id])
+  condition      Json     // { type: "equals|contains|greater|less", field: "Q1", value: "Yes" }
+  targetQuestionId String?
+  targetQuestion SurveyQuestion? @relation("RoutingTarget", fields: [targetQuestionId], references: [id])
+  action         String   // "skip_to", "show_if", "hide_if", "end_survey"
+  priority       Int      @default(0)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@index([surveyId])
+  @@index([sourceQuestionId])
+  @@index([isActive])
+}
+
+// Survey Quotas
+model SurveyQuota {
+  id              String   @id @default(cuid())
+  surveyId       String
+  survey         Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  name           String
+  targetCount    Int
+  currentCount   Int      @default(0)
+  conditions     Json     // { "Q1": "Yes", "Q2": "25-34" }
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@index([surveyId])
+  @@index([isActive])
+}
+
+// Survey Versions for A/B Testing
+model SurveyVersion {
+  id              String   @id @default(cuid())
+  surveyId       String
+  survey         Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  versionNumber  Int
+  name           String
+  description    String?
+  questions      Json     // Snapshot of questions at version
+  routingRules   Json?    // Snapshot of routing
+  distribution   Int      @default(100) // Percentage of traffic
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  
+  @@unique([surveyId, versionNumber])
+  @@index([surveyId])
+}
+
 // Taxonomy Management
 model TaxonomyCategory {
   id          String              @id @default(cuid())
@@ -3868,6 +3941,7 @@ model TaxonomyCategory {
   parent      TaxonomyCategory?   @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children    TaxonomyCategory[]  @relation("CategoryHierarchy")
   attributes  TaxonomyAttribute[]
+  versions    TaxonomyVersion[]
   version     Int                 @default(1)
   isActive    Boolean             @default(true)
   createdAt   DateTime            @default(now())
@@ -3913,6 +3987,41 @@ model TaxonomyMappingRule {
 
   @@index([targetCategoryCode])
   @@index([isActive])
+}
+
+// Taxonomy Versioning
+model TaxonomyVersion {
+  id              String   @id @default(cuid())
+  categoryId     String
+  category       TaxonomyCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  versionNumber  Int
+  snapshot       Json     // Full category snapshot
+  changeLog      Json?    // What changed
+  createdById    String
+  createdBy      SuperAdmin @relation("TaxonomyVersionCreator", fields: [createdById], references: [id])
+  createdAt      DateTime @default(now())
+  
+  @@unique([categoryId, versionNumber])
+  @@index([categoryId])
+}
+
+// Taxonomy Auto-Mapping
+model TaxonomyAutoMapping {
+  id                  String   @id @default(cuid())
+  surveyId           String?
+  questionId         String?
+  sourcePattern      String   // Regex or pattern
+  targetCategoryCode String
+  targetAttributeCode String?
+  transformation     Json?    // Transformation rules
+  confidence         Float    @default(1.0)
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  
+  @@index([surveyId])
+  @@index([questionId])
+  @@index([targetCategoryCode])
 }
 
 // Data Pipelines
@@ -4098,6 +4207,8 @@ model GWIDataSourceConnection {
   lastSyncAt       DateTime?
   syncStatus       String     @default("pending")
   errorLog         Json?
+  syncSchedules    DataSourceSyncSchedule[]
+  qualityRules     DataQualityRule[]
   createdById      String
   createdBy        SuperAdmin @relation("DataSourceCreator", fields: [createdById], references: [id])
   createdAt        DateTime   @default(now())
@@ -4111,6 +4222,37 @@ model GWIDataSourceConnection {
   @@index([isActive])
   @@index([syncStatus])
   @@index([orgId])
+}
+
+// Data Source Sync Schedules
+model DataSourceSyncSchedule {
+  id              String   @id @default(cuid())
+  dataSourceId   String
+  dataSource     GWIDataSourceConnection @relation(fields: [dataSourceId], references: [id], onDelete: Cascade)
+  schedule       String   // Cron expression
+  isActive       Boolean  @default(true)
+  lastRunAt      DateTime?
+  nextRunAt      DateTime?
+  createdAt      DateTime @default(now())
+  
+  @@index([dataSourceId])
+  @@index([nextRunAt])
+}
+
+// Data Quality Rules
+model DataQualityRule {
+  id              String   @id @default(cuid())
+  dataSourceId   String
+  dataSource     GWIDataSourceConnection @relation(fields: [dataSourceId], references: [id], onDelete: Cascade)
+  name           String
+  field          String
+  ruleType       String   // "required", "format", "range", "custom"
+  ruleConfig     Json
+  severity       String   @default("error") // "error", "warning"
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  
+  @@index([dataSourceId])
 }
 
 // Monitoring & Alerts
