@@ -44,6 +44,8 @@ import {
   UserCog,
   Activity,
   Mail,
+  Tags,
+  Database,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAdmin } from "@/components/providers/admin-provider"
@@ -209,6 +211,16 @@ const navSections: NavSection[] = [
     ],
   },
   {
+    titleKey: "sections.gwiManagement",
+    defaultOpen: false,
+    items: [
+      { nameKey: "items.surveys", href: "/admin/gwi/surveys", icon: FileText },
+      { nameKey: "items.taxonomyVersions", href: "/admin/gwi/taxonomy/versions", icon: Tags },
+      { nameKey: "items.taxonomyAutoMapping", href: "/admin/gwi/taxonomy/auto-mapping", icon: Tags },
+      { nameKey: "items.dataSources", href: "/admin/gwi/data-sources", icon: Database },
+    ],
+  },
+  {
     titleKey: "sections.system",
     defaultOpen: false,
     items: [
@@ -300,6 +312,7 @@ function NavSectionComponent({ section }: { section: NavSection }) {
           <span className="flex items-center gap-2">
             {sectionTitle}
             {hasActiveItem && !isOpen && (
+              // eslint-disable-next-line local/no-hardcoded-strings
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" title="Contains active page" />
             )}
           </span>

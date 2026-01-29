@@ -33,9 +33,15 @@ export async function GET(
         createdBy: { select: { id: true, name: true, email: true } },
         questions: { orderBy: { order: "asc" } },
         distributions: true,
+        routingRules: { where: { isActive: true } },
+        quotas: { where: { isActive: true } },
+        versions: { orderBy: { versionNumber: "desc" } },
         _count: {
           select: {
             responses: true,
+            routingRules: true,
+            quotas: true,
+            versions: true,
           },
         },
       },
