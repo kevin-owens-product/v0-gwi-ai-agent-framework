@@ -14733,7 +14733,7 @@
   "notifications": {
     "page": {
       "title": "Ειδοποιήσεις",
-      "description": "Έχετε {count, plural, =0 {no unread notifications} μία {# unread notification} άλλη {# unread notifications}}",
+      "description": "Έχετε {count, plural, =0 {no unread notifications} one {# unread notification} other {# unread notifications}}",
       "allCaughtUp": "Είστε όλοι πιασμένοι!",
       "noNotifications": "Δεν υπάρχουν ειδοποιήσεις",
       "markAllRead": "Σημειώστε όλα αναγνωσμένα",
@@ -15972,7 +15972,7 @@
       "createFirstAgent": "Δημιουργήστε τον πρώτο σας προσαρμοσμένο πράκτορα για να ξεκινήσετε",
       "createAgent": "Δημιουργία πράκτορα",
       "noDescription": "Δεν παρέχεται περιγραφή",
-      "runsCount": "{count, plural, =0 {0 runs} ένα {# run} άλλο {# runs}}",
+      "runsCount": "{count, plural, =0 {0 runs} one {# run} other {# runs}}",
       "byCreator": "από {όνομα}",
       "unknown": "Αγνωστος",
       "runAgent": "Τρέξιμο"

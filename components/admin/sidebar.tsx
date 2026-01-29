@@ -228,18 +228,8 @@ function NavSectionComponent({ section }: { section: NavSection }) {
 
   // Track if user has manually interacted with this section
   const userInteracted = useRef(false)
-  const initializedRef = useRef(false)
 
   const sectionTitle = t(section.titleKey)
-
-  // Initialize state from persisted storage or defaults
-  const [isOpen, setIsOpen] = useState(() => {
-    const persisted = loadPersistedState()
-    if (sectionTitle in persisted) {
-      return persisted[sectionTitle]
-    }
-    return section.defaultOpen ?? false
-  })
 
   const isActive = (href: string) => {
     if (href === "/admin") return pathname === "/admin"
@@ -248,25 +238,38 @@ function NavSectionComponent({ section }: { section: NavSection }) {
 
   const hasActiveItem = section.items.some((item) => isActive(item.href))
 
+  // Initialize state consistently for SSR and client
+  // Always start with defaultOpen or false to ensure server/client match
+  const [isOpen, setIsOpen] = useState(section.defaultOpen ?? false)
+
+  // Hydrate state from localStorage and active items after mount
+  // This prevents hydration mismatch by updating only after client hydration
+  useEffect(() => {
+    // Check persisted state first
+    const persisted = loadPersistedState()
+    if (sectionTitle in persisted) {
+      setIsOpen(persisted[sectionTitle])
+      return
+    }
+    
+    // If section has active item, open it by default (unless user interacted)
+    if (hasActiveItem && !userInteracted.current) {
+      setIsOpen(true)
+    }
+  }, [hasActiveItem, sectionTitle])
+
   // Handle open state changes with persistence
   const handleOpenChange = useCallback((open: boolean) => {
     userInteracted.current = true
     setIsOpen(open)
 
     // Persist to localStorage
-    const currentState = loadPersistedState()
-    currentState[sectionTitle] = open
-    savePersistedState(currentState)
-  }, [sectionTitle])
-
-  // Auto-expand on initial render if has active item and user hasn't interacted
-  // Only run once on mount, not on every isOpen change
-  useEffect(() => {
-    if (!initializedRef.current && hasActiveItem && !userInteracted.current) {
-      setIsOpen(true)
-      initializedRef.current = true
+    if (typeof window !== "undefined") {
+      const currentState = loadPersistedState()
+      currentState[sectionTitle] = open
+      savePersistedState(currentState)
     }
-  }, [hasActiveItem])
+  }, [sectionTitle])
 
   // Register with sidebar context for expand/collapse all
   useEffect(() => {

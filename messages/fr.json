@@ -59,8 +59,8 @@
     "relativeTime": {
       "justNow": "Tout à l' heure",
       "minutesAgo": "il y a {count} minutes",
-      "hoursAgo": "{count, plural, il y a une {# heure} autre {# heures}}",
-      "daysAgo": "{count, plural, un {# jour} autre {# jours}} il y a",
+      "hoursAgo": "{count, plural, one {il y a # heure} other {il y a # heures}}",
+      "daysAgo": "{count, plural, one {# jour} other {# jours}} il y a",
       "recently": "Récemment"
     },
     "learnMore": "Apprendre encore plus",
@@ -15972,7 +15972,7 @@
       "createFirstAgent": "Créez votre premier agent personnalisé pour commencer",
       "createAgent": "Créer un agent",
       "noDescription": "Aucune description fournie",
-      "runsCount": "{count, plural, =0 {0 courses} un {# course} autre {# courses}}",
+      "runsCount": "{count, plural, =0 {0 courses} one {# course} other {# courses}}",
       "byCreator": "par {nom}",
       "unknown": "Inconnue",
       "runAgent": "Courir"

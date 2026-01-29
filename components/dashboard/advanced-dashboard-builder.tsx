@@ -66,7 +66,7 @@ import {
 } from "lucide-react"
 
 // Widget Types
-type WidgetType = "chart" | "metric" | "table" | "text" | "image" | "kpi"
+type WidgetType = "chart" | "metric" | "table" | "text" | "image" | "kpi" | "statistical" | "comparison" | "trend" | "map"
 
 interface WidgetConfig {
   chartType?: ChartType

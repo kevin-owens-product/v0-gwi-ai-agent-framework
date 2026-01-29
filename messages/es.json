@@ -4501,7 +4501,7 @@
       "capabilities": "Capacidades",
       "openAgent": "Agente abierta",
       "searchPlaceholder": "Agentes de búsqueda...",
-      "agentsFound": "{count, plural, un {# agente} otro {# agentes}} encontrado",
+      "agentsFound": "{count, plural, one {# agente} other {# agentes}} encontrado",
       "noAgentsFound": "No se encontraron agentes que coincidan con su búsqueda.",
       "solutionAIAgents": "{nombre} agentes de IA",
       "solution": "Solución",
@@ -10594,7 +10594,7 @@
       "vsLastMonth": "vs el mes pasado",
       "recentSignups": "Registros recientes",
       "newOrgsLastDays": "Nuevas organizaciones en los últimos 30 días",
-      "members": "{count, plural, one {# miembro} otro {# miembros}}",
+      "members": "{count, plural, one {# miembro} other {# miembros}}",
       "noRecentSignups": "No hay registros recientes",
       "openSupportTickets": "Abrir tickets de soporte",
       "noOpenTickets": "No hay entradas abiertas"
@@ -15972,7 +15972,7 @@
       "createFirstAgent": "Cree su primer agente personalizado para comenzar",
       "createAgent": "Crear agente",
       "noDescription": "No se proporciona descripción",
-      "runsCount": "{count, plural, =0 {0 carreras} una {# carrera} otra {# carreras}}",
+      "runsCount": "{count, plural, =0 {0 carreras} one {# carrera} other {# carreras}}",
       "byCreator": "por {nombre}",
       "unknown": "Desconocida",
       "runAgent": "Correr"
@@ -16413,7 +16413,7 @@
       "scheduled": {
         "title": "Informes programados",
         "nextRun": "Próxima ejecución: {fecha}",
-        "recipientsCount": "{count, plural, one {# destinatario} otro {# destinatarios}}"
+        "recipientsCount": "{count, plural, one {# destinatario} other {# destinatarios}}"
       },
       "shared": {
         "title": "Informes compartidos",
