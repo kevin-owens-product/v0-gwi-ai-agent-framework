@@ -421,7 +421,7 @@ export default function MaintenancePage() {
                   <Label htmlFor="title">{t("fields.title")}</Label>
                   <Input
                     id="title"
-                    placeholder="e.g., Database upgrade"
+                    placeholder={t("placeholders.titleExample")}
                     value={newWindow.title}
                     onChange={(e) =>
                       setNewWindow({ ...newWindow, title: e.target.value })
@@ -432,7 +432,7 @@ export default function MaintenancePage() {
                   <Label htmlFor="description">{t("fields.description")}</Label>
                   <Textarea
                     id="description"
-                    placeholder="Describe the maintenance..."
+                    placeholder={t("new.placeholders.description")}
                     rows={3}
                     value={newWindow.description}
                     onChange={(e) =>

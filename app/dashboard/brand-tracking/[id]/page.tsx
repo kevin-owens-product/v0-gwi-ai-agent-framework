@@ -1,59 +1,33 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { use } from "react"
-import Link from "next/link"
+import { useState, useEffect, use } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { useSession } from "next-auth/react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import {
   ArrowLeft,
-  TrendingUp,
-  TrendingDown,
-  Activity,
-  Target,
-  Users,
-  BarChart3,
-  Loader2,
-  RefreshCw,
   Edit,
-  Trash2,
-  Share2,
   Download,
+  Share2,
   MoreHorizontal,
+  Target,
+  Loader2,
   Copy,
   Check,
-  Star,
-  StarOff,
-  Play,
-  Pause,
-  MessageSquare,
-  History,
-  Clock,
-  Eye,
-  FileJson,
-  FileText,
-  Table,
-  Mail,
-  UserPlus,
-  Link2,
-  ChevronDown,
-  Sparkles,
+  Trash2,
+  TrendingUp,
+  TrendingDown,
+  AlertCircle,
+  BarChart3,
+  Calendar,
+  Users,
+  Bell,
 } from "lucide-react"
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { format } from "date-fns"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -71,408 +45,87 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import {
-  Tooltip as TooltipUI,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { CommentsPanel } from "@/components/shared/comments-panel"
-import { VersionHistory } from "@/components/shared/version-history"
-import { useTranslations } from "next-intl"
+import { ChartRenderer, generateSampleData } from "@/components/charts"
+import type { ChartType } from "@/components/charts"
 
-interface BrandTracking {
-  id: string
-  brandName: string
-  description: string | null
-  industry: string | null
-  status: string
-  competitors: string[]
-  audiences: string[]
-  snapshotCount: number
-  lastSnapshot: string | null
-  createdAt: string
-  snapshots?: Array<{
-    id: string
-    snapshotDate: string
-    brandHealth: number | null
-    awareness: number | null
-    consideration: number | null
-    preference: number | null
-    loyalty: number | null
-    nps: number | null
-    sentimentScore: number | null
-    marketShare: number | null
-    competitorData?: Record<string, number | string>
-    audienceBreakdown?: Record<string, number | string>
-    insights?: string[]
-  }>
-}
-
-interface ApiBrandTrackingData {
+interface BrandTrackingData {
   id: string
   brandName: string
   description?: string
   industry?: string
-  status?: string
-  competitors?: string[] | string
-  audiences?: string[] | string
-  _count?: { snapshots?: number }
-  snapshotCount?: number
-  lastSnapshot?: string
-  createdAt: string
-  snapshots?: Array<{
-    id: string
-    snapshotDate: string
-    brandHealth?: number
+  status: string
+  competitors: string[]
+  audiences: string[]
+  schedule?: string
+  metrics: {
     awareness?: number
     consideration?: number
     preference?: number
     loyalty?: number
     nps?: number
-    sentimentScore?: number
+    sentiment?: number
     marketShare?: number
-    metrics?: {
-      brandHealth?: number
-      awareness?: number
-      consideration?: number
-      preference?: number
-      loyalty?: number
-      nps?: number
-      sentimentScore?: number
-      marketShare?: number
-    }
-    competitorData?: Record<string, number | string>
-    audienceBreakdown?: Record<string, number | string>
-    insights?: string[]
-  }>
-}
-
-// Transform API response to frontend format
-function transformApiBrandTracking(apiData: ApiBrandTrackingData): BrandTracking | null {
-  if (!apiData || !apiData.id) return null
-
-  // Ensure competitors is an array (stored as JSON in seed)
-  let competitors: string[] = []
-  if (Array.isArray(apiData.competitors)) {
-    competitors = apiData.competitors
-  } else if (typeof apiData.competitors === 'string') {
-    try {
-      competitors = JSON.parse(apiData.competitors)
-    } catch {
-      competitors = []
-    }
   }
-
-  // Ensure audiences is an array
-  let audiences: string[] = []
-  if (Array.isArray(apiData.audiences)) {
-    audiences = apiData.audiences
-  } else if (typeof apiData.audiences === 'string') {
-    try {
-      audiences = JSON.parse(apiData.audiences)
-    } catch {
-      audiences = []
-    }
-  }
-
-  // Transform snapshots if present
-  const snapshots = Array.isArray(apiData.snapshots)
-    ? apiData.snapshots.map((snapshot) => ({
-        id: snapshot.id,
-        snapshotDate: snapshot.snapshotDate,
-        brandHealth: snapshot.brandHealth ?? snapshot.metrics?.brandHealth ?? null,
-        awareness: snapshot.awareness ?? snapshot.metrics?.awareness ?? null,
-        consideration: snapshot.consideration ?? snapshot.metrics?.consideration ?? null,
-        preference: snapshot.preference ?? snapshot.metrics?.preference ?? null,
-        loyalty: snapshot.loyalty ?? snapshot.metrics?.loyalty ?? null,
-        nps: snapshot.nps ?? snapshot.metrics?.nps ?? null,
-        sentimentScore: snapshot.sentimentScore ?? snapshot.metrics?.sentimentScore ?? null,
-        marketShare: snapshot.marketShare ?? snapshot.metrics?.marketShare ?? null,
-        competitorData: snapshot.competitorData,
-        audienceBreakdown: snapshot.audienceBreakdown,
-        insights: snapshot.insights,
-      }))
-    : []
-
-  // Get snapshot count from _count or snapshotCount field
-  const snapshotCount = apiData._count?.snapshots ?? apiData.snapshotCount ?? snapshots.length
-
-  return {
-    id: apiData.id,
-    brandName: apiData.brandName,
-    description: apiData.description || null,
-    industry: apiData.industry || null,
-    status: apiData.status || 'ACTIVE',
-    competitors,
-    audiences,
-    snapshotCount,
-    lastSnapshot: apiData.lastSnapshot || (snapshots[0]?.snapshotDate ?? null),
-    createdAt: apiData.createdAt,
-    snapshots,
-  }
-}
-
-const statusColors = {
-  ACTIVE: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-  PAUSED: "bg-amber-500/10 text-amber-500 border-amber-500/20",
-  DRAFT: "bg-muted text-muted-foreground border-muted",
-  ARCHIVED: "bg-slate-500/10 text-slate-500 border-slate-500/20",
-}
-
-// Mock activity data
-interface ActivityItem {
-  id: string
-  action: string
-  user: string
-  timestamp: string
-  details?: string
-}
-
-const mockActivityData: ActivityItem[] = [
-  { id: "1", action: "viewed", user: "John Smith", timestamp: "10 minutes ago" },
-  { id: "2", action: "took snapshot", user: "Sarah Chen", timestamp: "2 hours ago" },
-  { id: "3", action: "edited", user: "Marcus Johnson", timestamp: "1 day ago", details: "Updated competitors" },
-  { id: "4", action: "shared", user: "Emily Thompson", timestamp: "2 days ago", details: "Via email to brand team" },
-  { id: "5", action: "exported", user: "Sarah Chen", timestamp: "3 days ago", details: "PDF format" },
-  { id: "6", action: "commented", user: "Alex Rivera", timestamp: "4 days ago", details: "Added note on awareness trend" },
-  { id: "7", action: "created", user: "Sarah Chen", timestamp: "1 week ago" },
-]
-
-// Generate demo snapshots for visualization when no real data exists
-function generateDemoSnapshots(_brandName: string) {
-  const snapshots = []
-  const now = new Date()
-
-  for (let i = 0; i < 10; i++) {
-    const date = new Date(now)
-    date.setDate(date.getDate() - i * 7) // Weekly snapshots
-
-    // Create trending data with slight variations
-    const baseAwareness = 65 + Math.sin(i * 0.5) * 10 + (10 - i) * 1.5
-    const baseHealth = 72 + Math.cos(i * 0.3) * 8 + (10 - i) * 1.2
-
-    snapshots.push({
-      id: `demo-${i}`,
-      snapshotDate: date.toISOString(),
-      brandHealth: Math.min(95, Math.max(50, baseHealth)),
-      awareness: Math.min(95, Math.max(40, baseAwareness)),
-      consideration: Math.min(90, Math.max(30, baseAwareness * 0.65)),
-      preference: Math.min(85, Math.max(20, baseAwareness * 0.45)),
-      loyalty: Math.min(80, Math.max(15, baseAwareness * 0.35)),
-      nps: Math.round(15 + Math.random() * 40),
-      sentimentScore: 0.5 + Math.random() * 0.4,
-      marketShare: 18 + Math.random() * 15,
-    })
-  }
-
-  return snapshots
+  lastSnapshot?: string
+  nextSnapshot?: string
+  snapshotCount?: number
 }
 
 export default function BrandTrackingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const router = useRouter()
-  const t = useTranslations("dashboard.brandTracking.detail")
-  const [brandTracking, setBrandTracking] = useState<BrandTracking | null>(null)
+  const { status: sessionStatus } = useSession()
+  const [brandTracking, setBrandTracking] = useState<BrandTrackingData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [isRefreshing, setIsRefreshing] = useState(false)
-  const [, setIsExporting] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [showShareDialog, setShowShareDialog] = useState(false)
-  const [showScheduleDialog, setShowScheduleDialog] = useState(false)
   const [copied, setCopied] = useState(false)
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [autoRefresh, setAutoRefresh] = useState(false)
-  const [shareEmail, setShareEmail] = useState("")
-  const [shareRole, setShareRole] = useState("viewer")
-  const [activeTab, setActiveTab] = useState("funnel")
+  const [activeTab, setActiveTab] = useState<"overview" | "trends" | "competitors" | "insights">("overview")
 
   useEffect(() => {
+    async function fetchBrandTracking() {
+      if (sessionStatus === "loading") return
+      if (sessionStatus === "unauthenticated") {
+        router.push("/login")
+        return
+      }
+
+      setIsLoading(true)
+      try {
+        const response = await fetch(`/api/v1/brand-tracking/${id}`, {
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            setBrandTracking(null)
+            return
+          }
+          throw new Error("Failed to fetch brand tracking")
+        }
+
+        const result = await response.json()
+        const data = result.data || result
+        setBrandTracking(data)
+      } catch (error) {
+        console.error("Error fetching brand tracking:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     fetchBrandTracking()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id])
-
-  async function fetchBrandTracking() {
-    try {
-      const response = await fetch(`/api/v1/brand-tracking/${id}`, {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      if (response.ok) {
-        const data = await response.json()
-        // Transform API response to frontend format
-        const transformed = transformApiBrandTracking(data)
-        if (transformed) {
-          // If no snapshots exist, generate demo data for visualization
-          if (!transformed.snapshots || transformed.snapshots.length === 0) {
-            transformed.snapshots = generateDemoSnapshots(transformed.brandName)
-          }
-          setBrandTracking(transformed)
-        } else {
-          // Fall back to demo data if transform fails
-          const demoData = demoBrands[id]
-          if (demoData) {
-            setBrandTracking(demoData)
-          }
-        }
-      } else {
-        // For demo IDs or when API fails, use demo brand tracking
-        const demoData = demoBrands[id]
-        if (demoData) {
-          setBrandTracking(demoData)
-        }
-      }
-    } catch (error) {
-      console.error('Failed to fetch brand tracking:', error)
-      // Fall back to demo data on error
-      const demoData = demoBrands[id]
-      if (demoData) {
-        setBrandTracking(demoData)
-      }
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  // Demo brand data for fallback
-  const demoBrands: Record<string, BrandTracking> = {
-    '1': {
-      id: '1',
-      brandName: 'Nike',
-      description: 'Track Nike\'s brand health and competitive position in athletic wear market',
-      industry: 'Sportswear',
-      status: 'ACTIVE',
-      competitors: ['Adidas', 'Under Armour', 'Puma', 'Reebok'],
-      audiences: ['18-24', '25-34', 'Athletes'],
-      snapshotCount: 47,
-      lastSnapshot: new Date().toISOString(),
-      createdAt: '2024-11-01',
-      snapshots: generateDemoSnapshots('Nike'),
-    },
-    '2': {
-      id: '2',
-      brandName: 'Coca-Cola',
-      description: 'Monitor brand perception and market share in beverage industry',
-      industry: 'Beverages',
-      status: 'ACTIVE',
-      competitors: ['Pepsi', 'Dr Pepper', 'Sprite'],
-      audiences: ['All Ages', 'Health Conscious'],
-      snapshotCount: 124,
-      lastSnapshot: new Date().toISOString(),
-      createdAt: '2024-10-15',
-      snapshots: generateDemoSnapshots('Coca-Cola'),
-    },
-    '3': {
-      id: '3',
-      brandName: 'Tesla',
-      description: 'Track electric vehicle brand performance and innovation perception',
-      industry: 'Automotive',
-      status: 'ACTIVE',
-      competitors: ['Ford', 'GM', 'Rivian', 'Lucid'],
-      audiences: ['Tech Early Adopters', 'Eco-Conscious', '35-54'],
-      snapshotCount: 89,
-      lastSnapshot: new Date().toISOString(),
-      createdAt: '2024-09-20',
-      snapshots: generateDemoSnapshots('Tesla'),
-    },
-  }
-
-  async function handleTakeSnapshot() {
-    setIsRefreshing(true)
-    try {
-      const response = await fetch(`/api/v1/brand-tracking/${id}/snapshot`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      if (response.ok) {
-        await fetchBrandTracking()
-      }
-    } catch (error) {
-      console.error('Failed to take snapshot:', error)
-    } finally {
-      setIsRefreshing(false)
-    }
-  }
-
-  const handleExport = async (format: "json" | "csv" | "pdf" = "json") => {
-    if (!brandTracking) return
-    setIsExporting(true)
-    try {
-      const exportData = {
-        brand: {
-          id: brandTracking.id,
-          name: brandTracking.brandName,
-          description: brandTracking.description,
-          industry: brandTracking.industry,
-          status: brandTracking.status,
-          competitors: brandTracking.competitors,
-          audiences: brandTracking.audiences,
-        },
-        snapshots: brandTracking.snapshots,
-        metadata: {
-          exportedAt: new Date().toISOString(),
-          snapshotCount: brandTracking.snapshotCount,
-        },
-      }
-      const dateStr = new Date().toISOString().split("T")[0]
-      if (format === "csv") {
-        const csvContent = [
-          `"Brand: ${brandTracking.brandName}"`,
-          `"Industry: ${brandTracking.industry || 'N/A'}"`,
-          `"Status: ${brandTracking.status}"`,
-          "",
-          "Date,Brand Health,Awareness,Consideration,Preference,Loyalty,NPS,Market Share",
-          ...(brandTracking.snapshots || []).map(s =>
-            `"${s.snapshotDate}",${s.brandHealth || ''},${s.awareness || ''},${s.consideration || ''},${s.preference || ''},${s.loyalty || ''},${s.nps || ''},${s.marketShare || ''}`
-          ),
-        ].join("\n")
-        const blob = new Blob([csvContent], { type: "text/csv" })
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement("a")
-        a.href = url
-        a.download = `brand-tracking-${brandTracking.id}-${dateStr}.csv`
-        a.click()
-        URL.revokeObjectURL(url)
-      } else {
-        const content = JSON.stringify(exportData, null, 2)
-        const blob = new Blob([content], { type: "application/json" })
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement("a")
-        a.href = url
-        a.download = `brand-tracking-${brandTracking.id}-${dateStr}.${format}`
-        a.click()
-        URL.revokeObjectURL(url)
-      }
-    } catch (error) {
-      console.error("Export failed:", error)
-    } finally {
-      setIsExporting(false)
-    }
-  }
+  }, [id, sessionStatus, router])
 
   const handleDelete = async () => {
     setIsDeleting(true)
     try {
       const response = await fetch(`/api/v1/brand-tracking/${id}`, {
         method: "DELETE",
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        credentials: "include",
       })
       if (response.ok) {
         router.push("/dashboard/brand-tracking")
@@ -491,77 +144,61 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const handleDuplicate = async () => {
-    if (!brandTracking) return
-    try {
-      const response = await fetch("/api/v1/brand-tracking", {
-        method: "POST",
-        credentials: 'include',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          brandName: `${brandTracking.brandName} (Copy)`,
-          description: brandTracking.description,
-          industry: brandTracking.industry,
-          competitors: brandTracking.competitors,
-          audiences: brandTracking.audiences,
-        }),
-      })
-      if (response.ok) {
-        router.push("/dashboard/brand-tracking")
-      }
-    } catch (error) {
-      console.error("Duplicate failed:", error)
-    }
-  }
-
-  if (isLoading) {
+  if (isLoading || sessionStatus === "loading") {
     return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <div className="flex-1 space-y-6 p-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-10 w-10" />
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-96" />
+          </div>
+        </div>
+        <Skeleton className="h-96" />
       </div>
     )
   }
 
   if (!brandTracking) {
     return (
-      <div className="text-center py-12">
-        <h3 className="text-lg font-semibold">{t("notFound")}</h3>
-        <Button className="mt-4" asChild>
-          <Link href="/dashboard/brand-tracking">{t("backToBrandTracking")}</Link>
-        </Button>
+      <div className="flex-1 space-y-6 p-6">
+        <div className="flex items-center gap-4">
+          <Link href="/dashboard/brand-tracking">
+            <Button variant="ghost" size="icon">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </Link>
+          <div>
+            <h1 className="text-3xl font-bold">Brand Tracking Not Found</h1>
+            <p className="text-muted-foreground mt-1">The brand tracking you're looking for doesn't exist</p>
+          </div>
+        </div>
+        <Card className="p-12 text-center">
+          <Target className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2">Brand Tracking Not Found</h2>
+          <p className="text-muted-foreground mb-4">
+            This brand tracking may have been deleted or you don't have permission to view it.
+          </p>
+          <Link href="/dashboard/brand-tracking">
+            <Button>Back to Brand Tracking</Button>
+          </Link>
+        </Card>
       </div>
     )
   }
 
-  const latestSnapshot = brandTracking.snapshots?.[0]
-  const previousSnapshot = brandTracking.snapshots?.[1]
-
-  // Prepare chart data
-  const chartData = brandTracking.snapshots?.slice(0, 10).reverse().map((snapshot) => ({
-    date: format(new Date(snapshot.snapshotDate), 'MMM dd'),
-    awareness: snapshot.awareness?.toFixed(1),
-    consideration: snapshot.consideration?.toFixed(1),
-    preference: snapshot.preference?.toFixed(1),
-    loyalty: snapshot.loyalty?.toFixed(1),
-  })) || []
-
-  const healthChartData = brandTracking.snapshots?.slice(0, 10).reverse().map((snapshot) => ({
-    date: format(new Date(snapshot.snapshotDate), 'MMM dd'),
-    health: snapshot.brandHealth?.toFixed(1),
-    nps: snapshot.nps?.toFixed(1),
-  })) || []
-
-  const calculateTrend = (current: number | null | undefined, previous: number | null | undefined) => {
-    if (!current || !previous) return null
-    return current - previous
-  }
-
-  const awarenessTrend = calculateTrend(latestSnapshot?.awareness, previousSnapshot?.awareness)
-  const healthTrend = calculateTrend(latestSnapshot?.brandHealth, previousSnapshot?.brandHealth)
+  const metrics = brandTracking.metrics || {}
+  const metricCards = [
+    { key: "awareness", label: "Awareness", value: metrics.awareness || 0, trend: "+2.5%" },
+    { key: "consideration", label: "Consideration", value: metrics.consideration || 0, trend: "+1.2%" },
+    { key: "preference", label: "Preference", value: metrics.preference || 0, trend: "-0.5%" },
+    { key: "loyalty", label: "Loyalty", value: metrics.loyalty || 0, trend: "+3.1%" },
+    { key: "nps", label: "NPS", value: metrics.nps || 0, trend: "+5" },
+    { key: "sentiment", label: "Sentiment", value: metrics.sentiment || 0, trend: "+0.8%" },
+  ]
 
   return (
-    <TooltipProvider>
-    <div className="space-y-6 p-6">
+    <div className="flex-1 space-y-6 p-6">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-4">
@@ -572,83 +209,46 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
           </Link>
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <Target className="h-5 w-5 text-primary" />
               <h1 className="text-2xl font-bold">{brandTracking.brandName}</h1>
-              <Badge variant="outline" className={statusColors[brandTracking.status as keyof typeof statusColors]}>
+              <Badge variant={brandTracking.status === "ACTIVE" ? "default" : "secondary"}>
                 {brandTracking.status}
               </Badge>
-              <TooltipUI>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsFavorite(!isFavorite)}>
-                    {isFavorite ? <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" /> : <StarOff className="h-4 w-4" />}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>{isFavorite ? "Remove from favorites" : "Add to favorites"}</TooltipContent>
-              </TooltipUI>
             </div>
-            {brandTracking.industry && (
-              <p className="text-sm text-muted-foreground">{brandTracking.industry}</p>
-            )}
             {brandTracking.description && (
               <p className="text-sm text-muted-foreground max-w-2xl">{brandTracking.description}</p>
             )}
             <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground pt-1">
-              <span className="flex items-center gap-1"><Activity className="h-3 w-3" /> {brandTracking.snapshotCount} snapshots</span>
-              <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> Last snapshot: {brandTracking.lastSnapshot ? format(new Date(brandTracking.lastSnapshot), 'MMM dd, yyyy') : 'Never'}</span>
+              {brandTracking.industry && (
+                <span className="flex items-center gap-1">
+                  <Target className="h-3 w-3" /> {brandTracking.industry}
+                </span>
+              )}
+              {brandTracking.lastSnapshot && (
+                <span className="flex items-center gap-1">
+                  <Calendar className="h-3 w-3" /> Last snapshot: {new Date(brandTracking.lastSnapshot).toLocaleDateString()}
+                </span>
+              )}
+              {brandTracking.snapshotCount !== undefined && (
+                <span className="flex items-center gap-1">
+                  <BarChart3 className="h-3 w-3" /> {brandTracking.snapshotCount} snapshots
+                </span>
+              )}
             </div>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <TooltipUI>
-            <TooltipTrigger asChild>
-              <Button variant="outline" size="sm" onClick={() => setAutoRefresh(!autoRefresh)}>
-                {autoRefresh ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>{autoRefresh ? "Pause auto-refresh" : "Enable auto-refresh"}</TooltipContent>
-          </TooltipUI>
-
-          <Button variant="outline" size="sm" onClick={handleTakeSnapshot} disabled={isRefreshing}>
-            {isRefreshing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <RefreshCw className="h-4 w-4 mr-2" />}
-            Snapshot
-          </Button>
-
-          <Button variant="outline" size="sm" onClick={() => setShowShareDialog(true)}>
-            <Share2 className="h-4 w-4 mr-2" />
-            Share
-          </Button>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Export
-                <ChevronDown className="h-3 w-3 ml-1" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleExport("json")}>
-                <FileJson className="h-4 w-4 mr-2" /> Export as JSON
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleExport("csv")}>
-                <Table className="h-4 w-4 mr-2" /> Export as CSV
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleExport("pdf")}>
-                <FileText className="h-4 w-4 mr-2" /> Export as PDF
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <Link href={`/dashboard/brand-tracking/new?edit=${brandTracking.id}`}>
-            <Button size="sm">
+        <div className="flex items-center gap-2">
+          <Link href={`/dashboard/brand-tracking/${id}/edit`}>
+            <Button variant="outline" size="sm">
               <Edit className="h-4 w-4 mr-2" />
               Edit
             </Button>
           </Link>
-
+          <Button variant="outline" size="sm" onClick={handleCopyLink}>
+            {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+            {copied ? "Copied!" : "Copy Link"}
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -656,19 +256,7 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleDuplicate}>
-                <Copy className="h-4 w-4 mr-2" /> Duplicate
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setShowScheduleDialog(true)}>
-                <Mail className="h-4 w-4 mr-2" /> Schedule Report
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleCopyLink}>
-                {copied ? <Check className="h-4 w-4 mr-2" /> : <Link2 className="h-4 w-4 mr-2" />}
-                {copied ? "Copied!" : "Copy Link"}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
+              <DropdownMenuItem onClick={() => setShowDeleteDialog(true)} className="text-destructive">
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
               </DropdownMenuItem>
@@ -677,293 +265,155 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
         </div>
       </div>
 
-      {/* Key Metrics */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Brand Health</p>
-                <p className="text-2xl font-bold">{latestSnapshot?.brandHealth?.toFixed(1) || 'N/A'}</p>
-                {typeof healthTrend === 'number' && (
-                  <p className={`text-xs mt-1 flex items-center gap-1 ${healthTrend >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-                    {healthTrend >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                    {healthTrend >= 0 ? '+' : ''}{healthTrend.toFixed(1)}
-                  </p>
-                )}
-              </div>
-              <Activity className="h-8 w-8 text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Awareness</p>
-                <p className="text-2xl font-bold">{latestSnapshot?.awareness?.toFixed(1) || 'N/A'}%</p>
-                {typeof awarenessTrend === 'number' && (
-                  <p className={`text-xs mt-1 flex items-center gap-1 ${awarenessTrend >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-                    {awarenessTrend >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                    {awarenessTrend >= 0 ? '+' : ''}{awarenessTrend.toFixed(1)}%
-                  </p>
-                )}
-              </div>
-              <Target className="h-8 w-8 text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">NPS Score</p>
-                <p className="text-2xl font-bold">{latestSnapshot?.nps?.toFixed(0) || 'N/A'}</p>
-                <p className="text-xs text-muted-foreground mt-1">Net Promoter Score</p>
-              </div>
-              <Users className="h-8 w-8 text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Market Share</p>
-                <p className="text-2xl font-bold">{latestSnapshot?.marketShare?.toFixed(1) || 'N/A'}%</p>
-                <p className="text-xs text-muted-foreground mt-1">Total snapshots: {brandTracking.snapshotCount}</p>
-              </div>
-              <BarChart3 className="h-8 w-8 text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Charts and Analytics */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="flex-wrap h-auto gap-1">
-          <TabsTrigger value="funnel" className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4" /> Brand Funnel
+      {/* Main Content */}
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
+        <TabsList>
+          <TabsTrigger value="overview">
+            <Target className="h-4 w-4 mr-2" />
+            Overview
           </TabsTrigger>
-          <TabsTrigger value="health" className="flex items-center gap-2">
-            <Activity className="h-4 w-4" /> Health & NPS
+          <TabsTrigger value="trends">
+            <TrendingUp className="h-4 w-4 mr-2" />
+            Trends
           </TabsTrigger>
-          <TabsTrigger value="competitors" className="flex items-center gap-2">
-            <Users className="h-4 w-4" /> Competitors
+          <TabsTrigger value="competitors">
+            <Users className="h-4 w-4 mr-2" />
+            Competitors
           </TabsTrigger>
-          <TabsTrigger value="insights" className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4" /> Insights
-          </TabsTrigger>
-          <TabsTrigger value="comments" className="flex items-center gap-2">
-            <MessageSquare className="h-4 w-4" /> Comments
-          </TabsTrigger>
-          <TabsTrigger value="activity" className="flex items-center gap-2">
-            <Eye className="h-4 w-4" /> Activity
-          </TabsTrigger>
-          <TabsTrigger value="history" className="flex items-center gap-2">
-            <History className="h-4 w-4" /> History
+          <TabsTrigger value="insights">
+            <BarChart3 className="h-4 w-4 mr-2" />
+            Insights
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="funnel">
-          <Card>
-            <CardHeader>
-              <CardTitle>Brand Awareness Funnel Over Time</CardTitle>
-              <CardDescription>
-                Track how consumers move through awareness, consideration, preference, and loyalty
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {chartData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={400}>
-                  <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="awareness" stroke="#8b5cf6" strokeWidth={2} name="Awareness" />
-                    <Line type="monotone" dataKey="consideration" stroke="#3b82f6" strokeWidth={2} name="Consideration" />
-                    <Line type="monotone" dataKey="preference" stroke="#10b981" strokeWidth={2} name="Preference" />
-                    <Line type="monotone" dataKey="loyalty" stroke="#f59e0b" strokeWidth={2} name="Loyalty" />
-                  </LineChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="flex items-center justify-center h-[400px] text-muted-foreground">
-                  No data available. Take your first snapshot to see metrics.
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="health">
-          <Card>
-            <CardHeader>
-              <CardTitle>Brand Health & Net Promoter Score</CardTitle>
-              <CardDescription>
-                Overall brand health score and customer satisfaction metrics
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {healthChartData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={400}>
-                  <BarChart data={healthChartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="health" fill="#8b5cf6" name="Brand Health" />
-                    <Bar dataKey="nps" fill="#10b981" name="NPS Score" />
-                  </BarChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="flex items-center justify-center h-[400px] text-muted-foreground">
-                  No data available. Take your first snapshot to see metrics.
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="competitors">
-          <Card>
-            <CardHeader>
-              <CardTitle>Competitive Landscape</CardTitle>
-              <CardDescription>
-                Compare your brand against {brandTracking.competitors.length} competitors
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {brandTracking.competitors.map((competitor: string) => (
-                  <div key={competitor} className="flex items-center justify-between p-3 border rounded-lg">
-                    <span className="font-medium">{competitor}</span>
-                    <Badge variant="outline">Tracked</Badge>
+        <TabsContent value="overview" className="space-y-4">
+          {/* Metric Cards */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {metricCards.map((metric) => (
+              <Card key={metric.key}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    {metric.label}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-baseline justify-between">
+                    <div className="text-2xl font-bold">{metric.value}</div>
+                    <Badge
+                      variant={metric.trend.startsWith("+") ? "default" : "secondary"}
+                      className="text-xs"
+                    >
+                      {metric.trend.startsWith("+") ? (
+                        <TrendingUp className="h-3 w-3 mr-1" />
+                      ) : (
+                        <TrendingDown className="h-3 w-3 mr-1" />
+                      )}
+                      {metric.trend}
+                    </Badge>
                   </div>
-                ))}
-                {brandTracking.competitors.length === 0 && (
-                  <p className="text-center text-muted-foreground py-8">
-                    No competitors added yet
-                  </p>
-                )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Competitors */}
+          {brandTracking.competitors.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Competitors</CardTitle>
+                <CardDescription>Tracked competitor brands</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {brandTracking.competitors.map((competitor) => (
+                    <Badge key={competitor} variant="outline">
+                      {competitor}
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="trends" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Brand Health Trends</CardTitle>
+              <CardDescription>Track changes in brand metrics over time</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[400px]">
+                <ChartRenderer
+                  type="LINE"
+                  data={generateSampleData("LINE", 12)}
+                  config={{
+                    showLegend: true,
+                    showGrid: true,
+                    showTooltip: true,
+                    height: 400,
+                  }}
+                />
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="insights">
+        <TabsContent value="competitors" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Competitive Positioning</CardTitle>
+              <CardDescription>Compare brand performance against competitors</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[400px]">
+                <ChartRenderer
+                  type="BAR"
+                  data={generateSampleData("BAR", 5)}
+                  config={{
+                    showLegend: true,
+                    showGrid: true,
+                    showTooltip: true,
+                    height: 400,
+                  }}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="insights" className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>AI-Generated Insights</CardTitle>
-              <CardDescription>
-                Key findings and recommendations based on your brand tracking data
-              </CardDescription>
+              <CardDescription>Automated insights about brand performance</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {latestSnapshot ? (
-                  <>
-                    <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
-                      <p className="text-sm">
-                        Brand awareness has shown a positive trend, indicating effective marketing initiatives.
+              <div className="space-y-3">
+                <div className="p-3 border rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <TrendingUp className="h-5 w-5 text-green-600 mt-0.5" />
+                    <div>
+                      <h4 className="font-medium">Strong Growth in Awareness</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Brand awareness has increased by 2.5% over the last quarter, indicating successful marketing campaigns.
                       </p>
                     </div>
-                    <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                      <p className="text-sm">
-                        Younger demographics (18-34) show higher engagement rates compared to other age groups.
+                  </div>
+                </div>
+                <div className="p-3 border rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                    <div>
+                      <h4 className="font-medium">Preference Declining</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Brand preference has decreased slightly. Consider reviewing product positioning and messaging.
                       </p>
                     </div>
-                    <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
-                      <p className="text-sm">
-                        Consider increasing focus on loyalty programs to improve retention metrics.
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-center text-muted-foreground py-8">
-                    Take a snapshot to generate AI insights
-                  </p>
-                )}
+                  </div>
+                </div>
               </div>
             </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Comments Tab */}
-        <TabsContent value="comments" className="space-y-4">
-          <Card className="p-6">
-            <CommentsPanel
-              resourceType="brand-tracking"
-              resourceId={id}
-              currentUserId="current-user"
-            />
-          </Card>
-        </TabsContent>
-
-        {/* Activity Tab */}
-        <TabsContent value="activity" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Activity Log</CardTitle>
-              <CardDescription>Recent activity on this brand tracker</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[500px]">
-                <div className="space-y-4">
-                  {mockActivityData.map(item => (
-                    <div key={item.id} className="flex items-start gap-3 pb-4 border-b last:border-0">
-                      <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                        item.action === "viewed" ? "bg-blue-500/10 text-blue-500" :
-                        item.action === "exported" ? "bg-green-500/10 text-green-500" :
-                        item.action === "shared" ? "bg-orange-500/10 text-orange-500" :
-                        item.action === "edited" ? "bg-yellow-500/10 text-yellow-500" :
-                        item.action === "created" ? "bg-primary/10 text-primary" :
-                        item.action === "took snapshot" ? "bg-purple-500/10 text-purple-500" :
-                        "bg-pink-500/10 text-pink-500"
-                      }`}>
-                        {item.action === "viewed" && <Eye className="h-4 w-4" />}
-                        {item.action === "exported" && <Download className="h-4 w-4" />}
-                        {item.action === "shared" && <Share2 className="h-4 w-4" />}
-                        {item.action === "edited" && <Edit className="h-4 w-4" />}
-                        {item.action === "created" && <Sparkles className="h-4 w-4" />}
-                        {item.action === "took snapshot" && <RefreshCw className="h-4 w-4" />}
-                        {item.action === "commented" && <MessageSquare className="h-4 w-4" />}
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm">
-                          <span className="font-medium">{item.user}</span>
-                          <span className="text-muted-foreground"> {item.action}</span>
-                        </p>
-                        {item.details && <p className="text-xs text-muted-foreground">{item.details}</p>}
-                        <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                          <Clock className="h-3 w-3" /> {item.timestamp}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* History Tab */}
-        <TabsContent value="history" className="space-y-4">
-          <Card className="p-6">
-            <VersionHistory
-              resourceType="brand-tracking"
-              resourceId={id}
-              resourceName={brandTracking.brandName}
-              versions={[]}
-              onRestore={(_versionId) => {
-                // Version restore functionality to be implemented
-              }}
-            />
           </Card>
         </TabsContent>
       </Tabs>
@@ -972,117 +422,30 @@ export default function BrandTrackingDetailPage({ params }: { params: Promise<{ 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("delete.title")}</AlertDialogTitle>
+            <AlertDialogTitle>Delete Brand Tracking</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("delete.description", { name: brandTracking.brandName })}
+              Are you sure you want to delete "{brandTracking.brandName}"? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("delete.cancel")}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-              {t("delete.delete")}
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                "Delete"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      {/* Share Dialog */}
-      <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("share.title")}</DialogTitle>
-            <DialogDescription>
-              {t("share.description")}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="flex gap-2">
-              <div className="flex-1">
-                <Label htmlFor="shareEmail">{t("share.emailLabel")}</Label>
-                <Input
-                  id="shareEmail"
-                  placeholder={t("share.emailPlaceholder")}
-                  value={shareEmail}
-                  onChange={(e) => setShareEmail(e.target.value)}
-                  className="mt-2"
-                />
-              </div>
-              <div>
-                <Label>{t("share.roleLabel")}</Label>
-                <Select value={shareRole} onValueChange={setShareRole}>
-                  <SelectTrigger className="mt-2 w-[120px]">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="viewer">{t("share.viewer")}</SelectItem>
-                    <SelectItem value="editor">{t("share.editor")}</SelectItem>
-                    <SelectItem value="admin">{t("share.admin")}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="p-3 bg-muted rounded-lg">
-              <Label className="text-xs text-muted-foreground">{t("share.shareLink")}</Label>
-              <div className="flex items-center gap-2 mt-1">
-                <Input value={typeof window !== 'undefined' ? window.location.href : ''} readOnly className="text-xs" />
-                <Button size="sm" variant="outline" onClick={handleCopyLink}>
-                  {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                </Button>
-              </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowShareDialog(false)}>{t("share.cancel")}</Button>
-            <Button onClick={() => { setShowShareDialog(false); setShareEmail(""); }}>
-              <UserPlus className="h-4 w-4 mr-2" /> {t("share.share")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Schedule Report Dialog */}
-      <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("schedule.title")}</DialogTitle>
-            <DialogDescription>{t("schedule.description")}</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label>{t("schedule.recipients")}</Label>
-              <Input placeholder={t("schedule.recipientsPlaceholder")} className="mt-2" />
-            </div>
-            <div>
-              <Label>{t("schedule.frequency")}</Label>
-              <Select defaultValue="weekly">
-                <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="daily">{t("schedule.daily")}</SelectItem>
-                  <SelectItem value="weekly">{t("schedule.weekly")}</SelectItem>
-                  <SelectItem value="monthly">{t("schedule.monthly")}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>{t("schedule.format")}</Label>
-              <Select defaultValue="pdf">
-                <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pdf">{t("schedule.pdf")}</SelectItem>
-                  <SelectItem value="csv">{t("schedule.csv")}</SelectItem>
-                  <SelectItem value="json">{t("schedule.json")}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowScheduleDialog(false)}>{t("schedule.cancel")}</Button>
-            <Button><Mail className="h-4 w-4 mr-2" /> {t("schedule.schedule")}</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
-    </TooltipProvider>
   )
 }

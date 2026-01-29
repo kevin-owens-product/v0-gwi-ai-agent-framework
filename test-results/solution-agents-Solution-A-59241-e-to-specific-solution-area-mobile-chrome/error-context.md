@@ -1,0 +1,244 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e5]:
+        - link "G GWI Insights" [ref=e7] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e9]: G
+          - generic [ref=e10]: GWI Insights
+        - button [ref=e11]:
+          - img [ref=e12]
+    - main [ref=e13]:
+      - generic [ref=e15]:
+        - generic [ref=e16]: solutions.product.badge
+        - heading "solutions.product.hero.titleStart solutions.product.hero.titleHighlight" [level=1] [ref=e17]
+        - paragraph [ref=e18]: solutions.product.hero.description
+        - generic [ref=e19]:
+          - generic [ref=e20]:
+            - heading "solutions.product.stats.faster.value" [level=3] [ref=e21]
+            - paragraph [ref=e22]: solutions.product.stats.faster.description
+          - generic [ref=e23]:
+            - heading "solutions.product.stats.more.value" [level=3] [ref=e24]
+            - paragraph [ref=e25]: solutions.product.stats.more.description
+          - generic [ref=e26]:
+            - heading "solutions.product.stats.higher.value" [level=3] [ref=e27]
+            - paragraph [ref=e28]: solutions.product.stats.higher.description
+        - generic [ref=e29]:
+          - link "solutions.product.cta.startBuilding" [ref=e30] [cursor=pointer]:
+            - /url: /dashboard
+          - link "solutions.product.cta.requestDemo" [ref=e31] [cursor=pointer]:
+            - /url: /contact
+      - generic [ref=e33]:
+        - heading "solutions.product.challengesTitle" [level=2] [ref=e34]
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - img [ref=e37]
+            - paragraph [ref=e40]: solutions.product.challenges.assumptions
+          - generic [ref=e41]:
+            - img [ref=e42]
+            - paragraph [ref=e45]: solutions.product.challenges.limitedResources
+          - generic [ref=e46]:
+            - img [ref=e47]
+            - paragraph [ref=e50]: solutions.product.challenges.prioritizing
+          - generic [ref=e51]:
+            - img [ref=e52]
+            - paragraph [ref=e55]: solutions.product.challenges.validating
+          - generic [ref=e56]:
+            - img [ref=e57]
+            - paragraph [ref=e60]: solutions.product.challenges.whyBehavior
+          - generic [ref=e61]:
+            - img [ref=e62]
+            - paragraph [ref=e65]: solutions.product.challenges.productMarketFit
+      - generic [ref=e67]:
+        - heading "solutions.product.agentsTitle" [level=2] [ref=e68]
+        - paragraph [ref=e69]: solutions.product.agentsDescription
+        - generic [ref=e70]:
+          - generic [ref=e72]:
+            - img [ref=e74]
+            - generic [ref=e76]:
+              - heading "solutions.product.agents.opportunityScout.name" [level=3] [ref=e77]
+              - paragraph [ref=e78]: solutions.product.agents.opportunityScout.description
+              - generic [ref=e79]:
+                - generic [ref=e80]: solutions.product.agents.opportunityScout.capabilities.needIdentification
+                - generic [ref=e81]: solutions.product.agents.opportunityScout.capabilities.gapAnalysis
+                - generic [ref=e82]: solutions.product.agents.opportunityScout.capabilities.opportunityScoring
+                - generic [ref=e83]: solutions.product.agents.opportunityScout.capabilities.marketSizing
+          - generic [ref=e85]:
+            - img [ref=e87]
+            - generic [ref=e91]:
+              - heading "solutions.product.agents.featurePrioritizer.name" [level=3] [ref=e92]
+              - paragraph [ref=e93]: solutions.product.agents.featurePrioritizer.description
+              - generic [ref=e94]:
+                - generic [ref=e95]: solutions.product.agents.featurePrioritizer.capabilities.userImpact
+                - generic [ref=e96]: solutions.product.agents.featurePrioritizer.capabilities.effortEstimation
+                - generic [ref=e97]: solutions.product.agents.featurePrioritizer.capabilities.roiCalculation
+                - generic [ref=e98]: solutions.product.agents.featurePrioritizer.capabilities.roadmapOptimization
+          - generic [ref=e100]:
+            - img [ref=e102]
+            - generic [ref=e107]:
+              - heading "solutions.product.agents.userPersonaBuilder.name" [level=3] [ref=e108]
+              - paragraph [ref=e109]: solutions.product.agents.userPersonaBuilder.description
+              - generic [ref=e110]:
+                - generic [ref=e111]: solutions.product.agents.userPersonaBuilder.capabilities.personaGeneration
+                - generic [ref=e112]: solutions.product.agents.userPersonaBuilder.capabilities.journeyMapping
+                - generic [ref=e113]: solutions.product.agents.userPersonaBuilder.capabilities.painPointAnalysis
+                - generic [ref=e114]: solutions.product.agents.userPersonaBuilder.capabilities.useCaseDocumentation
+          - generic [ref=e116]:
+            - img [ref=e118]
+            - generic [ref=e120]:
+              - heading "solutions.product.agents.conceptValidator.name" [level=3] [ref=e121]
+              - paragraph [ref=e122]: solutions.product.agents.conceptValidator.description
+              - generic [ref=e123]:
+                - generic [ref=e124]: solutions.product.agents.conceptValidator.capabilities.conceptTesting
+                - generic [ref=e125]: solutions.product.agents.conceptValidator.capabilities.demandValidation
+                - generic [ref=e126]: solutions.product.agents.conceptValidator.capabilities.competitiveAnalysis
+                - generic [ref=e127]: solutions.product.agents.conceptValidator.capabilities.riskAssessment
+          - generic [ref=e129]:
+            - img [ref=e131]
+            - generic [ref=e134]:
+              - heading "solutions.product.agents.pricingStrategist.name" [level=3] [ref=e135]
+              - paragraph [ref=e136]: solutions.product.agents.pricingStrategist.description
+              - generic [ref=e137]:
+                - generic [ref=e138]: solutions.product.agents.pricingStrategist.capabilities.priceSensitivity
+                - generic [ref=e139]: solutions.product.agents.pricingStrategist.capabilities.valueMapping
+                - generic [ref=e140]: solutions.product.agents.pricingStrategist.capabilities.competitiveBenchmarking
+                - generic [ref=e141]: solutions.product.agents.pricingStrategist.capabilities.tierRecommendations
+          - generic [ref=e143]:
+            - img [ref=e145]
+            - generic [ref=e149]:
+              - heading "solutions.product.agents.launchPlanner.name" [level=3] [ref=e150]
+              - paragraph [ref=e151]: solutions.product.agents.launchPlanner.description
+              - generic [ref=e152]:
+                - generic [ref=e153]: solutions.product.agents.launchPlanner.capabilities.gtmStrategy
+                - generic [ref=e154]: solutions.product.agents.launchPlanner.capabilities.channelSelection
+                - generic [ref=e155]: solutions.product.agents.launchPlanner.capabilities.messagePositioning
+                - generic [ref=e156]: solutions.product.agents.launchPlanner.capabilities.launchTiming
+      - generic [ref=e158]:
+        - heading "solutions.product.workflowsTitle" [level=2] [ref=e159]
+        - paragraph [ref=e160]: solutions.product.workflowsDescription
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - generic [ref=e163]:
+              - heading "solutions.product.workflows.discoverySprint.name" [level=3] [ref=e164]
+              - generic [ref=e165]: solutions.product.workflows.discoverySprint.time
+            - paragraph [ref=e166]: solutions.product.workflows.discoverySprint.description
+          - generic [ref=e167]:
+            - generic [ref=e168]:
+              - heading "solutions.product.workflows.featureImpact.name" [level=3] [ref=e169]
+              - generic [ref=e170]: solutions.product.workflows.featureImpact.time
+            - paragraph [ref=e171]: solutions.product.workflows.featureImpact.description
+          - generic [ref=e172]:
+            - generic [ref=e173]:
+              - heading "solutions.product.workflows.competitiveProduct.name" [level=3] [ref=e174]
+              - generic [ref=e175]: solutions.product.workflows.competitiveProduct.time
+            - paragraph [ref=e176]: solutions.product.workflows.competitiveProduct.description
+          - generic [ref=e177]:
+            - generic [ref=e178]:
+              - heading "solutions.product.workflows.launchReadiness.name" [level=3] [ref=e179]
+              - generic [ref=e180]: solutions.product.workflows.launchReadiness.time
+            - paragraph [ref=e181]: solutions.product.workflows.launchReadiness.description
+      - generic [ref=e183]:
+        - heading "solutions.product.finalCta.title" [level=2] [ref=e184]
+        - paragraph [ref=e185]: solutions.product.finalCta.description
+        - generic [ref=e186]:
+          - link "solutions.product.finalCta.getStarted" [ref=e187] [cursor=pointer]:
+            - /url: /signup
+            - text: solutions.product.finalCta.getStarted
+            - img
+          - link "solutions.product.finalCta.talkToSales" [ref=e188] [cursor=pointer]:
+            - /url: /contact
+    - contentinfo [ref=e189]:
+      - generic [ref=e190]:
+        - generic [ref=e191]:
+          - generic [ref=e192]:
+            - link "G GWI Insights" [ref=e193] [cursor=pointer]:
+              - /url: /
+              - generic [ref=e195]: G
+              - generic [ref=e196]: GWI Insights
+            - paragraph [ref=e197]: Real-world, human-sourced data powering smarter business decisions since 2009.
+          - generic [ref=e198]:
+            - heading "Product" [level=4] [ref=e199]
+            - list [ref=e200]:
+              - listitem [ref=e201]:
+                - link "Features" [ref=e202] [cursor=pointer]:
+                  - /url: /#features
+              - listitem [ref=e203]:
+                - link "Agents" [ref=e204] [cursor=pointer]:
+                  - /url: /#agents
+              - listitem [ref=e205]:
+                - link "Pricing" [ref=e206] [cursor=pointer]:
+                  - /url: /pricing
+              - listitem [ref=e207]:
+                - link "Changelog" [ref=e208] [cursor=pointer]:
+                  - /url: /changelog
+              - listitem [ref=e209]:
+                - link "Roadmap" [ref=e210] [cursor=pointer]:
+                  - /url: /roadmap
+          - generic [ref=e211]:
+            - heading "Resources" [level=4] [ref=e212]
+            - list [ref=e213]:
+              - listitem [ref=e214]:
+                - link "Documentation" [ref=e215] [cursor=pointer]:
+                  - /url: /docs
+              - listitem [ref=e216]:
+                - link "API Reference" [ref=e217] [cursor=pointer]:
+                  - /url: /docs/api
+              - listitem [ref=e218]:
+                - link "Tutorials" [ref=e219] [cursor=pointer]:
+                  - /url: /tutorials
+              - listitem [ref=e220]:
+                - link "Blog" [ref=e221] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e222]:
+                - link "Case Studies" [ref=e223] [cursor=pointer]:
+                  - /url: /case-studies
+          - generic [ref=e224]:
+            - heading "Company" [level=4] [ref=e225]
+            - list [ref=e226]:
+              - listitem [ref=e227]:
+                - link "About" [ref=e228] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e229]:
+                - link "Careers" [ref=e230] [cursor=pointer]:
+                  - /url: /careers
+              - listitem [ref=e231]:
+                - link "Press" [ref=e232] [cursor=pointer]:
+                  - /url: /press
+              - listitem [ref=e233]:
+                - link "Contact" [ref=e234] [cursor=pointer]:
+                  - /url: /contact
+              - listitem [ref=e235]:
+                - link "Partners" [ref=e236] [cursor=pointer]:
+                  - /url: /partners
+          - generic [ref=e237]:
+            - heading "Legal" [level=4] [ref=e238]
+            - list [ref=e239]:
+              - listitem [ref=e240]:
+                - link "Privacy" [ref=e241] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e242]:
+                - link "Terms" [ref=e243] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e244]:
+                - link "Security" [ref=e245] [cursor=pointer]:
+                  - /url: /security
+              - listitem [ref=e246]:
+                - link "Cookies" [ref=e247] [cursor=pointer]:
+                  - /url: /cookies
+              - listitem [ref=e248]:
+                - link "Compliance" [ref=e249] [cursor=pointer]:
+                  - /url: /compliance
+        - generic [ref=e250]:
+          - paragraph [ref=e251]: © 2026 GWI. All rights reserved.
+          - generic [ref=e252]:
+            - link "Twitter" [ref=e253] [cursor=pointer]:
+              - /url: https://twitter.com/GWI_Data
+            - link "LinkedIn" [ref=e254] [cursor=pointer]:
+              - /url: https://linkedin.com/company/gwidotcom
+            - link "GWI.com" [ref=e255] [cursor=pointer]:
+              - /url: https://www.gwi.com
+  - region "Notifications alt+T"
+```

@@ -97,6 +97,9 @@ import { MediaConsumption } from "@/components/audiences/media-consumption"
 import { BrandAffinities } from "@/components/audiences/brand-affinities"
 import { CommentsPanel } from "@/components/shared/comments-panel"
 import { VersionHistory } from "@/components/shared/version-history"
+import { AudienceInsightsPanel } from "@/components/audiences/audience-insights-panel"
+import { AudienceComparison } from "@/components/audiences/audience-comparison"
+import { LookalikeAudienceGenerator } from "@/components/audiences/lookalike-audience-generator"
 
 // Mock audience data - 10 advanced examples
 const audienceData: Record<string, {
@@ -963,11 +966,14 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
           </TabsList>
         </div>
 
-        {/* Overview Tab - Original Content */}
+        {/* Overview Tab - Enhanced with Insights and Comparison */}
         <TabsContent value="overview">
           <div className="grid gap-6 lg:grid-cols-3">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-6">
+              {/* AI-Generated Insights */}
+              <AudienceInsightsPanel audienceId={id} />
+
               {/* Demographics */}
               <Card className="p-6">
                 <h3 className="font-semibold mb-4 flex items-center gap-2">
@@ -1037,6 +1043,18 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
                 </div>
               </Card>
 
+              {/* Audience Comparison */}
+              <AudienceComparison baseAudienceId={id} />
+
+              {/* Lookalike Generator */}
+              <LookalikeAudienceGenerator
+                sourceAudienceId={id}
+                onLookalikeGenerated={(criteria, estimatedSize) => {
+                  // Navigate to create page with lookalike data
+                  router.push(`/dashboard/audiences/new?lookalike=${id}`)
+                }}
+              />
+
               <Card className="p-6 space-y-4">
                 <h3 className="font-semibold">Quick Actions</h3>
                 <div className="space-y-2">
@@ -1049,7 +1067,7 @@ export default function AudienceDetailPage({ params }: { params: Promise<{ id: s
                   <Link href={`/dashboard/crosstabs/new?audience=${audience.id}`}>
                     <Button variant="outline" className="w-full justify-start bg-transparent">
                       <Users className="h-4 w-4 mr-2" />
-                      Compare Audiences
+                      Add to Crosstab
                     </Button>
                   </Link>
                   <Button variant="outline" className="w-full justify-start bg-transparent" onClick={() => handleExport("json")} disabled={isExporting}>

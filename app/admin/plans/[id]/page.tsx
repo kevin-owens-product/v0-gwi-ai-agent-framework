@@ -405,9 +405,9 @@ export default function PlanDetailPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="STARTER">Starter</SelectItem>
-                      <SelectItem value="PROFESSIONAL">Professional</SelectItem>
-                      <SelectItem value="ENTERPRISE">Enterprise</SelectItem>
+                      <SelectItem value="STARTER">{t("plans.starter")}</SelectItem>
+                      <SelectItem value="PROFESSIONAL">{t("plans.professional")}</SelectItem>
+                      <SelectItem value="ENTERPRISE">{t("plans.enterprise")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

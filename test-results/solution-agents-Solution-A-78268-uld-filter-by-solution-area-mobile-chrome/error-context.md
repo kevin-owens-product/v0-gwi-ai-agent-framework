@@ -1,0 +1,109 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - link "solutions.backToHome" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - text: solutions.backToHome
+    - main [ref=e8]:
+      - generic [ref=e10]:
+        - heading "solutions.pageTitle" [level=1] [ref=e11]
+        - paragraph [ref=e12]: solutions.pageDescription
+        - generic [ref=e13]:
+          - link "solutions.salesTeams.title solutions.salesTeams.description • solutions.salesTeams.metrics.fasterProposals • solutions.salesTeams.metrics.moreOpportunities • solutions.salesTeams.metrics.higherWinRates Learn more" [ref=e15] [cursor=pointer]:
+            - /url: /solutions/sales
+            - img [ref=e17]
+            - heading "solutions.salesTeams.title" [level=3] [ref=e20]
+            - paragraph [ref=e21]: solutions.salesTeams.description
+            - generic [ref=e22]:
+              - generic [ref=e23]: • solutions.salesTeams.metrics.fasterProposals
+              - generic [ref=e24]: • solutions.salesTeams.metrics.moreOpportunities
+              - generic [ref=e25]: • solutions.salesTeams.metrics.higherWinRates
+            - generic [ref=e26]:
+              - text: Learn more
+              - img [ref=e27]
+          - link "solutions.insightsTeams.title solutions.insightsTeams.description • solutions.insightsTeams.metrics.fasterDelivery • solutions.insightsTeams.metrics.moreStudies • solutions.insightsTeams.metrics.lowerCosts Learn more" [ref=e30] [cursor=pointer]:
+            - /url: /solutions/insights
+            - img [ref=e32]
+            - heading "solutions.insightsTeams.title" [level=3] [ref=e37]
+            - paragraph [ref=e38]: solutions.insightsTeams.description
+            - generic [ref=e39]:
+              - generic [ref=e40]: • solutions.insightsTeams.metrics.fasterDelivery
+              - generic [ref=e41]: • solutions.insightsTeams.metrics.moreStudies
+              - generic [ref=e42]: • solutions.insightsTeams.metrics.lowerCosts
+            - generic [ref=e43]:
+              - text: Learn more
+              - img [ref=e44]
+          - link "solutions.adSales.title solutions.adSales.description • solutions.adSales.metrics.fasterRfps • solutions.adSales.metrics.morePackages • solutions.adSales.metrics.higherWinRates Learn more" [ref=e47] [cursor=pointer]:
+            - /url: /solutions/ad-sales
+            - img [ref=e49]
+            - heading "solutions.adSales.title" [level=3] [ref=e53]
+            - paragraph [ref=e54]: solutions.adSales.description
+            - generic [ref=e55]:
+              - generic [ref=e56]: • solutions.adSales.metrics.fasterRfps
+              - generic [ref=e57]: • solutions.adSales.metrics.morePackages
+              - generic [ref=e58]: • solutions.adSales.metrics.higherWinRates
+            - generic [ref=e59]:
+              - text: Learn more
+              - img [ref=e60]
+          - link "solutions.marketing.title solutions.marketing.description • solutions.marketing.metrics.fasterCampaigns • solutions.marketing.metrics.engagement • solutions.marketing.metrics.betterPerception Learn more" [ref=e63] [cursor=pointer]:
+            - /url: /solutions/marketing
+            - img [ref=e65]
+            - heading "solutions.marketing.title" [level=3] [ref=e68]
+            - paragraph [ref=e69]: solutions.marketing.description
+            - generic [ref=e70]:
+              - generic [ref=e71]: • solutions.marketing.metrics.fasterCampaigns
+              - generic [ref=e72]: • solutions.marketing.metrics.engagement
+              - generic [ref=e73]: • solutions.marketing.metrics.betterPerception
+            - generic [ref=e74]:
+              - text: Learn more
+              - img [ref=e75]
+          - link "solutions.productDevelopment.title solutions.productDevelopment.description • solutions.productDevelopment.metrics.fasterResearch • solutions.productDevelopment.metrics.moreConcepts • solutions.productDevelopment.metrics.higherPmf Learn more" [ref=e78] [cursor=pointer]:
+            - /url: /solutions/product
+            - img [ref=e80]
+            - heading "solutions.productDevelopment.title" [level=3] [ref=e84]
+            - paragraph [ref=e85]: solutions.productDevelopment.description
+            - generic [ref=e86]:
+              - generic [ref=e87]: • solutions.productDevelopment.metrics.fasterResearch
+              - generic [ref=e88]: • solutions.productDevelopment.metrics.moreConcepts
+              - generic [ref=e89]: • solutions.productDevelopment.metrics.higherPmf
+            - generic [ref=e90]:
+              - text: Learn more
+              - img [ref=e91]
+          - link "solutions.marketResearch.title solutions.marketResearch.description • solutions.marketResearch.metrics.fasterProjects • solutions.marketResearch.metrics.moreStudies • solutions.marketResearch.metrics.costReduction Learn more" [ref=e94] [cursor=pointer]:
+            - /url: /solutions/market-research
+            - img [ref=e96]
+            - heading "solutions.marketResearch.title" [level=3] [ref=e99]
+            - paragraph [ref=e100]: solutions.marketResearch.description
+            - generic [ref=e101]:
+              - generic [ref=e102]: • solutions.marketResearch.metrics.fasterProjects
+              - generic [ref=e103]: • solutions.marketResearch.metrics.moreStudies
+              - generic [ref=e104]: • solutions.marketResearch.metrics.costReduction
+            - generic [ref=e105]:
+              - text: Learn more
+              - img [ref=e106]
+          - link "solutions.innovation.title solutions.innovation.description • solutions.innovation.metrics.moreConcepts • solutions.innovation.metrics.fasterValidation • solutions.innovation.metrics.successRate Learn more" [ref=e109] [cursor=pointer]:
+            - /url: /solutions/innovation
+            - img [ref=e111]
+            - heading "solutions.innovation.title" [level=3] [ref=e113]
+            - paragraph [ref=e114]: solutions.innovation.description
+            - generic [ref=e115]:
+              - generic [ref=e116]: • solutions.innovation.metrics.moreConcepts
+              - generic [ref=e117]: • solutions.innovation.metrics.fasterValidation
+              - generic [ref=e118]: • solutions.innovation.metrics.successRate
+            - generic [ref=e119]:
+              - text: Learn more
+              - img [ref=e120]
+      - generic [ref=e123]:
+        - heading "solutions.cta.title" [level=2] [ref=e124]
+        - paragraph [ref=e125]: solutions.cta.description
+        - generic [ref=e126]:
+          - link "solutions.cta.getStarted" [ref=e127] [cursor=pointer]:
+            - /url: /signup
+          - link "solutions.cta.talkToSales" [ref=e128] [cursor=pointer]:
+            - /url: /contact
+  - region "Notifications alt+T"
+```

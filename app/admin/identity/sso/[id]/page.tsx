@@ -594,7 +594,7 @@ export default function SSODetailPage() {
                     <Input
                       value={editForm.displayName}
                       onChange={(e) => setEditForm({ ...editForm, displayName: e.target.value })}
-                      placeholder="e.g., Acme Corp SSO"
+                      placeholder={t("placeholders.nameExample")}
                     />
                   </div>
 
@@ -778,9 +778,9 @@ export default function SSODetailPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="VIEWER">Viewer</SelectItem>
-                        <SelectItem value="MEMBER">Member</SelectItem>
-                        <SelectItem value="ADMIN">Admin</SelectItem>
+                        <SelectItem value="VIEWER">{tIdentity("roles.viewer")}</SelectItem>
+                        <SelectItem value="MEMBER">{tIdentity("roles.member")}</SelectItem>
+                        <SelectItem value="ADMIN">{tIdentity("roles.admin")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

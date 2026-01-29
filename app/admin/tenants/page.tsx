@@ -674,9 +674,9 @@ export default function TenantsPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{t("allPlans")}</SelectItem>
-                <SelectItem value="STARTER">Starter</SelectItem>
-                <SelectItem value="PROFESSIONAL">Professional</SelectItem>
-                <SelectItem value="ENTERPRISE">Enterprise</SelectItem>
+                <SelectItem value="STARTER">{t("plans.starter")}</SelectItem>
+                <SelectItem value="PROFESSIONAL">{t("plans.professional")}</SelectItem>
+                <SelectItem value="ENTERPRISE">{t("plans.enterprise")}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -815,9 +815,9 @@ export default function TenantsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="STARTER">Starter</SelectItem>
-                    <SelectItem value="PROFESSIONAL">Professional</SelectItem>
-                    <SelectItem value="ENTERPRISE">Enterprise</SelectItem>
+                    <SelectItem value="STARTER">{t("plans.starter")}</SelectItem>
+                    <SelectItem value="PROFESSIONAL">{t("plans.professional")}</SelectItem>
+                    <SelectItem value="ENTERPRISE">{t("plans.enterprise")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

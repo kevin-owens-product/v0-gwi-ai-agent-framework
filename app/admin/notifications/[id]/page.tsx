@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -88,6 +89,7 @@ const notificationTypeConfig: Record<string, { icon: typeof Bell; color: string;
 export default function NotificationDetailPage() {
   const params = useParams()
   const router = useRouter()
+  const t = useTranslations("admin.notifications")
   const notificationId = params.id as string
 
   const [notification, setNotification] = useState<Notification | null>(null)
@@ -326,12 +328,12 @@ export default function NotificationDetailPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="INFO">Information</SelectItem>
-                          <SelectItem value="WARNING">Warning</SelectItem>
-                          <SelectItem value="ALERT">Alert</SelectItem>
-                          <SelectItem value="MAINTENANCE">Maintenance</SelectItem>
-                          <SelectItem value="FEATURE">Feature</SelectItem>
-                          <SelectItem value="PROMOTION">Promotion</SelectItem>
+                          <SelectItem value="INFO">{t("types.info")}</SelectItem>
+                          <SelectItem value="WARNING">{t("types.warning")}</SelectItem>
+                          <SelectItem value="ALERT">{t("types.alert")}</SelectItem>
+                          <SelectItem value="MAINTENANCE">{t("types.maintenance")}</SelectItem>
+                          <SelectItem value="FEATURE">{t("types.feature")}</SelectItem>
+                          <SelectItem value="PROMOTION">{t("types.promotion")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -345,9 +347,9 @@ export default function NotificationDetailPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="ALL">All Users</SelectItem>
-                          <SelectItem value="SPECIFIC_PLANS">Specific Plans</SelectItem>
-                          <SelectItem value="SPECIFIC_ORGS">Specific Orgs</SelectItem>
+                          <SelectItem value="ALL">{t("targetTypes.all")}</SelectItem>
+                          <SelectItem value="SPECIFIC_PLANS">{t("targetTypes.specificPlans")}</SelectItem>
+                          <SelectItem value="SPECIFIC_ORGS">{t("targetTypes.specificOrgs")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

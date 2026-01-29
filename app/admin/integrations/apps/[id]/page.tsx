@@ -874,7 +874,7 @@ export default function IntegrationAppDetailPage() {
                   value={editForm.shortDescription}
                   onChange={(e) => setEditForm({ ...editForm, shortDescription: e.target.value })}
                   disabled={!isEditing}
-                  placeholder="A brief description"
+                  placeholder={t("placeholders.briefDescription")}
                 />
               </div>
               <div className="space-y-2">
@@ -960,7 +960,7 @@ export default function IntegrationAppDetailPage() {
                   onChange={(e) => setEditForm({ ...editForm, setupInstructions: e.target.value })}
                   disabled={!isEditing}
                   rows={3}
-                  placeholder="Instructions for setting up this integration..."
+                  placeholder={t("placeholders.setupInstructions")}
                 />
               </div>
               <div className="flex items-center gap-6">

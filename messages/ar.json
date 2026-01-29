@@ -3821,6 +3821,106 @@
       },
       "actions": {
         "openAnalysis": "[AR] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      },
+      "components": {
+        "grid": {
+          "badges": {
+            "base": "[AR] Base: {name}",
+            "metricsAudiences": "[AR] {metrics} metrics × {audiences} audiences",
+            "selected": "[AR] {count} selected"
+          },
+          "baseColumn": "[AR] Base column",
+          "calculatedField": "[AR] Calculated field",
+          "columns": "[AR] Columns",
+          "conditionalFormatting": {
+            "addRule": "[AR] Add Rule",
+            "apply": "[AR] Apply",
+            "background": "[AR] Background",
+            "cancel": "[AR] Cancel",
+            "conditions": {
+              "between": "[AR] Between",
+              "bottomPercent": "[AR] Bottom %",
+              "equalTo": "[AR] Equal to",
+              "greaterThan": "[AR] Greater than",
+              "lessThan": "[AR] Less than",
+              "topPercent": "[AR] Top %"
+            },
+            "description": "[AR] Configure rules to highlight cells based on their values",
+            "newRule": "[AR] New Rule",
+            "text": "[AR] Text",
+            "title": "[AR] Conditional Formatting"
+          },
+          "contextMenu": {
+            "barChart": "[AR] Bar Chart",
+            "copy": "[AR] Copy",
+            "drillDown": "[AR] Drill Down",
+            "editValue": "[AR] Edit Value",
+            "lineChart": "[AR] Line Chart",
+            "pieChart": "[AR] Pie Chart",
+            "setAsBase": "[AR] Set as Base",
+            "visualize": "[AR] Visualize"
+          },
+          "done": "[AR] Done",
+          "drillDown": {
+            "average": "[AR] Average",
+            "breakdownPlaceholder": "[AR] Breakdown view would show demographic or segmentation details for this data point.",
+            "close": "[AR] Close",
+            "currentValue": "[AR] Current Value",
+            "export": "[AR] Export",
+            "metadata": "[AR] Metadata",
+            "source": "[AR] Source",
+            "tabs": {
+              "breakdown": "[AR] Breakdown",
+              "details": "[AR] Details",
+              "trend": "[AR] Trend"
+            },
+            "title": "[AR] Drill Down Analysis",
+            "trendPlaceholder": "[AR] Trend view would show historical data for this metric over time."
+          },
+          "edit": "[AR] Edit",
+          "legend": {
+            "drillDownHint": "[AR] Double-click cell to drill down",
+            "highestInRow": "[AR] Highest in row",
+            "lowestInRow": "[AR] Lowest in row",
+            "multiSelectHint": "[AR] Ctrl+Click to multi-select",
+            "significant": "[AR] Statistically significant (p < 0.05)"
+          },
+          "searchPlaceholder": "[AR] Search metrics...",
+          "settings": "[AR] Grid Settings",
+          "settingsOptions": {
+            "decimalPlaces": "[AR] Decimal Places",
+            "freezeFirstColumn": "[AR] Freeze First Column",
+            "groupByCategory": "[AR] Group by Category",
+            "highlightOnHover": "[AR] Highlight on Hover",
+            "showRowNumbers": "[AR] Show Row Numbers",
+            "showSignificance": "[AR] Show Significance Indicators",
+            "showSparklines": "[AR] Show Sparklines",
+            "showStatistics": "[AR] Show Statistics Columns",
+            "showTotals": "[AR] Show Totals Row"
+          },
+          "table": {
+            "avg": "[AR] Avg",
+            "max": "[AR] Max",
+            "metric": "[AR] Metric",
+            "min": "[AR] Min",
+            "totalAverage": "[AR] Total / Average",
+            "trend": "[AR] Trend"
+          },
+          "title": "[AR] Crosstab Analysis",
+          "tooltip": {
+            "doubleclickToDrillDown": "[AR] Double-click to drill down",
+            "mean": "[AR] Mean",
+            "range": "[AR] Range",
+            "statisticallySignificant": "[AR] Statistically significant"
+          },
+          "viewMode": {
+            "difference": "[AR] Difference",
+            "index": "[AR] Index",
+            "percentage": "[AR] Percentage",
+            "raw": "[AR] Raw Values"
+          },
+          "visibleColumns": "[AR] Visible Columns"
+        }
       }
     },
     "charts": {
@@ -9661,7 +9761,10 @@
         "user_info_url_optional": "[AR] User Info URL (Optional)",
         "viewer": "[AR] VIEWER",
         "x509_certificate": "[AR] X.509 Certificate",
-        "yourclientid": "[AR] your-client-id"
+        "yourclientid": "[AR] your-client-id",
+        "placeholders": {
+          "nameExample": "[AR] e.g., Acme Corp SSO"
+        }
       },
       "domains": {
         "title": "إدارة النطاقات",
@@ -10209,9 +10312,21 @@
         }
       },
       "title": "إدارة الهوية",
-      "description": "إدارة موفري الهوية والمجالات وتوفير المستخدمين"
+      "description": "إدارة موفري الهوية والمجالات وتوفير المستخدمين",
+      "roles": {
+        "admin": "[AR] Admin",
+        "member": "[AR] Member",
+        "viewer": "[AR] Viewer"
+      }
     },
-    "security": "[AR] security",
+    "security": {
+      "sessions": {
+        "statuses": {
+          "activeOnly": "[AR] Active Only",
+          "allSessions": "[AR] All Sessions"
+        }
+      }
+    },
     "scim": {
       "title": "تكاملات SCIM",
       "description": "إدارة التوفير التلقائي للمستخدمين باستخدام SCIM 2.0",
@@ -11669,7 +11784,20 @@
         "grantFeatureFailed": "[AR] Failed to grant feature",
         "revokeEntitlementFailed": "[AR] Failed to revoke entitlement"
       },
-      " ": "[AR] [TODO: Translate admin.tenants. ]"
+      " ": "[AR] [TODO: Translate admin.tenants. ]",
+      "suspensionTypes": {
+        "billingHold": "[AR] Billing Hold",
+        "full": "[AR] Full Suspension",
+        "investigation": "[AR] Under Investigation",
+        "partial": "[AR] Partial (Limited Access)"
+      },
+      "placeholders": {
+        "chooseFeature": "[AR] Choose a feature...",
+        "choosePlan": "[AR] Choose a plan...",
+        "reasonForSuspension": "[AR] Enter the reason for suspension...",
+        "whyFeatureGranted": "[AR] Why is this feature being granted?",
+        "whyPlanAssigned": "[AR] Why is this plan being assigned?"
+      }
     },
     "users": {
       "title": "إدارة المستخدم",
@@ -12692,7 +12820,11 @@
           "timeline": "[AR] [TODO: Translate admin.operations.incidents.detail.timeline]",
           "addUpdate": "[AR] [TODO: Translate admin.operations.incidents.detail.addUpdate]",
           "updatePlaceholder": "[AR] [TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
-          "postUpdate": "[AR] [TODO: Translate admin.operations.incidents.detail.postUpdate]"
+          "postUpdate": "[AR] [TODO: Translate admin.operations.incidents.detail.postUpdate]",
+          "changeStatusOptional": "[AR] Change status (optional)",
+          "documentRootCause": "[AR] Document the root cause...",
+          "enterUpdate": "[AR] Enter your update...",
+          "impactPlaceholder": "[AR] Describe the impact of this incident..."
         },
         "stats": {
           "totalIncidents": "[AR] [TODO: Translate admin.operations.incidents.stats.totalIncidents]",
@@ -12891,7 +13023,10 @@
           "startRollout": "بدء الطرح",
           "complete": "مكتمل",
           "rollback": "التراجع",
-          "cancel": "يلغي"
+          "cancel": "يلغي",
+          "bugFixTitle": "[AR] Bug fix title",
+          "breakingChangeTitle": "[AR] Breaking change title",
+          "featureTitle": "[AR] Feature title"
         },
         "bulk": {
           "cancelSelected": "إلغاء المحدد",
@@ -13006,7 +13141,8 @@
           "memory": "ذاكرة",
           "storage": "تخزين",
           "connections": "اتصالات",
-          "queueDepth": "عمق قائمة الانتظار"
+          "queueDepth": "عمق قائمة الانتظار",
+          "bandwidth": "[AR] Bandwidth"
         },
         "status": {
           "normal": "طبيعي",
@@ -13053,6 +13189,17 @@
           "createFailed": "فشل إنشاء مقياس السعة",
           "updateFailed": "فشل تحديث مقياس السعة",
           "deleteFailed": "فشل حذف مقياس السعة"
+        },
+        "units": {
+          "connections": "[AR] Connections",
+          "gb": "[AR] Gigabytes (GB)",
+          "messages": "[AR] Messages",
+          "percent": "[AR] Percent (%)",
+          "tb": "[AR] Terabytes (TB)"
+        },
+        "placeholders": {
+          "regionExample": "[AR] e.g., us-east-1",
+          "serviceExample": "[AR] e.g., API Gateway"
         }
       },
       "services": {
@@ -13873,6 +14020,12 @@
         "of": "ل",
         "previous": "سابق",
         "next": "التالي"
+      },
+      "categories": {
+        "all": "[AR] All",
+        "detractors": "[AR] Detractors",
+        "passives": "[AR] Passives",
+        "promoters": "[AR] Promoters"
       }
     },
     "rules": {
@@ -13945,7 +14098,14 @@
       }
     },
     "status": "[AR] Status",
-    "features": "[AR] features",
+    "features": {
+      "types": {
+        "boolean": "[AR] Boolean",
+        "json": "[AR] JSON",
+        "number": "[AR] Number",
+        "string": "[AR] String"
+      }
+    },
     "1_for_unlimited": "[AR] -1 for unlimited",
     "a_brief_description": "[AR] A brief description",
     "a_brief_description_of": "[AR] A brief description of this plan...",
@@ -14243,7 +14403,22 @@
     "why_is_this_feature": "[AR] Why is this feature being granted?",
     "why_is_this_plan": "[AR] Why is this plan being assigned?",
     "workflows": "[AR] Workflows",
-    "yearly_price_cents": "[AR] Yearly Price (cents)"
+    "yearly_price_cents": "[AR] Yearly Price (cents)",
+    "notifications": {
+      "types": {
+        "alert": "[AR] Alert",
+        "feature": "[AR] Feature",
+        "info": "[AR] Information",
+        "maintenance": "[AR] Maintenance",
+        "promotion": "[AR] Promotion",
+        "warning": "[AR] Warning"
+      },
+      "targetTypes": {
+        "all": "[AR] All Users",
+        "specificOrgs": "[AR] Specific Orgs",
+        "specificPlans": "[AR] Specific Plans"
+      }
+    }
   },
   "ui": {
     "dialog": {

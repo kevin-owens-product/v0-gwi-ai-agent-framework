@@ -24,6 +24,13 @@ export { ChartTemplateGallery } from "./chart-template-gallery"
 // Comparison component
 export { ChartComparison, comparisonScenarios } from "./chart-comparison"
 
+// Data transformation
+export { DataTransformationPipeline } from "./data-transformation-pipeline"
+export type { CalculatedField, TransformationRule } from "./data-transformation-pipeline"
+
+// Statistical analysis
+export { StatisticalAnalysisPanel } from "./statistical-analysis-panel"
+
 // GWI sample data
 export {
   demographicsData,

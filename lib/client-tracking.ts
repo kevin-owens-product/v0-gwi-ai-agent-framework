@@ -437,6 +437,18 @@ class ClientTracker {
    * Flush events to server
    */
   public flush(synchronous: boolean = false): void {
+    // Check if tracking is enabled
+    if (!this.config.enabled) return;
+    
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') return;
+    
+    // Check if we're online (if navigator.onLine is available)
+    if ('onLine' in navigator && !navigator.onLine) {
+      // Queue will be flushed when connection is restored
+      return;
+    }
+    
     if (this.eventQueue.length === 0) return;
 
     const events = [...this.eventQueue];
@@ -449,24 +461,59 @@ class ClientTracker {
 
     if (synchronous && 'sendBeacon' in navigator) {
       // Use sendBeacon for synchronous requests (e.g., on page unload)
-      navigator.sendBeacon(
-        this.config.endpoint,
-        JSON.stringify(payload)
-      );
+      try {
+        const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+        const sent = navigator.sendBeacon(this.config.endpoint, blob);
+        if (!sent && this.config.debug) {
+          console.warn('[Tracking] sendBeacon failed, events may be lost');
+        }
+      } catch (error) {
+        // Silently handle sendBeacon errors (network issues, etc.)
+        if (this.config.debug) {
+          console.warn('[Tracking] sendBeacon error:', error);
+        }
+      }
     } else {
       // Use fetch for async requests
-      fetch(this.config.endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-        keepalive: true,
-      }).catch((error) => {
-        if (this.config.debug) {
-          console.error('[Tracking] Failed to send events:', error);
-        }
-      });
+      // Wrap in a promise that always resolves to prevent unhandled rejections
+      Promise.resolve(
+        fetch(this.config.endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+          keepalive: true,
+        })
+      )
+        .then((response) => {
+          // Only log errors for non-network failures
+          if (response && !response.ok && this.config.debug) {
+            console.warn(`[Tracking] Server returned ${response.status} for tracking endpoint`);
+          }
+        })
+        .catch((error) => {
+          // Silently handle all network errors (offline, CORS, endpoint not found, etc.)
+          // Network errors like "Failed to fetch" are common and expected in some scenarios
+          // Completely suppress these errors to avoid console spam
+          if (this.config.debug) {
+            // Check if it's a network error (TypeError with "Failed to fetch" message)
+            const isNetworkError = 
+              error instanceof TypeError && 
+              (error.message?.includes('Failed to fetch') || 
+               error.message?.includes('NetworkError') ||
+               error.message?.includes('Load failed') ||
+               error.message?.includes('network') ||
+               error.name === 'TypeError');
+            
+            // Only log non-network errors in debug mode
+            if (!isNetworkError) {
+              console.warn('[Tracking] Failed to send events:', error);
+            }
+          }
+          // Don't re-queue events - they'll be lost on network errors, which is acceptable
+          // for analytics tracking. Silently fail to avoid console errors.
+        });
     }
   }
 

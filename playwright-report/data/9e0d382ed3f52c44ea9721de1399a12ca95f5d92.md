@@ -1,0 +1,61 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - link "GWI Agents" [ref=e7] [cursor=pointer]:
+      - /url: /
+      - img [ref=e9]
+      - generic [ref=e19]: GWI Agents
+    - generic [ref=e20]:
+      - heading "Create your account" [level=1] [ref=e21]
+      - paragraph [ref=e22]: Start your 14-day free trial. No credit card required.
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - generic [ref=e26]: Full name
+          - textbox "Full name" [ref=e27]:
+            - /placeholder: John Smith
+        - generic [ref=e28]:
+          - generic [ref=e29]: Organization
+          - textbox "Organization" [ref=e30]:
+            - /placeholder: Acme Inc.
+      - generic [ref=e31]:
+        - generic [ref=e32]: Work email
+        - textbox "Work email" [ref=e33]:
+          - /placeholder: you@company.com
+      - generic [ref=e34]:
+        - generic [ref=e35]: Password
+        - generic [ref=e36]:
+          - textbox "Password" [ref=e37]:
+            - /placeholder: Create a strong password
+          - button [ref=e38]:
+            - img [ref=e39]
+      - generic [ref=e42]:
+        - checkbox "I agree to the Terms of Service and Privacy Policy" [ref=e43]
+        - checkbox
+        - generic [ref=e44]:
+          - text: I agree to the
+          - link "Terms of Service" [ref=e45] [cursor=pointer]:
+            - /url: /terms
+          - text: and
+          - link "Privacy Policy" [ref=e46] [cursor=pointer]:
+            - /url: /privacy
+      - button "Create account" [disabled]
+    - generic [ref=e48]: OR
+    - generic [ref=e49]:
+      - button "Sign up with Google" [ref=e50]:
+        - img
+        - text: Sign up with Google
+      - button "Sign up with Microsoft" [ref=e51]:
+        - img
+        - text: Sign up with Microsoft
+    - paragraph [ref=e52]:
+      - text: Already have an account?
+      - link "Sign in" [ref=e53] [cursor=pointer]:
+        - /url: /login
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e59] [cursor=pointer]:
+    - img [ref=e60]
+  - alert [ref=e63]
+```

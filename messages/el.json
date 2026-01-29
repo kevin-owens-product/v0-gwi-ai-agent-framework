@@ -3821,6 +3821,106 @@
       },
       "actions": {
         "openAnalysis": "[EL] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      },
+      "components": {
+        "grid": {
+          "badges": {
+            "base": "[EL] Base: {name}",
+            "metricsAudiences": "[EL] {metrics} metrics × {audiences} audiences",
+            "selected": "[EL] {count} selected"
+          },
+          "baseColumn": "[EL] Base column",
+          "calculatedField": "[EL] Calculated field",
+          "columns": "[EL] Columns",
+          "conditionalFormatting": {
+            "addRule": "[EL] Add Rule",
+            "apply": "[EL] Apply",
+            "background": "[EL] Background",
+            "cancel": "[EL] Cancel",
+            "conditions": {
+              "between": "[EL] Between",
+              "bottomPercent": "[EL] Bottom %",
+              "equalTo": "[EL] Equal to",
+              "greaterThan": "[EL] Greater than",
+              "lessThan": "[EL] Less than",
+              "topPercent": "[EL] Top %"
+            },
+            "description": "[EL] Configure rules to highlight cells based on their values",
+            "newRule": "[EL] New Rule",
+            "text": "[EL] Text",
+            "title": "[EL] Conditional Formatting"
+          },
+          "contextMenu": {
+            "barChart": "[EL] Bar Chart",
+            "copy": "[EL] Copy",
+            "drillDown": "[EL] Drill Down",
+            "editValue": "[EL] Edit Value",
+            "lineChart": "[EL] Line Chart",
+            "pieChart": "[EL] Pie Chart",
+            "setAsBase": "[EL] Set as Base",
+            "visualize": "[EL] Visualize"
+          },
+          "done": "[EL] Done",
+          "drillDown": {
+            "average": "[EL] Average",
+            "breakdownPlaceholder": "[EL] Breakdown view would show demographic or segmentation details for this data point.",
+            "close": "[EL] Close",
+            "currentValue": "[EL] Current Value",
+            "export": "[EL] Export",
+            "metadata": "[EL] Metadata",
+            "source": "[EL] Source",
+            "tabs": {
+              "breakdown": "[EL] Breakdown",
+              "details": "[EL] Details",
+              "trend": "[EL] Trend"
+            },
+            "title": "[EL] Drill Down Analysis",
+            "trendPlaceholder": "[EL] Trend view would show historical data for this metric over time."
+          },
+          "edit": "[EL] Edit",
+          "legend": {
+            "drillDownHint": "[EL] Double-click cell to drill down",
+            "highestInRow": "[EL] Highest in row",
+            "lowestInRow": "[EL] Lowest in row",
+            "multiSelectHint": "[EL] Ctrl+Click to multi-select",
+            "significant": "[EL] Statistically significant (p < 0.05)"
+          },
+          "searchPlaceholder": "[EL] Search metrics...",
+          "settings": "[EL] Grid Settings",
+          "settingsOptions": {
+            "decimalPlaces": "[EL] Decimal Places",
+            "freezeFirstColumn": "[EL] Freeze First Column",
+            "groupByCategory": "[EL] Group by Category",
+            "highlightOnHover": "[EL] Highlight on Hover",
+            "showRowNumbers": "[EL] Show Row Numbers",
+            "showSignificance": "[EL] Show Significance Indicators",
+            "showSparklines": "[EL] Show Sparklines",
+            "showStatistics": "[EL] Show Statistics Columns",
+            "showTotals": "[EL] Show Totals Row"
+          },
+          "table": {
+            "avg": "[EL] Avg",
+            "max": "[EL] Max",
+            "metric": "[EL] Metric",
+            "min": "[EL] Min",
+            "totalAverage": "[EL] Total / Average",
+            "trend": "[EL] Trend"
+          },
+          "title": "[EL] Crosstab Analysis",
+          "tooltip": {
+            "doubleclickToDrillDown": "[EL] Double-click to drill down",
+            "mean": "[EL] Mean",
+            "range": "[EL] Range",
+            "statisticallySignificant": "[EL] Statistically significant"
+          },
+          "viewMode": {
+            "difference": "[EL] Difference",
+            "index": "[EL] Index",
+            "percentage": "[EL] Percentage",
+            "raw": "[EL] Raw Values"
+          },
+          "visibleColumns": "[EL] Visible Columns"
+        }
       }
     },
     "charts": {
@@ -9752,7 +9852,10 @@
         "user_info_url_optional": "[EL] User Info URL (Optional)",
         "viewer": "[EL] VIEWER",
         "x509_certificate": "[EL] X.509 Certificate",
-        "yourclientid": "[EL] your-client-id"
+        "yourclientid": "[EL] your-client-id",
+        "placeholders": {
+          "nameExample": "[EL] e.g., Acme Corp SSO"
+        }
       },
       "domains": {
         "title": "Διαχείριση Τομέα",
@@ -10298,6 +10401,11 @@
           "deleteDevice": "[EL] [TODO: Translate admin.identity.devices.dialogs.deleteDevice]",
           "deleteDeviceDescription": "[EL] [TODO: Translate admin.identity.devices.dialogs.deleteDeviceDescription]"
         }
+      },
+      "roles": {
+        "admin": "[EL] Admin",
+        "member": "[EL] Member",
+        "viewer": "[EL] Viewer"
       }
     },
     "organizations": {
@@ -10494,7 +10602,20 @@
         "grantFeatureFailed": "[EL] Failed to grant feature",
         "revokeEntitlementFailed": "[EL] Failed to revoke entitlement"
       },
-      " ": "[EL] [TODO: Translate admin.tenants. ]"
+      " ": "[EL] [TODO: Translate admin.tenants. ]",
+      "suspensionTypes": {
+        "billingHold": "[EL] Billing Hold",
+        "full": "[EL] Full Suspension",
+        "investigation": "[EL] Under Investigation",
+        "partial": "[EL] Partial (Limited Access)"
+      },
+      "placeholders": {
+        "chooseFeature": "[EL] Choose a feature...",
+        "choosePlan": "[EL] Choose a plan...",
+        "reasonForSuspension": "[EL] Enter the reason for suspension...",
+        "whyFeatureGranted": "[EL] Why is this feature being granted?",
+        "whyPlanAssigned": "[EL] Why is this plan being assigned?"
+      }
     },
     "admins": "[EL] admins",
     "users": {
@@ -10968,7 +11089,14 @@
         }
       }
     },
-    "security": "[EL] security",
+    "security": {
+      "sessions": {
+        "statuses": {
+          "activeOnly": "[EL] Active Only",
+          "allSessions": "[EL] All Sessions"
+        }
+      }
+    },
     "scim": {
       "title": "Ενσωματώσεις SCIM",
       "description": "Διαχειριστείτε την αυτοματοποιημένη παροχή χρηστών με το SCIM 2.0",
@@ -12785,7 +12913,11 @@
           "timeline": "[EL] [TODO: Translate admin.operations.incidents.detail.timeline]",
           "addUpdate": "[EL] [TODO: Translate admin.operations.incidents.detail.addUpdate]",
           "updatePlaceholder": "[EL] [TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
-          "postUpdate": "[EL] [TODO: Translate admin.operations.incidents.detail.postUpdate]"
+          "postUpdate": "[EL] [TODO: Translate admin.operations.incidents.detail.postUpdate]",
+          "changeStatusOptional": "[EL] Change status (optional)",
+          "documentRootCause": "[EL] Document the root cause...",
+          "enterUpdate": "[EL] Enter your update...",
+          "impactPlaceholder": "[EL] Describe the impact of this incident..."
         },
         "stats": {
           "totalIncidents": "[EL] [TODO: Translate admin.operations.incidents.stats.totalIncidents]",
@@ -12984,7 +13116,10 @@
           "startRollout": "Έναρξη διάθεσης",
           "complete": "Πλήρης",
           "rollback": "Επαναφορά",
-          "cancel": "Ματαίωση"
+          "cancel": "Ματαίωση",
+          "bugFixTitle": "[EL] Bug fix title",
+          "breakingChangeTitle": "[EL] Breaking change title",
+          "featureTitle": "[EL] Feature title"
         },
         "bulk": {
           "cancelSelected": "Ακύρωση επιλεγμένων",
@@ -13099,7 +13234,8 @@
           "memory": "Μνήμη",
           "storage": "Αποθήκευση",
           "connections": "Συνδέσεις",
-          "queueDepth": "Βάθος ουράς"
+          "queueDepth": "Βάθος ουράς",
+          "bandwidth": "[EL] Bandwidth"
         },
         "status": {
           "normal": "Κανονικός",
@@ -13146,6 +13282,17 @@
           "createFailed": "Η δημιουργία μέτρησης χωρητικότητας απέτυχε",
           "updateFailed": "Η ενημέρωση της μέτρησης χωρητικότητας απέτυχε",
           "deleteFailed": "Η διαγραφή της μέτρησης χωρητικότητας απέτυχε"
+        },
+        "units": {
+          "connections": "[EL] Connections",
+          "gb": "[EL] Gigabytes (GB)",
+          "messages": "[EL] Messages",
+          "percent": "[EL] Percent (%)",
+          "tb": "[EL] Terabytes (TB)"
+        },
+        "placeholders": {
+          "regionExample": "[EL] e.g., us-east-1",
+          "serviceExample": "[EL] e.g., API Gateway"
         }
       },
       "services": {
@@ -13966,6 +14113,12 @@
         "of": "του",
         "previous": "Προηγούμενος",
         "next": "Επόμενος"
+      },
+      "categories": {
+        "all": "[EL] All",
+        "detractors": "[EL] Detractors",
+        "passives": "[EL] Passives",
+        "promoters": "[EL] Promoters"
       }
     },
     "rules": {
@@ -14038,7 +14191,14 @@
       }
     },
     "status": "[EL] Status",
-    "features": "[EL] features",
+    "features": {
+      "types": {
+        "boolean": "[EL] Boolean",
+        "json": "[EL] JSON",
+        "number": "[EL] Number",
+        "string": "[EL] String"
+      }
+    },
     "1_for_unlimited": "[EL] -1 for unlimited",
     "a_brief_description": "[EL] A brief description",
     "a_brief_description_of": "[EL] A brief description of this plan...",
@@ -14336,7 +14496,22 @@
     "why_is_this_feature": "[EL] Why is this feature being granted?",
     "why_is_this_plan": "[EL] Why is this plan being assigned?",
     "workflows": "[EL] Workflows",
-    "yearly_price_cents": "[EL] Yearly Price (cents)"
+    "yearly_price_cents": "[EL] Yearly Price (cents)",
+    "notifications": {
+      "types": {
+        "alert": "[EL] Alert",
+        "feature": "[EL] Feature",
+        "info": "[EL] Information",
+        "maintenance": "[EL] Maintenance",
+        "promotion": "[EL] Promotion",
+        "warning": "[EL] Warning"
+      },
+      "targetTypes": {
+        "all": "[EL] All Users",
+        "specificOrgs": "[EL] Specific Orgs",
+        "specificPlans": "[EL] Specific Plans"
+      }
+    }
   },
   "ui": {
     "dialog": {

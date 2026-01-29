@@ -1,0 +1,686 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - link "G GWI Insights" [ref=e7] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e9]: G
+            - generic [ref=e10]: GWI Insights
+          - navigation [ref=e11]:
+            - button "Solutions" [ref=e12]:
+              - text: Solutions
+              - img [ref=e13]
+            - link "Features" [ref=e15] [cursor=pointer]:
+              - /url: /#features
+            - link "Agents" [ref=e16] [cursor=pointer]:
+              - /url: /#agents
+            - link "Pricing" [ref=e17] [cursor=pointer]:
+              - /url: /#pricing
+            - link "Docs" [ref=e18] [cursor=pointer]:
+              - /url: /docs
+        - generic [ref=e19]:
+          - button "Switch language" [ref=e20]:
+            - img
+            - generic [ref=e21]: Switch language
+          - button "Toggle theme" [ref=e22]:
+            - generic [ref=e23]:
+              - img
+              - img
+            - generic [ref=e24]: Toggle theme
+          - link "Sign in" [ref=e25] [cursor=pointer]:
+            - /url: /login
+            - button "Sign in" [ref=e26]
+          - link "Get Started" [ref=e27] [cursor=pointer]:
+            - /url: /dashboard
+            - button "Get Started" [ref=e28]
+    - main [ref=e29]:
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - generic [ref=e34]: Now with Real LLM Execution, SSO/SAML, Scheduled Workflows & Multi-Format Reports
+          - heading "AI agents that understand people." [level=1] [ref=e38]:
+            - text: AI agents that
+            - text: understand people.
+          - paragraph [ref=e39]: Build autonomous workflows that analyze human behavior, uncover audience motivations, and deliver strategic insights—all powered by the world's largest study of consumers.
+          - generic [ref=e40]:
+            - link "Start Building" [ref=e41] [cursor=pointer]:
+              - /url: /dashboard
+              - button "Start Building" [ref=e42]:
+                - text: Start Building
+                - img
+            - button "Watch Demo" [ref=e43]:
+              - img
+              - text: Watch Demo
+          - paragraph [ref=e44]:
+            - img [ref=e45]
+            - generic [ref=e47]: Press ⌘K anywhere to access templates
+        - generic [ref=e49]:
+          - generic [ref=e50]:
+            - generic [ref=e56]: GWI Insights Playground
+            - generic [ref=e57]:
+              - button "Chat" [ref=e58]:
+                - img [ref=e59]
+                - text: Chat
+              - button "Canvas" [ref=e61]:
+                - img [ref=e62]
+                - text: Canvas
+              - button "Split" [ref=e67]:
+                - img [ref=e68]
+                - text: Split
+          - generic [ref=e71]:
+            - generic [ref=e72]:
+              - generic [ref=e74]:
+                - generic [ref=e76]: AI
+                - generic [ref=e77]:
+                  - paragraph [ref=e78]: Analyzing Gen Z motivations around sustainable fashion choices and brand loyalty drivers...
+                  - generic [ref=e82]: 75%
+              - generic [ref=e84]:
+                - generic [ref=e86]: PA
+                - generic [ref=e87]:
+                  - paragraph [ref=e88]: Persona Architect agent spawned
+                  - paragraph [ref=e89]: Building detailed audience personas based on behavioral patterns and values
+            - generic [ref=e90]:
+              - heading "Active Agents" [level=4] [ref=e91]
+              - generic [ref=e92]:
+                - generic [ref=e95]: Audience Explorer
+                - generic [ref=e98]: Persona Architect
+                - generic [ref=e101]: Culture Tracker
+      - generic [ref=e103]:
+        - paragraph [ref=e104]: Trusted by leading enterprise teams
+        - generic [ref=e105]:
+          - generic [ref=e106]: Unilever
+          - generic [ref=e107]: Nike
+          - generic [ref=e108]: Samsung
+          - generic [ref=e109]: L'Oreal
+          - generic [ref=e110]: Coca-Cola
+          - generic [ref=e111]: Nestle
+          - generic [ref=e112]: P&G
+          - generic [ref=e113]: Diageo
+          - generic [ref=e114]: PepsiCo
+          - generic [ref=e115]: Mars
+      - generic [ref=e117]:
+        - generic [ref=e118]:
+          - heading "A complete platform for human intelligence at scale" [level=2] [ref=e119]:
+            - text: A complete platform for
+            - text: human intelligence at scale
+          - paragraph [ref=e120]: From autonomous task planning to verified insights, GWI Insights provides everything you need to understand people deeply.
+        - generic [ref=e121]:
+          - generic [ref=e122]:
+            - generic [ref=e123]:
+              - img [ref=e125]
+              - generic [ref=e127]: NEW
+            - heading "Real LLM Execution" [level=3] [ref=e128]
+            - paragraph [ref=e129]: Multi-provider support with Anthropic Claude, OpenAI GPT, and GWI Spark. No mock data—production-ready AI.
+          - generic [ref=e130]:
+            - generic [ref=e131]:
+              - img [ref=e133]
+              - generic [ref=e136]: NEW
+            - heading "Multi-Format Reports" [level=3] [ref=e137]
+            - paragraph [ref=e138]: Export to PDF, PowerPoint, Excel, CSV, and HTML. AI-powered content generation with templates.
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - img [ref=e142]
+              - generic [ref=e145]: NEW
+            - heading "Scheduled Workflows" [level=3] [ref=e146]
+            - paragraph [ref=e147]: Automate workflows with cron scheduling. Set recurring runs and automated brand tracking snapshots.
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - img [ref=e151]
+              - generic [ref=e154]: NEW
+            - heading "SSO & SAML 2.0" [level=3] [ref=e155]
+            - paragraph [ref=e156]: Enterprise-ready authentication with Azure AD, Google Workspace, and custom SAML providers.
+          - generic [ref=e157]:
+            - generic [ref=e158]:
+              - img [ref=e160]
+              - generic [ref=e164]: NEW
+            - heading "Integrations Hub" [level=3] [ref=e165]
+            - paragraph [ref=e166]: Connect Slack, Zapier, webhooks, and custom APIs. Build integrations with 5000+ tools.
+          - generic [ref=e167]:
+            - generic [ref=e168]:
+              - img [ref=e170]
+              - generic [ref=e175]: NEW
+            - heading "Enterprise Reliability" [level=3] [ref=e176]
+            - paragraph [ref=e177]: Circuit breakers, retry logic, request timeouts, and automatic failover ensure 99.9% uptime.
+          - generic [ref=e178]:
+            - generic [ref=e179]:
+              - img [ref=e181]
+              - generic [ref=e183]: NEW
+            - heading "Advanced Analytics" [level=3] [ref=e184]
+            - paragraph [ref=e185]: Comprehensive usage dashboards with token tracking, cost estimation, and performance metrics.
+          - generic [ref=e186]:
+            - generic [ref=e187]:
+              - img [ref=e189]
+              - generic [ref=e199]: NEW
+            - heading "Context-Aware Agents" [level=3] [ref=e200]
+            - paragraph [ref=e201]: Agents access memory context automatically. Persistent knowledge across sessions and workflows.
+          - generic [ref=e202]:
+            - img [ref=e205]
+            - heading "Multi-Mode Playground" [level=3] [ref=e210]
+            - paragraph [ref=e211]: Switch between Chat, Canvas, and Split views. Build insights visually with drag-and-drop blocks.
+          - generic [ref=e212]:
+            - img [ref=e215]
+            - heading "Visual Workflow Builder" [level=3] [ref=e219]
+            - paragraph [ref=e220]: Orchestrate complex analysis with drag-and-drop pipelines, triggers, and scheduled runs.
+          - generic [ref=e221]:
+            - img [ref=e224]
+            - heading "Verified Insights" [level=3] [ref=e226]
+            - paragraph [ref=e227]: Every insight includes clickable citations, confidence scores, and transparent reasoning chains.
+          - generic [ref=e228]:
+            - img [ref=e231]
+            - heading "Team Collaboration" [level=3] [ref=e236]
+            - paragraph [ref=e237]: Email invitations, role-based access control, and comprehensive audit logs for security.
+      - generic [ref=e240]:
+        - generic [ref=e241]:
+          - generic [ref=e242]:
+            - img [ref=e243]
+            - text: Advanced Playground
+          - heading "Three ways to build insights" [level=2] [ref=e245]
+          - paragraph [ref=e246]: Whether you prefer conversational AI, visual building, or both—the Playground adapts to your workflow.
+          - generic [ref=e247]:
+            - button "Chat Mode Conversational interface with streaming responses, sub-agent spawning, and inline citations." [ref=e248]:
+              - img [ref=e250]
+              - generic [ref=e252]:
+                - paragraph [ref=e253]: Chat Mode
+                - paragraph [ref=e254]: Conversational interface with streaming responses, sub-agent spawning, and inline citations.
+            - button "Canvas Mode Visual workspace with draggable blocks—charts, personas, tables, and insights." [ref=e255]:
+              - img [ref=e257]
+              - generic [ref=e262]:
+                - paragraph [ref=e263]: Canvas Mode
+                - paragraph [ref=e264]: Visual workspace with draggable blocks—charts, personas, tables, and insights.
+            - button "Split View Chat on the left, live canvas preview on the right. See outputs as you build." [ref=e265]:
+              - img [ref=e267]
+              - generic [ref=e270]:
+                - paragraph [ref=e271]: Split View
+                - paragraph [ref=e272]: Chat on the left, live canvas preview on the right. See outputs as you build.
+          - link "Try the Playground" [ref=e273] [cursor=pointer]:
+            - /url: /dashboard/playground
+            - button "Try the Playground" [ref=e274]:
+              - text: Try the Playground
+              - img
+        - generic [ref=e275]:
+          - generic [ref=e276]:
+            - generic [ref=e277]:
+              - img [ref=e278]
+              - heading "Playground Capabilities" [level=3] [ref=e288]
+            - list [ref=e289]:
+              - listitem [ref=e290]:
+                - img [ref=e291]
+                - generic [ref=e294]: Rich output blocks (charts, personas, data tables)
+              - listitem [ref=e295]:
+                - img [ref=e296]
+                - generic [ref=e299]: Command palette with saved templates
+              - listitem [ref=e300]:
+                - img [ref=e301]
+                - generic [ref=e304]: Clickable citations with source preview
+              - listitem [ref=e305]:
+                - img [ref=e306]
+                - generic [ref=e309]: Reasoning mode to see agent thinking
+              - listitem [ref=e310]:
+                - img [ref=e311]
+                - generic [ref=e314]: Multi-model selection (GPT-4o, Claude, Gemini)
+              - listitem [ref=e315]:
+                - img [ref=e316]
+                - generic [ref=e319]: Export to workflows, reports, or API
+          - generic [ref=e320]:
+            - generic [ref=e321]:
+              - img [ref=e322]
+              - heading "Quick Actions" [level=3] [ref=e324]
+            - paragraph [ref=e325]: "Press ⌘K to open the command palette and access:"
+            - generic [ref=e326]:
+              - generic [ref=e327]: Persona Deep Dive
+              - generic [ref=e328]: Segment Comparison
+              - generic [ref=e329]: Trend Analysis
+              - generic [ref=e330]: Brand Tracker
+      - generic [ref=e332]:
+        - generic [ref=e333]:
+          - heading "Pre-built human insights agents" [level=2] [ref=e334]
+          - paragraph [ref=e335]: Start with specialized agents designed for understanding people, or build your own in the Agent Playground.
+        - generic [ref=e336]:
+          - generic [ref=e337]:
+            - img [ref=e339]
+            - heading "Audience Explorer" [level=3] [ref=e344]
+            - paragraph [ref=e345]: Discovers who your audience really is—their values, behaviors, and what makes them tick.
+          - generic [ref=e346]:
+            - img [ref=e348]
+            - heading "Persona Architect" [level=3] [ref=e350]
+            - paragraph [ref=e351]: Builds rich, data-driven personas that bring your audiences to life with authentic human details.
+          - generic [ref=e352]:
+            - img [ref=e354]
+            - heading "Motivation Decoder" [level=3] [ref=e358]
+            - paragraph [ref=e359]: Uncovers the 'why' behind consumer choices—the emotional and rational drivers of behavior.
+          - generic [ref=e360]:
+            - img [ref=e362]
+            - heading "Culture Tracker" [level=3] [ref=e365]
+            - paragraph [ref=e366]: Spots emerging cultural shifts and changing attitudes before they hit the mainstream.
+          - generic [ref=e367]:
+            - img [ref=e369]
+            - heading "Brand Relationship Analyst" [level=3] [ref=e371]
+            - paragraph [ref=e372]: Maps how people really feel about brands—loyalty drivers, switching triggers, and emotional connections.
+          - generic [ref=e373]:
+            - img [ref=e375]
+            - heading "Global Perspective Agent" [level=3] [ref=e378]
+            - paragraph [ref=e379]: Compares attitudes and behaviors across markets to find universal truths and local nuances.
+      - generic [ref=e382]:
+        - generic [ref=e384]:
+          - generic [ref=e385]:
+            - generic [ref=e386]:
+              - img [ref=e387]
+              - generic [ref=e390]: Inbox Agents
+            - generic [ref=e391]:
+              - button "All" [ref=e392]
+              - button "Slack" [ref=e393]
+              - button "Email" [ref=e394]
+          - generic [ref=e395]:
+            - generic [ref=e397]:
+              - img [ref=e399]
+              - generic [ref=e401]:
+                - generic [ref=e402]:
+                  - generic [ref=e403]: Sarah Chen
+                  - generic [ref=e404]: 2 min ago
+                - paragraph [ref=e405]: Can you pull Gen Z attitudes toward sustainable fashion in the UK?
+                - generic [ref=e407]:
+                  - img [ref=e408]
+                  - text: Completed
+            - generic [ref=e412]:
+              - img [ref=e414]
+              - generic [ref=e417]:
+                - generic [ref=e418]:
+                  - generic [ref=e419]: marketing@acme.com
+                  - generic [ref=e420]: Just now
+                - paragraph [ref=e421]: Need a competitive analysis of streaming platforms for millennials
+                - generic [ref=e423]:
+                  - img [ref=e424]
+                  - text: Processing
+            - generic [ref=e427]:
+              - img [ref=e429]
+              - generic [ref=e431]:
+                - generic [ref=e432]:
+                  - generic [ref=e433]: David Park
+                  - generic [ref=e434]: 5 min ago
+                - paragraph [ref=e435]: What's the brand perception of Tesla among Gen X in Germany?
+                - generic [ref=e437]:
+                  - img [ref=e438]
+                  - text: Pending Review
+        - generic [ref=e441]:
+          - generic [ref=e442]:
+            - img [ref=e443]
+            - text: Inbox Agents
+          - heading "AI that handles requests while you sleep" [level=2] [ref=e446]:
+            - text: AI that handles requests
+            - text: while you sleep
+          - paragraph [ref=e447]: Connect your Slack channels and email inboxes. Inbox Agents automatically detect research requests, process them using your configured workflows, and deliver insights back to the requester.
+          - list [ref=e448]:
+            - listitem [ref=e449]:
+              - img [ref=e450]
+              - generic [ref=e453]: Auto-detect research questions from messages
+            - listitem [ref=e454]:
+              - img [ref=e455]
+              - generic [ref=e458]: Route to the right agent based on topic
+            - listitem [ref=e459]:
+              - img [ref=e460]
+              - generic [ref=e463]: Optional human approval before sending
+            - listitem [ref=e464]:
+              - img [ref=e465]
+              - generic [ref=e468]: Full audit trail of all processed requests
+          - link "Set Up Inbox Agents" [ref=e469] [cursor=pointer]:
+            - /url: /dashboard/inbox
+            - button "Set Up Inbox Agents" [ref=e470]:
+              - text: Set Up Inbox Agents
+              - img
+      - generic [ref=e472]:
+        - generic [ref=e473]:
+          - generic [ref=e474]:
+            - img [ref=e475]
+            - text: Report Builder
+          - heading "From insight to deliverable in minutes, not days" [level=2] [ref=e478]:
+            - text: From insight to deliverable
+            - text: in minutes, not days
+          - paragraph [ref=e479]: Transform your analysis into polished presentations, interactive dashboards, and comprehensive reports with AI-assisted editing and 8+ pre-built templates.
+        - generic [ref=e480]:
+          - generic [ref=e482]:
+            - generic [ref=e488]: Report Builder
+            - generic [ref=e489]:
+              - generic [ref=e490]:
+                - button "Presentations" [ref=e491]:
+                  - img [ref=e492]
+                  - text: Presentations
+                - button "Dashboards" [ref=e495]:
+                  - img [ref=e496]
+                  - text: Dashboards
+                - button "Reports" [ref=e498]:
+                  - img [ref=e499]
+                  - text: Reports
+                - button "Data Exports" [ref=e502]:
+                  - img [ref=e503]
+                  - text: Data Exports
+              - generic [ref=e505]:
+                - generic [ref=e510]: Slide 1
+                - generic [ref=e515]: Slide 2
+                - generic [ref=e520]: Slide 3
+              - generic [ref=e521]:
+                - generic [ref=e522]:
+                  - button "AI Enhance" [ref=e523]:
+                    - img
+                    - text: AI Enhance
+                  - button "Export" [ref=e524]:
+                    - img
+                    - text: Export
+                - button "Share" [ref=e525]:
+                  - img
+                  - text: Share
+          - generic [ref=e526]:
+            - generic [ref=e527]:
+              - heading "Pre-built Templates" [level=3] [ref=e528]
+              - generic [ref=e529]:
+                - generic [ref=e530] [cursor=pointer]:
+                  - generic [ref=e531]: Persona Deep Dive
+                  - img [ref=e532]
+                - generic [ref=e534] [cursor=pointer]:
+                  - generic [ref=e535]: Segment Comparison
+                  - img [ref=e536]
+                - generic [ref=e538] [cursor=pointer]:
+                  - generic [ref=e539]: Market Snapshot
+                  - img [ref=e540]
+                - generic [ref=e542] [cursor=pointer]:
+                  - generic [ref=e543]: Trend Report
+                  - img [ref=e544]
+                - generic [ref=e546] [cursor=pointer]:
+                  - generic [ref=e547]: Competitive Analysis
+                  - img [ref=e548]
+                - generic [ref=e550] [cursor=pointer]:
+                  - generic [ref=e551]: Brand Health Tracker
+                  - img [ref=e552]
+            - link "Open Report Builder" [ref=e554] [cursor=pointer]:
+              - /url: /dashboard/reports
+              - button "Open Report Builder" [ref=e555]:
+                - text: Open Report Builder
+                - img
+      - generic [ref=e558]:
+        - generic [ref=e559]:
+          - heading "Build workflows in minutes, not weeks" [level=2] [ref=e560]:
+            - text: Build workflows in minutes,
+            - text: not weeks
+          - paragraph [ref=e561]: Our visual workflow builder lets you connect agents, define triggers, and orchestrate complex research pipelines without writing code.
+          - generic [ref=e562]:
+            - button "Define Objective Set your research goal and target audience" [ref=e563]:
+              - img [ref=e564]
+              - generic [ref=e567]:
+                - paragraph [ref=e568]: Define Objective
+                - paragraph [ref=e569]: Set your research goal and target audience
+              - img [ref=e570]
+            - button "Select Agents Choose specialized agents for your workflow" [ref=e572]:
+              - generic [ref=e575]:
+                - paragraph [ref=e576]: Select Agents
+                - paragraph [ref=e577]: Choose specialized agents for your workflow
+              - img [ref=e578]
+            - button "Configure Pipeline Connect agents and define data flows" [ref=e580]:
+              - img [ref=e581]
+              - generic [ref=e583]:
+                - paragraph [ref=e584]: Configure Pipeline
+                - paragraph [ref=e585]: Connect agents and define data flows
+              - img [ref=e586]
+            - button "Execute & Monitor Run workflow with real-time progress" [ref=e588]:
+              - img [ref=e589]
+              - generic [ref=e591]:
+                - paragraph [ref=e592]: Execute & Monitor
+                - paragraph [ref=e593]: Run workflow with real-time progress
+              - img [ref=e594]
+            - button "Review & Export Verify insights and export deliverables" [ref=e596]:
+              - img [ref=e597]
+              - generic [ref=e599]:
+                - paragraph [ref=e600]: Review & Export
+                - paragraph [ref=e601]: Verify insights and export deliverables
+              - img [ref=e602]
+        - generic [ref=e604]:
+          - generic [ref=e605]:
+            - heading "Workflow Preview" [level=4] [ref=e606]
+            - generic [ref=e607]: Step 2 of 5
+          - generic [ref=e608]:
+            - generic [ref=e609]:
+              - generic [ref=e611]: IN
+              - img [ref=e612]
+              - generic [ref=e615]: AS
+              - img [ref=e616]
+              - generic [ref=e619]: CB
+              - img [ref=e620]
+              - generic [ref=e623]: OUT
+            - paragraph [ref=e625]: "Selected agents: Audience Strategist -> Creative Brief Builder -> Trend Forecaster"
+            - generic [ref=e626]:
+              - generic [ref=e629]: Completed
+              - generic [ref=e632]: In Progress
+              - generic [ref=e635]: Pending
+      - generic [ref=e638]:
+        - generic [ref=e639]:
+          - generic [ref=e640]: 3B
+          - generic [ref=e641]: Consumers represented
+        - generic [ref=e642]:
+          - generic [ref=e643]: 50+
+          - generic [ref=e644]: Markets worldwide
+        - generic [ref=e645]:
+          - generic [ref=e646]: 200K+
+          - generic [ref=e647]: Profiling data points
+        - generic [ref=e648]:
+          - generic [ref=e649]: 750+
+          - generic [ref=e650]: Team members globally
+      - generic [ref=e652]:
+        - generic [ref=e653]:
+          - heading "Simple, transparent pricing" [level=2] [ref=e654]
+          - paragraph [ref=e655]: Choose the plan that fits your team. All plans include a 14-day free trial with full access.
+        - generic [ref=e656]:
+          - generic [ref=e657]:
+            - heading "Starter" [level=3] [ref=e658]
+            - generic [ref=e659]:
+              - generic [ref=e660]: $499
+              - generic [ref=e661]: /month
+            - paragraph [ref=e662]: For teams getting started with AI-powered human insights
+            - button "Start Free Trial" [ref=e663]
+            - list [ref=e664]:
+              - listitem [ref=e665]:
+                - img [ref=e666]
+                - generic [ref=e668]: 5 team members
+              - listitem [ref=e669]:
+                - img [ref=e670]
+                - generic [ref=e672]: 3 pre-built agents
+              - listitem [ref=e673]:
+                - img [ref=e674]
+                - generic [ref=e676]: 1,000 workflow runs/month
+              - listitem [ref=e677]:
+                - img [ref=e678]
+                - generic [ref=e680]: Basic memory (7 days)
+              - listitem [ref=e681]:
+                - img [ref=e682]
+                - generic [ref=e684]: Chat & Canvas modes
+              - listitem [ref=e685]:
+                - img [ref=e686]
+                - generic [ref=e688]: Email support
+              - listitem [ref=e689]:
+                - img [ref=e690]
+                - generic [ref=e692]: Standard integrations
+          - generic [ref=e693]:
+            - generic [ref=e694]: Most Popular
+            - heading "Professional" [level=3] [ref=e695]
+            - generic [ref=e696]:
+              - generic [ref=e697]: $1,499
+              - generic [ref=e698]: /month
+            - paragraph [ref=e699]: For growing teams with complex research needs
+            - button "Start Free Trial" [ref=e700]
+            - list [ref=e701]:
+              - listitem [ref=e702]:
+                - img [ref=e703]
+                - generic [ref=e705]: 25 team members
+              - listitem [ref=e706]:
+                - img [ref=e707]
+                - generic [ref=e709]: All pre-built agents
+              - listitem [ref=e710]:
+                - img [ref=e711]
+                - generic [ref=e713]: 10,000 workflow runs/month
+              - listitem [ref=e714]:
+                - img [ref=e715]
+                - generic [ref=e717]: Extended memory (90 days)
+              - listitem [ref=e718]:
+                - img [ref=e719]
+                - generic [ref=e721]: Inbox Agents (Slack & Email)
+              - listitem [ref=e722]:
+                - img [ref=e723]
+                - generic [ref=e725]: Report Builder with templates
+              - listitem [ref=e726]:
+                - img [ref=e727]
+                - generic [ref=e729]: Command palette & templates
+              - listitem [ref=e730]:
+                - img [ref=e731]
+                - generic [ref=e733]: Priority support
+              - listitem [ref=e734]:
+                - img [ref=e735]
+                - generic [ref=e737]: Custom agent builder
+              - listitem [ref=e738]:
+                - img [ref=e739]
+                - generic [ref=e741]: API access
+          - generic [ref=e742]:
+            - heading "Enterprise" [level=3] [ref=e743]
+            - generic [ref=e745]: Custom
+            - paragraph [ref=e746]: For organizations requiring maximum scale and control
+            - button "Contact Sales" [ref=e747]
+            - list [ref=e748]:
+              - listitem [ref=e749]:
+                - img [ref=e750]
+                - generic [ref=e752]: Unlimited team members
+              - listitem [ref=e753]:
+                - img [ref=e754]
+                - generic [ref=e756]: Custom agent development
+              - listitem [ref=e757]:
+                - img [ref=e758]
+                - generic [ref=e760]: Unlimited workflow runs
+              - listitem [ref=e761]:
+                - img [ref=e762]
+                - generic [ref=e764]: Persistent memory
+              - listitem [ref=e765]:
+                - img [ref=e766]
+                - generic [ref=e768]: Unlimited Inbox Agents
+              - listitem [ref=e769]:
+                - img [ref=e770]
+                - generic [ref=e772]: White-label reports
+              - listitem [ref=e773]:
+                - img [ref=e774]
+                - generic [ref=e776]: Dedicated success manager
+              - listitem [ref=e777]:
+                - img [ref=e778]
+                - generic [ref=e780]: SSO & SAML
+              - listitem [ref=e781]:
+                - img [ref=e782]
+                - generic [ref=e784]: On-premise deployment
+              - listitem [ref=e785]:
+                - img [ref=e786]
+                - generic [ref=e788]: SLA guarantee
+      - generic [ref=e793]:
+        - heading "Ready to truly understand your audience?" [level=2] [ref=e794]
+        - paragraph [ref=e795]: Join leading brands using AI agents to unlock human insights 10x faster. Start your free trial today.
+        - generic [ref=e796]:
+          - link "Get Started Free" [ref=e797] [cursor=pointer]:
+            - /url: /dashboard
+            - button "Get Started Free" [ref=e798]:
+              - text: Get Started Free
+              - img
+          - button "Schedule Demo" [ref=e799]
+    - contentinfo [ref=e800]:
+      - generic [ref=e801]:
+        - generic [ref=e802]:
+          - generic [ref=e803]:
+            - link "G GWI Insights" [ref=e804] [cursor=pointer]:
+              - /url: /
+              - generic [ref=e806]: G
+              - generic [ref=e807]: GWI Insights
+            - paragraph [ref=e808]: Real-world, human-sourced data powering smarter business decisions since 2009.
+          - generic [ref=e809]:
+            - heading "Product" [level=4] [ref=e810]
+            - list [ref=e811]:
+              - listitem [ref=e812]:
+                - link "Features" [ref=e813] [cursor=pointer]:
+                  - /url: /#features
+              - listitem [ref=e814]:
+                - link "Agents" [ref=e815] [cursor=pointer]:
+                  - /url: /#agents
+              - listitem [ref=e816]:
+                - link "Pricing" [ref=e817] [cursor=pointer]:
+                  - /url: /pricing
+              - listitem [ref=e818]:
+                - link "Changelog" [ref=e819] [cursor=pointer]:
+                  - /url: /changelog
+              - listitem [ref=e820]:
+                - link "Roadmap" [ref=e821] [cursor=pointer]:
+                  - /url: /roadmap
+          - generic [ref=e822]:
+            - heading "Resources" [level=4] [ref=e823]
+            - list [ref=e824]:
+              - listitem [ref=e825]:
+                - link "Documentation" [ref=e826] [cursor=pointer]:
+                  - /url: /docs
+              - listitem [ref=e827]:
+                - link "API Reference" [ref=e828] [cursor=pointer]:
+                  - /url: /docs/api
+              - listitem [ref=e829]:
+                - link "Tutorials" [ref=e830] [cursor=pointer]:
+                  - /url: /tutorials
+              - listitem [ref=e831]:
+                - link "Blog" [ref=e832] [cursor=pointer]:
+                  - /url: /blog
+              - listitem [ref=e833]:
+                - link "Case Studies" [ref=e834] [cursor=pointer]:
+                  - /url: /case-studies
+          - generic [ref=e835]:
+            - heading "Company" [level=4] [ref=e836]
+            - list [ref=e837]:
+              - listitem [ref=e838]:
+                - link "About" [ref=e839] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e840]:
+                - link "Careers" [ref=e841] [cursor=pointer]:
+                  - /url: /careers
+              - listitem [ref=e842]:
+                - link "Press" [ref=e843] [cursor=pointer]:
+                  - /url: /press
+              - listitem [ref=e844]:
+                - link "Contact" [ref=e845] [cursor=pointer]:
+                  - /url: /contact
+              - listitem [ref=e846]:
+                - link "Partners" [ref=e847] [cursor=pointer]:
+                  - /url: /partners
+          - generic [ref=e848]:
+            - heading "Legal" [level=4] [ref=e849]
+            - list [ref=e850]:
+              - listitem [ref=e851]:
+                - link "Privacy" [ref=e852] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e853]:
+                - link "Terms" [ref=e854] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e855]:
+                - link "Security" [ref=e856] [cursor=pointer]:
+                  - /url: /security
+              - listitem [ref=e857]:
+                - link "Cookies" [ref=e858] [cursor=pointer]:
+                  - /url: /cookies
+              - listitem [ref=e859]:
+                - link "Compliance" [ref=e860] [cursor=pointer]:
+                  - /url: /compliance
+        - generic [ref=e861]:
+          - paragraph [ref=e862]: © 2026 GWI. All rights reserved.
+          - generic [ref=e863]:
+            - link "Twitter" [ref=e864] [cursor=pointer]:
+              - /url: https://twitter.com/GWI_Data
+            - link "LinkedIn" [ref=e865] [cursor=pointer]:
+              - /url: https://linkedin.com/company/gwidotcom
+            - link "GWI.com" [ref=e866] [cursor=pointer]:
+              - /url: https://www.gwi.com
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e872] [cursor=pointer]:
+    - generic [ref=e875]:
+      - text: Compiling
+      - generic [ref=e876]:
+        - generic [ref=e877]: .
+        - generic [ref=e878]: .
+        - generic [ref=e879]: .
+  - alert [ref=e880]
+```

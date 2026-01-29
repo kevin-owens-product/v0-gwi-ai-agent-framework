@@ -398,7 +398,7 @@ export default function IncidentDetailPage() {
                     <Textarea
                       value={editForm.impact || ""}
                       onChange={(e) => setEditForm({ ...editForm, impact: e.target.value })}
-                      placeholder="Describe the impact of this incident..."
+                      placeholder={t("detail.impactPlaceholder")}
                       rows={3}
                     />
                   ) : (
@@ -418,7 +418,7 @@ export default function IncidentDetailPage() {
                     <Textarea
                       value={editForm.rootCause || ""}
                       onChange={(e) => setEditForm({ ...editForm, rootCause: e.target.value })}
-                      placeholder="Document the root cause..."
+                      placeholder={t("detail.documentRootCause")}
                       rows={3}
                     />
                   ) : (
@@ -494,7 +494,7 @@ export default function IncidentDetailPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Textarea
-                    placeholder="Enter your update..."
+                    placeholder={t("detail.enterUpdate")}
                     value={newUpdate}
                     onChange={(e) => setNewUpdate(e.target.value)}
                     rows={3}
@@ -502,7 +502,7 @@ export default function IncidentDetailPage() {
                   <div className="flex items-center justify-between">
                     <Select value={updateStatus} onValueChange={setUpdateStatus}>
                       <SelectTrigger className="w-[200px]">
-                        <SelectValue placeholder="Change status (optional)" />
+                        <SelectValue placeholder={t("detail.changeStatusOptional")} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="">No status change</SelectItem>

@@ -1,321 +1,262 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useTranslations } from "next-intl"
-import { Card } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import {
-  Users,
-  ArrowLeftRight,
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  BarChart3,
-  Download,
-  Table2,
-} from "lucide-react"
-import { cn } from "@/lib/utils"
-import Link from "next/link"
-
-interface AudienceProfile {
-  id: string
-  name: string
-  size: string
-  demographics?: { label: string; value: string }[]
-  behaviors?: string[]
-  interests?: string[]
-}
+import { Loader2, Users, TrendingUp, TrendingDown, Minus, X } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 interface AudienceComparisonProps {
-  primaryAudience: AudienceProfile
-  availableAudiences: AudienceProfile[]
-  className?: string
+  baseAudienceId: string
+  onCompareClick?: () => void
 }
 
-// Mock comparison metrics
-const comparisonMetrics = [
-  { category: "Demographics", metrics: [
-    { name: "Age 18-34", field: "young" },
-    { name: "Age 35-54", field: "middle" },
-    { name: "Age 55+", field: "senior" },
-    { name: "Female", field: "female" },
-    { name: "Urban", field: "urban" },
-    { name: "College+", field: "college" },
-    { name: "HH Income $100K+", field: "high_income" },
-  ]},
-  { category: "Social Media", metrics: [
-    { name: "TikTok", field: "tiktok" },
-    { name: "Instagram", field: "instagram" },
-    { name: "Facebook", field: "facebook" },
-    { name: "YouTube", field: "youtube" },
-    { name: "LinkedIn", field: "linkedin" },
-  ]},
-  { category: "Shopping", metrics: [
-    { name: "Online Primary", field: "online_shopping" },
-    { name: "In-Store Primary", field: "instore_shopping" },
-    { name: "Brand Loyal", field: "brand_loyal" },
-    { name: "Deal Seeker", field: "deal_seeker" },
-    { name: "Premium Buyer", field: "premium_buyer" },
-  ]},
-  { category: "Values", metrics: [
-    { name: "Eco-Conscious", field: "eco_conscious" },
-    { name: "Health Focused", field: "health_focused" },
-    { name: "Tech Enthusiast", field: "tech_enthusiast" },
-    { name: "Family Oriented", field: "family_oriented" },
-    { name: "Career Driven", field: "career_driven" },
-  ]},
-]
-
-// Generate mock comparison data
-function generateComparisonData(audience1Id: string, audience2Id: string) {
-  const seed = (audience1Id + audience2Id).split('').reduce((a, b) => a + b.charCodeAt(0), 0)
-  const random = (min: number, max: number, offset: number) => {
-    const x = Math.sin(seed + offset) * 10000
-    return Math.floor((x - Math.floor(x)) * (max - min + 1)) + min
+interface ComparisonData {
+  base: {
+    id: string
+    name: string
+    size: number | null
+    criteria: unknown
   }
-
-  const data: Record<string, { audience1: number; audience2: number }> = {}
-  let offset = 0
-
-  for (const category of comparisonMetrics) {
-    for (const metric of category.metrics) {
-      data[metric.field] = {
-        audience1: random(15, 85, offset++),
-        audience2: random(15, 85, offset++),
-      }
+  comparisons: Array<{
+    audience: {
+      id: string
+      name: string
+      size: number | null
     }
+    differences: Array<{
+      dimension: string
+      baseValue: string | number | [number, number]
+      compareValue: string | number | [number, number]
+      significance: "high" | "medium" | "low"
+    }>
+    overlap: number
+    similarity: number
+  }>
+  summary: {
+    keyDifferentiators: Array<{
+      dimension: string
+      values: Record<string, string | number>
+      significance: "high" | "medium" | "low"
+    }>
+    sizeComparison: Record<string, number>
   }
-
-  return data
 }
 
-export function AudienceComparison({
-  primaryAudience,
-  availableAudiences,
-  className,
-}: AudienceComparisonProps) {
-  const t = useTranslations("audiences")
-  const [comparisonAudienceId, setComparisonAudienceId] = useState<string>("")
-  const [comparisonData, setComparisonData] = useState<Record<string, { audience1: number; audience2: number }>>({})
-
-  const comparisonAudience = availableAudiences.find(a => a.id === comparisonAudienceId)
+export function AudienceComparison({ baseAudienceId, onCompareClick }: AudienceComparisonProps) {
+  const [selectedAudiences, setSelectedAudiences] = useState<string[]>([])
+  const [availableAudiences, setAvailableAudiences] = useState<Array<{ id: string; name: string }>>([])
+  const [comparison, setComparison] = useState<ComparisonData | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (comparisonAudienceId) {
-      setComparisonData(generateComparisonData(primaryAudience.id, comparisonAudienceId))
-    }
-  }, [primaryAudience.id, comparisonAudienceId])
+    // Fetch available audiences for comparison
+    fetch("/api/v1/audiences?limit=50")
+      .then((res) => res.json())
+      .then((data) => {
+        const audiences = (data.audiences || data.data || []).filter(
+          (a: { id: string }) => a.id !== baseAudienceId
+        )
+        setAvailableAudiences(audiences.slice(0, 10)) // Limit to 10 for dropdown
+      })
+      .catch(console.error)
+  }, [baseAudienceId])
 
-  const getDifferenceIndicator = (diff: number) => {
-    if (diff > 15) return { icon: <TrendingUp className="h-4 w-4 text-green-500" />, color: "text-green-600", label: "Higher" }
-    if (diff < -15) return { icon: <TrendingDown className="h-4 w-4 text-red-500" />, color: "text-red-600", label: "Lower" }
-    return { icon: <Minus className="h-4 w-4 text-gray-400" />, color: "text-gray-500", label: "Similar" }
+  const handleCompare = async () => {
+    if (selectedAudiences.length === 0) {
+      setError("Please select at least one audience to compare")
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const compareWith = selectedAudiences.join(",")
+      const response = await fetch(
+        `/api/v1/audiences/${baseAudienceId}/compare?compareWith=${compareWith}`,
+        {
+          credentials: "include",
+        }
+      )
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to compare audiences")
+      }
+
+      const data = await response.json()
+      setComparison(data.comparison)
+      onCompareClick?.()
+    } catch (err) {
+      console.error("Error comparing audiences:", err)
+      setError(err instanceof Error ? err.message : "Failed to compare audiences")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const getKeyDifferences = () => {
-    if (!comparisonData || Object.keys(comparisonData).length === 0) return []
-
-    const differences = Object.entries(comparisonData)
-      .map(([field, values]) => ({
-        field,
-        diff: values.audience1 - values.audience2,
-        absDiff: Math.abs(values.audience1 - values.audience2),
-      }))
-      .sort((a, b) => b.absDiff - a.absDiff)
-      .slice(0, 5)
-
-    return differences.map(d => {
-      const metricName = comparisonMetrics
-        .flatMap(c => c.metrics)
-        .find(m => m.field === d.field)?.name || d.field
-
-      return {
-        name: metricName,
-        diff: d.diff,
-        ...getDifferenceIndicator(d.diff),
-      }
-    })
+  const formatValue = (value: string | number | [number, number]): string => {
+    if (Array.isArray(value)) {
+      return `${value[0]}-${value[1]}`
+    }
+    return String(value)
   }
 
   return (
-    <div className={cn("space-y-6", className)}>
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <ArrowLeftRight className="h-5 w-5" />
-          <h2 className="text-lg font-semibold">{t("comparison.title")}</h2>
-        </div>
-        {comparisonAudience && (
-          <Link href={`/dashboard/crosstabs/new?audiences=${primaryAudience.id},${comparisonAudienceId}`}>
-            <Button size="sm">
-              <Table2 className="h-4 w-4 mr-2" />
-              {t("comparison.createCrosstab")}
-            </Button>
-          </Link>
-        )}
-      </div>
-
-      {/* Audience Selector */}
-      <div className="grid grid-cols-3 gap-4 items-center">
-        {/* Primary Audience */}
-        <Card className="p-4 bg-primary/5 border-primary/20">
-          <div className="flex items-center gap-2 mb-2">
-            <Users className="h-4 w-4 text-primary" />
-            <span className="text-xs text-muted-foreground">{t("comparison.primary")}</span>
-          </div>
-          <h3 className="font-medium">{primaryAudience.name}</h3>
-          <p className="text-sm text-muted-foreground">{t("comparison.consumers", { count: primaryAudience.size })}</p>
-        </Card>
-
-        {/* VS Divider */}
-        <div className="flex justify-center">
-          <Badge variant="outline" className="text-lg px-4 py-2">{t("comparison.vs")}</Badge>
-        </div>
-
-        {/* Comparison Selector */}
-        <Card className="p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Users className="h-4 w-4" />
-            <span className="text-xs text-muted-foreground">{t("comparison.compareWith")}</span>
-          </div>
-          <Select value={comparisonAudienceId} onValueChange={setComparisonAudienceId}>
-            <SelectTrigger>
-              <SelectValue placeholder={t("comparison.selectAudience")} />
-            </SelectTrigger>
-            <SelectContent>
-              {availableAudiences
-                .filter(a => a.id !== primaryAudience.id)
-                .map((audience) => (
-                  <SelectItem key={audience.id} value={audience.id}>
-                    {audience.name}
-                  </SelectItem>
-                ))}
-            </SelectContent>
-          </Select>
-          {comparisonAudience && (
-            <p className="text-sm text-muted-foreground mt-2">{t("comparison.consumers", { count: comparisonAudience.size })}</p>
-          )}
-        </Card>
-      </div>
-
-      {/* Comparison Results */}
-      {comparisonAudience && comparisonData && Object.keys(comparisonData).length > 0 && (
-        <>
-          {/* Key Differences */}
-          <Card className="p-4">
-            <h3 className="font-medium mb-3 flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              {t("comparison.keyDifferences")}
-            </h3>
-            <div className="space-y-2">
-              {getKeyDifferences().map((diff) => (
-                <div key={diff.name} className="flex items-center justify-between p-2 bg-muted/50 rounded-lg">
-                  <span className="text-sm font-medium">{diff.name}</span>
-                  <div className="flex items-center gap-2">
-                    {diff.icon}
-                    <span className={cn("text-sm font-mono", diff.color)}>
-                      {diff.diff > 0 ? "+" : ""}{diff.diff} pts
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          {/* Detailed Comparison */}
-          <div className="space-y-4">
-            {comparisonMetrics.map((category) => (
-              <Card key={category.category} className="p-4">
-                <h3 className="font-medium mb-3">{category.category}</h3>
-                <div className="space-y-3">
-                  {category.metrics.map((metric) => {
-                    const data = comparisonData[metric.field]
-                    if (!data) return null
-                    const diff = data.audience1 - data.audience2
-                    const indicator = getDifferenceIndicator(diff)
-
-                    return (
-                      <div key={metric.field} className="space-y-1">
-                        <div className="flex items-center justify-between text-sm">
-                          <span>{metric.name}</span>
-                          <div className="flex items-center gap-2">
-                            {indicator.icon}
-                            <span className={cn("font-mono text-xs", indicator.color)}>
-                              {diff > 0 ? "+" : ""}{diff} pts
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {/* Primary audience bar */}
-                          <div className="flex-1">
-                            <div className="h-2 bg-muted rounded-full overflow-hidden">
-                              <div
-                                className="h-full bg-primary transition-all duration-500"
-                                style={{ width: `${data.audience1}%` }}
-                              />
-                            </div>
-                          </div>
-                          <span className="text-xs font-mono w-10 text-right">{data.audience1}%</span>
-                          <span className="text-xs text-muted-foreground w-4 text-center">|</span>
-                          <span className="text-xs font-mono w-10">{data.audience2}%</span>
-                          {/* Comparison audience bar */}
-                          <div className="flex-1">
-                            <div className="h-2 bg-muted rounded-full overflow-hidden">
-                              <div
-                                className="h-full bg-blue-500 transition-all duration-500"
-                                style={{ width: `${data.audience2}%` }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </Card>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Users className="h-5 w-5" />
+          Compare Audiences
+        </CardTitle>
+        <CardDescription>
+          Compare this audience with up to 3 others to identify key differences
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Select audiences to compare</label>
+          <div className="flex flex-wrap gap-2">
+            {availableAudiences.map((audience) => (
+              <Badge
+                key={audience.id}
+                variant={selectedAudiences.includes(audience.id) ? "default" : "outline"}
+                className="cursor-pointer"
+                onClick={() => {
+                  if (selectedAudiences.includes(audience.id)) {
+                    setSelectedAudiences(selectedAudiences.filter((id) => id !== audience.id))
+                  } else if (selectedAudiences.length < 3) {
+                    setSelectedAudiences([...selectedAudiences, audience.id])
+                  }
+                }}
+              >
+                {audience.name}
+                {selectedAudiences.includes(audience.id) && (
+                  <X className="h-3 w-3 ml-1" />
+                )}
+              </Badge>
             ))}
           </div>
+          {selectedAudiences.length >= 3 && (
+            <p className="text-xs text-muted-foreground">
+              Maximum 3 audiences can be compared at once
+            </p>
+          )}
+        </div>
 
-          {/* Legend */}
-          <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded bg-primary" />
-              <span>{primaryAudience.name}</span>
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        <Button
+          className="w-full"
+          onClick={handleCompare}
+          disabled={isLoading || selectedAudiences.length === 0}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Comparing...
+            </>
+          ) : (
+            <>
+              <Users className="h-4 w-4 mr-2" />
+              Compare
+            </>
+          )}
+        </Button>
+
+        {comparison && (
+          <div className="space-y-4 pt-4 border-t">
+            {/* Key Differentiators */}
+            {comparison.summary.keyDifferentiators.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium">Key Differentiators</h4>
+                <div className="space-y-2">
+                  {comparison.summary.keyDifferentiators.map((diff, index) => (
+                    <div key={index} className="p-2 border rounded-lg">
+                      <div className="text-sm font-medium capitalize mb-1">{diff.dimension}</div>
+                      <div className="space-y-1 text-xs">
+                        {Object.entries(diff.values).map(([name, value]) => (
+                          <div key={name} className="flex justify-between">
+                            <span className="text-muted-foreground">{name}:</span>
+                            <span className="font-medium">{formatValue(value)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Size Comparison */}
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium">Size Comparison</h4>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Audience</TableHead>
+                    <TableHead className="text-right">Size</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {Object.entries(comparison.summary.sizeComparison).map(([name, size]) => (
+                    <TableRow key={name}>
+                      <TableCell>{name}</TableCell>
+                      <TableCell className="text-right">
+                        {size >= 1000000
+                          ? `${(size / 1000000).toFixed(1)}M`
+                          : size >= 1000
+                          ? `${(size / 1000).toFixed(0)}K`
+                          : size}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded bg-blue-500" />
-              <span>{comparisonAudience.name}</span>
-            </div>
-          </div>
 
-          {/* Actions */}
-          <div className="flex items-center justify-center gap-4">
-            <Button variant="outline">
-              <Download className="h-4 w-4 mr-2" />
-              {t("comparison.exportComparison")}
-            </Button>
-            <Link href={`/dashboard/crosstabs/new?audiences=${primaryAudience.id},${comparisonAudienceId}`}>
-              <Button>
-                <BarChart3 className="h-4 w-4 mr-2" />
-                {t("comparison.fullCrosstabAnalysis")}
-              </Button>
-            </Link>
+            {/* Detailed Comparisons */}
+            {comparison.comparisons.map((comp) => (
+              <div key={comp.audience.id} className="space-y-2 p-3 border rounded-lg">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-medium">{comp.audience.name}</h4>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary">
+                      {Math.round(comp.similarity * 100)}% similar
+                    </Badge>
+                    <Badge variant="outline">
+                      {Math.round(comp.overlap * 100)}% overlap
+                    </Badge>
+                  </div>
+                </div>
+                {comp.differences.length > 0 && (
+                  <div className="space-y-1 text-xs">
+                    {comp.differences.slice(0, 5).map((diff, index) => (
+                      <div key={index} className="flex items-center justify-between">
+                        <span className="text-muted-foreground capitalize">{diff.dimension}:</span>
+                        <div className="flex items-center gap-2">
+                          <span>{formatValue(diff.baseValue)}</span>
+                          <Minus className="h-3 w-3" />
+                          <span>{formatValue(diff.compareValue)}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-        </>
-      )}
-
-      {/* Empty State */}
-      {!comparisonAudience && (
-        <Card className="p-12 text-center">
-          <ArrowLeftRight className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-          <h3 className="font-medium mb-2">{t("comparison.selectToCompare")}</h3>
-          <p className="text-sm text-muted-foreground">
-            {t("comparison.selectToCompareDescription")}
-          </p>
-        </Card>
-      )}
-    </div>
+        )}
+      </CardContent>
+    </Card>
   )
 }

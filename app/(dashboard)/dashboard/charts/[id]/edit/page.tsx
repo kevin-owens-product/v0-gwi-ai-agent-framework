@@ -49,8 +49,9 @@ import {
   X,
   Eye,
 } from "lucide-react"
-import { ChartRenderer, generateSampleData } from "@/components/charts"
+import { ChartRenderer, generateSampleData, StatisticalAnalysisPanel } from "@/components/charts"
 import type { ChartType } from "@/components/charts"
+import { DataTransformationPipeline, CalculatedField, TransformationRule } from "@/components/charts/data-transformation-pipeline"
 
 // Chart type options with icons
 const chartTypes: { value: ChartType; labelKey: string; icon: React.ReactNode }[] = [
@@ -153,6 +154,8 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
   const [showLegend, setShowLegend] = useState(true)
   const [showGrid, setShowGrid] = useState(true)
   const [showTooltip, setShowTooltip] = useState(true)
+  const [calculatedFields, setCalculatedFields] = useState<CalculatedField[]>([])
+  const [transformations, setTransformations] = useState<TransformationRule[]>([])
 
   // UI state
   const [isLoading, setIsLoading] = useState(true)
@@ -579,6 +582,16 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
             </CardContent>
           </Card>
 
+          {/* Data Transformation Pipeline */}
+          <DataTransformationPipeline
+            onTransformationChange={(transforms, fields) => {
+              setTransformations(transforms)
+              setCalculatedFields(fields)
+            }}
+            initialTransformations={transformations}
+            initialCalculatedFields={calculatedFields}
+          />
+
           {/* Data Configuration */}
           <Card>
             <CardHeader>
@@ -789,6 +802,13 @@ export default function EditChartPage({ params }: { params: Promise<{ id: string
               </div>
             </CardContent>
           </Card>
+
+          {/* Statistical Analysis */}
+          <StatisticalAnalysisPanel
+            data={generateSampleData(chartType, 6) as Array<Record<string, unknown>>}
+            xField="name"
+            yField="value"
+          />
 
           {/* Display Options */}
           <Card>

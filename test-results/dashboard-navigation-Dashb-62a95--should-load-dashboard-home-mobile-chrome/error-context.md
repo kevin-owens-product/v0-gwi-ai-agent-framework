@@ -1,0 +1,57 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - link "GWI Agents" [ref=e7] [cursor=pointer]:
+      - /url: /
+      - img [ref=e9]
+      - generic [ref=e19]: GWI Agents
+    - generic [ref=e20]:
+      - heading "Welcome back" [level=1] [ref=e21]
+      - paragraph [ref=e22]: Sign in to your account to continue
+    - generic [ref=e23]:
+      - tablist [ref=e24]:
+        - tab "User" [selected] [ref=e25]:
+          - img
+          - generic [ref=e26]: User
+        - tab "Admin" [ref=e27]:
+          - img
+          - text: Admin
+        - tab "GWI" [ref=e28]:
+          - img
+          - text: GWI
+      - tabpanel "User" [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - generic [ref=e32]: Email
+            - textbox "Email" [ref=e33]:
+              - /placeholder: you@company.com
+          - generic [ref=e34]:
+            - generic [ref=e35]:
+              - generic [ref=e36]: Password
+              - link "Forgot password?" [ref=e37] [cursor=pointer]:
+                - /url: /forgot-password
+            - generic [ref=e38]:
+              - textbox "Password" [ref=e39]:
+                - /placeholder: Enter your password
+              - button [ref=e40]:
+                - img [ref=e41]
+          - button "Sign in to Platform" [ref=e44]
+        - generic [ref=e46]: OR
+        - generic [ref=e47]:
+          - button "Continue with Google" [ref=e48]:
+            - img
+            - text: Continue with Google
+          - button "Continue with Microsoft" [ref=e49]:
+            - img
+            - text: Continue with Microsoft
+        - paragraph [ref=e50]:
+          - text: Don't have an account?
+          - link "Sign up for free" [ref=e51] [cursor=pointer]:
+            - /url: /signup
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e57] [cursor=pointer]:
+    - img [ref=e58]
+  - alert [ref=e61]
+```

@@ -3821,6 +3821,106 @@
       },
       "actions": {
         "openAnalysis": "[JA] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      },
+      "components": {
+        "grid": {
+          "badges": {
+            "base": "[JA] Base: {name}",
+            "metricsAudiences": "[JA] {metrics} metrics × {audiences} audiences",
+            "selected": "[JA] {count} selected"
+          },
+          "baseColumn": "[JA] Base column",
+          "calculatedField": "[JA] Calculated field",
+          "columns": "[JA] Columns",
+          "conditionalFormatting": {
+            "addRule": "[JA] Add Rule",
+            "apply": "[JA] Apply",
+            "background": "[JA] Background",
+            "cancel": "[JA] Cancel",
+            "conditions": {
+              "between": "[JA] Between",
+              "bottomPercent": "[JA] Bottom %",
+              "equalTo": "[JA] Equal to",
+              "greaterThan": "[JA] Greater than",
+              "lessThan": "[JA] Less than",
+              "topPercent": "[JA] Top %"
+            },
+            "description": "[JA] Configure rules to highlight cells based on their values",
+            "newRule": "[JA] New Rule",
+            "text": "[JA] Text",
+            "title": "[JA] Conditional Formatting"
+          },
+          "contextMenu": {
+            "barChart": "[JA] Bar Chart",
+            "copy": "[JA] Copy",
+            "drillDown": "[JA] Drill Down",
+            "editValue": "[JA] Edit Value",
+            "lineChart": "[JA] Line Chart",
+            "pieChart": "[JA] Pie Chart",
+            "setAsBase": "[JA] Set as Base",
+            "visualize": "[JA] Visualize"
+          },
+          "done": "[JA] Done",
+          "drillDown": {
+            "average": "[JA] Average",
+            "breakdownPlaceholder": "[JA] Breakdown view would show demographic or segmentation details for this data point.",
+            "close": "[JA] Close",
+            "currentValue": "[JA] Current Value",
+            "export": "[JA] Export",
+            "metadata": "[JA] Metadata",
+            "source": "[JA] Source",
+            "tabs": {
+              "breakdown": "[JA] Breakdown",
+              "details": "[JA] Details",
+              "trend": "[JA] Trend"
+            },
+            "title": "[JA] Drill Down Analysis",
+            "trendPlaceholder": "[JA] Trend view would show historical data for this metric over time."
+          },
+          "edit": "[JA] Edit",
+          "legend": {
+            "drillDownHint": "[JA] Double-click cell to drill down",
+            "highestInRow": "[JA] Highest in row",
+            "lowestInRow": "[JA] Lowest in row",
+            "multiSelectHint": "[JA] Ctrl+Click to multi-select",
+            "significant": "[JA] Statistically significant (p < 0.05)"
+          },
+          "searchPlaceholder": "[JA] Search metrics...",
+          "settings": "[JA] Grid Settings",
+          "settingsOptions": {
+            "decimalPlaces": "[JA] Decimal Places",
+            "freezeFirstColumn": "[JA] Freeze First Column",
+            "groupByCategory": "[JA] Group by Category",
+            "highlightOnHover": "[JA] Highlight on Hover",
+            "showRowNumbers": "[JA] Show Row Numbers",
+            "showSignificance": "[JA] Show Significance Indicators",
+            "showSparklines": "[JA] Show Sparklines",
+            "showStatistics": "[JA] Show Statistics Columns",
+            "showTotals": "[JA] Show Totals Row"
+          },
+          "table": {
+            "avg": "[JA] Avg",
+            "max": "[JA] Max",
+            "metric": "[JA] Metric",
+            "min": "[JA] Min",
+            "totalAverage": "[JA] Total / Average",
+            "trend": "[JA] Trend"
+          },
+          "title": "[JA] Crosstab Analysis",
+          "tooltip": {
+            "doubleclickToDrillDown": "[JA] Double-click to drill down",
+            "mean": "[JA] Mean",
+            "range": "[JA] Range",
+            "statisticallySignificant": "[JA] Statistically significant"
+          },
+          "viewMode": {
+            "difference": "[JA] Difference",
+            "index": "[JA] Index",
+            "percentage": "[JA] Percentage",
+            "raw": "[JA] Raw Values"
+          },
+          "visibleColumns": "[JA] Visible Columns"
+        }
       }
     },
     "charts": {
@@ -9661,7 +9761,10 @@
         "user_info_url_optional": "[JA] User Info URL (Optional)",
         "viewer": "[JA] VIEWER",
         "x509_certificate": "[JA] X.509 Certificate",
-        "yourclientid": "[JA] your-client-id"
+        "yourclientid": "[JA] your-client-id",
+        "placeholders": {
+          "nameExample": "[JA] e.g., Acme Corp SSO"
+        }
       },
       "domains": {
         "title": "ドメイン管理",
@@ -10209,9 +10312,21 @@
         }
       },
       "title": "アイデンティティ管理",
-      "description": "ID プロバイダー、ドメイン、ユーザー プロビジョニングを管理する"
+      "description": "ID プロバイダー、ドメイン、ユーザー プロビジョニングを管理する",
+      "roles": {
+        "admin": "[JA] Admin",
+        "member": "[JA] Member",
+        "viewer": "[JA] Viewer"
+      }
     },
-    "security": "[JA] security",
+    "security": {
+      "sessions": {
+        "statuses": {
+          "activeOnly": "[JA] Active Only",
+          "allSessions": "[JA] All Sessions"
+        }
+      }
+    },
     "scim": {
       "title": "SCIMインテグレーション",
       "description": "SCIM 2.0を使用した自動ユーザープロビジョニングを管理します",
@@ -11669,7 +11784,20 @@
         "grantFeatureFailed": "[JA] Failed to grant feature",
         "revokeEntitlementFailed": "[JA] Failed to revoke entitlement"
       },
-      " ": "[JA] [TODO: Translate admin.tenants. ]"
+      " ": "[JA] [TODO: Translate admin.tenants. ]",
+      "suspensionTypes": {
+        "billingHold": "[JA] Billing Hold",
+        "full": "[JA] Full Suspension",
+        "investigation": "[JA] Under Investigation",
+        "partial": "[JA] Partial (Limited Access)"
+      },
+      "placeholders": {
+        "chooseFeature": "[JA] Choose a feature...",
+        "choosePlan": "[JA] Choose a plan...",
+        "reasonForSuspension": "[JA] Enter the reason for suspension...",
+        "whyFeatureGranted": "[JA] Why is this feature being granted?",
+        "whyPlanAssigned": "[JA] Why is this plan being assigned?"
+      }
     },
     "users": {
       "title": "ユーザー管理",
@@ -12692,7 +12820,11 @@
           "timeline": "[JA] [TODO: Translate admin.operations.incidents.detail.timeline]",
           "addUpdate": "[JA] [TODO: Translate admin.operations.incidents.detail.addUpdate]",
           "updatePlaceholder": "[JA] [TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
-          "postUpdate": "[JA] [TODO: Translate admin.operations.incidents.detail.postUpdate]"
+          "postUpdate": "[JA] [TODO: Translate admin.operations.incidents.detail.postUpdate]",
+          "changeStatusOptional": "[JA] Change status (optional)",
+          "documentRootCause": "[JA] Document the root cause...",
+          "enterUpdate": "[JA] Enter your update...",
+          "impactPlaceholder": "[JA] Describe the impact of this incident..."
         },
         "stats": {
           "totalIncidents": "[JA] [TODO: Translate admin.operations.incidents.stats.totalIncidents]",
@@ -12891,7 +13023,10 @@
           "startRollout": "ロールアウトの開始",
           "complete": "完了",
           "rollback": "ロールバック",
-          "cancel": "キャンセル"
+          "cancel": "キャンセル",
+          "bugFixTitle": "[JA] Bug fix title",
+          "breakingChangeTitle": "[JA] Breaking change title",
+          "featureTitle": "[JA] Feature title"
         },
         "bulk": {
           "cancelSelected": "選択をキャンセル",
@@ -13006,7 +13141,8 @@
           "memory": "メモリ",
           "storage": "ストレージ",
           "connections": "接続",
-          "queueDepth": "キューの深さ"
+          "queueDepth": "キューの深さ",
+          "bandwidth": "[JA] Bandwidth"
         },
         "status": {
           "normal": "普通",
@@ -13053,6 +13189,17 @@
           "createFailed": "容量メトリックの作成に失敗しました",
           "updateFailed": "容量メトリックの更新に失敗しました",
           "deleteFailed": "容量メトリックの削除に失敗しました"
+        },
+        "units": {
+          "connections": "[JA] Connections",
+          "gb": "[JA] Gigabytes (GB)",
+          "messages": "[JA] Messages",
+          "percent": "[JA] Percent (%)",
+          "tb": "[JA] Terabytes (TB)"
+        },
+        "placeholders": {
+          "regionExample": "[JA] e.g., us-east-1",
+          "serviceExample": "[JA] e.g., API Gateway"
         }
       },
       "services": {
@@ -13873,6 +14020,12 @@
         "of": "の",
         "previous": "前の",
         "next": "次"
+      },
+      "categories": {
+        "all": "[JA] All",
+        "detractors": "[JA] Detractors",
+        "passives": "[JA] Passives",
+        "promoters": "[JA] Promoters"
       }
     },
     "rules": {
@@ -13945,7 +14098,14 @@
       }
     },
     "status": "[JA] Status",
-    "features": "[JA] features",
+    "features": {
+      "types": {
+        "boolean": "[JA] Boolean",
+        "json": "[JA] JSON",
+        "number": "[JA] Number",
+        "string": "[JA] String"
+      }
+    },
     "1_for_unlimited": "[JA] -1 for unlimited",
     "a_brief_description": "[JA] A brief description",
     "a_brief_description_of": "[JA] A brief description of this plan...",
@@ -14243,7 +14403,22 @@
     "why_is_this_feature": "[JA] Why is this feature being granted?",
     "why_is_this_plan": "[JA] Why is this plan being assigned?",
     "workflows": "[JA] Workflows",
-    "yearly_price_cents": "[JA] Yearly Price (cents)"
+    "yearly_price_cents": "[JA] Yearly Price (cents)",
+    "notifications": {
+      "types": {
+        "alert": "[JA] Alert",
+        "feature": "[JA] Feature",
+        "info": "[JA] Information",
+        "maintenance": "[JA] Maintenance",
+        "promotion": "[JA] Promotion",
+        "warning": "[JA] Warning"
+      },
+      "targetTypes": {
+        "all": "[JA] All Users",
+        "specificOrgs": "[JA] Specific Orgs",
+        "specificPlans": "[JA] Specific Plans"
+      }
+    }
   },
   "ui": {
     "dialog": {

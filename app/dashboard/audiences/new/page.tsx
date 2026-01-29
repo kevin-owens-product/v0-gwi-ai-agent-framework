@@ -7,10 +7,15 @@ import { Label } from "@/components/ui/label"
 import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Plus, X, Sparkles, Loader2 } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
+import { ArrowLeft, Plus, X, Sparkles, Loader2, Users, Wand2, Filter } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
+import { AIAudienceBuilder } from "@/components/audiences/ai-audience-builder"
+import { AdvancedSegmentationBuilder, FilterGroup } from "@/components/audiences/advanced-segmentation-builder"
+import { AudienceSizeEstimator } from "@/components/audiences/audience-size-estimator"
 
 export default function NewAudiencePage() {
   const router = useRouter()
@@ -20,8 +25,42 @@ export default function NewAudiencePage() {
   const [aiQuery, setAiQuery] = useState("")
   const [selectedMarkets, setSelectedMarkets] = useState<string[]>(["Global"])
   const [attributes, setAttributes] = useState<{ dimension: string; operator: string; value: string }[]>([])
+  const [filterGroups, setFilterGroups] = useState<FilterGroup[]>([])
+  const [estimatedSize, setEstimatedSize] = useState<number | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState("")
+  const [builderMode, setBuilderMode] = useState<"ai" | "advanced" | "manual">("ai")
+
+  const handleAICriteriaGenerated = (criteria: Array<{ dimension: string; operator: string; value: string | number | [number, number]; confidence: number }>, size: number) => {
+    // Convert AI criteria to attributes format
+    const newAttributes = criteria.map(c => ({
+      dimension: c.dimension,
+      operator: c.operator,
+      value: Array.isArray(c.value) ? `${c.value[0]}-${c.value[1]}` : String(c.value),
+    }))
+    setAttributes(newAttributes)
+    setEstimatedSize(size)
+  }
+
+  const handleAdvancedCriteriaChange = (groups: FilterGroup[]) => {
+    setFilterGroups(groups)
+    // Convert filter groups to attributes format
+    const allAttributes: { dimension: string; operator: string; value: string }[] = []
+    groups.forEach(group => {
+      group.conditions.forEach(condition => {
+        allAttributes.push({
+          dimension: condition.dimension,
+          operator: condition.operator,
+          value: Array.isArray(condition.value) ? `${condition.value[0]}-${condition.value[1]}` : String(condition.value),
+        })
+      })
+    })
+    setAttributes(allAttributes)
+  }
+
+  const handleEstimationChange = (estimation: { totalSize: number }) => {
+    setEstimatedSize(estimation.totalSize)
+  }
 
   const handleSave = async () => {
     if (!name.trim()) {
@@ -33,6 +72,20 @@ export default function NewAudiencePage() {
     setError("")
 
     try {
+      // Build criteria based on builder mode
+      let criteria: unknown
+      if (builderMode === "advanced" && filterGroups.length > 0) {
+        criteria = {
+          groups: filterGroups,
+          logic: "AND", // Logic between groups
+        }
+      } else {
+        criteria = {
+          attributes,
+          aiQuery: aiQuery.trim(),
+        }
+      }
+
       const response = await fetch("/api/v1/audiences", {
         method: "POST",
         credentials: 'include',
@@ -41,10 +94,8 @@ export default function NewAudiencePage() {
           name: name.trim(),
           description: description.trim(),
           markets: selectedMarkets,
-          criteria: {
-            attributes,
-            aiQuery: aiQuery.trim(),
-          },
+          criteria,
+          size: estimatedSize,
         }),
       })
 
@@ -102,100 +153,117 @@ export default function NewAudiencePage() {
             </div>
           </Card>
 
-          {/* AI Query Builder */}
-          <Card className="p-6 space-y-4">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-accent" />
-              <h2 className="text-lg font-semibold">{t("aiQuery.title")}</h2>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {t("aiQuery.description")}
-            </p>
-            <Textarea
-              placeholder={t("aiQuery.placeholder")}
-              value={aiQuery}
-              onChange={(e) => setAiQuery(e.target.value)}
-              rows={3}
-            />
-            <Button variant="outline" className="w-full bg-transparent">
-              <Sparkles className="h-4 w-4 mr-2" />
-              {t("aiQuery.generateButton")}
-            </Button>
-          </Card>
+          {/* Builder Mode Selector */}
+          <Card className="p-6">
+            <Tabs value={builderMode} onValueChange={(v) => setBuilderMode(v as typeof builderMode)}>
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="ai" className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4" />
+                  AI Builder
+                </TabsTrigger>
+                <TabsTrigger value="advanced" className="flex items-center gap-2">
+                  <Filter className="h-4 w-4" />
+                  Advanced
+                </TabsTrigger>
+                <TabsTrigger value="manual" className="flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  Manual
+                </TabsTrigger>
+              </TabsList>
 
-          {/* Manual Attributes */}
-          <Card className="p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">{t("attributes.title")}</h2>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  setAttributes([...attributes, { dimension: "age", operator: "between", value: "25-34" }])
-                }
-              >
-                <Plus className="h-4 w-4 mr-1" />
-                {t("attributes.add")}
-              </Button>
-            </div>
+              <TabsContent value="ai" className="mt-4">
+                <AIAudienceBuilder
+                  onCriteriaGenerated={handleAICriteriaGenerated}
+                  initialQuery={aiQuery}
+                  markets={selectedMarkets}
+                />
+              </TabsContent>
 
-            <div className="space-y-3">
-              {attributes.map((attr, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <Select
-                    value={attr.dimension}
-                    onValueChange={(v) => {
-                      const newAttrs = [...attributes]
-                      newAttrs[index].dimension = v
-                      setAttributes(newAttrs)
-                    }}
-                  >
-                    <SelectTrigger className="w-40">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="age">{t("attributes.age")}</SelectItem>
-                      <SelectItem value="gender">{t("attributes.gender")}</SelectItem>
-                      <SelectItem value="income">{t("attributes.income")}</SelectItem>
-                      <SelectItem value="interests">{t("attributes.interests")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select
-                    value={attr.operator}
-                    onValueChange={(v) => {
-                      const newAttrs = [...attributes]
-                      newAttrs[index].operator = v
-                      setAttributes(newAttrs)
-                    }}
-                  >
-                    <SelectTrigger className="w-32">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="is">{t("attributes.is")}</SelectItem>
-                      <SelectItem value="between">{t("attributes.between")}</SelectItem>
-                      <SelectItem value="contains">{t("attributes.contains")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    className="flex-1"
-                    value={attr.value}
-                    onChange={(e) => {
-                      const newAttrs = [...attributes]
-                      newAttrs[index].value = e.target.value
-                      setAttributes(newAttrs)
-                    }}
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setAttributes(attributes.filter((_, i) => i !== index))}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
+              <TabsContent value="advanced" className="mt-4">
+                <AdvancedSegmentationBuilder
+                  onCriteriaChange={handleAdvancedCriteriaChange}
+                  initialGroups={filterGroups}
+                />
+              </TabsContent>
+
+              <TabsContent value="manual" className="mt-4">
+                <Card>
+                  <div className="p-6 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-lg font-semibold">{t("attributes.title")}</h2>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setAttributes([...attributes, { dimension: "age", operator: "between", value: "25-34" }])
+                        }
+                      >
+                        <Plus className="h-4 w-4 mr-1" />
+                        {t("attributes.add")}
+                      </Button>
+                    </div>
+
+                    <div className="space-y-3">
+                      {attributes.map((attr, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <Select
+                            value={attr.dimension}
+                            onValueChange={(v) => {
+                              const newAttrs = [...attributes]
+                              newAttrs[index].dimension = v
+                              setAttributes(newAttrs)
+                            }}
+                          >
+                            <SelectTrigger className="w-40">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="age">{t("attributes.age")}</SelectItem>
+                              <SelectItem value="gender">{t("attributes.gender")}</SelectItem>
+                              <SelectItem value="income">{t("attributes.income")}</SelectItem>
+                              <SelectItem value="interests">{t("attributes.interests")}</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <Select
+                            value={attr.operator}
+                            onValueChange={(v) => {
+                              const newAttrs = [...attributes]
+                              newAttrs[index].operator = v
+                              setAttributes(newAttrs)
+                            }}
+                          >
+                            <SelectTrigger className="w-32">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="is">{t("attributes.is")}</SelectItem>
+                              <SelectItem value="between">{t("attributes.between")}</SelectItem>
+                              <SelectItem value="contains">{t("attributes.contains")}</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <Input
+                            className="flex-1"
+                            value={attr.value}
+                            onChange={(e) => {
+                              const newAttrs = [...attributes]
+                              newAttrs[index].value = e.target.value
+                              setAttributes(newAttrs)
+                            }}
+                          />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setAttributes(attributes.filter((_, i) => i !== index))}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </Card>
         </div>
 
@@ -204,26 +272,40 @@ export default function NewAudiencePage() {
           {/* Markets */}
           <Card className="p-6 space-y-4">
             <h2 className="text-lg font-semibold">{t("markets.title")}</h2>
-            <Select value={selectedMarkets[0]} onValueChange={(v) => setSelectedMarkets([v])}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Global">{t("markets.global")}</SelectItem>
-                <SelectItem value="US">{t("markets.us")}</SelectItem>
-                <SelectItem value="UK">{t("markets.uk")}</SelectItem>
-                <SelectItem value="DE">{t("markets.de")}</SelectItem>
-                <SelectItem value="JP">{t("markets.jp")}</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="space-y-2">
+              <div className="flex flex-wrap gap-2">
+                {["Global", "US", "UK", "DE", "FR", "JP", "AU", "CA", "NL", "KR", "SG", "HK", "UAE", "BR", "IT"].map((market) => (
+                  <Badge
+                    key={market}
+                    variant={selectedMarkets.includes(market) ? "default" : "outline"}
+                    className="cursor-pointer hover:bg-primary/80 transition-colors"
+                    onClick={() => {
+                      if (selectedMarkets.includes(market)) {
+                        setSelectedMarkets(selectedMarkets.filter((m) => m !== market))
+                      } else {
+                        setSelectedMarkets([...selectedMarkets, market])
+                      }
+                    }}
+                  >
+                    {market}
+                    {selectedMarkets.includes(market) && (
+                      <X className="h-3 w-3 ml-1" />
+                    )}
+                  </Badge>
+                ))}
+              </div>
+              {selectedMarkets.length === 0 && (
+                <p className="text-xs text-muted-foreground">Select at least one market</p>
+              )}
+            </div>
           </Card>
 
           {/* Estimated Reach */}
-          <Card className="p-6 space-y-2">
-            <h2 className="text-lg font-semibold">{t("estimatedReach.title")}</h2>
-            <div className="text-3xl font-bold">1.2M</div>
-            <p className="text-sm text-muted-foreground">{t("estimatedReach.matchCriteria")}</p>
-          </Card>
+          <AudienceSizeEstimator
+            criteria={builderMode === "advanced" ? { groups: filterGroups } : { attributes, aiQuery }}
+            markets={selectedMarkets}
+            onEstimationChange={handleEstimationChange}
+          />
 
           {/* Actions */}
           <div className="space-y-2">

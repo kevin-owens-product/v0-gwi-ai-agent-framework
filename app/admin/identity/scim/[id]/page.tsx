@@ -91,6 +91,7 @@ export default function SCIMDetailPage() {
   const router = useRouter()
   const scimId = params.id as string
   const t = useTranslations("admin.identity.scim")
+  const tIdentity = useTranslations("admin.identity")
 
   const [scimIntegration, setScimIntegration] = useState<SCIMIntegration | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -696,9 +697,9 @@ export default function SCIMDetailPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="VIEWER">Viewer</SelectItem>
-                        <SelectItem value="MEMBER">Member</SelectItem>
-                        <SelectItem value="ADMIN">Admin</SelectItem>
+                        <SelectItem value="VIEWER">{tIdentity("roles.viewer")}</SelectItem>
+                        <SelectItem value="MEMBER">{tIdentity("roles.member")}</SelectItem>
+                        <SelectItem value="ADMIN">{tIdentity("roles.admin")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

@@ -68,6 +68,7 @@ interface SessionStats {
 
 export default function SessionsPage() {
   const t = useTranslations("admin.security.sessions")
+  const tSecurity = useTranslations("admin.security")
   const tCommon = useTranslations("common")
   const [sessions, setSessions] = useState<PlatformSession[]>([])
   const [loading, setLoading] = useState(true)
@@ -500,8 +501,8 @@ export default function SessionsPage() {
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="true">Active Only</SelectItem>
-                <SelectItem value="false">All Sessions</SelectItem>
+                <SelectItem value="true">{tSecurity("sessions.statuses.activeOnly")}</SelectItem>
+                <SelectItem value="false">{tSecurity("sessions.statuses.allSessions")}</SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline" onClick={handleSearch}>

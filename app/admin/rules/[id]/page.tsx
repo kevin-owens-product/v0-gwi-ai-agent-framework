@@ -323,14 +323,14 @@ export default function SystemRuleDetailPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="RATE_LIMIT">Rate Limit</SelectItem>
-                          <SelectItem value="CONTENT_POLICY">Content Policy</SelectItem>
-                          <SelectItem value="SECURITY">Security</SelectItem>
-                          <SelectItem value="BILLING">Billing</SelectItem>
-                          <SelectItem value="USAGE">Usage</SelectItem>
-                          <SelectItem value="COMPLIANCE">Compliance</SelectItem>
-                          <SelectItem value="NOTIFICATION">Notification</SelectItem>
-                          <SelectItem value="AUTO_SUSPEND">Auto Suspend</SelectItem>
+                          <SelectItem value="RATE_LIMIT">{t("types.rateLimit")}</SelectItem>
+                          <SelectItem value="CONTENT_POLICY">{t("types.contentPolicy")}</SelectItem>
+                          <SelectItem value="SECURITY">{t("types.security")}</SelectItem>
+                          <SelectItem value="BILLING">{t("types.billing")}</SelectItem>
+                          <SelectItem value="USAGE">{t("types.usage")}</SelectItem>
+                          <SelectItem value="COMPLIANCE">{t("types.compliance")}</SelectItem>
+                          <SelectItem value="NOTIFICATION">{t("types.notification")}</SelectItem>
+                          <SelectItem value="AUTO_SUSPEND">{t("types.autoSuspend")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

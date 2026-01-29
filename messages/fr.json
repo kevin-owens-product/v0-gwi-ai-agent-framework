@@ -3821,6 +3821,106 @@
       },
       "actions": {
         "openAnalysis": "[FR] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      },
+      "components": {
+        "grid": {
+          "badges": {
+            "base": "[FR] Base: {name}",
+            "metricsAudiences": "[FR] {metrics} metrics × {audiences} audiences",
+            "selected": "[FR] {count} selected"
+          },
+          "baseColumn": "[FR] Base column",
+          "calculatedField": "[FR] Calculated field",
+          "columns": "[FR] Columns",
+          "conditionalFormatting": {
+            "addRule": "[FR] Add Rule",
+            "apply": "[FR] Apply",
+            "background": "[FR] Background",
+            "cancel": "[FR] Cancel",
+            "conditions": {
+              "between": "[FR] Between",
+              "bottomPercent": "[FR] Bottom %",
+              "equalTo": "[FR] Equal to",
+              "greaterThan": "[FR] Greater than",
+              "lessThan": "[FR] Less than",
+              "topPercent": "[FR] Top %"
+            },
+            "description": "[FR] Configure rules to highlight cells based on their values",
+            "newRule": "[FR] New Rule",
+            "text": "[FR] Text",
+            "title": "[FR] Conditional Formatting"
+          },
+          "contextMenu": {
+            "barChart": "[FR] Bar Chart",
+            "copy": "[FR] Copy",
+            "drillDown": "[FR] Drill Down",
+            "editValue": "[FR] Edit Value",
+            "lineChart": "[FR] Line Chart",
+            "pieChart": "[FR] Pie Chart",
+            "setAsBase": "[FR] Set as Base",
+            "visualize": "[FR] Visualize"
+          },
+          "done": "[FR] Done",
+          "drillDown": {
+            "average": "[FR] Average",
+            "breakdownPlaceholder": "[FR] Breakdown view would show demographic or segmentation details for this data point.",
+            "close": "[FR] Close",
+            "currentValue": "[FR] Current Value",
+            "export": "[FR] Export",
+            "metadata": "[FR] Metadata",
+            "source": "[FR] Source",
+            "tabs": {
+              "breakdown": "[FR] Breakdown",
+              "details": "[FR] Details",
+              "trend": "[FR] Trend"
+            },
+            "title": "[FR] Drill Down Analysis",
+            "trendPlaceholder": "[FR] Trend view would show historical data for this metric over time."
+          },
+          "edit": "[FR] Edit",
+          "legend": {
+            "drillDownHint": "[FR] Double-click cell to drill down",
+            "highestInRow": "[FR] Highest in row",
+            "lowestInRow": "[FR] Lowest in row",
+            "multiSelectHint": "[FR] Ctrl+Click to multi-select",
+            "significant": "[FR] Statistically significant (p < 0.05)"
+          },
+          "searchPlaceholder": "[FR] Search metrics...",
+          "settings": "[FR] Grid Settings",
+          "settingsOptions": {
+            "decimalPlaces": "[FR] Decimal Places",
+            "freezeFirstColumn": "[FR] Freeze First Column",
+            "groupByCategory": "[FR] Group by Category",
+            "highlightOnHover": "[FR] Highlight on Hover",
+            "showRowNumbers": "[FR] Show Row Numbers",
+            "showSignificance": "[FR] Show Significance Indicators",
+            "showSparklines": "[FR] Show Sparklines",
+            "showStatistics": "[FR] Show Statistics Columns",
+            "showTotals": "[FR] Show Totals Row"
+          },
+          "table": {
+            "avg": "[FR] Avg",
+            "max": "[FR] Max",
+            "metric": "[FR] Metric",
+            "min": "[FR] Min",
+            "totalAverage": "[FR] Total / Average",
+            "trend": "[FR] Trend"
+          },
+          "title": "[FR] Crosstab Analysis",
+          "tooltip": {
+            "doubleclickToDrillDown": "[FR] Double-click to drill down",
+            "mean": "[FR] Mean",
+            "range": "[FR] Range",
+            "statisticallySignificant": "[FR] Statistically significant"
+          },
+          "viewMode": {
+            "difference": "[FR] Difference",
+            "index": "[FR] Index",
+            "percentage": "[FR] Percentage",
+            "raw": "[FR] Raw Values"
+          },
+          "visibleColumns": "[FR] Visible Columns"
+        }
       }
     },
     "charts": {
@@ -9661,7 +9761,10 @@
         "user_info_url_optional": "[FR] User Info URL (Optional)",
         "viewer": "[FR] VIEWER",
         "x509_certificate": "[FR] X.509 Certificate",
-        "yourclientid": "[FR] your-client-id"
+        "yourclientid": "[FR] your-client-id",
+        "placeholders": {
+          "nameExample": "[FR] e.g., Acme Corp SSO"
+        }
       },
       "domains": {
         "title": "Gestion des domaines",
@@ -10209,9 +10312,21 @@
         }
       },
       "title": "Gestion des identités",
-      "description": "Gérer les fournisseurs d'identité, les domaines et le provisionnement des utilisateurs"
+      "description": "Gérer les fournisseurs d'identité, les domaines et le provisionnement des utilisateurs",
+      "roles": {
+        "admin": "[FR] Admin",
+        "member": "[FR] Member",
+        "viewer": "[FR] Viewer"
+      }
     },
-    "security": "[FR] security",
+    "security": {
+      "sessions": {
+        "statuses": {
+          "activeOnly": "[FR] Active Only",
+          "allSessions": "[FR] All Sessions"
+        }
+      }
+    },
     "scim": {
       "title": "Integrations SCIM",
       "description": "Gerer le provisionnement automatique des utilisateurs avec SCIM 2.0",
@@ -11669,7 +11784,20 @@
         "grantFeatureFailed": "[FR] Failed to grant feature",
         "revokeEntitlementFailed": "[FR] Failed to revoke entitlement"
       },
-      " ": "[FR] [TODO: Translate admin.tenants. ]"
+      " ": "[FR] [TODO: Translate admin.tenants. ]",
+      "suspensionTypes": {
+        "billingHold": "[FR] Billing Hold",
+        "full": "[FR] Full Suspension",
+        "investigation": "[FR] Under Investigation",
+        "partial": "[FR] Partial (Limited Access)"
+      },
+      "placeholders": {
+        "chooseFeature": "[FR] Choose a feature...",
+        "choosePlan": "[FR] Choose a plan...",
+        "reasonForSuspension": "[FR] Enter the reason for suspension...",
+        "whyFeatureGranted": "[FR] Why is this feature being granted?",
+        "whyPlanAssigned": "[FR] Why is this plan being assigned?"
+      }
     },
     "users": {
       "title": "Gestion des utilisateurs",
@@ -12692,7 +12820,11 @@
           "timeline": "[FR] [TODO: Translate admin.operations.incidents.detail.timeline]",
           "addUpdate": "[FR] [TODO: Translate admin.operations.incidents.detail.addUpdate]",
           "updatePlaceholder": "[FR] [TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
-          "postUpdate": "[FR] [TODO: Translate admin.operations.incidents.detail.postUpdate]"
+          "postUpdate": "[FR] [TODO: Translate admin.operations.incidents.detail.postUpdate]",
+          "changeStatusOptional": "[FR] Change status (optional)",
+          "documentRootCause": "[FR] Document the root cause...",
+          "enterUpdate": "[FR] Enter your update...",
+          "impactPlaceholder": "[FR] Describe the impact of this incident..."
         },
         "stats": {
           "totalIncidents": "[FR] [TODO: Translate admin.operations.incidents.stats.totalIncidents]",
@@ -12891,7 +13023,10 @@
           "startRollout": "Démarrer le déploiement",
           "complete": "Complète",
           "rollback": "Restauration",
-          "cancel": "Annuler"
+          "cancel": "Annuler",
+          "bugFixTitle": "[FR] Bug fix title",
+          "breakingChangeTitle": "[FR] Breaking change title",
+          "featureTitle": "[FR] Feature title"
         },
         "bulk": {
           "cancelSelected": "Annuler la sélection",
@@ -13006,7 +13141,8 @@
           "memory": "Mémoire",
           "storage": "Stockage",
           "connections": "Relations",
-          "queueDepth": "Profondeur de la file d'attente"
+          "queueDepth": "Profondeur de la file d'attente",
+          "bandwidth": "[FR] Bandwidth"
         },
         "status": {
           "normal": "Normale",
@@ -13053,6 +13189,17 @@
           "createFailed": "Échec de la création de la métrique de capacité",
           "updateFailed": "Échec de la mise à jour de la métrique de capacité",
           "deleteFailed": "Échec de la suppression de la métrique de capacité"
+        },
+        "units": {
+          "connections": "[FR] Connections",
+          "gb": "[FR] Gigabytes (GB)",
+          "messages": "[FR] Messages",
+          "percent": "[FR] Percent (%)",
+          "tb": "[FR] Terabytes (TB)"
+        },
+        "placeholders": {
+          "regionExample": "[FR] e.g., us-east-1",
+          "serviceExample": "[FR] e.g., API Gateway"
         }
       },
       "services": {
@@ -13873,6 +14020,12 @@
         "of": "de",
         "previous": "Précédente",
         "next": "Suivante"
+      },
+      "categories": {
+        "all": "[FR] All",
+        "detractors": "[FR] Detractors",
+        "passives": "[FR] Passives",
+        "promoters": "[FR] Promoters"
       }
     },
     "rules": {
@@ -13945,7 +14098,14 @@
       }
     },
     "status": "[FR] Status",
-    "features": "[FR] features",
+    "features": {
+      "types": {
+        "boolean": "[FR] Boolean",
+        "json": "[FR] JSON",
+        "number": "[FR] Number",
+        "string": "[FR] String"
+      }
+    },
     "1_for_unlimited": "[FR] -1 for unlimited",
     "a_brief_description": "[FR] A brief description",
     "a_brief_description_of": "[FR] A brief description of this plan...",
@@ -14243,7 +14403,22 @@
     "why_is_this_feature": "[FR] Why is this feature being granted?",
     "why_is_this_plan": "[FR] Why is this plan being assigned?",
     "workflows": "[FR] Workflows",
-    "yearly_price_cents": "[FR] Yearly Price (cents)"
+    "yearly_price_cents": "[FR] Yearly Price (cents)",
+    "notifications": {
+      "types": {
+        "alert": "[FR] Alert",
+        "feature": "[FR] Feature",
+        "info": "[FR] Information",
+        "maintenance": "[FR] Maintenance",
+        "promotion": "[FR] Promotion",
+        "warning": "[FR] Warning"
+      },
+      "targetTypes": {
+        "all": "[FR] All Users",
+        "specificOrgs": "[FR] Specific Orgs",
+        "specificPlans": "[FR] Specific Plans"
+      }
+    }
   },
   "ui": {
     "dialog": {

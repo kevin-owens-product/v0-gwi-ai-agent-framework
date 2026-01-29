@@ -8,6 +8,7 @@
 
 import { useState, useEffect, useCallback, use } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -100,6 +101,7 @@ export default function NPSSurveyDetailPage({
 }) {
   const { id } = use(params)
   const router = useRouter()
+  const t = useTranslations("admin.nps")
   const [survey, setSurvey] = useState<NPSSurvey | null>(null)
   const [responses, setResponses] = useState<NPSResponse[]>([])
   const [analytics, setAnalytics] = useState<Analytics | null>(null)

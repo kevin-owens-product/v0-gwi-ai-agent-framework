@@ -3821,6 +3821,106 @@
       },
       "actions": {
         "openAnalysis": "[BN] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      },
+      "components": {
+        "grid": {
+          "badges": {
+            "base": "[BN] Base: {name}",
+            "metricsAudiences": "[BN] {metrics} metrics × {audiences} audiences",
+            "selected": "[BN] {count} selected"
+          },
+          "baseColumn": "[BN] Base column",
+          "calculatedField": "[BN] Calculated field",
+          "columns": "[BN] Columns",
+          "conditionalFormatting": {
+            "addRule": "[BN] Add Rule",
+            "apply": "[BN] Apply",
+            "background": "[BN] Background",
+            "cancel": "[BN] Cancel",
+            "conditions": {
+              "between": "[BN] Between",
+              "bottomPercent": "[BN] Bottom %",
+              "equalTo": "[BN] Equal to",
+              "greaterThan": "[BN] Greater than",
+              "lessThan": "[BN] Less than",
+              "topPercent": "[BN] Top %"
+            },
+            "description": "[BN] Configure rules to highlight cells based on their values",
+            "newRule": "[BN] New Rule",
+            "text": "[BN] Text",
+            "title": "[BN] Conditional Formatting"
+          },
+          "contextMenu": {
+            "barChart": "[BN] Bar Chart",
+            "copy": "[BN] Copy",
+            "drillDown": "[BN] Drill Down",
+            "editValue": "[BN] Edit Value",
+            "lineChart": "[BN] Line Chart",
+            "pieChart": "[BN] Pie Chart",
+            "setAsBase": "[BN] Set as Base",
+            "visualize": "[BN] Visualize"
+          },
+          "done": "[BN] Done",
+          "drillDown": {
+            "average": "[BN] Average",
+            "breakdownPlaceholder": "[BN] Breakdown view would show demographic or segmentation details for this data point.",
+            "close": "[BN] Close",
+            "currentValue": "[BN] Current Value",
+            "export": "[BN] Export",
+            "metadata": "[BN] Metadata",
+            "source": "[BN] Source",
+            "tabs": {
+              "breakdown": "[BN] Breakdown",
+              "details": "[BN] Details",
+              "trend": "[BN] Trend"
+            },
+            "title": "[BN] Drill Down Analysis",
+            "trendPlaceholder": "[BN] Trend view would show historical data for this metric over time."
+          },
+          "edit": "[BN] Edit",
+          "legend": {
+            "drillDownHint": "[BN] Double-click cell to drill down",
+            "highestInRow": "[BN] Highest in row",
+            "lowestInRow": "[BN] Lowest in row",
+            "multiSelectHint": "[BN] Ctrl+Click to multi-select",
+            "significant": "[BN] Statistically significant (p < 0.05)"
+          },
+          "searchPlaceholder": "[BN] Search metrics...",
+          "settings": "[BN] Grid Settings",
+          "settingsOptions": {
+            "decimalPlaces": "[BN] Decimal Places",
+            "freezeFirstColumn": "[BN] Freeze First Column",
+            "groupByCategory": "[BN] Group by Category",
+            "highlightOnHover": "[BN] Highlight on Hover",
+            "showRowNumbers": "[BN] Show Row Numbers",
+            "showSignificance": "[BN] Show Significance Indicators",
+            "showSparklines": "[BN] Show Sparklines",
+            "showStatistics": "[BN] Show Statistics Columns",
+            "showTotals": "[BN] Show Totals Row"
+          },
+          "table": {
+            "avg": "[BN] Avg",
+            "max": "[BN] Max",
+            "metric": "[BN] Metric",
+            "min": "[BN] Min",
+            "totalAverage": "[BN] Total / Average",
+            "trend": "[BN] Trend"
+          },
+          "title": "[BN] Crosstab Analysis",
+          "tooltip": {
+            "doubleclickToDrillDown": "[BN] Double-click to drill down",
+            "mean": "[BN] Mean",
+            "range": "[BN] Range",
+            "statisticallySignificant": "[BN] Statistically significant"
+          },
+          "viewMode": {
+            "difference": "[BN] Difference",
+            "index": "[BN] Index",
+            "percentage": "[BN] Percentage",
+            "raw": "[BN] Raw Values"
+          },
+          "visibleColumns": "[BN] Visible Columns"
+        }
       }
     },
     "charts": {
@@ -9661,7 +9761,10 @@
         "user_info_url_optional": "[BN] User Info URL (Optional)",
         "viewer": "[BN] VIEWER",
         "x509_certificate": "[BN] X.509 Certificate",
-        "yourclientid": "[BN] your-client-id"
+        "yourclientid": "[BN] your-client-id",
+        "placeholders": {
+          "nameExample": "[BN] e.g., Acme Corp SSO"
+        }
       },
       "domains": {
         "title": "ডোমেইন ব্যবস্থাপনা",
@@ -10209,9 +10312,21 @@
         }
       },
       "title": "পরিচয় ব্যবস্থাপনা",
-      "description": "পরিচয় প্রদানকারী, ডোমেন এবং ব্যবহারকারীর ব্যবস্থা পরিচালনা করুন"
+      "description": "পরিচয় প্রদানকারী, ডোমেন এবং ব্যবহারকারীর ব্যবস্থা পরিচালনা করুন",
+      "roles": {
+        "admin": "[BN] Admin",
+        "member": "[BN] Member",
+        "viewer": "[BN] Viewer"
+      }
     },
-    "security": "[BN] security",
+    "security": {
+      "sessions": {
+        "statuses": {
+          "activeOnly": "[BN] Active Only",
+          "allSessions": "[BN] All Sessions"
+        }
+      }
+    },
     "scim": {
       "title": "SCIM ইন্টিগ্রেশন",
       "description": "SCIM 2.0 দিয়ে স্বয়ংক্রিয় ব্যবহারকারী প্রভিশনিং পরিচালনা করুন",
@@ -11669,7 +11784,20 @@
         "grantFeatureFailed": "[BN] Failed to grant feature",
         "revokeEntitlementFailed": "[BN] Failed to revoke entitlement"
       },
-      " ": "[BN] [TODO: Translate admin.tenants. ]"
+      " ": "[BN] [TODO: Translate admin.tenants. ]",
+      "suspensionTypes": {
+        "billingHold": "[BN] Billing Hold",
+        "full": "[BN] Full Suspension",
+        "investigation": "[BN] Under Investigation",
+        "partial": "[BN] Partial (Limited Access)"
+      },
+      "placeholders": {
+        "chooseFeature": "[BN] Choose a feature...",
+        "choosePlan": "[BN] Choose a plan...",
+        "reasonForSuspension": "[BN] Enter the reason for suspension...",
+        "whyFeatureGranted": "[BN] Why is this feature being granted?",
+        "whyPlanAssigned": "[BN] Why is this plan being assigned?"
+      }
     },
     "users": {
       "title": "ব্যবহারকারী ব্যবস্থাপনা",
@@ -12692,7 +12820,11 @@
           "timeline": "[BN] [TODO: Translate admin.operations.incidents.detail.timeline]",
           "addUpdate": "[BN] [TODO: Translate admin.operations.incidents.detail.addUpdate]",
           "updatePlaceholder": "[BN] [TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
-          "postUpdate": "[BN] [TODO: Translate admin.operations.incidents.detail.postUpdate]"
+          "postUpdate": "[BN] [TODO: Translate admin.operations.incidents.detail.postUpdate]",
+          "changeStatusOptional": "[BN] Change status (optional)",
+          "documentRootCause": "[BN] Document the root cause...",
+          "enterUpdate": "[BN] Enter your update...",
+          "impactPlaceholder": "[BN] Describe the impact of this incident..."
         },
         "stats": {
           "totalIncidents": "[BN] [TODO: Translate admin.operations.incidents.stats.totalIncidents]",
@@ -12891,7 +13023,10 @@
           "startRollout": "রোলআউট শুরু করুন",
           "complete": "সম্পূর্ণ",
           "rollback": "রোলব্যাক",
-          "cancel": "বাতিল করুন"
+          "cancel": "বাতিল করুন",
+          "bugFixTitle": "[BN] Bug fix title",
+          "breakingChangeTitle": "[BN] Breaking change title",
+          "featureTitle": "[BN] Feature title"
         },
         "bulk": {
           "cancelSelected": "নির্বাচিত বাতিল",
@@ -13006,7 +13141,8 @@
           "memory": "স্মৃতি",
           "storage": "স্টোরেজ",
           "connections": "সংযোগ",
-          "queueDepth": "সারির গভীরতা"
+          "queueDepth": "সারির গভীরতা",
+          "bandwidth": "[BN] Bandwidth"
         },
         "status": {
           "normal": "স্বাভাবিক",
@@ -13053,6 +13189,17 @@
           "createFailed": "ক্ষমতা মেট্রিক তৈরি করতে ব্যর্থ হয়েছে",
           "updateFailed": "ক্ষমতা মেট্রিক আপডেট করতে ব্যর্থ হয়েছে",
           "deleteFailed": "ক্ষমতা মেট্রিক মুছে ফেলতে ব্যর্থ হয়েছে"
+        },
+        "units": {
+          "connections": "[BN] Connections",
+          "gb": "[BN] Gigabytes (GB)",
+          "messages": "[BN] Messages",
+          "percent": "[BN] Percent (%)",
+          "tb": "[BN] Terabytes (TB)"
+        },
+        "placeholders": {
+          "regionExample": "[BN] e.g., us-east-1",
+          "serviceExample": "[BN] e.g., API Gateway"
         }
       },
       "services": {
@@ -13873,6 +14020,12 @@
         "of": "এর",
         "previous": "আগের",
         "next": "পরবর্তী"
+      },
+      "categories": {
+        "all": "[BN] All",
+        "detractors": "[BN] Detractors",
+        "passives": "[BN] Passives",
+        "promoters": "[BN] Promoters"
       }
     },
     "rules": {
@@ -13945,7 +14098,14 @@
       }
     },
     "status": "[BN] Status",
-    "features": "[BN] features",
+    "features": {
+      "types": {
+        "boolean": "[BN] Boolean",
+        "json": "[BN] JSON",
+        "number": "[BN] Number",
+        "string": "[BN] String"
+      }
+    },
     "1_for_unlimited": "[BN] -1 for unlimited",
     "a_brief_description": "[BN] A brief description",
     "a_brief_description_of": "[BN] A brief description of this plan...",
@@ -14243,7 +14403,22 @@
     "why_is_this_feature": "[BN] Why is this feature being granted?",
     "why_is_this_plan": "[BN] Why is this plan being assigned?",
     "workflows": "[BN] Workflows",
-    "yearly_price_cents": "[BN] Yearly Price (cents)"
+    "yearly_price_cents": "[BN] Yearly Price (cents)",
+    "notifications": {
+      "types": {
+        "alert": "[BN] Alert",
+        "feature": "[BN] Feature",
+        "info": "[BN] Information",
+        "maintenance": "[BN] Maintenance",
+        "promotion": "[BN] Promotion",
+        "warning": "[BN] Warning"
+      },
+      "targetTypes": {
+        "all": "[BN] All Users",
+        "specificOrgs": "[BN] Specific Orgs",
+        "specificPlans": "[BN] Specific Plans"
+      }
+    }
   },
   "ui": {
     "dialog": {

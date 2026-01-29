@@ -3339,11 +3339,23 @@
         },
         "healthScore": "Health Score",
         "metricTypes": {
+          "bandwidth": "Bandwidth",
           "connections": "Connections",
           "cpu": "CPU",
           "memory": "Memory",
           "queueDepth": "Queue Depth",
           "storage": "Storage"
+        },
+        "units": {
+          "connections": "Connections",
+          "gb": "Gigabytes (GB)",
+          "messages": "Messages",
+          "percent": "Percent (%)",
+          "tb": "Terabytes (TB)"
+        },
+        "placeholders": {
+          "regionExample": "e.g., us-east-1",
+          "serviceExample": "e.g., API Gateway"
         },
         "noMetrics": "No capacity metrics found",
         "status": {
@@ -3363,6 +3375,17 @@
           "decreasing": "Decreasing",
           "increasing": "Increasing",
           "stable": "Stable"
+        }
+      },
+      "releases": {
+        "placeholders": {
+          "codeNameExample": "e.g., Phoenix",
+          "versionExample": "e.g., 2.5.0"
+        }
+      },
+      "maintenance": {
+        "placeholders": {
+          "titleExample": "e.g., Database upgrade"
         }
       },
       "incidents": {
@@ -3395,7 +3418,11 @@
         "detail": {
           "addUpdate": "Add Update",
           "affectedServices": "Affected Services",
+          "changeStatusOptional": "Change status (optional)",
           "description": "Description",
+          "documentRootCause": "Document the root cause...",
+          "enterUpdate": "Enter your update...",
+          "impactPlaceholder": "Describe the impact of this incident...",
           "postUpdate": "Post Update",
           "timeline": "Timeline",
           "updatePlaceholder": "Update Placeholder",
@@ -3699,8 +3726,11 @@
       },
       "releases": {
         "actions": {
+          "bugFixTitle": "Bug fix title",
+          "breakingChangeTitle": "Breaking change title",
           "cancel": "Cancel",
           "complete": "Complete",
+          "featureTitle": "Feature title",
           "rollback": "Rollback",
           "startRollout": "Start Rollout"
         },
@@ -4692,6 +4722,19 @@
         "professional": "Professional",
         "starter": "Starter"
       },
+      "suspensionTypes": {
+        "billingHold": "Billing Hold",
+        "full": "Full Suspension",
+        "investigation": "Under Investigation",
+        "partial": "Partial (Limited Access)"
+      },
+      "placeholders": {
+        "chooseFeature": "Choose a feature...",
+        "choosePlan": "Choose a plan...",
+        "reasonForSuspension": "Enter the reason for suspension...",
+        "whyFeatureGranted": "Why is this feature being granted?",
+        "whyPlanAssigned": "Why is this plan being assigned?"
+      },
       "reason": "Reason",
       "reasonPlaceholder": "Enter the reason for suspension...",
       "refresh": "Refresh",
@@ -4725,6 +4768,57 @@
       "upgradeToProfessional": "Upgrade to Professional",
       "upgradeToStarter": "Upgrade to Starter",
       "viewHierarchy": "View Hierarchy"
+    },
+    "features": {
+      "types": {
+        "boolean": "Boolean",
+        "json": "JSON",
+        "number": "Number",
+        "string": "String"
+      }
+    },
+    "notifications": {
+      "types": {
+        "alert": "Alert",
+        "feature": "Feature",
+        "info": "Information",
+        "maintenance": "Maintenance",
+        "promotion": "Promotion",
+        "warning": "Warning"
+      },
+      "targetTypes": {
+        "all": "All Users",
+        "specificOrgs": "Specific Orgs",
+        "specificPlans": "Specific Plans"
+      }
+    },
+    "identity": {
+      "roles": {
+        "admin": "Admin",
+        "member": "Member",
+        "viewer": "Viewer"
+      },
+      "sso": {
+        "placeholders": {
+          "nameExample": "e.g., Acme Corp SSO"
+        }
+      }
+    },
+    "security": {
+      "sessions": {
+        "statuses": {
+          "activeOnly": "Active Only",
+          "allSessions": "All Sessions"
+        }
+      }
+    },
+    "nps": {
+      "categories": {
+        "all": "All",
+        "detractors": "Detractors",
+        "passives": "Passives",
+        "promoters": "Promoters"
+      }
     },
     "terabytes_tb": "Terabytes (TB)",
     "terminate_selected_sessions": "Terminate Selected Sessions",
@@ -6100,14 +6194,26 @@
       "slow": "Slow",
       "perRun": "per run"
     },
-    "activity": "activity",
+    "activity": {
+      "liveActivity": "Live Activity",
+      "noRecentActivity": "No recent activity",
+      "runAgentToSeeActivity": "Run an agent to see activity here"
+    },
     "activity_log": "Activity Log",
     "add_note": "Add Note",
     "adtier_adoption_rate": "Ad-Tier Adoption Rate",
     "advisory_preference": "Advisory Preference",
     "affluent_consumers_prioritizing_premium": "Affluent consumers prioritizing premium experiences over goods",
     "age_range": "Age Range",
-    "agents": "agents",
+    "agents": {
+      "agentOrchestrator": "Agent Orchestrator",
+      "manage": "Manage",
+      "noAgentsYet": "No agents yet",
+      "createAgent": "Create Agent",
+      "runsCount": "{count} run",
+      "runsCountPlural": "{count} runs",
+      "activate": "Activate"
+    },
     "aigenerated_insights": "AI-Generated Insights",
     "alex_kim": "Alex Kim",
     "alex_rivera": "Alex Rivera",
@@ -6773,7 +6879,7 @@
       },
       "description": "Compare audiences across multiple dimensions",
       "empty": {
-        "description": "Get started by creating your first crosstab to compare audiences across multiple dimensions",
+        "description": "Create your first crosstab to compare audiences",
         "title": "No crosstabs yet"
       },
       "featured": {
@@ -7070,10 +7176,6 @@
           "population": "Population Weighted"
         }
       },
-      "empty": {
-        "description": "Create your first crosstab to compare audiences",
-        "title": "No crosstabs yet"
-      },
       "justNow": "Just now",
       "labels": {
         "audienceSegments": "audience segments",
@@ -7119,7 +7221,107 @@
         "recent": "Recent",
         "templates": "Templates"
       },
-      "title": "Crosstabs"
+      "title": "Crosstabs",
+      "components": {
+        "grid": {
+          "badges": {
+            "base": "Base: {name}",
+            "metricsAudiences": "{metrics} metrics × {audiences} audiences",
+            "selected": "{count} selected"
+          },
+          "baseColumn": "Base column",
+          "calculatedField": "Calculated field",
+          "columns": "Columns",
+          "conditionalFormatting": {
+            "addRule": "Add Rule",
+            "apply": "Apply",
+            "background": "Background",
+            "cancel": "Cancel",
+            "conditions": {
+              "between": "Between",
+              "bottomPercent": "Bottom %",
+              "equalTo": "Equal to",
+              "greaterThan": "Greater than",
+              "lessThan": "Less than",
+              "topPercent": "Top %"
+            },
+            "description": "Configure rules to highlight cells based on their values",
+            "newRule": "New Rule",
+            "text": "Text",
+            "title": "Conditional Formatting"
+          },
+          "contextMenu": {
+            "barChart": "Bar Chart",
+            "copy": "Copy",
+            "drillDown": "Drill Down",
+            "editValue": "Edit Value",
+            "lineChart": "Line Chart",
+            "pieChart": "Pie Chart",
+            "setAsBase": "Set as Base",
+            "visualize": "Visualize"
+          },
+          "done": "Done",
+          "drillDown": {
+            "average": "Average",
+            "breakdownPlaceholder": "Breakdown view would show demographic or segmentation details for this data point.",
+            "close": "Close",
+            "currentValue": "Current Value",
+            "export": "Export",
+            "metadata": "Metadata",
+            "source": "Source",
+            "tabs": {
+              "breakdown": "Breakdown",
+              "details": "Details",
+              "trend": "Trend"
+            },
+            "title": "Drill Down Analysis",
+            "trendPlaceholder": "Trend view would show historical data for this metric over time."
+          },
+          "edit": "Edit",
+          "legend": {
+            "drillDownHint": "Double-click cell to drill down",
+            "highestInRow": "Highest in row",
+            "lowestInRow": "Lowest in row",
+            "multiSelectHint": "Ctrl+Click to multi-select",
+            "significant": "Statistically significant (p < 0.05)"
+          },
+          "searchPlaceholder": "Search metrics...",
+          "settings": "Grid Settings",
+          "settingsOptions": {
+            "decimalPlaces": "Decimal Places",
+            "freezeFirstColumn": "Freeze First Column",
+            "groupByCategory": "Group by Category",
+            "highlightOnHover": "Highlight on Hover",
+            "showRowNumbers": "Show Row Numbers",
+            "showSignificance": "Show Significance Indicators",
+            "showSparklines": "Show Sparklines",
+            "showStatistics": "Show Statistics Columns",
+            "showTotals": "Show Totals Row"
+          },
+          "table": {
+            "avg": "Avg",
+            "max": "Max",
+            "metric": "Metric",
+            "min": "Min",
+            "totalAverage": "Total / Average",
+            "trend": "Trend"
+          },
+          "title": "Crosstab Analysis",
+          "tooltip": {
+            "doubleclickToDrillDown": "Double-click to drill down",
+            "mean": "Mean",
+            "range": "Range",
+            "statisticallySignificant": "Statistically significant"
+          },
+          "viewMode": {
+            "difference": "Difference",
+            "index": "Index",
+            "percentage": "Percentage",
+            "raw": "Raw Values"
+          },
+          "visibleColumns": "Visible Columns"
+        }
+      }
     },
     "crypto_ownership_trends": "Crypto Ownership Trends",
     "csv": "csv",
@@ -7357,8 +7559,12 @@
           "settings": "Settings"
         },
         "tags": {
+          "addNewTag": "Add New Tag",
           "addTag": "Add Tag",
-          "manageTags": "Manage Tags"
+          "done": "Done",
+          "manageTags": "Manage Tags",
+          "manageTagsDescription": "Manage Tags Description",
+          "noTagsAdded": "No Tags Added"
         },
         "visibility": {
           "private": "Private",
@@ -7367,24 +7573,12 @@
         "selection": {
           "ofSelected": "{selected} of {total} selected"
         },
-        "tags": {
-          "addNewTag": "Add New Tag",
-          "addTag": "Add Tag",
-          "done": "Done",
-          "manageTags": "Manage Tags",
-          "manageTagsDescription": "Manage Tags Description",
-          "noTagsAdded": "No Tags Added"
-        },
         "title": "Dashboard Details",
         "toast": {
           "deleteSuccess": "Dashboard deleted successfully",
           "duplicateSuccess": "Dashboard duplicated successfully",
           "exportSuccess": "Dashboard exported successfully",
           "saveSuccess": "Dashboard saved successfully"
-        },
-        "visibility": {
-          "private": "Private",
-          "public": "Public"
         }
       },
       "edit": {
@@ -7888,7 +8082,13 @@
     "incremental_reach_by_medium": "Incremental Reach by Medium",
     "individuals_actively_pursuing_early": "Individuals actively pursuing early retirement through aggressive saving, investing, and side income",
     "influencer_trust_levels": "Influencer Trust Levels",
-    "insights": "insights",
+    "insights": {
+      "topInsights": "Top Insights",
+      "newCount": "{count} new",
+      "noInsightsYet": "No insights yet",
+      "runAgentsToGenerate": "Run agents to generate insights",
+      "confidence": "{percent}% confidence"
+    },
     "instagram_data_aligns_with": "Instagram data aligns with our internal tracking",
     "instagram_engagement_by_age": "Instagram Engagement by Age Group",
     "insurance_product_gaps": "Insurance Product Gaps",
@@ -8276,40 +8476,6 @@
         "searchPlaceholder": "Search agents...",
         "solutionAgents": "Solution Agents",
         "title": "Agent Library"
-      },
-      "audiences": {
-        "aiAudienceBuilder": "AI Audience Builder",
-        "aiBuilder": "AI Builder",
-        "aiBuilderDescription": "Describe your target audience in natural language and let AI generate the criteria for you.",
-        "allAudiences": "All Audiences",
-        "avgReach": "Avg. Reach",
-        "compareAudiences": "Compare Audiences",
-        "compareDescription": "Compare demographic and behavioral attributes between audiences.",
-        "createFirstAudience": "Create your first audience to get started",
-        "description": "Build and analyze custom consumer segments",
-        "emptyState": {
-          "action": "Create Audience",
-          "description": "Create your first audience segment to get started",
-          "title": "No audiences yet"
-        },
-        "favorites": "Favorites",
-        "justAdded": "Just added",
-        "marketplace": "Marketplace",
-        "markets": "Markets",
-        "marketsCount": "{count} markets",
-        "newAudience": "New Audience",
-        "noAudiencesYet": "No audiences yet",
-        "recentlyUsed": "Recently Used",
-        "searchPlaceholder": "Search audiences...",
-        "timeAgo": {
-          "days": "{count, plural, one {# day ago} other {# days ago}}",
-          "hours": "{count, plural, one {# hour ago} other {# hours ago}}",
-          "justNow": "Just now"
-        },
-        "title": "Audiences",
-        "totalAudiences": "Total Audiences",
-        "used": "Used {time}",
-        "usedThisWeek": "Used This Week"
       },
       "audiences": {
         "detail": {
@@ -8730,20 +8896,6 @@
         "title": "Usage Over Time"
       }
     },
-    "agents": {
-      "agentOrchestrator": "Agent Orchestrator",
-      "manage": "Manage",
-      "noAgentsYet": "No agents yet",
-      "createAgent": "Create Agent",
-      "runsCount": "{count} run",
-      "runsCountPlural": "{count} runs",
-      "activate": "Activate"
-    },
-    "activity": {
-      "liveActivity": "Live Activity",
-      "noRecentActivity": "No recent activity",
-      "runAgentToSeeActivity": "Run an agent to see activity here"
-    },
     "reports": {
       "recentReports": "Recent Reports",
       "viewAll": "View All",
@@ -8768,13 +8920,6 @@
           "description": "Reports that have been shared with you"
         }
       }
-    },
-    "insights": {
-      "topInsights": "Top Insights",
-      "newCount": "{count} new",
-      "noInsightsYet": "No insights yet",
-      "runAgentsToGenerate": "Run agents to generate insights",
-      "confidence": "{percent}% confidence"
     },
     "audiences": {
       "detail": {

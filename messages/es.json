@@ -3821,6 +3821,106 @@
       },
       "actions": {
         "openAnalysis": "[ES] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      },
+      "components": {
+        "grid": {
+          "badges": {
+            "base": "[ES] Base: {name}",
+            "metricsAudiences": "[ES] {metrics} metrics × {audiences} audiences",
+            "selected": "[ES] {count} selected"
+          },
+          "baseColumn": "[ES] Base column",
+          "calculatedField": "[ES] Calculated field",
+          "columns": "[ES] Columns",
+          "conditionalFormatting": {
+            "addRule": "[ES] Add Rule",
+            "apply": "[ES] Apply",
+            "background": "[ES] Background",
+            "cancel": "[ES] Cancel",
+            "conditions": {
+              "between": "[ES] Between",
+              "bottomPercent": "[ES] Bottom %",
+              "equalTo": "[ES] Equal to",
+              "greaterThan": "[ES] Greater than",
+              "lessThan": "[ES] Less than",
+              "topPercent": "[ES] Top %"
+            },
+            "description": "[ES] Configure rules to highlight cells based on their values",
+            "newRule": "[ES] New Rule",
+            "text": "[ES] Text",
+            "title": "[ES] Conditional Formatting"
+          },
+          "contextMenu": {
+            "barChart": "[ES] Bar Chart",
+            "copy": "[ES] Copy",
+            "drillDown": "[ES] Drill Down",
+            "editValue": "[ES] Edit Value",
+            "lineChart": "[ES] Line Chart",
+            "pieChart": "[ES] Pie Chart",
+            "setAsBase": "[ES] Set as Base",
+            "visualize": "[ES] Visualize"
+          },
+          "done": "[ES] Done",
+          "drillDown": {
+            "average": "[ES] Average",
+            "breakdownPlaceholder": "[ES] Breakdown view would show demographic or segmentation details for this data point.",
+            "close": "[ES] Close",
+            "currentValue": "[ES] Current Value",
+            "export": "[ES] Export",
+            "metadata": "[ES] Metadata",
+            "source": "[ES] Source",
+            "tabs": {
+              "breakdown": "[ES] Breakdown",
+              "details": "[ES] Details",
+              "trend": "[ES] Trend"
+            },
+            "title": "[ES] Drill Down Analysis",
+            "trendPlaceholder": "[ES] Trend view would show historical data for this metric over time."
+          },
+          "edit": "[ES] Edit",
+          "legend": {
+            "drillDownHint": "[ES] Double-click cell to drill down",
+            "highestInRow": "[ES] Highest in row",
+            "lowestInRow": "[ES] Lowest in row",
+            "multiSelectHint": "[ES] Ctrl+Click to multi-select",
+            "significant": "[ES] Statistically significant (p < 0.05)"
+          },
+          "searchPlaceholder": "[ES] Search metrics...",
+          "settings": "[ES] Grid Settings",
+          "settingsOptions": {
+            "decimalPlaces": "[ES] Decimal Places",
+            "freezeFirstColumn": "[ES] Freeze First Column",
+            "groupByCategory": "[ES] Group by Category",
+            "highlightOnHover": "[ES] Highlight on Hover",
+            "showRowNumbers": "[ES] Show Row Numbers",
+            "showSignificance": "[ES] Show Significance Indicators",
+            "showSparklines": "[ES] Show Sparklines",
+            "showStatistics": "[ES] Show Statistics Columns",
+            "showTotals": "[ES] Show Totals Row"
+          },
+          "table": {
+            "avg": "[ES] Avg",
+            "max": "[ES] Max",
+            "metric": "[ES] Metric",
+            "min": "[ES] Min",
+            "totalAverage": "[ES] Total / Average",
+            "trend": "[ES] Trend"
+          },
+          "title": "[ES] Crosstab Analysis",
+          "tooltip": {
+            "doubleclickToDrillDown": "[ES] Double-click to drill down",
+            "mean": "[ES] Mean",
+            "range": "[ES] Range",
+            "statisticallySignificant": "[ES] Statistically significant"
+          },
+          "viewMode": {
+            "difference": "[ES] Difference",
+            "index": "[ES] Index",
+            "percentage": "[ES] Percentage",
+            "raw": "[ES] Raw Values"
+          },
+          "visibleColumns": "[ES] Visible Columns"
+        }
       }
     },
     "charts": {
@@ -9661,7 +9761,10 @@
         "user_info_url_optional": "[ES] User Info URL (Optional)",
         "viewer": "[ES] VIEWER",
         "x509_certificate": "[ES] X.509 Certificate",
-        "yourclientid": "[ES] your-client-id"
+        "yourclientid": "[ES] your-client-id",
+        "placeholders": {
+          "nameExample": "[ES] e.g., Acme Corp SSO"
+        }
       },
       "domains": {
         "title": "Gestión de dominios",
@@ -10209,9 +10312,21 @@
         }
       },
       "title": "Gestión de identidad",
-      "description": "Administrar proveedores de identidad, dominios y aprovisionamiento de usuarios."
+      "description": "Administrar proveedores de identidad, dominios y aprovisionamiento de usuarios.",
+      "roles": {
+        "admin": "[ES] Admin",
+        "member": "[ES] Member",
+        "viewer": "[ES] Viewer"
+      }
     },
-    "security": "[ES] security",
+    "security": {
+      "sessions": {
+        "statuses": {
+          "activeOnly": "[ES] Active Only",
+          "allSessions": "[ES] All Sessions"
+        }
+      }
+    },
     "scim": {
       "title": "Integraciones SCIM",
       "description": "Gestionar aprovisionamiento automatizado de usuarios con SCIM 2.0",
@@ -11669,7 +11784,20 @@
         "grantFeatureFailed": "[ES] Failed to grant feature",
         "revokeEntitlementFailed": "[ES] Failed to revoke entitlement"
       },
-      " ": "[ES] [TODO: Translate admin.tenants. ]"
+      " ": "[ES] [TODO: Translate admin.tenants. ]",
+      "suspensionTypes": {
+        "billingHold": "[ES] Billing Hold",
+        "full": "[ES] Full Suspension",
+        "investigation": "[ES] Under Investigation",
+        "partial": "[ES] Partial (Limited Access)"
+      },
+      "placeholders": {
+        "chooseFeature": "[ES] Choose a feature...",
+        "choosePlan": "[ES] Choose a plan...",
+        "reasonForSuspension": "[ES] Enter the reason for suspension...",
+        "whyFeatureGranted": "[ES] Why is this feature being granted?",
+        "whyPlanAssigned": "[ES] Why is this plan being assigned?"
+      }
     },
     "users": {
       "title": "Gestión de usuarios",
@@ -12692,7 +12820,11 @@
           "timeline": "[ES] [TODO: Translate admin.operations.incidents.detail.timeline]",
           "addUpdate": "[ES] [TODO: Translate admin.operations.incidents.detail.addUpdate]",
           "updatePlaceholder": "[ES] [TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
-          "postUpdate": "[ES] [TODO: Translate admin.operations.incidents.detail.postUpdate]"
+          "postUpdate": "[ES] [TODO: Translate admin.operations.incidents.detail.postUpdate]",
+          "changeStatusOptional": "[ES] Change status (optional)",
+          "documentRootCause": "[ES] Document the root cause...",
+          "enterUpdate": "[ES] Enter your update...",
+          "impactPlaceholder": "[ES] Describe the impact of this incident..."
         },
         "stats": {
           "totalIncidents": "[ES] [TODO: Translate admin.operations.incidents.stats.totalIncidents]",
@@ -12891,7 +13023,10 @@
           "startRollout": "Iniciar lanzamiento",
           "complete": "Completa",
           "rollback": "Revertir",
-          "cancel": "Cancelar"
+          "cancel": "Cancelar",
+          "bugFixTitle": "[ES] Bug fix title",
+          "breakingChangeTitle": "[ES] Breaking change title",
+          "featureTitle": "[ES] Feature title"
         },
         "bulk": {
           "cancelSelected": "Cancelar seleccionada",
@@ -13006,7 +13141,8 @@
           "memory": "Memoria",
           "storage": "Almacenamiento",
           "connections": "Conexiones",
-          "queueDepth": "Profundidad de la cola"
+          "queueDepth": "Profundidad de la cola",
+          "bandwidth": "[ES] Bandwidth"
         },
         "status": {
           "normal": "Normal",
@@ -13053,6 +13189,17 @@
           "createFailed": "No se pudo crear la métrica de capacidad",
           "updateFailed": "No se pudo actualizar la métrica de capacidad",
           "deleteFailed": "No se pudo eliminar la métrica de capacidad"
+        },
+        "units": {
+          "connections": "[ES] Connections",
+          "gb": "[ES] Gigabytes (GB)",
+          "messages": "[ES] Messages",
+          "percent": "[ES] Percent (%)",
+          "tb": "[ES] Terabytes (TB)"
+        },
+        "placeholders": {
+          "regionExample": "[ES] e.g., us-east-1",
+          "serviceExample": "[ES] e.g., API Gateway"
         }
       },
       "services": {
@@ -13873,6 +14020,12 @@
         "of": "de",
         "previous": "Previa",
         "next": "Próxima"
+      },
+      "categories": {
+        "all": "[ES] All",
+        "detractors": "[ES] Detractors",
+        "passives": "[ES] Passives",
+        "promoters": "[ES] Promoters"
       }
     },
     "rules": {
@@ -13945,7 +14098,14 @@
       }
     },
     "status": "[ES] Status",
-    "features": "[ES] features",
+    "features": {
+      "types": {
+        "boolean": "[ES] Boolean",
+        "json": "[ES] JSON",
+        "number": "[ES] Number",
+        "string": "[ES] String"
+      }
+    },
     "1_for_unlimited": "[ES] -1 for unlimited",
     "a_brief_description": "[ES] A brief description",
     "a_brief_description_of": "[ES] A brief description of this plan...",
@@ -14243,7 +14403,22 @@
     "why_is_this_feature": "[ES] Why is this feature being granted?",
     "why_is_this_plan": "[ES] Why is this plan being assigned?",
     "workflows": "[ES] Workflows",
-    "yearly_price_cents": "[ES] Yearly Price (cents)"
+    "yearly_price_cents": "[ES] Yearly Price (cents)",
+    "notifications": {
+      "types": {
+        "alert": "[ES] Alert",
+        "feature": "[ES] Feature",
+        "info": "[ES] Information",
+        "maintenance": "[ES] Maintenance",
+        "promotion": "[ES] Promotion",
+        "warning": "[ES] Warning"
+      },
+      "targetTypes": {
+        "all": "[ES] All Users",
+        "specificOrgs": "[ES] Specific Orgs",
+        "specificPlans": "[ES] Specific Plans"
+      }
+    }
   },
   "ui": {
     "dialog": {

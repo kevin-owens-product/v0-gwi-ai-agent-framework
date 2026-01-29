@@ -1,0 +1,77 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - link "GWI Agents" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e16]: GWI Agents
+      - generic [ref=e17]:
+        - blockquote [ref=e18]: "\"GWI Agents transformed how we approach consumer research. What used to take weeks now happens in hours with unprecedented accuracy.\""
+        - generic [ref=e19]:
+          - paragraph [ref=e20]: Sarah Chen
+          - paragraph [ref=e21]: VP of Insights, Unilever
+      - generic [ref=e22]:
+        - generic [ref=e25]: 99.9% uptime
+        - generic [ref=e26]: SOC 2 Compliant
+        - generic [ref=e27]: GDPR Ready
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - heading "Create your account" [level=1] [ref=e32]
+        - paragraph [ref=e33]: Start your 14-day free trial. No credit card required.
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - generic [ref=e37]: Full name
+            - textbox "Full name" [ref=e38]:
+              - /placeholder: John Smith
+          - generic [ref=e39]:
+            - generic [ref=e40]: Organization
+            - textbox "Organization" [ref=e41]:
+              - /placeholder: Acme Inc.
+        - generic [ref=e42]:
+          - generic [ref=e43]: Work email
+          - textbox "Work email" [ref=e44]:
+            - /placeholder: you@company.com
+        - generic [ref=e45]:
+          - generic [ref=e46]: Password
+          - generic [ref=e47]:
+            - textbox "Password" [ref=e48]:
+              - /placeholder: Create a strong password
+            - button [ref=e49]:
+              - img [ref=e50]
+        - generic [ref=e53]:
+          - checkbox "I agree to the Terms of Service and Privacy Policy" [ref=e54]
+          - checkbox
+          - generic [ref=e55]:
+            - text: I agree to the
+            - link "Terms of Service" [ref=e56] [cursor=pointer]:
+              - /url: /terms
+            - text: and
+            - link "Privacy Policy" [ref=e57] [cursor=pointer]:
+              - /url: /privacy
+        - button "Create account" [disabled]
+      - generic [ref=e59]: OR
+      - generic [ref=e60]:
+        - button "Sign up with Google" [ref=e61]:
+          - img
+          - text: Sign up with Google
+        - button "Sign up with Microsoft" [ref=e62]:
+          - img
+          - text: Sign up with Microsoft
+      - paragraph [ref=e63]:
+        - text: Already have an account?
+        - link "Sign in" [ref=e64] [cursor=pointer]:
+          - /url: /login
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e70] [cursor=pointer]:
+    - generic [ref=e73]:
+      - text: Compiling
+      - generic [ref=e74]:
+        - generic [ref=e75]: .
+        - generic [ref=e76]: .
+        - generic [ref=e77]: .
+  - alert [ref=e78]
+```

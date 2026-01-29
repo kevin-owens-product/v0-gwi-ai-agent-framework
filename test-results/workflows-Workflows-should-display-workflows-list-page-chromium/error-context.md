@@ -1,0 +1,68 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - link "GWI Agents" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e16]: GWI Agents
+      - generic [ref=e17]:
+        - blockquote [ref=e18]: "\"GWI Agents transformed how we approach consumer research. What used to take weeks now happens in hours with unprecedented accuracy.\""
+        - generic [ref=e19]:
+          - paragraph [ref=e20]: Sarah Chen
+          - paragraph [ref=e21]: VP of Insights, Unilever
+      - generic [ref=e22]:
+        - generic [ref=e25]: 99.9% uptime
+        - generic [ref=e26]: SOC 2 Compliant
+        - generic [ref=e27]: GDPR Ready
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - heading "Welcome back" [level=1] [ref=e32]
+        - paragraph [ref=e33]: Sign in to your account to continue
+      - generic [ref=e34]:
+        - tablist [ref=e35]:
+          - tab "Platform" [selected] [ref=e36]:
+            - img
+            - generic [ref=e37]: Platform
+          - tab "Admin" [ref=e38]:
+            - img
+            - text: Admin
+          - tab "GWI" [ref=e39]:
+            - img
+            - text: GWI
+        - tabpanel "Platform" [ref=e40]:
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - generic [ref=e43]: Email
+              - textbox "Email" [ref=e44]:
+                - /placeholder: you@company.com
+            - generic [ref=e45]:
+              - generic [ref=e46]:
+                - generic [ref=e47]: Password
+                - link "Forgot password?" [ref=e48] [cursor=pointer]:
+                  - /url: /forgot-password
+              - generic [ref=e49]:
+                - textbox "Password" [ref=e50]:
+                  - /placeholder: Enter your password
+                - button [ref=e51]:
+                  - img [ref=e52]
+            - button "Sign in to Platform" [ref=e55]
+          - generic [ref=e57]: OR
+          - generic [ref=e58]:
+            - button "Continue with Google" [ref=e59]:
+              - img
+              - text: Continue with Google
+            - button "Continue with Microsoft" [ref=e60]:
+              - img
+              - text: Continue with Microsoft
+          - paragraph [ref=e61]:
+            - text: Don't have an account?
+            - link "Sign up for free" [ref=e62] [cursor=pointer]:
+              - /url: /signup
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e68] [cursor=pointer]:
+    - img [ref=e69]
+  - alert [ref=e72]
+```

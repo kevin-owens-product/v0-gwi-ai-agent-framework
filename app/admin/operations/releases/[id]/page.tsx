@@ -466,7 +466,7 @@ export default function ReleaseDetailPage() {
                       value={editForm.description || ""}
                       onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                       rows={4}
-                      placeholder="Describe the release..."
+                      placeholder={t("new.placeholders.description")}
                     />
                   ) : (
                     <p className="whitespace-pre-wrap text-muted-foreground">
@@ -524,7 +524,7 @@ export default function ReleaseDetailPage() {
                         (feature, index) => (
                           <div key={index} className="flex gap-2">
                             <Input
-                              placeholder="Feature title"
+                              placeholder={t("actions.featureTitle")}
                               value={feature.title}
                               onChange={(e) =>
                                 updateItem("features", index, "title", e.target.value)
@@ -591,7 +591,7 @@ export default function ReleaseDetailPage() {
                         (fix, index) => (
                           <div key={index} className="flex gap-2">
                             <Input
-                              placeholder="Bug fix title"
+                              placeholder={t("actions.bugFixTitle")}
                               value={fix.title}
                               onChange={(e) =>
                                 updateItem("bugFixes", index, "title", e.target.value)
@@ -658,7 +658,7 @@ export default function ReleaseDetailPage() {
                         (change, index) => (
                           <div key={index} className="flex gap-2">
                             <Input
-                              placeholder="Breaking change title"
+                              placeholder={t("actions.breakingChangeTitle")}
                               value={change.title}
                               onChange={(e) =>
                                 updateItem("breakingChanges", index, "title", e.target.value)

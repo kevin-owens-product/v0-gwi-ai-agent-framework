@@ -79,6 +79,7 @@ interface FeatureFlag {
 export default function FeatureFlagDetailPage() {
   const params = useParams()
   const router = useRouter()
+  const t = useTranslations("admin.features")
   const flagId = params.id as string
 
   const [flag, setFlag] = useState<FeatureFlag | null>(null)
@@ -309,10 +310,10 @@ export default function FeatureFlagDetailPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="BOOLEAN">Boolean</SelectItem>
-                        <SelectItem value="STRING">String</SelectItem>
-                        <SelectItem value="NUMBER">Number</SelectItem>
-                        <SelectItem value="JSON">JSON</SelectItem>
+                        <SelectItem value="BOOLEAN">{t("types.boolean")}</SelectItem>
+                        <SelectItem value="STRING">{t("types.string")}</SelectItem>
+                        <SelectItem value="NUMBER">{t("types.number")}</SelectItem>
+                        <SelectItem value="JSON">{t("types.json")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

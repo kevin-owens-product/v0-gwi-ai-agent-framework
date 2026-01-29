@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -60,6 +61,7 @@ interface Ticket {
 export default function SupportTicketDetailPage() {
   const params = useParams()
   const router = useRouter()
+  const t = useTranslations("admin.support")
   const { admin } = useAdmin()
   const ticketId = params.id as string
 
@@ -295,7 +297,7 @@ export default function SupportTicketDetailPage() {
               <div className="pt-4 border-t space-y-4">
                 <Label>Reply</Label>
                 <Textarea
-                  placeholder="Type your response..."
+                  placeholder={t("replyPlaceholder")}
                   value={replyMessage}
                   onChange={(e) => setReplyMessage(e.target.value)}
                   rows={4}
@@ -342,12 +344,12 @@ export default function SupportTicketDetailPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="OPEN">Open</SelectItem>
-                    <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                    <SelectItem value="WAITING_ON_CUSTOMER">Waiting on Customer</SelectItem>
-                    <SelectItem value="WAITING_ON_INTERNAL">Waiting Internal</SelectItem>
-                    <SelectItem value="RESOLVED">Resolved</SelectItem>
-                    <SelectItem value="CLOSED">Closed</SelectItem>
+                    <SelectItem value="OPEN">{t("statuses.open")}</SelectItem>
+                    <SelectItem value="IN_PROGRESS">{t("statuses.inProgress")}</SelectItem>
+                    <SelectItem value="WAITING_ON_CUSTOMER">{t("statuses.waitingOnCustomer")}</SelectItem>
+                    <SelectItem value="WAITING_ON_INTERNAL">{t("statuses.waitingInternal")}</SelectItem>
+                    <SelectItem value="RESOLVED">{t("statuses.resolved")}</SelectItem>
+                    <SelectItem value="CLOSED">{t("statuses.closed")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -359,10 +361,10 @@ export default function SupportTicketDetailPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="URGENT">Urgent</SelectItem>
-                    <SelectItem value="HIGH">High</SelectItem>
-                    <SelectItem value="MEDIUM">Medium</SelectItem>
-                    <SelectItem value="LOW">Low</SelectItem>
+                    <SelectItem value="URGENT">{t("priorities.urgent")}</SelectItem>
+                    <SelectItem value="HIGH">{t("priorities.high")}</SelectItem>
+                    <SelectItem value="MEDIUM">{t("priorities.medium")}</SelectItem>
+                    <SelectItem value="LOW">{t("priorities.low")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

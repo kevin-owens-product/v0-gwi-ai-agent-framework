@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback, useRef, useEffect } from "react"
+import React, { useState, useMemo, useCallback, useRef, useEffect } from "react"
 import { useTranslations } from "next-intl"
 import {
   Table,
@@ -864,7 +864,7 @@ export function AdvancedCrosstabGrid({
               </TableHeader>
               <TableBody>
                 {Object.entries(groupedData).map(([category, rows]) => (
-                  <>
+                  <React.Fragment key={category || 'default'}>
                     {config.groupByCategory && category && (
                       <TableRow key={`category-${category}`} className="bg-muted/50">
                         <TableCell
@@ -949,7 +949,7 @@ export function AdvancedCrosstabGrid({
                         </TableRow>
                       )
                     })}
-                  </>
+                  </React.Fragment>
                 ))}
 
                 {/* Totals Row */}

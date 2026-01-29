@@ -806,7 +806,7 @@ export default function WebhookDetailPage() {
                     value={editForm.name}
                     onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                     disabled={!isEditing}
-                    placeholder="Optional name"
+                    placeholder={t("placeholders.optionalName")}
                   />
                 </div>
                 <div className="space-y-2">

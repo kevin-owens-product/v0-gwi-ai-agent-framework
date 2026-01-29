@@ -487,7 +487,7 @@ export default function WebhooksPage() {
                   <Label htmlFor="name">{t("fields.name")}</Label>
                   <Input
                     id="name"
-                    placeholder="My Webhook"
+                    placeholder={t("placeholders.name")}
                     value={newWebhook.name}
                     onChange={(e) =>
                       setNewWebhook({ ...newWebhook, name: e.target.value })
@@ -521,7 +521,7 @@ export default function WebhooksPage() {
                 <Label htmlFor="description">{t("fields.description")} ({tCommon("optional")})</Label>
                 <Textarea
                   id="description"
-                  placeholder="What is this webhook used for?"
+                  placeholder={t("placeholders.description")}
                   value={newWebhook.description}
                   onChange={(e) =>
                     setNewWebhook({ ...newWebhook, description: e.target.value })

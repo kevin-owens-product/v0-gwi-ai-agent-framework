@@ -568,9 +568,9 @@ export default function TenantDetailPage() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="STARTER">Starter</SelectItem>
-                          <SelectItem value="PROFESSIONAL">Professional</SelectItem>
-                          <SelectItem value="ENTERPRISE">Enterprise</SelectItem>
+                          <SelectItem value="STARTER">{t("plans.starter")}</SelectItem>
+                          <SelectItem value="PROFESSIONAL">{t("plans.professional")}</SelectItem>
+                          <SelectItem value="ENTERPRISE">{t("plans.enterprise")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -1066,10 +1066,10 @@ export default function TenantDetailPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="FULL">Full Suspension</SelectItem>
-                  <SelectItem value="PARTIAL">Partial (Limited Access)</SelectItem>
-                  <SelectItem value="BILLING_HOLD">Billing Hold</SelectItem>
-                  <SelectItem value="INVESTIGATION">Under Investigation</SelectItem>
+                  <SelectItem value="FULL">{t("suspensionTypes.full")}</SelectItem>
+                  <SelectItem value="PARTIAL">{t("suspensionTypes.partial")}</SelectItem>
+                  <SelectItem value="BILLING_HOLD">{t("suspensionTypes.billingHold")}</SelectItem>
+                  <SelectItem value="INVESTIGATION">{t("suspensionTypes.investigation")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1119,7 +1119,7 @@ export default function TenantDetailPage() {
               <Label>Select Plan</Label>
               <Select value={selectedPlanId} onValueChange={setSelectedPlanId}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Choose a plan..." />
+                  <SelectValue placeholder={t("placeholders.choosePlan")} />
                 </SelectTrigger>
                 <SelectContent>
                   {allPlans.map((plan) => (
@@ -1133,7 +1133,7 @@ export default function TenantDetailPage() {
             <div className="space-y-2">
               <Label>Reason (optional)</Label>
               <Textarea
-                placeholder="Why is this plan being assigned?"
+                placeholder={t("placeholders.whyPlanAssigned")}
                 value={featureReason}
                 onChange={(e) => setFeatureReason(e.target.value)}
                 rows={2}
@@ -1172,7 +1172,7 @@ export default function TenantDetailPage() {
               <Label>Select Feature</Label>
               <Select value={selectedFeatureId} onValueChange={setSelectedFeatureId}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Choose a feature..." />
+                  <SelectValue placeholder={t("placeholders.chooseFeature")} />
                 </SelectTrigger>
                 <SelectContent>
                   {allFeatures.map((feature) => (
@@ -1186,7 +1186,7 @@ export default function TenantDetailPage() {
             <div className="space-y-2">
               <Label>Reason (optional)</Label>
               <Textarea
-                placeholder="Why is this feature being granted?"
+                placeholder={t("placeholders.whyFeatureGranted")}
                 value={featureReason}
                 onChange={(e) => setFeatureReason(e.target.value)}
                 rows={2}

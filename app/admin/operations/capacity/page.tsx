@@ -265,7 +265,7 @@ export default function CapacityPage() {
                         <SelectItem value="STORAGE">{t("metricTypes.storage")}</SelectItem>
                         <SelectItem value="CONNECTIONS">{t("metricTypes.connections")}</SelectItem>
                         <SelectItem value="QUEUE_DEPTH">{t("metricTypes.queueDepth")}</SelectItem>
-                        <SelectItem value="BANDWIDTH">Bandwidth</SelectItem>
+                        <SelectItem value="BANDWIDTH">{t("metricTypes.bandwidth")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -279,11 +279,11 @@ export default function CapacityPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="percent">Percent (%)</SelectItem>
-                        <SelectItem value="GB">Gigabytes (GB)</SelectItem>
-                        <SelectItem value="TB">Terabytes (TB)</SelectItem>
-                        <SelectItem value="connections">{t("metricTypes.connections")}</SelectItem>
-                        <SelectItem value="messages">Messages</SelectItem>
+                        <SelectItem value="percent">{t("units.percent")}</SelectItem>
+                        <SelectItem value="GB">{t("units.gb")}</SelectItem>
+                        <SelectItem value="TB">{t("units.tb")}</SelectItem>
+                        <SelectItem value="connections">{t("units.connections")}</SelectItem>
+                        <SelectItem value="messages">{t("units.messages")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -292,7 +292,7 @@ export default function CapacityPage() {
                   <div className="space-y-2">
                     <Label>{t("fields.service")}</Label>
                     <Input
-                      placeholder="e.g., API Gateway"
+                      placeholder={t("placeholders.serviceExample")}
                       value={newMetric.service}
                       onChange={(e) => setNewMetric({ ...newMetric, service: e.target.value })}
                     />
@@ -300,7 +300,7 @@ export default function CapacityPage() {
                   <div className="space-y-2">
                     <Label>{t("fields.region")}</Label>
                     <Input
-                      placeholder="e.g., us-east-1"
+                      placeholder={t("placeholders.regionExample")}
                       value={newMetric.region}
                       onChange={(e) => setNewMetric({ ...newMetric, region: e.target.value })}
                     />

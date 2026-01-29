@@ -3821,6 +3821,106 @@
       },
       "actions": {
         "openAnalysis": "[HI] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      },
+      "components": {
+        "grid": {
+          "badges": {
+            "base": "[HI] Base: {name}",
+            "metricsAudiences": "[HI] {metrics} metrics × {audiences} audiences",
+            "selected": "[HI] {count} selected"
+          },
+          "baseColumn": "[HI] Base column",
+          "calculatedField": "[HI] Calculated field",
+          "columns": "[HI] Columns",
+          "conditionalFormatting": {
+            "addRule": "[HI] Add Rule",
+            "apply": "[HI] Apply",
+            "background": "[HI] Background",
+            "cancel": "[HI] Cancel",
+            "conditions": {
+              "between": "[HI] Between",
+              "bottomPercent": "[HI] Bottom %",
+              "equalTo": "[HI] Equal to",
+              "greaterThan": "[HI] Greater than",
+              "lessThan": "[HI] Less than",
+              "topPercent": "[HI] Top %"
+            },
+            "description": "[HI] Configure rules to highlight cells based on their values",
+            "newRule": "[HI] New Rule",
+            "text": "[HI] Text",
+            "title": "[HI] Conditional Formatting"
+          },
+          "contextMenu": {
+            "barChart": "[HI] Bar Chart",
+            "copy": "[HI] Copy",
+            "drillDown": "[HI] Drill Down",
+            "editValue": "[HI] Edit Value",
+            "lineChart": "[HI] Line Chart",
+            "pieChart": "[HI] Pie Chart",
+            "setAsBase": "[HI] Set as Base",
+            "visualize": "[HI] Visualize"
+          },
+          "done": "[HI] Done",
+          "drillDown": {
+            "average": "[HI] Average",
+            "breakdownPlaceholder": "[HI] Breakdown view would show demographic or segmentation details for this data point.",
+            "close": "[HI] Close",
+            "currentValue": "[HI] Current Value",
+            "export": "[HI] Export",
+            "metadata": "[HI] Metadata",
+            "source": "[HI] Source",
+            "tabs": {
+              "breakdown": "[HI] Breakdown",
+              "details": "[HI] Details",
+              "trend": "[HI] Trend"
+            },
+            "title": "[HI] Drill Down Analysis",
+            "trendPlaceholder": "[HI] Trend view would show historical data for this metric over time."
+          },
+          "edit": "[HI] Edit",
+          "legend": {
+            "drillDownHint": "[HI] Double-click cell to drill down",
+            "highestInRow": "[HI] Highest in row",
+            "lowestInRow": "[HI] Lowest in row",
+            "multiSelectHint": "[HI] Ctrl+Click to multi-select",
+            "significant": "[HI] Statistically significant (p < 0.05)"
+          },
+          "searchPlaceholder": "[HI] Search metrics...",
+          "settings": "[HI] Grid Settings",
+          "settingsOptions": {
+            "decimalPlaces": "[HI] Decimal Places",
+            "freezeFirstColumn": "[HI] Freeze First Column",
+            "groupByCategory": "[HI] Group by Category",
+            "highlightOnHover": "[HI] Highlight on Hover",
+            "showRowNumbers": "[HI] Show Row Numbers",
+            "showSignificance": "[HI] Show Significance Indicators",
+            "showSparklines": "[HI] Show Sparklines",
+            "showStatistics": "[HI] Show Statistics Columns",
+            "showTotals": "[HI] Show Totals Row"
+          },
+          "table": {
+            "avg": "[HI] Avg",
+            "max": "[HI] Max",
+            "metric": "[HI] Metric",
+            "min": "[HI] Min",
+            "totalAverage": "[HI] Total / Average",
+            "trend": "[HI] Trend"
+          },
+          "title": "[HI] Crosstab Analysis",
+          "tooltip": {
+            "doubleclickToDrillDown": "[HI] Double-click to drill down",
+            "mean": "[HI] Mean",
+            "range": "[HI] Range",
+            "statisticallySignificant": "[HI] Statistically significant"
+          },
+          "viewMode": {
+            "difference": "[HI] Difference",
+            "index": "[HI] Index",
+            "percentage": "[HI] Percentage",
+            "raw": "[HI] Raw Values"
+          },
+          "visibleColumns": "[HI] Visible Columns"
+        }
       }
     },
     "charts": {
@@ -9661,7 +9761,10 @@
         "user_info_url_optional": "[HI] User Info URL (Optional)",
         "viewer": "[HI] VIEWER",
         "x509_certificate": "[HI] X.509 Certificate",
-        "yourclientid": "[HI] your-client-id"
+        "yourclientid": "[HI] your-client-id",
+        "placeholders": {
+          "nameExample": "[HI] e.g., Acme Corp SSO"
+        }
       },
       "domains": {
         "title": "डोमेन प्रबंधन",
@@ -10209,9 +10312,21 @@
         }
       },
       "title": "पहचान प्रबंधन",
-      "description": "पहचान प्रदाताओं, डोमेन और उपयोगकर्ता प्रावधान को प्रबंधित करें"
+      "description": "पहचान प्रदाताओं, डोमेन और उपयोगकर्ता प्रावधान को प्रबंधित करें",
+      "roles": {
+        "admin": "[HI] Admin",
+        "member": "[HI] Member",
+        "viewer": "[HI] Viewer"
+      }
     },
-    "security": "[HI] security",
+    "security": {
+      "sessions": {
+        "statuses": {
+          "activeOnly": "[HI] Active Only",
+          "allSessions": "[HI] All Sessions"
+        }
+      }
+    },
     "scim": {
       "title": "SCIM एकीकरण",
       "description": "SCIM 2.0 के साथ स्वचालित उपयोगकर्ता प्रोविज़निंग प्रबंधित करें",
@@ -11669,7 +11784,20 @@
         "grantFeatureFailed": "[HI] Failed to grant feature",
         "revokeEntitlementFailed": "[HI] Failed to revoke entitlement"
       },
-      " ": "[HI] [TODO: Translate admin.tenants. ]"
+      " ": "[HI] [TODO: Translate admin.tenants. ]",
+      "suspensionTypes": {
+        "billingHold": "[HI] Billing Hold",
+        "full": "[HI] Full Suspension",
+        "investigation": "[HI] Under Investigation",
+        "partial": "[HI] Partial (Limited Access)"
+      },
+      "placeholders": {
+        "chooseFeature": "[HI] Choose a feature...",
+        "choosePlan": "[HI] Choose a plan...",
+        "reasonForSuspension": "[HI] Enter the reason for suspension...",
+        "whyFeatureGranted": "[HI] Why is this feature being granted?",
+        "whyPlanAssigned": "[HI] Why is this plan being assigned?"
+      }
     },
     "users": {
       "title": "प्रयोक्ता प्रबंधन",
@@ -12692,7 +12820,11 @@
           "timeline": "[HI] [TODO: Translate admin.operations.incidents.detail.timeline]",
           "addUpdate": "[HI] [TODO: Translate admin.operations.incidents.detail.addUpdate]",
           "updatePlaceholder": "[HI] [TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
-          "postUpdate": "[HI] [TODO: Translate admin.operations.incidents.detail.postUpdate]"
+          "postUpdate": "[HI] [TODO: Translate admin.operations.incidents.detail.postUpdate]",
+          "changeStatusOptional": "[HI] Change status (optional)",
+          "documentRootCause": "[HI] Document the root cause...",
+          "enterUpdate": "[HI] Enter your update...",
+          "impactPlaceholder": "[HI] Describe the impact of this incident..."
         },
         "stats": {
           "totalIncidents": "[HI] [TODO: Translate admin.operations.incidents.stats.totalIncidents]",
@@ -12891,7 +13023,10 @@
           "startRollout": "रोलआउट प्रारंभ करें",
           "complete": "पूरा",
           "rollback": "रोलबैक",
-          "cancel": "रद्द करना"
+          "cancel": "रद्द करना",
+          "bugFixTitle": "[HI] Bug fix title",
+          "breakingChangeTitle": "[HI] Breaking change title",
+          "featureTitle": "[HI] Feature title"
         },
         "bulk": {
           "cancelSelected": "चयनित रद्द करें",
@@ -13006,7 +13141,8 @@
           "memory": "याद",
           "storage": "भंडारण",
           "connections": "कनेक्शन",
-          "queueDepth": "कतार की गहराई"
+          "queueDepth": "कतार की गहराई",
+          "bandwidth": "[HI] Bandwidth"
         },
         "status": {
           "normal": "सामान्य",
@@ -13053,6 +13189,17 @@
           "createFailed": "क्षमता मीट्रिक बनाने में विफल",
           "updateFailed": "क्षमता मीट्रिक अद्यतन करने में विफल",
           "deleteFailed": "क्षमता मीट्रिक हटाने में विफल"
+        },
+        "units": {
+          "connections": "[HI] Connections",
+          "gb": "[HI] Gigabytes (GB)",
+          "messages": "[HI] Messages",
+          "percent": "[HI] Percent (%)",
+          "tb": "[HI] Terabytes (TB)"
+        },
+        "placeholders": {
+          "regionExample": "[HI] e.g., us-east-1",
+          "serviceExample": "[HI] e.g., API Gateway"
         }
       },
       "services": {
@@ -13873,6 +14020,12 @@
         "of": "का",
         "previous": "पहले का",
         "next": "अगला"
+      },
+      "categories": {
+        "all": "[HI] All",
+        "detractors": "[HI] Detractors",
+        "passives": "[HI] Passives",
+        "promoters": "[HI] Promoters"
       }
     },
     "rules": {
@@ -13945,7 +14098,14 @@
       }
     },
     "status": "[HI] Status",
-    "features": "[HI] features",
+    "features": {
+      "types": {
+        "boolean": "[HI] Boolean",
+        "json": "[HI] JSON",
+        "number": "[HI] Number",
+        "string": "[HI] String"
+      }
+    },
     "1_for_unlimited": "[HI] -1 for unlimited",
     "a_brief_description": "[HI] A brief description",
     "a_brief_description_of": "[HI] A brief description of this plan...",
@@ -14243,7 +14403,22 @@
     "why_is_this_feature": "[HI] Why is this feature being granted?",
     "why_is_this_plan": "[HI] Why is this plan being assigned?",
     "workflows": "[HI] Workflows",
-    "yearly_price_cents": "[HI] Yearly Price (cents)"
+    "yearly_price_cents": "[HI] Yearly Price (cents)",
+    "notifications": {
+      "types": {
+        "alert": "[HI] Alert",
+        "feature": "[HI] Feature",
+        "info": "[HI] Information",
+        "maintenance": "[HI] Maintenance",
+        "promotion": "[HI] Promotion",
+        "warning": "[HI] Warning"
+      },
+      "targetTypes": {
+        "all": "[HI] All Users",
+        "specificOrgs": "[HI] Specific Orgs",
+        "specificPlans": "[HI] Specific Plans"
+      }
+    }
   },
   "ui": {
     "dialog": {

@@ -3821,6 +3821,106 @@
       },
       "actions": {
         "openAnalysis": "[ZH] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      },
+      "components": {
+        "grid": {
+          "badges": {
+            "base": "[ZH] Base: {name}",
+            "metricsAudiences": "[ZH] {metrics} metrics × {audiences} audiences",
+            "selected": "[ZH] {count} selected"
+          },
+          "baseColumn": "[ZH] Base column",
+          "calculatedField": "[ZH] Calculated field",
+          "columns": "[ZH] Columns",
+          "conditionalFormatting": {
+            "addRule": "[ZH] Add Rule",
+            "apply": "[ZH] Apply",
+            "background": "[ZH] Background",
+            "cancel": "[ZH] Cancel",
+            "conditions": {
+              "between": "[ZH] Between",
+              "bottomPercent": "[ZH] Bottom %",
+              "equalTo": "[ZH] Equal to",
+              "greaterThan": "[ZH] Greater than",
+              "lessThan": "[ZH] Less than",
+              "topPercent": "[ZH] Top %"
+            },
+            "description": "[ZH] Configure rules to highlight cells based on their values",
+            "newRule": "[ZH] New Rule",
+            "text": "[ZH] Text",
+            "title": "[ZH] Conditional Formatting"
+          },
+          "contextMenu": {
+            "barChart": "[ZH] Bar Chart",
+            "copy": "[ZH] Copy",
+            "drillDown": "[ZH] Drill Down",
+            "editValue": "[ZH] Edit Value",
+            "lineChart": "[ZH] Line Chart",
+            "pieChart": "[ZH] Pie Chart",
+            "setAsBase": "[ZH] Set as Base",
+            "visualize": "[ZH] Visualize"
+          },
+          "done": "[ZH] Done",
+          "drillDown": {
+            "average": "[ZH] Average",
+            "breakdownPlaceholder": "[ZH] Breakdown view would show demographic or segmentation details for this data point.",
+            "close": "[ZH] Close",
+            "currentValue": "[ZH] Current Value",
+            "export": "[ZH] Export",
+            "metadata": "[ZH] Metadata",
+            "source": "[ZH] Source",
+            "tabs": {
+              "breakdown": "[ZH] Breakdown",
+              "details": "[ZH] Details",
+              "trend": "[ZH] Trend"
+            },
+            "title": "[ZH] Drill Down Analysis",
+            "trendPlaceholder": "[ZH] Trend view would show historical data for this metric over time."
+          },
+          "edit": "[ZH] Edit",
+          "legend": {
+            "drillDownHint": "[ZH] Double-click cell to drill down",
+            "highestInRow": "[ZH] Highest in row",
+            "lowestInRow": "[ZH] Lowest in row",
+            "multiSelectHint": "[ZH] Ctrl+Click to multi-select",
+            "significant": "[ZH] Statistically significant (p < 0.05)"
+          },
+          "searchPlaceholder": "[ZH] Search metrics...",
+          "settings": "[ZH] Grid Settings",
+          "settingsOptions": {
+            "decimalPlaces": "[ZH] Decimal Places",
+            "freezeFirstColumn": "[ZH] Freeze First Column",
+            "groupByCategory": "[ZH] Group by Category",
+            "highlightOnHover": "[ZH] Highlight on Hover",
+            "showRowNumbers": "[ZH] Show Row Numbers",
+            "showSignificance": "[ZH] Show Significance Indicators",
+            "showSparklines": "[ZH] Show Sparklines",
+            "showStatistics": "[ZH] Show Statistics Columns",
+            "showTotals": "[ZH] Show Totals Row"
+          },
+          "table": {
+            "avg": "[ZH] Avg",
+            "max": "[ZH] Max",
+            "metric": "[ZH] Metric",
+            "min": "[ZH] Min",
+            "totalAverage": "[ZH] Total / Average",
+            "trend": "[ZH] Trend"
+          },
+          "title": "[ZH] Crosstab Analysis",
+          "tooltip": {
+            "doubleclickToDrillDown": "[ZH] Double-click to drill down",
+            "mean": "[ZH] Mean",
+            "range": "[ZH] Range",
+            "statisticallySignificant": "[ZH] Statistically significant"
+          },
+          "viewMode": {
+            "difference": "[ZH] Difference",
+            "index": "[ZH] Index",
+            "percentage": "[ZH] Percentage",
+            "raw": "[ZH] Raw Values"
+          },
+          "visibleColumns": "[ZH] Visible Columns"
+        }
       }
     },
     "charts": {
@@ -9661,7 +9761,10 @@
         "user_info_url_optional": "[ZH] User Info URL (Optional)",
         "viewer": "[ZH] VIEWER",
         "x509_certificate": "[ZH] X.509 Certificate",
-        "yourclientid": "[ZH] your-client-id"
+        "yourclientid": "[ZH] your-client-id",
+        "placeholders": {
+          "nameExample": "[ZH] e.g., Acme Corp SSO"
+        }
       },
       "domains": {
         "title": "域名管理",
@@ -10209,9 +10312,21 @@
         }
       },
       "title": "身份管理",
-      "description": "管理身份提供商、域和用户配置"
+      "description": "管理身份提供商、域和用户配置",
+      "roles": {
+        "admin": "[ZH] Admin",
+        "member": "[ZH] Member",
+        "viewer": "[ZH] Viewer"
+      }
     },
-    "security": "[ZH] security",
+    "security": {
+      "sessions": {
+        "statuses": {
+          "activeOnly": "[ZH] Active Only",
+          "allSessions": "[ZH] All Sessions"
+        }
+      }
+    },
     "scim": {
       "title": "SCIM 集成",
       "description": "使用 SCIM 2.0 管理自动用户配置",
@@ -11669,7 +11784,20 @@
         "grantFeatureFailed": "[ZH] Failed to grant feature",
         "revokeEntitlementFailed": "[ZH] Failed to revoke entitlement"
       },
-      " ": "[ZH] [TODO: Translate admin.tenants. ]"
+      " ": "[ZH] [TODO: Translate admin.tenants. ]",
+      "suspensionTypes": {
+        "billingHold": "[ZH] Billing Hold",
+        "full": "[ZH] Full Suspension",
+        "investigation": "[ZH] Under Investigation",
+        "partial": "[ZH] Partial (Limited Access)"
+      },
+      "placeholders": {
+        "chooseFeature": "[ZH] Choose a feature...",
+        "choosePlan": "[ZH] Choose a plan...",
+        "reasonForSuspension": "[ZH] Enter the reason for suspension...",
+        "whyFeatureGranted": "[ZH] Why is this feature being granted?",
+        "whyPlanAssigned": "[ZH] Why is this plan being assigned?"
+      }
     },
     "users": {
       "title": "用户管理",
@@ -12692,7 +12820,11 @@
           "timeline": "[ZH] [TODO: Translate admin.operations.incidents.detail.timeline]",
           "addUpdate": "[ZH] [TODO: Translate admin.operations.incidents.detail.addUpdate]",
           "updatePlaceholder": "[ZH] [TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
-          "postUpdate": "[ZH] [TODO: Translate admin.operations.incidents.detail.postUpdate]"
+          "postUpdate": "[ZH] [TODO: Translate admin.operations.incidents.detail.postUpdate]",
+          "changeStatusOptional": "[ZH] Change status (optional)",
+          "documentRootCause": "[ZH] Document the root cause...",
+          "enterUpdate": "[ZH] Enter your update...",
+          "impactPlaceholder": "[ZH] Describe the impact of this incident..."
         },
         "stats": {
           "totalIncidents": "[ZH] [TODO: Translate admin.operations.incidents.stats.totalIncidents]",
@@ -12891,7 +13023,10 @@
           "startRollout": "开始推出",
           "complete": "完全的",
           "rollback": "回滚",
-          "cancel": "取消"
+          "cancel": "取消",
+          "bugFixTitle": "[ZH] Bug fix title",
+          "breakingChangeTitle": "[ZH] Breaking change title",
+          "featureTitle": "[ZH] Feature title"
         },
         "bulk": {
           "cancelSelected": "取消选定",
@@ -13006,7 +13141,8 @@
           "memory": "记忆",
           "storage": "贮存",
           "connections": "连接",
-          "queueDepth": "队列深度"
+          "queueDepth": "队列深度",
+          "bandwidth": "[ZH] Bandwidth"
         },
         "status": {
           "normal": "普通的",
@@ -13053,6 +13189,17 @@
           "createFailed": "创建容量指标失败",
           "updateFailed": "无法更新容量指标",
           "deleteFailed": "删除容量指标失败"
+        },
+        "units": {
+          "connections": "[ZH] Connections",
+          "gb": "[ZH] Gigabytes (GB)",
+          "messages": "[ZH] Messages",
+          "percent": "[ZH] Percent (%)",
+          "tb": "[ZH] Terabytes (TB)"
+        },
+        "placeholders": {
+          "regionExample": "[ZH] e.g., us-east-1",
+          "serviceExample": "[ZH] e.g., API Gateway"
         }
       },
       "services": {
@@ -13873,6 +14020,12 @@
         "of": "的",
         "previous": "以前的",
         "next": "下一个"
+      },
+      "categories": {
+        "all": "[ZH] All",
+        "detractors": "[ZH] Detractors",
+        "passives": "[ZH] Passives",
+        "promoters": "[ZH] Promoters"
       }
     },
     "rules": {
@@ -13945,7 +14098,14 @@
       }
     },
     "status": "[ZH] Status",
-    "features": "[ZH] features",
+    "features": {
+      "types": {
+        "boolean": "[ZH] Boolean",
+        "json": "[ZH] JSON",
+        "number": "[ZH] Number",
+        "string": "[ZH] String"
+      }
+    },
     "1_for_unlimited": "[ZH] -1 for unlimited",
     "a_brief_description": "[ZH] A brief description",
     "a_brief_description_of": "[ZH] A brief description of this plan...",
@@ -14243,7 +14403,22 @@
     "why_is_this_feature": "[ZH] Why is this feature being granted?",
     "why_is_this_plan": "[ZH] Why is this plan being assigned?",
     "workflows": "[ZH] Workflows",
-    "yearly_price_cents": "[ZH] Yearly Price (cents)"
+    "yearly_price_cents": "[ZH] Yearly Price (cents)",
+    "notifications": {
+      "types": {
+        "alert": "[ZH] Alert",
+        "feature": "[ZH] Feature",
+        "info": "[ZH] Information",
+        "maintenance": "[ZH] Maintenance",
+        "promotion": "[ZH] Promotion",
+        "warning": "[ZH] Warning"
+      },
+      "targetTypes": {
+        "all": "[ZH] All Users",
+        "specificOrgs": "[ZH] Specific Orgs",
+        "specificPlans": "[ZH] Specific Plans"
+      }
+    }
   },
   "ui": {
     "dialog": {

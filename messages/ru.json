@@ -3821,6 +3821,106 @@
       },
       "actions": {
         "openAnalysis": "[RU] [TODO: Translate dashboard.crosstabs.actions.openAnalysis]"
+      },
+      "components": {
+        "grid": {
+          "badges": {
+            "base": "[RU] Base: {name}",
+            "metricsAudiences": "[RU] {metrics} metrics × {audiences} audiences",
+            "selected": "[RU] {count} selected"
+          },
+          "baseColumn": "[RU] Base column",
+          "calculatedField": "[RU] Calculated field",
+          "columns": "[RU] Columns",
+          "conditionalFormatting": {
+            "addRule": "[RU] Add Rule",
+            "apply": "[RU] Apply",
+            "background": "[RU] Background",
+            "cancel": "[RU] Cancel",
+            "conditions": {
+              "between": "[RU] Between",
+              "bottomPercent": "[RU] Bottom %",
+              "equalTo": "[RU] Equal to",
+              "greaterThan": "[RU] Greater than",
+              "lessThan": "[RU] Less than",
+              "topPercent": "[RU] Top %"
+            },
+            "description": "[RU] Configure rules to highlight cells based on their values",
+            "newRule": "[RU] New Rule",
+            "text": "[RU] Text",
+            "title": "[RU] Conditional Formatting"
+          },
+          "contextMenu": {
+            "barChart": "[RU] Bar Chart",
+            "copy": "[RU] Copy",
+            "drillDown": "[RU] Drill Down",
+            "editValue": "[RU] Edit Value",
+            "lineChart": "[RU] Line Chart",
+            "pieChart": "[RU] Pie Chart",
+            "setAsBase": "[RU] Set as Base",
+            "visualize": "[RU] Visualize"
+          },
+          "done": "[RU] Done",
+          "drillDown": {
+            "average": "[RU] Average",
+            "breakdownPlaceholder": "[RU] Breakdown view would show demographic or segmentation details for this data point.",
+            "close": "[RU] Close",
+            "currentValue": "[RU] Current Value",
+            "export": "[RU] Export",
+            "metadata": "[RU] Metadata",
+            "source": "[RU] Source",
+            "tabs": {
+              "breakdown": "[RU] Breakdown",
+              "details": "[RU] Details",
+              "trend": "[RU] Trend"
+            },
+            "title": "[RU] Drill Down Analysis",
+            "trendPlaceholder": "[RU] Trend view would show historical data for this metric over time."
+          },
+          "edit": "[RU] Edit",
+          "legend": {
+            "drillDownHint": "[RU] Double-click cell to drill down",
+            "highestInRow": "[RU] Highest in row",
+            "lowestInRow": "[RU] Lowest in row",
+            "multiSelectHint": "[RU] Ctrl+Click to multi-select",
+            "significant": "[RU] Statistically significant (p < 0.05)"
+          },
+          "searchPlaceholder": "[RU] Search metrics...",
+          "settings": "[RU] Grid Settings",
+          "settingsOptions": {
+            "decimalPlaces": "[RU] Decimal Places",
+            "freezeFirstColumn": "[RU] Freeze First Column",
+            "groupByCategory": "[RU] Group by Category",
+            "highlightOnHover": "[RU] Highlight on Hover",
+            "showRowNumbers": "[RU] Show Row Numbers",
+            "showSignificance": "[RU] Show Significance Indicators",
+            "showSparklines": "[RU] Show Sparklines",
+            "showStatistics": "[RU] Show Statistics Columns",
+            "showTotals": "[RU] Show Totals Row"
+          },
+          "table": {
+            "avg": "[RU] Avg",
+            "max": "[RU] Max",
+            "metric": "[RU] Metric",
+            "min": "[RU] Min",
+            "totalAverage": "[RU] Total / Average",
+            "trend": "[RU] Trend"
+          },
+          "title": "[RU] Crosstab Analysis",
+          "tooltip": {
+            "doubleclickToDrillDown": "[RU] Double-click to drill down",
+            "mean": "[RU] Mean",
+            "range": "[RU] Range",
+            "statisticallySignificant": "[RU] Statistically significant"
+          },
+          "viewMode": {
+            "difference": "[RU] Difference",
+            "index": "[RU] Index",
+            "percentage": "[RU] Percentage",
+            "raw": "[RU] Raw Values"
+          },
+          "visibleColumns": "[RU] Visible Columns"
+        }
       }
     },
     "charts": {
@@ -9661,7 +9761,10 @@
         "user_info_url_optional": "[RU] User Info URL (Optional)",
         "viewer": "[RU] VIEWER",
         "x509_certificate": "[RU] X.509 Certificate",
-        "yourclientid": "[RU] your-client-id"
+        "yourclientid": "[RU] your-client-id",
+        "placeholders": {
+          "nameExample": "[RU] e.g., Acme Corp SSO"
+        }
       },
       "domains": {
         "title": "Управление доменами",
@@ -10209,9 +10312,21 @@
         }
       },
       "title": "Управление идентификацией",
-      "description": "Управляйте поставщиками удостоверений, доменами и подготовкой пользователей."
+      "description": "Управляйте поставщиками удостоверений, доменами и подготовкой пользователей.",
+      "roles": {
+        "admin": "[RU] Admin",
+        "member": "[RU] Member",
+        "viewer": "[RU] Viewer"
+      }
     },
-    "security": "[RU] security",
+    "security": {
+      "sessions": {
+        "statuses": {
+          "activeOnly": "[RU] Active Only",
+          "allSessions": "[RU] All Sessions"
+        }
+      }
+    },
     "scim": {
       "title": "Интеграции SCIM",
       "description": "Управляйте автоматической подготовкой пользователей с помощью SCIM 2.0",
@@ -11669,7 +11784,20 @@
         "grantFeatureFailed": "[RU] Failed to grant feature",
         "revokeEntitlementFailed": "[RU] Failed to revoke entitlement"
       },
-      " ": "[RU] [TODO: Translate admin.tenants. ]"
+      " ": "[RU] [TODO: Translate admin.tenants. ]",
+      "suspensionTypes": {
+        "billingHold": "[RU] Billing Hold",
+        "full": "[RU] Full Suspension",
+        "investigation": "[RU] Under Investigation",
+        "partial": "[RU] Partial (Limited Access)"
+      },
+      "placeholders": {
+        "chooseFeature": "[RU] Choose a feature...",
+        "choosePlan": "[RU] Choose a plan...",
+        "reasonForSuspension": "[RU] Enter the reason for suspension...",
+        "whyFeatureGranted": "[RU] Why is this feature being granted?",
+        "whyPlanAssigned": "[RU] Why is this plan being assigned?"
+      }
     },
     "users": {
       "title": "Управление пользователями",
@@ -12692,7 +12820,11 @@
           "timeline": "[RU] [TODO: Translate admin.operations.incidents.detail.timeline]",
           "addUpdate": "[RU] [TODO: Translate admin.operations.incidents.detail.addUpdate]",
           "updatePlaceholder": "[RU] [TODO: Translate admin.operations.incidents.detail.updatePlaceholder]",
-          "postUpdate": "[RU] [TODO: Translate admin.operations.incidents.detail.postUpdate]"
+          "postUpdate": "[RU] [TODO: Translate admin.operations.incidents.detail.postUpdate]",
+          "changeStatusOptional": "[RU] Change status (optional)",
+          "documentRootCause": "[RU] Document the root cause...",
+          "enterUpdate": "[RU] Enter your update...",
+          "impactPlaceholder": "[RU] Describe the impact of this incident..."
         },
         "stats": {
           "totalIncidents": "[RU] [TODO: Translate admin.operations.incidents.stats.totalIncidents]",
@@ -12891,7 +13023,10 @@
           "startRollout": "Начать внедрение",
           "complete": "Полный",
           "rollback": "Откат",
-          "cancel": "Отмена"
+          "cancel": "Отмена",
+          "bugFixTitle": "[RU] Bug fix title",
+          "breakingChangeTitle": "[RU] Breaking change title",
+          "featureTitle": "[RU] Feature title"
         },
         "bulk": {
           "cancelSelected": "Отменить выбранное",
@@ -13006,7 +13141,8 @@
           "memory": "Память",
           "storage": "Хранилище",
           "connections": "Соединения",
-          "queueDepth": "Глубина очереди"
+          "queueDepth": "Глубина очереди",
+          "bandwidth": "[RU] Bandwidth"
         },
         "status": {
           "normal": "Нормальный",
@@ -13053,6 +13189,17 @@
           "createFailed": "Не удалось создать показатель мощности.",
           "updateFailed": "Не удалось обновить показатель емкости.",
           "deleteFailed": "Не удалось удалить показатель мощности."
+        },
+        "units": {
+          "connections": "[RU] Connections",
+          "gb": "[RU] Gigabytes (GB)",
+          "messages": "[RU] Messages",
+          "percent": "[RU] Percent (%)",
+          "tb": "[RU] Terabytes (TB)"
+        },
+        "placeholders": {
+          "regionExample": "[RU] e.g., us-east-1",
+          "serviceExample": "[RU] e.g., API Gateway"
         }
       },
       "services": {
@@ -13873,6 +14020,12 @@
         "of": "из",
         "previous": "Предыдущий",
         "next": "Следующий"
+      },
+      "categories": {
+        "all": "[RU] All",
+        "detractors": "[RU] Detractors",
+        "passives": "[RU] Passives",
+        "promoters": "[RU] Promoters"
       }
     },
     "rules": {
@@ -13945,7 +14098,14 @@
       }
     },
     "status": "[RU] Status",
-    "features": "[RU] features",
+    "features": {
+      "types": {
+        "boolean": "[RU] Boolean",
+        "json": "[RU] JSON",
+        "number": "[RU] Number",
+        "string": "[RU] String"
+      }
+    },
     "1_for_unlimited": "[RU] -1 for unlimited",
     "a_brief_description": "[RU] A brief description",
     "a_brief_description_of": "[RU] A brief description of this plan...",
@@ -14243,7 +14403,22 @@
     "why_is_this_feature": "[RU] Why is this feature being granted?",
     "why_is_this_plan": "[RU] Why is this plan being assigned?",
     "workflows": "[RU] Workflows",
-    "yearly_price_cents": "[RU] Yearly Price (cents)"
+    "yearly_price_cents": "[RU] Yearly Price (cents)",
+    "notifications": {
+      "types": {
+        "alert": "[RU] Alert",
+        "feature": "[RU] Feature",
+        "info": "[RU] Information",
+        "maintenance": "[RU] Maintenance",
+        "promotion": "[RU] Promotion",
+        "warning": "[RU] Warning"
+      },
+      "targetTypes": {
+        "all": "[RU] All Users",
+        "specificOrgs": "[RU] Specific Orgs",
+        "specificPlans": "[RU] Specific Plans"
+      }
+    }
   },
   "ui": {
     "dialog": {

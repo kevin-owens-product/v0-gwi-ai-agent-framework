@@ -419,7 +419,7 @@ export default function ReleasesPage() {
                     <Label htmlFor="version">{t("fields.version")}</Label>
                     <Input
                       id="version"
-                      placeholder="e.g., 2.5.0"
+                      placeholder={t("placeholders.versionExample")}
                       value={newRelease.version}
                       onChange={(e) =>
                         setNewRelease({ ...newRelease, version: e.target.value })
@@ -430,7 +430,7 @@ export default function ReleasesPage() {
                     <Label htmlFor="name">{t("fields.name")} ({tCommon("optional")})</Label>
                     <Input
                       id="name"
-                      placeholder="e.g., Phoenix"
+                      placeholder={t("placeholders.codeNameExample")}
                       value={newRelease.name}
                       onChange={(e) =>
                         setNewRelease({ ...newRelease, name: e.target.value })
@@ -442,7 +442,7 @@ export default function ReleasesPage() {
                   <Label htmlFor="description">{t("fields.description")}</Label>
                   <Textarea
                     id="description"
-                    placeholder="Describe the release..."
+                    placeholder={t("new.placeholders.description")}
                     rows={3}
                     value={newRelease.description}
                     onChange={(e) =>
