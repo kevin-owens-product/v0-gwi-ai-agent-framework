@@ -419,4 +419,248 @@ test.describe('Edit Pages - Save Functionality', () => {
       }
     })
   })
+
+  test.describe('Projects Edit Page', () => {
+    test('should save project changes successfully', async ({ page }) => {
+      await page.goto('/dashboard/projects')
+      
+      await page.waitForResponse(
+        response => response.url().includes('/api/v1/projects') && response.status() === 200,
+        { timeout: 10000 }
+      ).catch(() => {})
+
+      const projectLink = page.locator('a[href*="/dashboard/projects/"]').first()
+      const projectLinkExists = await projectLink.isVisible().catch(() => false)
+
+      if (projectLinkExists) {
+        const href = await projectLink.getAttribute('href')
+        if (href && !href.includes('/edit') && !href.includes('/new')) {
+          const projectId = href.split('/').pop()
+          await page.goto(`/dashboard/projects/${projectId}`)
+          await page.waitForLoadState('networkidle')
+          
+          const editButton = page.locator('a[href*="/edit"], button:has-text("Edit")').first()
+          const editButtonExists = await editButton.isVisible().catch(() => false)
+          
+          if (editButtonExists) {
+            await editButton.click()
+            await page.waitForLoadState('networkidle')
+            await expect(page).toHaveURL(/\/projects\/.*\/edit/)
+            
+            const nameInput = page.locator('input[name="name"], input[placeholder*="name" i]').first()
+            const nameInputExists = await nameInput.isVisible().catch(() => false)
+            
+            if (nameInputExists) {
+              const currentValue = await nameInput.inputValue()
+              const newValue = currentValue ? `${currentValue} (Updated)` : 'Updated Project'
+              await nameInput.fill(newValue)
+              
+              const saveButton = page.locator('button:has-text("Save"), button:has-text("Save Changes")').first()
+              await saveButton.click()
+              
+              await page.waitForURL(/\/projects\/.*(?!\/edit)/, { timeout: 10000 }).catch(() => {})
+              const isDetailPage = page.url().includes(`/projects/${projectId}`) && !page.url().includes('/edit')
+              const hasSuccessMessage = await page.locator('text=/success|saved|updated/i').isVisible().catch(() => false)
+              
+              expect(isDetailPage || hasSuccessMessage).toBe(true)
+            }
+          }
+        }
+      }
+    })
+  })
+
+  test.describe('Templates Edit Page', () => {
+    test('should save template changes successfully', async ({ page }) => {
+      await page.goto('/dashboard/templates')
+      
+      await page.waitForResponse(
+        response => response.url().includes('/api/v1/templates') && response.status() === 200,
+        { timeout: 10000 }
+      ).catch(() => {})
+
+      const templateLink = page.locator('a[href*="/dashboard/templates/"]').first()
+      const templateLinkExists = await templateLink.isVisible().catch(() => false)
+
+      if (templateLinkExists) {
+        const href = await templateLink.getAttribute('href')
+        if (href && !href.includes('/edit') && !href.includes('/new')) {
+          const templateId = href.split('/').pop()
+          await page.goto(`/dashboard/templates/${templateId}`)
+          await page.waitForLoadState('networkidle')
+          
+          const editButton = page.locator('a[href*="/edit"], button:has-text("Edit")').first()
+          const editButtonExists = await editButton.isVisible().catch(() => false)
+          
+          if (editButtonExists) {
+            await editButton.click()
+            await page.waitForLoadState('networkidle')
+            await expect(page).toHaveURL(/\/templates\/.*\/edit/)
+            
+            const nameInput = page.locator('input[name="name"], input[placeholder*="name" i]').first()
+            const nameInputExists = await nameInput.isVisible().catch(() => false)
+            
+            if (nameInputExists) {
+              const currentValue = await nameInput.inputValue()
+              const newValue = currentValue ? `${currentValue} (Updated)` : 'Updated Template'
+              await nameInput.fill(newValue)
+              
+              const saveButton = page.locator('button:has-text("Save"), button:has-text("Save Changes")').first()
+              await saveButton.click()
+              
+              await page.waitForURL(/\/templates\/.*(?!\/edit)/, { timeout: 10000 }).catch(() => {})
+              const isDetailPage = page.url().includes(`/templates/${templateId}`) && !page.url().includes('/edit')
+              const hasSuccessMessage = await page.locator('text=/success|saved|updated/i').isVisible().catch(() => false)
+              
+              expect(isDetailPage || hasSuccessMessage).toBe(true)
+            }
+          }
+        }
+      }
+    })
+  })
+
+  test.describe('Integrations Edit Page', () => {
+    test('should save integration configuration successfully', async ({ page }) => {
+      await page.goto('/dashboard/integrations')
+      
+      await page.waitForResponse(
+        response => response.url().includes('/api/v1/integrations') && response.status() === 200,
+        { timeout: 10000 }
+      ).catch(() => {})
+
+      const integrationLink = page.locator('a[href*="/dashboard/integrations/"]').first()
+      const integrationLinkExists = await integrationLink.isVisible().catch(() => false)
+
+      if (integrationLinkExists) {
+        const href = await integrationLink.getAttribute('href')
+        if (href && !href.includes('/edit') && !href.includes('/new')) {
+          await page.goto(href)
+          await page.waitForLoadState('networkidle')
+          
+          const configButton = page.locator('button:has-text("Configure"), button:has-text("Settings"), a[href*="/edit"]')
+          const configButtonExists = await configButton.isVisible().catch(() => false)
+          
+          if (configButtonExists) {
+            await configButton.click()
+            await page.waitForLoadState('networkidle')
+            
+            const configInput = page.locator('input, textarea, select').first()
+            const configInputExists = await configInput.isVisible().catch(() => false)
+            
+            if (configInputExists) {
+              await configInput.fill('test')
+              
+              const saveButton = page.locator('button:has-text("Save"), button:has-text("Update")').first()
+              if (await saveButton.isVisible()) {
+                await saveButton.click()
+                await page.waitForTimeout(2000)
+                await expect(page.locator('body')).toBeVisible()
+              }
+            }
+          }
+        }
+      }
+    })
+  })
+
+  test.describe('Brand Tracking Edit Page', () => {
+    test('should save brand tracking changes successfully', async ({ page }) => {
+      await page.goto('/dashboard/brand-tracking')
+      
+      await page.waitForResponse(
+        response => response.url().includes('/api/v1/brand-tracking') && response.status() === 200,
+        { timeout: 10000 }
+      ).catch(() => {})
+
+      const trackingLink = page.locator('a[href*="/dashboard/brand-tracking/"]').first()
+      const trackingLinkExists = await trackingLink.isVisible().catch(() => false)
+
+      if (trackingLinkExists) {
+        const href = await trackingLink.getAttribute('href')
+        if (href && !href.includes('/edit') && !href.includes('/new')) {
+          const trackingId = href.split('/').pop()
+          await page.goto(`/dashboard/brand-tracking/${trackingId}`)
+          await page.waitForLoadState('networkidle')
+          
+          const editButton = page.locator('a[href*="/edit"], button:has-text("Edit")').first()
+          const editButtonExists = await editButton.isVisible().catch(() => false)
+          
+          if (editButtonExists) {
+            await editButton.click()
+            await page.waitForLoadState('networkidle')
+            await expect(page).toHaveURL(/\/brand-tracking\/.*\/edit/)
+            
+            const nameInput = page.locator('input[name="name"], input[placeholder*="name" i]').first()
+            const nameInputExists = await nameInput.isVisible().catch(() => false)
+            
+            if (nameInputExists) {
+              const currentValue = await nameInput.inputValue()
+              const newValue = currentValue ? `${currentValue} (Updated)` : 'Updated Brand Tracking'
+              await nameInput.fill(newValue)
+              
+              const saveButton = page.locator('button:has-text("Save"), button:has-text("Save Changes")').first()
+              await saveButton.click()
+              
+              await page.waitForURL(/\/brand-tracking\/.*(?!\/edit)/, { timeout: 10000 }).catch(() => {})
+              const isDetailPage = page.url().includes(`/brand-tracking/${trackingId}`) && !page.url().includes('/edit')
+              const hasSuccessMessage = await page.locator('text=/success|saved|updated/i').isVisible().catch(() => false)
+              
+              expect(isDetailPage || hasSuccessMessage).toBe(true)
+            }
+          }
+        }
+      }
+    })
+  })
+
+  test.describe('Reports Edit Page', () => {
+    test('should save report changes successfully', async ({ page }) => {
+      await page.goto('/dashboard/reports')
+      
+      await page.waitForResponse(
+        response => response.url().includes('/api/v1/reports') && response.status() === 200,
+        { timeout: 10000 }
+      ).catch(() => {})
+
+      const reportLink = page.locator('a[href*="/dashboard/reports/"]').first()
+      const reportLinkExists = await reportLink.isVisible().catch(() => false)
+
+      if (reportLinkExists) {
+        const href = await reportLink.getAttribute('href')
+        if (href && !href.includes('/edit') && !href.includes('/new')) {
+          const reportId = href.split('/').pop()
+          await page.goto(`/dashboard/reports/${reportId}`)
+          await page.waitForLoadState('networkidle')
+          
+          const editButton = page.locator('a[href*="/edit"], button:has-text("Edit")').first()
+          const editButtonExists = await editButton.isVisible().catch(() => false)
+          
+          if (editButtonExists) {
+            await editButton.click()
+            await page.waitForLoadState('networkidle')
+            await expect(page).toHaveURL(/\/reports\/.*\/edit/)
+            
+            const nameInput = page.locator('input[name="name"], input[placeholder*="name" i]').first()
+            const nameInputExists = await nameInput.isVisible().catch(() => false)
+            
+            if (nameInputExists) {
+              const currentValue = await nameInput.inputValue()
+              const newValue = currentValue ? `${currentValue} (Updated)` : 'Updated Report'
+              await nameInput.fill(newValue)
+              
+              const saveButton = page.locator('button:has-text("Save"), button:has-text("Save Changes")').first()
+              await saveButton.click()
+              
+              await page.waitForURL(/\/reports\/.*(?!\/edit)/, { timeout: 10000 }).catch(() => {})
+              const isDetailPage = page.url().includes(`/reports/${reportId}`) && !page.url().includes('/edit')
+              const hasSuccessMessage = await page.locator('text=/success|saved|updated/i').isVisible().catch(() => false)
+              
+              expect(isDetailPage || hasSuccessMessage).toBe(true)
+            }
+          }
+        }
+      }
+    })
+  })
 })

@@ -16480,5 +16480,59 @@
     "deleteScimIntegrationDescription": "[BN] Are you sure you want to delete this SCIM integration? This action cannot be undone.",
     "regenerateToken": "[BN] Regenerate Token",
     "regenerateTokenDescription": "[BN] Are you sure you want to regenerate the token? The current token will be invalidated and you will need to update your identity provider configuration."
+  },
+  "memory": {
+    "browser": {
+      "allProjects": "[BN] All Projects",
+      "deleteDialog": {
+        "cancel": "[BN] Cancel",
+        "confirm": "[BN] Delete",
+        "description": "[BN] Are you sure you want to delete this memory? This action cannot be undone.",
+        "title": "[BN] Delete Memory"
+      },
+      "detail": {
+        "citations": "[BN] Citations",
+        "confidenceScore": "[BN] Confidence Score",
+        "created": "[BN] Created",
+        "source": "[BN] Source",
+        "tags": "[BN] Tags"
+      },
+      "export": "[BN] Export",
+      "noMemoriesFound": "[BN] No memories found matching your search criteria.",
+      "projectPlaceholder": "[BN] Project",
+      "refresh": "[BN] Refresh",
+      "searchPlaceholder": "[BN] Search memories by content or tags...",
+      "selectMemory": "[BN] Select a memory to view details",
+      "showing": "[BN] Showing {filtered} of {total} memories",
+      "title": "[BN] Memory Browser",
+      "typePlaceholder": "[BN] Type",
+      "types": {
+        "all": "[BN] All Types",
+        "context": "[BN] Context",
+        "conversations": "[BN] Conversations",
+        "facts": "[BN] Facts",
+        "findings": "[BN] Findings",
+        "insights": "[BN] Insights",
+        "preferences": "[BN] Preferences"
+      }
+    },
+    "overview": {
+      "memoriesCount": "[BN] {count} memories",
+      "projectMemory": "[BN] Project Memory",
+      "recentMemories": "[BN] Recent Memories",
+      "refresh": "[BN] Refresh",
+      "viewAll": "[BN] View all"
+    },
+    "stats": {
+      "activeProjects": "[BN] Active Projects",
+      "avgRetention": "[BN] Avg Retention",
+      "days": "[BN] {count} days",
+      "extendedTier": "[BN] Extended tier",
+      "ofTotal": "[BN] of {total}",
+      "storageUsed": "[BN] Storage Used",
+      "thisWeek": "[BN] +{count} this week",
+      "totalMemories": "[BN] Total Memories",
+      "withMemories": "[BN] {count} with memories"
+    }
   }
 }

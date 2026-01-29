@@ -16480,5 +16480,59 @@
     "deleteScimIntegrationDescription": "[ES] Are you sure you want to delete this SCIM integration? This action cannot be undone.",
     "regenerateToken": "[ES] Regenerate Token",
     "regenerateTokenDescription": "[ES] Are you sure you want to regenerate the token? The current token will be invalidated and you will need to update your identity provider configuration."
+  },
+  "memory": {
+    "browser": {
+      "allProjects": "[ES] All Projects",
+      "deleteDialog": {
+        "cancel": "[ES] Cancel",
+        "confirm": "[ES] Delete",
+        "description": "[ES] Are you sure you want to delete this memory? This action cannot be undone.",
+        "title": "[ES] Delete Memory"
+      },
+      "detail": {
+        "citations": "[ES] Citations",
+        "confidenceScore": "[ES] Confidence Score",
+        "created": "[ES] Created",
+        "source": "[ES] Source",
+        "tags": "[ES] Tags"
+      },
+      "export": "[ES] Export",
+      "noMemoriesFound": "[ES] No memories found matching your search criteria.",
+      "projectPlaceholder": "[ES] Project",
+      "refresh": "[ES] Refresh",
+      "searchPlaceholder": "[ES] Search memories by content or tags...",
+      "selectMemory": "[ES] Select a memory to view details",
+      "showing": "[ES] Showing {filtered} of {total} memories",
+      "title": "[ES] Memory Browser",
+      "typePlaceholder": "[ES] Type",
+      "types": {
+        "all": "[ES] All Types",
+        "context": "[ES] Context",
+        "conversations": "[ES] Conversations",
+        "facts": "[ES] Facts",
+        "findings": "[ES] Findings",
+        "insights": "[ES] Insights",
+        "preferences": "[ES] Preferences"
+      }
+    },
+    "overview": {
+      "memoriesCount": "[ES] {count} memories",
+      "projectMemory": "[ES] Project Memory",
+      "recentMemories": "[ES] Recent Memories",
+      "refresh": "[ES] Refresh",
+      "viewAll": "[ES] View all"
+    },
+    "stats": {
+      "activeProjects": "[ES] Active Projects",
+      "avgRetention": "[ES] Avg Retention",
+      "days": "[ES] {count} days",
+      "extendedTier": "[ES] Extended tier",
+      "ofTotal": "[ES] of {total}",
+      "storageUsed": "[ES] Storage Used",
+      "thisWeek": "[ES] +{count} this week",
+      "totalMemories": "[ES] Total Memories",
+      "withMemories": "[ES] {count} with memories"
+    }
   }
 }

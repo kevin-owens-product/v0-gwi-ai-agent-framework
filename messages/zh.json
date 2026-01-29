@@ -16480,5 +16480,59 @@
     "deleteScimIntegrationDescription": "[ZH] Are you sure you want to delete this SCIM integration? This action cannot be undone.",
     "regenerateToken": "[ZH] Regenerate Token",
     "regenerateTokenDescription": "[ZH] Are you sure you want to regenerate the token? The current token will be invalidated and you will need to update your identity provider configuration."
+  },
+  "memory": {
+    "browser": {
+      "allProjects": "[ZH] All Projects",
+      "deleteDialog": {
+        "cancel": "[ZH] Cancel",
+        "confirm": "[ZH] Delete",
+        "description": "[ZH] Are you sure you want to delete this memory? This action cannot be undone.",
+        "title": "[ZH] Delete Memory"
+      },
+      "detail": {
+        "citations": "[ZH] Citations",
+        "confidenceScore": "[ZH] Confidence Score",
+        "created": "[ZH] Created",
+        "source": "[ZH] Source",
+        "tags": "[ZH] Tags"
+      },
+      "export": "[ZH] Export",
+      "noMemoriesFound": "[ZH] No memories found matching your search criteria.",
+      "projectPlaceholder": "[ZH] Project",
+      "refresh": "[ZH] Refresh",
+      "searchPlaceholder": "[ZH] Search memories by content or tags...",
+      "selectMemory": "[ZH] Select a memory to view details",
+      "showing": "[ZH] Showing {filtered} of {total} memories",
+      "title": "[ZH] Memory Browser",
+      "typePlaceholder": "[ZH] Type",
+      "types": {
+        "all": "[ZH] All Types",
+        "context": "[ZH] Context",
+        "conversations": "[ZH] Conversations",
+        "facts": "[ZH] Facts",
+        "findings": "[ZH] Findings",
+        "insights": "[ZH] Insights",
+        "preferences": "[ZH] Preferences"
+      }
+    },
+    "overview": {
+      "memoriesCount": "[ZH] {count} memories",
+      "projectMemory": "[ZH] Project Memory",
+      "recentMemories": "[ZH] Recent Memories",
+      "refresh": "[ZH] Refresh",
+      "viewAll": "[ZH] View all"
+    },
+    "stats": {
+      "activeProjects": "[ZH] Active Projects",
+      "avgRetention": "[ZH] Avg Retention",
+      "days": "[ZH] {count} days",
+      "extendedTier": "[ZH] Extended tier",
+      "ofTotal": "[ZH] of {total}",
+      "storageUsed": "[ZH] Storage Used",
+      "thisWeek": "[ZH] +{count} this week",
+      "totalMemories": "[ZH] Total Memories",
+      "withMemories": "[ZH] {count} with memories"
+    }
   }
 }

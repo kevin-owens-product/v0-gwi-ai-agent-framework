@@ -16480,5 +16480,59 @@
     "deleteScimIntegrationDescription": "[FR] Are you sure you want to delete this SCIM integration? This action cannot be undone.",
     "regenerateToken": "[FR] Regenerate Token",
     "regenerateTokenDescription": "[FR] Are you sure you want to regenerate the token? The current token will be invalidated and you will need to update your identity provider configuration."
+  },
+  "memory": {
+    "browser": {
+      "allProjects": "[FR] All Projects",
+      "deleteDialog": {
+        "cancel": "[FR] Cancel",
+        "confirm": "[FR] Delete",
+        "description": "[FR] Are you sure you want to delete this memory? This action cannot be undone.",
+        "title": "[FR] Delete Memory"
+      },
+      "detail": {
+        "citations": "[FR] Citations",
+        "confidenceScore": "[FR] Confidence Score",
+        "created": "[FR] Created",
+        "source": "[FR] Source",
+        "tags": "[FR] Tags"
+      },
+      "export": "[FR] Export",
+      "noMemoriesFound": "[FR] No memories found matching your search criteria.",
+      "projectPlaceholder": "[FR] Project",
+      "refresh": "[FR] Refresh",
+      "searchPlaceholder": "[FR] Search memories by content or tags...",
+      "selectMemory": "[FR] Select a memory to view details",
+      "showing": "[FR] Showing {filtered} of {total} memories",
+      "title": "[FR] Memory Browser",
+      "typePlaceholder": "[FR] Type",
+      "types": {
+        "all": "[FR] All Types",
+        "context": "[FR] Context",
+        "conversations": "[FR] Conversations",
+        "facts": "[FR] Facts",
+        "findings": "[FR] Findings",
+        "insights": "[FR] Insights",
+        "preferences": "[FR] Preferences"
+      }
+    },
+    "overview": {
+      "memoriesCount": "[FR] {count} memories",
+      "projectMemory": "[FR] Project Memory",
+      "recentMemories": "[FR] Recent Memories",
+      "refresh": "[FR] Refresh",
+      "viewAll": "[FR] View all"
+    },
+    "stats": {
+      "activeProjects": "[FR] Active Projects",
+      "avgRetention": "[FR] Avg Retention",
+      "days": "[FR] {count} days",
+      "extendedTier": "[FR] Extended tier",
+      "ofTotal": "[FR] of {total}",
+      "storageUsed": "[FR] Storage Used",
+      "thisWeek": "[FR] +{count} this week",
+      "totalMemories": "[FR] Total Memories",
+      "withMemories": "[FR] {count} with memories"
+    }
   }
 }

@@ -16480,5 +16480,59 @@
     "deleteScimIntegrationDescription": "[RU] Are you sure you want to delete this SCIM integration? This action cannot be undone.",
     "regenerateToken": "[RU] Regenerate Token",
     "regenerateTokenDescription": "[RU] Are you sure you want to regenerate the token? The current token will be invalidated and you will need to update your identity provider configuration."
+  },
+  "memory": {
+    "browser": {
+      "allProjects": "[RU] All Projects",
+      "deleteDialog": {
+        "cancel": "[RU] Cancel",
+        "confirm": "[RU] Delete",
+        "description": "[RU] Are you sure you want to delete this memory? This action cannot be undone.",
+        "title": "[RU] Delete Memory"
+      },
+      "detail": {
+        "citations": "[RU] Citations",
+        "confidenceScore": "[RU] Confidence Score",
+        "created": "[RU] Created",
+        "source": "[RU] Source",
+        "tags": "[RU] Tags"
+      },
+      "export": "[RU] Export",
+      "noMemoriesFound": "[RU] No memories found matching your search criteria.",
+      "projectPlaceholder": "[RU] Project",
+      "refresh": "[RU] Refresh",
+      "searchPlaceholder": "[RU] Search memories by content or tags...",
+      "selectMemory": "[RU] Select a memory to view details",
+      "showing": "[RU] Showing {filtered} of {total} memories",
+      "title": "[RU] Memory Browser",
+      "typePlaceholder": "[RU] Type",
+      "types": {
+        "all": "[RU] All Types",
+        "context": "[RU] Context",
+        "conversations": "[RU] Conversations",
+        "facts": "[RU] Facts",
+        "findings": "[RU] Findings",
+        "insights": "[RU] Insights",
+        "preferences": "[RU] Preferences"
+      }
+    },
+    "overview": {
+      "memoriesCount": "[RU] {count} memories",
+      "projectMemory": "[RU] Project Memory",
+      "recentMemories": "[RU] Recent Memories",
+      "refresh": "[RU] Refresh",
+      "viewAll": "[RU] View all"
+    },
+    "stats": {
+      "activeProjects": "[RU] Active Projects",
+      "avgRetention": "[RU] Avg Retention",
+      "days": "[RU] {count} days",
+      "extendedTier": "[RU] Extended tier",
+      "ofTotal": "[RU] of {total}",
+      "storageUsed": "[RU] Storage Used",
+      "thisWeek": "[RU] +{count} this week",
+      "totalMemories": "[RU] Total Memories",
+      "withMemories": "[RU] {count} with memories"
+    }
   }
 }

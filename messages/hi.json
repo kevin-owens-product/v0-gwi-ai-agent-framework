@@ -16480,5 +16480,59 @@
     "deleteScimIntegrationDescription": "[HI] Are you sure you want to delete this SCIM integration? This action cannot be undone.",
     "regenerateToken": "[HI] Regenerate Token",
     "regenerateTokenDescription": "[HI] Are you sure you want to regenerate the token? The current token will be invalidated and you will need to update your identity provider configuration."
+  },
+  "memory": {
+    "browser": {
+      "allProjects": "[HI] All Projects",
+      "deleteDialog": {
+        "cancel": "[HI] Cancel",
+        "confirm": "[HI] Delete",
+        "description": "[HI] Are you sure you want to delete this memory? This action cannot be undone.",
+        "title": "[HI] Delete Memory"
+      },
+      "detail": {
+        "citations": "[HI] Citations",
+        "confidenceScore": "[HI] Confidence Score",
+        "created": "[HI] Created",
+        "source": "[HI] Source",
+        "tags": "[HI] Tags"
+      },
+      "export": "[HI] Export",
+      "noMemoriesFound": "[HI] No memories found matching your search criteria.",
+      "projectPlaceholder": "[HI] Project",
+      "refresh": "[HI] Refresh",
+      "searchPlaceholder": "[HI] Search memories by content or tags...",
+      "selectMemory": "[HI] Select a memory to view details",
+      "showing": "[HI] Showing {filtered} of {total} memories",
+      "title": "[HI] Memory Browser",
+      "typePlaceholder": "[HI] Type",
+      "types": {
+        "all": "[HI] All Types",
+        "context": "[HI] Context",
+        "conversations": "[HI] Conversations",
+        "facts": "[HI] Facts",
+        "findings": "[HI] Findings",
+        "insights": "[HI] Insights",
+        "preferences": "[HI] Preferences"
+      }
+    },
+    "overview": {
+      "memoriesCount": "[HI] {count} memories",
+      "projectMemory": "[HI] Project Memory",
+      "recentMemories": "[HI] Recent Memories",
+      "refresh": "[HI] Refresh",
+      "viewAll": "[HI] View all"
+    },
+    "stats": {
+      "activeProjects": "[HI] Active Projects",
+      "avgRetention": "[HI] Avg Retention",
+      "days": "[HI] {count} days",
+      "extendedTier": "[HI] Extended tier",
+      "ofTotal": "[HI] of {total}",
+      "storageUsed": "[HI] Storage Used",
+      "thisWeek": "[HI] +{count} this week",
+      "totalMemories": "[HI] Total Memories",
+      "withMemories": "[HI] {count} with memories"
+    }
   }
 }

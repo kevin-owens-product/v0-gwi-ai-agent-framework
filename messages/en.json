@@ -8234,60 +8234,6 @@
       },
       "title": "Memory & Context"
     },
-    "memory": {
-      "browser": {
-        "allProjects": "All Projects",
-        "deleteDialog": {
-          "cancel": "Cancel",
-          "confirm": "Delete",
-          "description": "Are you sure you want to delete this memory? This action cannot be undone.",
-          "title": "Delete Memory"
-        },
-        "detail": {
-          "citations": "Citations",
-          "confidenceScore": "Confidence Score",
-          "created": "Created",
-          "source": "Source",
-          "tags": "Tags"
-        },
-        "export": "Export",
-        "noMemoriesFound": "No memories found matching your search criteria.",
-        "projectPlaceholder": "Project",
-        "refresh": "Refresh",
-        "searchPlaceholder": "Search memories by content or tags...",
-        "selectMemory": "Select a memory to view details",
-        "showing": "Showing {filtered} of {total} memories",
-        "title": "Memory Browser",
-        "typePlaceholder": "Type",
-        "types": {
-          "all": "All Types",
-          "context": "Context",
-          "conversations": "Conversations",
-          "facts": "Facts",
-          "findings": "Findings",
-          "insights": "Insights",
-          "preferences": "Preferences"
-        }
-      },
-      "overview": {
-        "memoriesCount": "{count} memories",
-        "projectMemory": "Project Memory",
-        "recentMemories": "Recent Memories",
-        "refresh": "Refresh",
-        "viewAll": "View all"
-      },
-      "stats": {
-        "activeProjects": "Active Projects",
-        "avgRetention": "Avg Retention",
-        "days": "{count} days",
-        "extendedTier": "Extended tier",
-        "ofTotal": "of {total}",
-        "storageUsed": "Storage Used",
-        "thisWeek": "+{count} this week",
-        "totalMemories": "Total Memories",
-        "withMemories": "{count} with memories"
-      }
-    },
     "mental_health_awareness": "Mental Health Awareness",
     "metric": "Metric",
     "mike_johnson": "Mike Johnson",
@@ -13077,6 +13023,60 @@
       "title": "Build workflows in minutes,",
       "titleHighlight": "not weeks",
       "workflowPreview": "Workflow Preview"
+    }
+  },
+  "memory": {
+    "browser": {
+      "allProjects": "All Projects",
+      "deleteDialog": {
+        "cancel": "Cancel",
+        "confirm": "Delete",
+        "description": "Are you sure you want to delete this memory? This action cannot be undone.",
+        "title": "Delete Memory"
+      },
+      "detail": {
+        "citations": "Citations",
+        "confidenceScore": "Confidence Score",
+        "created": "Created",
+        "source": "Source",
+        "tags": "Tags"
+      },
+      "export": "Export",
+      "noMemoriesFound": "No memories found matching your search criteria.",
+      "projectPlaceholder": "Project",
+      "refresh": "Refresh",
+      "searchPlaceholder": "Search memories by content or tags...",
+      "selectMemory": "Select a memory to view details",
+      "showing": "Showing {filtered} of {total} memories",
+      "title": "Memory Browser",
+      "typePlaceholder": "Type",
+      "types": {
+        "all": "All Types",
+        "context": "Context",
+        "conversations": "Conversations",
+        "facts": "Facts",
+        "findings": "Findings",
+        "insights": "Insights",
+        "preferences": "Preferences"
+      }
+    },
+    "overview": {
+      "memoriesCount": "{count} memories",
+      "projectMemory": "Project Memory",
+      "recentMemories": "Recent Memories",
+      "refresh": "Refresh",
+      "viewAll": "View all"
+    },
+    "stats": {
+      "activeProjects": "Active Projects",
+      "avgRetention": "Avg Retention",
+      "days": "{count} days",
+      "extendedTier": "Extended tier",
+      "ofTotal": "of {total}",
+      "storageUsed": "Storage Used",
+      "thisWeek": "+{count} this week",
+      "totalMemories": "Total Memories",
+      "withMemories": "{count} with memories"
     }
   },
   "legal": {

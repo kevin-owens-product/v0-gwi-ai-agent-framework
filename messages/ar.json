@@ -16480,5 +16480,59 @@
     "deleteScimIntegrationDescription": "[AR] Are you sure you want to delete this SCIM integration? This action cannot be undone.",
     "regenerateToken": "[AR] Regenerate Token",
     "regenerateTokenDescription": "[AR] Are you sure you want to regenerate the token? The current token will be invalidated and you will need to update your identity provider configuration."
+  },
+  "memory": {
+    "browser": {
+      "allProjects": "[AR] All Projects",
+      "deleteDialog": {
+        "cancel": "[AR] Cancel",
+        "confirm": "[AR] Delete",
+        "description": "[AR] Are you sure you want to delete this memory? This action cannot be undone.",
+        "title": "[AR] Delete Memory"
+      },
+      "detail": {
+        "citations": "[AR] Citations",
+        "confidenceScore": "[AR] Confidence Score",
+        "created": "[AR] Created",
+        "source": "[AR] Source",
+        "tags": "[AR] Tags"
+      },
+      "export": "[AR] Export",
+      "noMemoriesFound": "[AR] No memories found matching your search criteria.",
+      "projectPlaceholder": "[AR] Project",
+      "refresh": "[AR] Refresh",
+      "searchPlaceholder": "[AR] Search memories by content or tags...",
+      "selectMemory": "[AR] Select a memory to view details",
+      "showing": "[AR] Showing {filtered} of {total} memories",
+      "title": "[AR] Memory Browser",
+      "typePlaceholder": "[AR] Type",
+      "types": {
+        "all": "[AR] All Types",
+        "context": "[AR] Context",
+        "conversations": "[AR] Conversations",
+        "facts": "[AR] Facts",
+        "findings": "[AR] Findings",
+        "insights": "[AR] Insights",
+        "preferences": "[AR] Preferences"
+      }
+    },
+    "overview": {
+      "memoriesCount": "[AR] {count} memories",
+      "projectMemory": "[AR] Project Memory",
+      "recentMemories": "[AR] Recent Memories",
+      "refresh": "[AR] Refresh",
+      "viewAll": "[AR] View all"
+    },
+    "stats": {
+      "activeProjects": "[AR] Active Projects",
+      "avgRetention": "[AR] Avg Retention",
+      "days": "[AR] {count} days",
+      "extendedTier": "[AR] Extended tier",
+      "ofTotal": "[AR] of {total}",
+      "storageUsed": "[AR] Storage Used",
+      "thisWeek": "[AR] +{count} this week",
+      "totalMemories": "[AR] Total Memories",
+      "withMemories": "[AR] {count} with memories"
+    }
   }
 }

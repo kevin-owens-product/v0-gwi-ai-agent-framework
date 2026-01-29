@@ -16480,5 +16480,59 @@
     "deleteScimIntegrationDescription": "[JA] Are you sure you want to delete this SCIM integration? This action cannot be undone.",
     "regenerateToken": "[JA] Regenerate Token",
     "regenerateTokenDescription": "[JA] Are you sure you want to regenerate the token? The current token will be invalidated and you will need to update your identity provider configuration."
+  },
+  "memory": {
+    "browser": {
+      "allProjects": "[JA] All Projects",
+      "deleteDialog": {
+        "cancel": "[JA] Cancel",
+        "confirm": "[JA] Delete",
+        "description": "[JA] Are you sure you want to delete this memory? This action cannot be undone.",
+        "title": "[JA] Delete Memory"
+      },
+      "detail": {
+        "citations": "[JA] Citations",
+        "confidenceScore": "[JA] Confidence Score",
+        "created": "[JA] Created",
+        "source": "[JA] Source",
+        "tags": "[JA] Tags"
+      },
+      "export": "[JA] Export",
+      "noMemoriesFound": "[JA] No memories found matching your search criteria.",
+      "projectPlaceholder": "[JA] Project",
+      "refresh": "[JA] Refresh",
+      "searchPlaceholder": "[JA] Search memories by content or tags...",
+      "selectMemory": "[JA] Select a memory to view details",
+      "showing": "[JA] Showing {filtered} of {total} memories",
+      "title": "[JA] Memory Browser",
+      "typePlaceholder": "[JA] Type",
+      "types": {
+        "all": "[JA] All Types",
+        "context": "[JA] Context",
+        "conversations": "[JA] Conversations",
+        "facts": "[JA] Facts",
+        "findings": "[JA] Findings",
+        "insights": "[JA] Insights",
+        "preferences": "[JA] Preferences"
+      }
+    },
+    "overview": {
+      "memoriesCount": "[JA] {count} memories",
+      "projectMemory": "[JA] Project Memory",
+      "recentMemories": "[JA] Recent Memories",
+      "refresh": "[JA] Refresh",
+      "viewAll": "[JA] View all"
+    },
+    "stats": {
+      "activeProjects": "[JA] Active Projects",
+      "avgRetention": "[JA] Avg Retention",
+      "days": "[JA] {count} days",
+      "extendedTier": "[JA] Extended tier",
+      "ofTotal": "[JA] of {total}",
+      "storageUsed": "[JA] Storage Used",
+      "thisWeek": "[JA] +{count} this week",
+      "totalMemories": "[JA] Total Memories",
+      "withMemories": "[JA] {count} with memories"
+    }
   }
 }
