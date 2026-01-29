@@ -51,24 +51,55 @@ export async function GET(request: NextRequest) {
       ]
     }
 
-    const surveys = await prisma.survey.findMany({
-      where,
-      include: {
-        createdBy: { select: { id: true, name: true, email: true } },
-        organization: { select: { id: true, name: true, slug: true } },
-        _count: {
-          select: {
-            questions: true,
-            responses: true,
-            distributions: true,
-            routingRules: true,
-            quotas: true,
-            versions: true,
+    // Try to include new relations, but handle gracefully if migration hasn't been run
+    let surveys
+    try {
+      surveys = await prisma.survey.findMany({
+        where,
+        include: {
+          createdBy: { select: { id: true, name: true, email: true } },
+          organization: { select: { id: true, name: true, slug: true } },
+          _count: {
+            select: {
+              questions: true,
+              responses: true,
+              distributions: true,
+              routingRules: true,
+              quotas: true,
+              versions: true,
+            },
           },
         },
-      },
-      orderBy: { createdAt: "desc" },
-    })
+        orderBy: { createdAt: "desc" },
+      })
+    } catch {
+      // Fallback if new relations don't exist yet (migration not run)
+      surveys = await prisma.survey.findMany({
+        where,
+        include: {
+          createdBy: { select: { id: true, name: true, email: true } },
+          organization: { select: { id: true, name: true, slug: true } },
+          _count: {
+            select: {
+              questions: true,
+              responses: true,
+              distributions: true,
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      })
+      // Add default counts for new relations
+      surveys = surveys.map((survey) => ({
+        ...survey,
+        _count: {
+          ...survey._count,
+          routingRules: 0,
+          quotas: 0,
+          versions: 0,
+        },
+      }))
+    }
 
     return NextResponse.json(surveys)
   } catch (error) {

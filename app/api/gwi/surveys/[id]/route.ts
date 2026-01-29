@@ -27,25 +27,59 @@ export async function GET(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
-    const survey = await prisma.survey.findUnique({
-      where: { id },
-      include: {
-        createdBy: { select: { id: true, name: true, email: true } },
-        questions: { orderBy: { order: "asc" } },
-        distributions: true,
-        routingRules: { where: { isActive: true } },
-        quotas: { where: { isActive: true } },
-        versions: { orderBy: { versionNumber: "desc" } },
-        _count: {
-          select: {
-            responses: true,
-            routingRules: true,
-            quotas: true,
-            versions: true,
+    // Try to include new relations, but handle gracefully if migration hasn't been run
+    let survey
+    try {
+      survey = await prisma.survey.findUnique({
+        where: { id },
+        include: {
+          createdBy: { select: { id: true, name: true, email: true } },
+          questions: { orderBy: { order: "asc" } },
+          distributions: true,
+          routingRules: { where: { isActive: true } },
+          quotas: { where: { isActive: true } },
+          versions: { orderBy: { versionNumber: "desc" } },
+          _count: {
+            select: {
+              responses: true,
+              routingRules: true,
+              quotas: true,
+              versions: true,
+            },
           },
         },
-      },
-    })
+      })
+    } catch {
+      // Fallback if new relations don't exist yet (migration not run)
+      survey = await prisma.survey.findUnique({
+        where: { id },
+        include: {
+          createdBy: { select: { id: true, name: true, email: true } },
+          questions: { orderBy: { order: "asc" } },
+          distributions: true,
+          _count: {
+            select: {
+              responses: true,
+            },
+          },
+        },
+      })
+      if (survey) {
+        // Add default values for new relations
+        survey = {
+          ...survey,
+          routingRules: [],
+          quotas: [],
+          versions: [],
+          _count: {
+            ...survey._count,
+            routingRules: 0,
+            quotas: 0,
+            versions: 0,
+          },
+        } as typeof survey
+      }
+    }
 
     if (!survey) {
       return NextResponse.json({ error: "Survey not found" }, { status: 404 })
